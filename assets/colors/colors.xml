@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<colors>
+
+<color name="scaffoldBackgroundColor">#FF111111</color>
+<color name="cFFFFFF">#FFFFFFFF</color>
+<color name="c000000">#FF000000</color>
+<color name="cF4F4F4">#FFF4F4F4</color>
+<color name="c778beb">#FF778beb</color>
+<color name="c38686A">#FF38686A</color>
+<color name="cd9d9d9">#FFd9d9d9</color>
+<color name="c8c8c8c">#FF8c8c8c</color>
+<color name="c292E34">#FF292E34</color>
+<color name="ce7e5df">#FFe7e5df</color>
+<color name="cb4b4b4">#FFb4b4b4</color>
+<color name="c4d4d4d">#FF4d4d4d</color>
+<color name="c989898">#FF989898</color>
+<color name="cde0000">#FFde0000</color>
+<color name="c999999">#FF999999</color>
+<color name="cb20000">#FFb20000</color>
+<color name="cc6c6c6">#FFc6c6c6</color>
+<color name="cfefefe">#FFfefefe</color>
+<color name="cd7d7d7">#FFd7d7d7</color>
+<color name="c363636">#FF363636</color>
+
+</colors>
