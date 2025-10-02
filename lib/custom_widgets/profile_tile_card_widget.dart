@@ -9,34 +9,46 @@ import '../helper/ui_helpers.dart';
 class ProfileTileCardWidget extends StatelessWidget {
   final String imagePath;
   final String title;
+  final Color? cardColor;
+  final Color? suffixColor;
+  final void Function()? onTap;
   const ProfileTileCardWidget({
     super.key,
     required this.imagePath,
     required this.title,
+    this.cardColor,
+    this.suffixColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 1.sw,
-      decoration: BoxDecoration(
-        color: AppColors.c3c3c3c,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      padding: EdgeInsets.all(12.sp),
-      child: Row(
-        children: [
-          ///Section : -----------------///PrefixIcon Icon///--------------
-          SvgPicture.asset(imagePath),
-          UIHelper.horizontalSpace(10.w),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 1.sw,
+        decoration: BoxDecoration(
+          color: cardColor ?? AppColors.c3c3c3c,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        padding: EdgeInsets.all(12.sp),
+        child: Row(
+          children: [
+            ///Section : -----------------///PrefixIcon Icon///--------------
+            SvgPicture.asset(imagePath),
+            UIHelper.horizontalSpace(10.w),
 
-          ///Section : -----------------///Card Title///--------------
-          Text(title, style: TextFontStyle.headline14w400cc6c6c6StylePoppins),
-          Spacer(),
+            ///Section : -----------------///Card Title///--------------
+            Text(title, style: TextFontStyle.headline14w400cfefefeStylePoppins),
+            Spacer(),
 
-          ///Section : -----------------///Suffix Icon///--------------
-          Icon(Icons.arrow_forward_ios_rounded, color: AppColors.c999999),
-        ],
+            ///Section : -----------------///Suffix Icon///--------------
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: suffixColor ?? AppColors.c999999,
+            ),
+          ],
+        ),
       ),
     );
   }
