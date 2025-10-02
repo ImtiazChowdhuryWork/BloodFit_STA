@@ -45,6 +45,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google_icon.svg
   String get googleIcon => 'assets/icons/google_icon.svg';
 
+  /// File path: assets/icons/logout_icon.svg
+  String get logoutIcon => 'assets/icons/logout_icon.svg';
+
   /// File path: assets/icons/meal_icon.svg
   String get mealIcon => 'assets/icons/meal_icon.svg';
 
@@ -65,6 +68,7 @@ class $AssetsIconsGen {
     facebookIcon,
     fitnessIcon,
     googleIcon,
+    logoutIcon,
     mealIcon,
     personIcon,
     redBellIcon,
