@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../onboarding/presentation/onboarding_screen.dart';
-
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 

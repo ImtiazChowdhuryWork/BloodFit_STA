@@ -27,14 +27,20 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/bell_icon.svg
+  String get bellIcon => 'assets/icons/bell_icon.svg';
+
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
 
   /// File path: assets/icons/google_icon.svg
   String get googleIcon => 'assets/icons/google_icon.svg';
 
+  /// File path: assets/icons/red_bell_icon.svg
+  String get redBellIcon => 'assets/icons/red_bell_icon.svg';
+
   /// List of all assets
-  List<String> get values => [facebookIcon, googleIcon];
+  List<String> get values => [bellIcon, facebookIcon, googleIcon, redBellIcon];
 }
 
 class $AssetsImagesGen {
@@ -72,6 +78,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboardingImageTwo =>
       const AssetGenImage('assets/images/onboarding_image_two.png');
 
+  /// File path: assets/images/userImage.png
+  AssetGenImage get userImage =>
+      const AssetGenImage('assets/images/userImage.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     appLogo,
@@ -82,6 +92,7 @@ class $AssetsImagesGen {
     onboardingImageOne,
     onboardingImageThree,
     onboardingImageTwo,
+    userImage,
   ];
 }
 

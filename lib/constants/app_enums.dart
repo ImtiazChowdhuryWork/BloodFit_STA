@@ -1,1 +1,1 @@
-
+enum UserType { firstTime, returning }

@@ -4,6 +4,8 @@ import 'package:bloodfit/features/auth/reset_password/presentation/reset_passwor
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
 import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart';
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
+import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
+import 'package:bloodfit/features/notification/presentation/notification_screen.dart';
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:flutter/material.dart'; // 👈 Needed for BuildContext, Widget, FadeTransition
 import 'package:get/get.dart';
@@ -21,6 +23,8 @@ class Routes {
   static const String forgotPasswordScreen = '/forgot_password_screen';
   static const String verifyOtpScreen = '/verify_otp_screen';
   static const String resetPasswordScreen = '/reset_password_screen';
+  static const String enterYourDetailsScreen = '/enter_your_details_screen';
+  static const String notificationScreen = '/notifications_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -81,6 +85,24 @@ class Routes {
     GetPage(
       name: resetPasswordScreen,
       page: () => ResetPasswordScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///enterYourDetailsScreen
+    GetPage(
+      name: enterYourDetailsScreen,
+      page: () => EnterYourDetailsScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///notificationScreen
+    GetPage(
+      name: notificationScreen,
+      page: () => NotificationScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
