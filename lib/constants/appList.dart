@@ -1,3 +1,4 @@
+import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../gen/assets.gen.dart';
 
@@ -25,6 +26,22 @@ class AppList {
       title: "1-day streak",
       subTitle: "Awesome! Every Streak Counts, Keep It Going!",
       imagePath: Assets.images.onboardingImageFour.path,
+    ),
+  ];
+
+  static List<ProfileTileModel> freeUserProfileTileList = [
+    ProfileTileModel(imagePath: Assets.icons.personIcon, title: "Edit Profile"),
+    ProfileTileModel(imagePath: Assets.icons.settingsIcon, title: "Settings"),
+  ];
+
+  static List<ProfileTileModel> premimumUserProfileTileList = [
+    ProfileTileModel(imagePath: Assets.icons.personIcon, title: "Edit Profile"),
+    ProfileTileModel(imagePath: Assets.icons.mealIcon, title: "Mealplan"),
+    ProfileTileModel(imagePath: Assets.icons.fitnessIcon, title: "Fitness"),
+    ProfileTileModel(imagePath: Assets.icons.settingsIcon, title: "Settings"),
+    ProfileTileModel(
+      imagePath: Assets.icons.mealIcon,
+      title: "Subscription: Starter",
     ),
   ];
 }

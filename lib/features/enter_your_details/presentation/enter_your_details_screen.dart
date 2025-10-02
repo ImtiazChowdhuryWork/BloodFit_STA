@@ -27,9 +27,11 @@ class EnterYourDetailsScreen extends StatelessWidget {
               ///Section : ---------------------///Profile///-----------
               Row(
                 children: [
+                  ///Section : ---------------------///AppLogo///-----------
                   AppLogoWidget(),
                   Spacer(),
 
+                  ///Section : ---------------------///Notification///-----------
                   InkWell(
                     onTap: () {
                       Get.toNamed(Routes.notificationScreen);
@@ -37,15 +39,22 @@ class EnterYourDetailsScreen extends StatelessWidget {
                     child: SvgPicture.asset(Assets.icons.bellIcon),
                   ),
                   UIHelper.horizontalSpace(15.w),
-                  Container(
-                    width: 48.w,
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.cFFFFFF),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(Assets.images.userImage.path),
+
+                  ///Section : ---------------------///Profile///-----------
+                  InkWell(
+                    onTap: () {
+                      Get.toNamed(Routes.myProfileScreen);
+                    },
+                    child: Container(
+                      width: 48.w,
+                      height: 48.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.cFFFFFF),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(Assets.images.userImage.path),
+                        ),
                       ),
                     ),
                   ),
