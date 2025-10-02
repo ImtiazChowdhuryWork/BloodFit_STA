@@ -30,17 +30,46 @@ class $AssetsIconsGen {
   /// File path: assets/icons/bell_icon.svg
   String get bellIcon => 'assets/icons/bell_icon.svg';
 
+  /// File path: assets/icons/camera_icon.svg
+  String get cameraIcon => 'assets/icons/camera_icon.svg';
+
+  /// File path: assets/icons/crown_icon.svg
+  String get crownIcon => 'assets/icons/crown_icon.svg';
+
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
+
+  /// File path: assets/icons/fitness_icon.svg
+  String get fitnessIcon => 'assets/icons/fitness_icon.svg';
 
   /// File path: assets/icons/google_icon.svg
   String get googleIcon => 'assets/icons/google_icon.svg';
 
+  /// File path: assets/icons/meal_icon.svg
+  String get mealIcon => 'assets/icons/meal_icon.svg';
+
+  /// File path: assets/icons/person_icon.svg
+  String get personIcon => 'assets/icons/person_icon.svg';
+
   /// File path: assets/icons/red_bell_icon.svg
   String get redBellIcon => 'assets/icons/red_bell_icon.svg';
 
+  /// File path: assets/icons/settings_icon.svg
+  String get settingsIcon => 'assets/icons/settings_icon.svg';
+
   /// List of all assets
-  List<String> get values => [bellIcon, facebookIcon, googleIcon, redBellIcon];
+  List<String> get values => [
+    bellIcon,
+    cameraIcon,
+    crownIcon,
+    facebookIcon,
+    fitnessIcon,
+    googleIcon,
+    mealIcon,
+    personIcon,
+    redBellIcon,
+    settingsIcon,
+  ];
 }
 
 class $AssetsImagesGen {
@@ -78,6 +107,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboardingImageTwo =>
       const AssetGenImage('assets/images/onboarding_image_two.png');
 
+  /// File path: assets/images/profile_avatar_default_image.png
+  AssetGenImage get profileAvatarDefaultImage =>
+      const AssetGenImage('assets/images/profile_avatar_default_image.png');
+
   /// File path: assets/images/userImage.png
   AssetGenImage get userImage =>
       const AssetGenImage('assets/images/userImage.png');
@@ -92,6 +125,7 @@ class $AssetsImagesGen {
     onboardingImageOne,
     onboardingImageThree,
     onboardingImageTwo,
+    profileAvatarDefaultImage,
     userImage,
   ];
 }
