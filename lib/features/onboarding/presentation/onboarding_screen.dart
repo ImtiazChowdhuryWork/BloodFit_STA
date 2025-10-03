@@ -12,7 +12,8 @@ import '../../../controllers/onboarding_screen_controller.dart';
 class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({super.key});
 
-  OnboardingScreenController controller = Get.put(OnboardingScreenController());
+  final OnboardingScreenController controller =
+      Get.find<OnboardingScreenController>();
 
   @override
   Widget build(BuildContext context) {

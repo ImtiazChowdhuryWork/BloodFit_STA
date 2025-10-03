@@ -18,8 +18,7 @@ class CustomTextWidgetWithReadMoreButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Each widget gets its own controller
-    final controller = Get.put(
-      ReadMoreController(),
+    final ReadMoreController controller = Get.find<ReadMoreController>(
       tag: UniqueKey().toString(),
     );
 

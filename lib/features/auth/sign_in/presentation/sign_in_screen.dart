@@ -4,13 +4,11 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/sign_in_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
-import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../custom_widgets/app_logo_widget.dart';
@@ -19,7 +17,7 @@ import '../../../../custom_widgets/social_media_button_widget.dart';
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
 
-  SignInScreenController controller = Get.put(SignInScreenController());
+  final SignInScreenController controller = Get.find<SignInScreenController>();
 
   @override
   Widget build(BuildContext context) {
