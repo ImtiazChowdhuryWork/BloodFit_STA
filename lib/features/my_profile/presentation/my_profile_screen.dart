@@ -3,15 +3,16 @@ import 'dart:developer';
 import 'package:bloodfit/constants/appList.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/profile_screen_controller.dart';
-import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_image_showing_widget.dart';
+import 'package:bloodfit/features/my_profile/presentation/widgets/show_image_picker_dialog.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../custom_widgets/profile_tile_card_widget.dart';
 
@@ -41,7 +42,35 @@ class MyProfileScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ///Section : ---------------------///Profile Image Picker Widget///-----------
-              ProfileImageShowingWidget(),
+              Obx(() {
+                return ProfileImageShowingWidget(
+                  onTap: () {
+                    log("Camera Icon Button Taped!");
+                    showImagPickerDialog(
+                      cameraOntap: () {
+                        log("Camera Button Tapped!");
+                        Get.back();
+                        controller.imagePicker(
+                          imagPickerSource: ImageSource.camera,
+                        );
+                      },
+                      galleryOntap: () {
+                        log("Gallery Button Taped!");
+                        Get.back();
+                        controller.imagePicker(
+                          imagPickerSource: ImageSource.gallery,
+                        );
+                      },
+                    );
+                  },
+                  shapeHeight: 120.h,
+                  shapeWidth: 120.w,
+                  imagePath: controller.pickedImagePath.value,
+                  defualtImagePath:
+                      Assets.images.profileAvatarDefaultImage.path,
+                  editIconPath: Assets.icons.cameraIcon,
+                );
+              }),
               UIHelper.verticalSpace(10.h),
 
               ///Section : ---------------------///Profile Image Picker Widget///-----------
@@ -66,6 +95,7 @@ class MyProfileScreen extends StatelessWidget {
                         ? AppList.freeUserProfileTileList[index]
                         : AppList.premimumUserProfileTileList[index];
                     return ProfileTileCardWidget(
+                      onTap: () {},
                       imagePath: data.imagePath,
                       title: data.title,
                     );

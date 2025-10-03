@@ -33,6 +33,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
 
+  /// File path: assets/icons/camera_icon_without_bg.svg
+  String get cameraIconWithoutBg => 'assets/icons/camera_icon_without_bg.svg';
+
   /// File path: assets/icons/crown_icon.svg
   String get crownIcon => 'assets/icons/crown_icon.svg';
 
@@ -64,6 +67,7 @@ class $AssetsIconsGen {
   List<String> get values => [
     bellIcon,
     cameraIcon,
+    cameraIconWithoutBg,
     crownIcon,
     facebookIcon,
     fitnessIcon,
