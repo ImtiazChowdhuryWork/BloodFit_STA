@@ -11,9 +11,8 @@ import '../../../../../gen/colors.gen.dart';
 import '../../../../../helper/ui_helpers.dart';
 
 class CustomPinInput extends StatelessWidget {
-  final VerifyOtpScreenController controller = Get.put(
-    VerifyOtpScreenController(),
-  );
+  final VerifyOtpScreenController controller =
+      Get.find<VerifyOtpScreenController>();
 
   CustomPinInput({super.key});
 

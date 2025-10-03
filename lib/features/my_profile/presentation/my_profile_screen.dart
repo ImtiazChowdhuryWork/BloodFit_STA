@@ -4,8 +4,11 @@ import 'package:bloodfit/constants/appList.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/profile_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
+import 'package:bloodfit/features/my_profile/presentation/widgets/log_out_button.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_image_showing_widget.dart';
+import 'package:bloodfit/features/my_profile/presentation/widgets/profile_tags_showing_widget.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/show_image_picker_dialog.dart';
+import 'package:bloodfit/features/my_profile/presentation/widgets/show_user_type_buttons.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -19,7 +22,8 @@ import '../../../custom_widgets/profile_tile_card_widget.dart';
 class MyProfileScreen extends StatelessWidget {
   MyProfileScreen({super.key});
 
-  ProfileScreenController controller = Get.put(ProfileScreenController());
+  final ProfileScreenController controller =
+      Get.find<ProfileScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,10 @@ class MyProfileScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              ///Section : Button -> User Types Buttons
+              ShowUserTypeButtons(),
+              UIHelper.verticalSpace(10.h),
+
               ///Section : ---------------------///Profile Image Picker Widget///-----------
               Obx(() {
                 return ProfileImageShowingWidget(
@@ -78,6 +86,18 @@ class MyProfileScreen extends StatelessWidget {
                 "Tasmia Hassan Shabonty",
                 style: TextFontStyle.headline16w500cfefefeStylePoppins,
               ),
+              UIHelper.verticalSpace(5.h),
+
+              ///Section : ---------------------///Profile Tags///-----------
+              Obx(() {
+                return !controller.isFreeUser
+                    ? ProfileTagShowingWidget(
+                        dietType: "Classic Diet",
+                        weightGainOrLooseTarget: "Loose Weight",
+                      )
+                    : SizedBox.shrink();
+              }),
+
               UIHelper.verticalSpace(32.h),
 
               ///Section : ---------------------///Profile Tile Based on User Subscription Type///-----------
@@ -95,7 +115,9 @@ class MyProfileScreen extends StatelessWidget {
                         ? AppList.freeUserProfileTileList[index]
                         : AppList.premimumUserProfileTileList[index];
                     return ProfileTileCardWidget(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(data.route);
+                      },
                       imagePath: data.imagePath,
                       title: data.title,
                     );
@@ -108,26 +130,11 @@ class MyProfileScreen extends StatelessWidget {
       ),
 
       ///Section : -----------///Log Out Button///-----------
-      bottomNavigationBar: Container(
-        height: 150.h,
-        color: Colors.transparent,
-        padding: EdgeInsets.only(
-          bottom: 80.h,
-          right: UIHelper.kDefaulutPadding(),
-          left: UIHelper.kDefaulutPadding(),
-          top: UIHelper.kDefaulutPadding(),
-        ),
-        child: InkWell(
-          onTap: () {
-            log("Button -> Logout Button Taped!");
-          },
-          child: ProfileTileCardWidget(
-            imagePath: Assets.icons.logoutIcon,
-            cardColor: AppColors.cb20000,
-            suffixColor: AppColors.cFFFFFF,
-            title: "Logout",
-          ),
-        ),
+      bottomNavigationBar: LogoutButton(
+        onTap: () {
+          log("Button -> Logout Button Taped!");
+        },
+        buttonTitle: "Logout",
       ),
     );
   }

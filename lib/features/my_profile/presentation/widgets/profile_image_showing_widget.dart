@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../../gen/assets.gen.dart';
 
 class ProfileImageShowingWidget extends StatelessWidget {
   final String? imagePath;
@@ -38,10 +35,19 @@ class ProfileImageShowingWidget extends StatelessWidget {
             return Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(4.r),
-                child: InteractiveViewer(
-                  child: imagePath != null && imagePath!.isNotEmpty
-                      ? Image.file(File(imagePath!))
-                      : Image.asset(defualtImagePath),
+                child: Container(
+                  width: 0.9.sw,
+                  height: 0.3.sh,
+                  color: Colors.white,
+                  padding: EdgeInsets.all(10.sp),
+                  child: InteractiveViewer(
+                    child:
+                        imagePath != null &&
+                            imagePath!.isNotEmpty &&
+                            File(imagePath!).existsSync()
+                        ? Image.file(fit: BoxFit.contain, File(imagePath!))
+                        : Image.asset(defualtImagePath),
+                  ),
                 ),
               ),
             );
@@ -52,6 +58,7 @@ class ProfileImageShowingWidget extends StatelessWidget {
         height: shapeHeight,
         width: shapeWidth,
         decoration: BoxDecoration(
+          color: Colors.transparent,
           shape: BoxShape.circle,
           image: DecorationImage(
             fit: BoxFit.cover,

@@ -154,7 +154,7 @@ final class CustomFormField extends StatelessWidget {
               hintTextStyle ?? TextFontStyle.headline14w400cfefefeStylePoppins,
           labelText: labelText,
           labelStyle:
-              labelStyle ?? TextFontStyle.headline14w500c292E34StylePoppins,
+              labelStyle ?? TextFontStyle.headline14w400cFFFFFFStylePoppins,
           errorStyle: TextStyle(
             fontSize: 10.sp,
             fontWeight: FontWeight.w400,

@@ -1,6 +1,11 @@
 class ProfileTileModel {
-  String imagePath;
-  String title;
+  final String imagePath;
+  final String title;
+  final String route;
 
-  ProfileTileModel({required this.imagePath, required this.title});
+  ProfileTileModel({
+    required this.imagePath,
+    required this.title,
+    required this.route,
+  });
 }

@@ -30,4 +30,27 @@ class ProfileScreenController extends GetxController {
   Rx<UserSubscriptionType> subscriptionType =
       AppConstants.defaultSubscriptionType.obs;
   bool get isFreeUser => subscriptionType.value == UserSubscriptionType.free;
+
+  ///-------------------------///Dummy Code///For development Purpose Only
+  ///Set User SubscriptionType as -> FREE
+  void setSubscriptionTypeFree() {
+    subscriptionType.value = UserSubscriptionType.free;
+  }
+
+  ///Set User SubscriptionType as -> ELITE
+  void setSubscriptionTypeElite() {
+    subscriptionType.value = UserSubscriptionType.elite;
+  }
+
+  ///Set User SubscriptionType as -> PRO
+  void setSubscriptionTypePro() {
+    subscriptionType.value = UserSubscriptionType.pro;
+  }
+
+  ///Set User SubscriptionType as -> STARTER
+  void setSubscriptionTypeStarter() {
+    subscriptionType.value = UserSubscriptionType.starter;
+  }
+
+  ///-------------------////End of Dummy Code///-------------------------------
 }

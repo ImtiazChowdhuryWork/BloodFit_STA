@@ -4,10 +4,15 @@ import 'package:bloodfit/features/auth/reset_password/presentation/reset_passwor
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
 import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart';
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
+import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
+import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
+import 'package:bloodfit/features/mealplan/presentation/mealplan_screen.dart';
 import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart';
 import 'package:bloodfit/features/notification/presentation/notification_screen.dart';
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
+import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:flutter/material.dart'; // 👈 Needed for BuildContext, Widget, FadeTransition
 import 'package:get/get.dart';
 
@@ -21,12 +26,18 @@ class Routes {
   static const String onboardingScreen = '/onboarding_screen';
   static const String signInScreen = '/sign_in_screen';
   static const String signUpScreen = '/sign_up_screen';
+  static const String signOut = '/sign_out';
   static const String forgotPasswordScreen = '/forgot_password_screen';
   static const String verifyOtpScreen = '/verify_otp_screen';
   static const String resetPasswordScreen = '/reset_password_screen';
   static const String enterYourDetailsScreen = '/enter_your_details_screen';
   static const String notificationScreen = '/notifications_screen';
   static const String myProfileScreen = '/my_profile_screen';
+  static const String editProfileScreen = '/edit_profile_screen';
+  static const String settingsScreen = '/settings_screen';
+  static const String mealPlanScreen = '/meal_plan_screen';
+  static const String fitnessScreen = '/fit_ness_screen';
+  static const String subscriptionScreen = '/subs_cription_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -114,6 +125,60 @@ class Routes {
     GetPage(
       name: myProfileScreen,
       page: () => MyProfileScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///editProfileScreen
+    GetPage(
+      name: editProfileScreen,
+      page: () => EditProfileScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///settingsScreen
+    GetPage(
+      name: settingsScreen,
+      page: () => SettingsScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///mealPlanScreen
+    GetPage(
+      name: mealPlanScreen,
+      page: () => MealplanScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///fitnessScreen
+    GetPage(
+      name: fitnessScreen,
+      page: () => FitnessScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///subscriptionScreen
+    GetPage(
+      name: subscriptionScreen,
+      page: () => SubscriptionScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///signOut
+    GetPage(
+      name: signOut,
+      page: () => SignInScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
