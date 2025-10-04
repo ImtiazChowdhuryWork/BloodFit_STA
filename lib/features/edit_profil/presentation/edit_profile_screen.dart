@@ -10,20 +10,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../controllers/custom_image_picker_controller.dart';
 import '../../../controllers/edit_profile_screen_controller.dart';
-import '../../../controllers/profile_screen_controller.dart';
 import '../../../custom_widgets/custom_drop_down_field_widget.dart';
+import '../../../custom_widgets/custom_image_picker_widget.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../helper/ui_helpers.dart';
-import '../../my_profile/presentation/widgets/profile_image_showing_widget.dart';
-import '../../my_profile/presentation/widgets/show_image_picker_dialog.dart';
+import '../../../utils/image_picker_handler.dart';
 
 class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({super.key});
 
-  final ProfileScreenController profileScreenController =
-      Get.find<ProfileScreenController>();
+  final CustomImagePickerController imageController = Get.put(
+    CustomImagePickerController(),
+    tag: 'editProfileScreen',
+  );
+
+  late final ImagePickerHandler pickerHandler = ImagePickerHandler(
+    imageController,
+  );
+
   final EditProfileScreenController editProfileScreenController =
       Get.find<EditProfileScreenController>();
 
@@ -49,35 +56,15 @@ class EditProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ///Section : ---------------------///Profile Image Picker Widget///-----------
-                Obx(() {
-                  return ProfileImageShowingWidget(
-                    onTap: () {
-                      log("Camera Icon Button Taped!");
-                      showImagPickerDialog(
-                        cameraOntap: () {
-                          log("Camera Button Tapped!");
-                          Get.back();
-                          profileScreenController.imagePicker(
-                            imagPickerSource: ImageSource.camera,
-                          );
-                        },
-                        galleryOntap: () {
-                          log("Gallery Button Taped!");
-                          Get.back();
-                          profileScreenController.imagePicker(
-                            imagPickerSource: ImageSource.gallery,
-                          );
-                        },
-                      );
-                    },
-                    shapeHeight: 120.h,
-                    shapeWidth: 120.w,
-                    imagePath: profileScreenController.pickedImagePath.value,
-                    defualtImagePath:
-                        Assets.images.profileAvatarDefaultImage.path,
-                    editIconPath: Assets.icons.cameraIcon,
-                  );
-                }),
+                CustomImagePickerWidget(
+                  controller: imageController,
+                  handler: pickerHandler,
+                  defaultImagePath:
+                      Assets.images.profileAvatarDefaultImage.path,
+                  editIconPath: Assets.icons.cameraIcon,
+                  shapeHeight: 120.h,
+                  shapeWidth: 120.w,
+                ),
                 UIHelper.verticalSpace(30.h),
 
                 ///Section : -----------///Form Field -> First Name///--------------
