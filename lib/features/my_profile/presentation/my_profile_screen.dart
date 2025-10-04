@@ -5,9 +5,7 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/profile_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/log_out_button.dart';
-import 'package:bloodfit/features/my_profile/presentation/widgets/profile_image_showing_widget.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_tags_showing_widget.dart';
-import 'package:bloodfit/features/my_profile/presentation/widgets/show_image_picker_dialog.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/show_user_type_buttons.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -15,12 +13,23 @@ import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
+import '../../../controllers/custom_image_picker_controller.dart';
+import '../../../custom_widgets/custom_image_picker_widget.dart';
 import '../../../custom_widgets/profile_tile_card_widget.dart';
+import '../../../utils/image_picker_handler.dart';
 
 class MyProfileScreen extends StatelessWidget {
   MyProfileScreen({super.key});
+
+  final CustomImagePickerController imageController = Get.put(
+    CustomImagePickerController(),
+    tag: 'profileScreen',
+  );
+
+  late final ImagePickerHandler pickerHandler = ImagePickerHandler(
+    imageController,
+  );
 
   final ProfileScreenController controller =
       Get.find<ProfileScreenController>();
@@ -50,35 +59,14 @@ class MyProfileScreen extends StatelessWidget {
               UIHelper.verticalSpace(10.h),
 
               ///Section : ---------------------///Profile Image Picker Widget///-----------
-              Obx(() {
-                return ProfileImageShowingWidget(
-                  onTap: () {
-                    log("Camera Icon Button Taped!");
-                    showImagPickerDialog(
-                      cameraOntap: () {
-                        log("Camera Button Tapped!");
-                        Get.back();
-                        controller.imagePicker(
-                          imagPickerSource: ImageSource.camera,
-                        );
-                      },
-                      galleryOntap: () {
-                        log("Gallery Button Taped!");
-                        Get.back();
-                        controller.imagePicker(
-                          imagPickerSource: ImageSource.gallery,
-                        );
-                      },
-                    );
-                  },
-                  shapeHeight: 120.h,
-                  shapeWidth: 120.w,
-                  imagePath: controller.pickedImagePath.value,
-                  defualtImagePath:
-                      Assets.images.profileAvatarDefaultImage.path,
-                  editIconPath: Assets.icons.cameraIcon,
-                );
-              }),
+              CustomImagePickerWidget(
+                controller: imageController,
+                handler: pickerHandler,
+                defaultImagePath: Assets.images.profileAvatarDefaultImage.path,
+                editIconPath: Assets.icons.cameraIcon,
+                shapeHeight: 120.h,
+                shapeWidth: 120.w,
+              ),
               UIHelper.verticalSpace(10.h),
 
               ///Section : ---------------------///Profile Image Picker Widget///-----------

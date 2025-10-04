@@ -19,6 +19,6 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => VerifyOtpScreenController());
     Get.lazyPut(() => ResetPasswordScreenController());
     Get.lazyPut(() => ProfileScreenController());
-    Get.lazyPut(() => EditProfileScreenController());
+    Get.lazyPut(() => EditProfileScreenController(), fenix: true);
   }
 }

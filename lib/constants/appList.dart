@@ -34,6 +34,11 @@ class AppList {
   static List<ProfileTileModel> freeUserProfileTileList = [
     ProfileTileModel(
       imagePath: Assets.icons.personIcon,
+      title: "View Profile",
+      route: Routes.viewProfileInfoScreen,
+    ),
+    ProfileTileModel(
+      imagePath: Assets.icons.personIcon,
       title: "Edit Profile",
       route: Routes.editProfileScreen,
     ),
@@ -41,6 +46,11 @@ class AppList {
       imagePath: Assets.icons.settingsIcon,
       title: "Settings",
       route: Routes.settingsScreen,
+    ),
+    ProfileTileModel(
+      imagePath: Assets.icons.mealIcon,
+      title: "Subscription: Starter",
+      route: Routes.subscriptionScreen,
     ),
   ];
 
