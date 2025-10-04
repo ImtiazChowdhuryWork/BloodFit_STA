@@ -18,7 +18,7 @@ class CustomCard extends StatelessWidget {
       // height: height ?? 114.h,
       padding: EdgeInsets.all(16.sp),
       decoration: BoxDecoration(
-        color: AppColors.cFFFFFF,
+        color: AppColors.c363636,
         boxShadow: [
           BoxShadow(
             color: AppColors.c000000.withOpacity(0.1),

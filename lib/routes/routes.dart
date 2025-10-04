@@ -13,7 +13,6 @@ import 'package:bloodfit/features/notification/presentation/notification_screen.
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
-import 'package:bloodfit/features/view_profile_info/presentation/view_profile_info_screen.dart';
 import 'package:flutter/material.dart'; // 👈 Needed for BuildContext, Widget, FadeTransition
 import 'package:get/get.dart';
 
@@ -181,15 +180,6 @@ class Routes {
     GetPage(
       name: signOut,
       page: () => SignInScreen(),
-      transition: _transition(),
-      customTransition: _customTransition(),
-      transitionDuration: _duration(),
-    ),
-
-    ///viewProfileInfoScreen
-    GetPage(
-      name: viewProfileInfoScreen,
-      page: () => ViewProfileInfoScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
