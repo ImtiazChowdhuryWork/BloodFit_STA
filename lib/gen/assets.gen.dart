@@ -39,14 +39,26 @@ class $AssetsIconsGen {
   /// File path: assets/icons/crown_icon.svg
   String get crownIcon => 'assets/icons/crown_icon.svg';
 
+  /// File path: assets/icons/delete_user_icon.svg
+  String get deleteUserIcon => 'assets/icons/delete_user_icon.svg';
+
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
+
+  /// File path: assets/icons/faq_icon.svg
+  String get faqIcon => 'assets/icons/faq_icon.svg';
+
+  /// File path: assets/icons/file_icon.svg
+  String get fileIcon => 'assets/icons/file_icon.svg';
 
   /// File path: assets/icons/fitness_icon.svg
   String get fitnessIcon => 'assets/icons/fitness_icon.svg';
 
   /// File path: assets/icons/google_icon.svg
   String get googleIcon => 'assets/icons/google_icon.svg';
+
+  /// File path: assets/icons/lock_icon.svg
+  String get lockIcon => 'assets/icons/lock_icon.svg';
 
   /// File path: assets/icons/logout_icon.svg
   String get logoutIcon => 'assets/icons/logout_icon.svg';
@@ -60,11 +72,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/person_icon.svg
   String get personIcon => 'assets/icons/person_icon.svg';
 
+  /// File path: assets/icons/privacy_policy_icon.svg
+  String get privacyPolicyIcon => 'assets/icons/privacy_policy_icon.svg';
+
   /// File path: assets/icons/red_bell_icon.svg
   String get redBellIcon => 'assets/icons/red_bell_icon.svg';
 
   /// File path: assets/icons/settings_icon.svg
   String get settingsIcon => 'assets/icons/settings_icon.svg';
+
+  /// File path: assets/icons/warning_icon.svg
+  String get warningIcon => 'assets/icons/warning_icon.svg';
 
   /// List of all assets
   List<String> get values => [
@@ -72,15 +90,21 @@ class $AssetsIconsGen {
     cameraIcon,
     cameraIconWithoutBg,
     crownIcon,
+    deleteUserIcon,
     facebookIcon,
+    faqIcon,
+    fileIcon,
     fitnessIcon,
     googleIcon,
+    lockIcon,
     logoutIcon,
     mealIcon,
     penIcon,
     personIcon,
+    privacyPolicyIcon,
     redBellIcon,
     settingsIcon,
+    warningIcon,
   ];
 }
 

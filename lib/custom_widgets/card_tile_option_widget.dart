@@ -6,13 +6,13 @@ import '../constants/text_font_style.dart';
 import '../gen/colors.gen.dart';
 import '../helper/ui_helpers.dart';
 
-class ProfileTileCardWidget extends StatelessWidget {
+class CardTileOptionWidget extends StatelessWidget {
   final String imagePath;
   final String title;
   final Color? cardColor;
   final Color? suffixColor;
   final void Function()? onTap;
-  const ProfileTileCardWidget({
+  const CardTileOptionWidget({
     super.key,
     required this.imagePath,
     required this.title,
