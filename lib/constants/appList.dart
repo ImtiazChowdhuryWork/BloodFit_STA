@@ -165,14 +165,14 @@ class AppList {
       titleEnum: SettingsOptionTitle.changePassword,
       sectionTitle: " Account Management",
 
-      route: Routes.resetPasswordScreen,
+      route: Routes.changePasswordScreen,
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
       imagePath: Assets.icons.fileIcon,
       titleEnum: SettingsOptionTitle.termsAndConditions,
       sectionTitle: "Legal & Privacy",
-      route: Routes.myProfileScreen,
+      route: Routes.termsAndConditionsScreen,
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(

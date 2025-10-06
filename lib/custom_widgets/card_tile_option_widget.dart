@@ -11,6 +11,8 @@ class CardTileOptionWidget extends StatelessWidget {
   final String title;
   final Color? cardColor;
   final Color? suffixColor;
+  final Color? borderColor;
+  final bool isBorderUsed;
   final void Function()? onTap;
   const CardTileOptionWidget({
     super.key,
@@ -19,6 +21,8 @@ class CardTileOptionWidget extends StatelessWidget {
     this.cardColor,
     this.suffixColor,
     this.onTap,
+    this.borderColor = Colors.transparent,
+    this.isBorderUsed = false,
   });
 
   @override
@@ -29,6 +33,9 @@ class CardTileOptionWidget extends StatelessWidget {
         width: 1.sw,
         decoration: BoxDecoration(
           color: cardColor ?? AppColors.c3c3c3c,
+          border: isBorderUsed
+              ? Border.all(color: borderColor ?? Colors.transparent)
+              : null,
           borderRadius: BorderRadius.circular(8.r),
         ),
         padding: EdgeInsets.all(12.sp),

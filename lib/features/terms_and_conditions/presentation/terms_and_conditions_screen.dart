@@ -1,3 +1,4 @@
+import 'package:bloodfit/constants/app_text.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,8 @@ class TermsAndConditionsScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "App Long Text",
-                  style: TextFontStyle.headline12w400c999999StylePoppins,
+                  longText,
+                  style: TextFontStyle.headline14w400cc6c6c6StylePoppins,
                 ),
               ],
             ),
