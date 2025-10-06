@@ -1,8 +1,13 @@
+import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/features/my_profile/model/personal_data_model.dart';
+import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin_tile_extension.dart';
+import 'package:bloodfit/features/settings/widgets/settings_option_title_extension.dart';
 import 'package:bloodfit/routes/routes.dart';
 
 import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../gen/assets.gen.dart';
+import '../utils/card_tile_option_model.dart';
 
 class AppList {
   static List<OnboardingModel> onboardingList = [
@@ -31,49 +36,59 @@ class AppList {
     ),
   ];
 
-  static List<ProfileTileModel> freeUserProfileTileList = [
-    ProfileTileModel(
+  static List<CardTileOptionModel<ProfileOptionsTitle>>
+  freeUserProfileTileList = [
+    CardTileOptionModel(
       imagePath: Assets.icons.penIcon,
-      title: "Edit Profile",
+      titleEnum: ProfileOptionsTitle.editProfile,
       route: Routes.editProfileScreen,
+      labelMapper: (e) => e.label,
     ),
-    ProfileTileModel(
+    CardTileOptionModel(
       imagePath: Assets.icons.settingsIcon,
-      title: "Settings",
+      titleEnum: ProfileOptionsTitle.setTings,
       route: Routes.settingsScreen,
+      labelMapper: (e) => e.label,
     ),
-    ProfileTileModel(
+    CardTileOptionModel(
       imagePath: Assets.icons.mealIcon,
-      title: "Subscription: Starter",
+      titleEnum: ProfileOptionsTitle.subscriptoinType,
       route: Routes.subscriptionScreen,
+      labelMapper: (e) => e.label,
     ),
   ];
 
-  static List<ProfileTileModel> premimumUserProfileTileList = [
-    ProfileTileModel(
+  static List<CardTileOptionModel<ProfileOptionsTitle>>
+  premimumUserProfileTileList = [
+    CardTileOptionModel(
       imagePath: Assets.icons.personIcon,
-      title: "Edit Profile",
+      titleEnum: ProfileOptionsTitle.editProfile,
       route: Routes.editProfileScreen,
+      labelMapper: (e) => e.label,
     ),
-    ProfileTileModel(
+    CardTileOptionModel(
       imagePath: Assets.icons.mealIcon,
-      title: "Mealplan",
+      titleEnum: ProfileOptionsTitle.mealPlan,
       route: Routes.mealPlanScreen,
+      labelMapper: (e) => e.label,
     ),
-    ProfileTileModel(
+    CardTileOptionModel(
       imagePath: Assets.icons.fitnessIcon,
-      title: "Fitness",
+      titleEnum: ProfileOptionsTitle.fitNess,
       route: Routes.fitnessScreen,
+      labelMapper: (e) => e.label,
     ),
-    ProfileTileModel(
+    CardTileOptionModel(
       imagePath: Assets.icons.settingsIcon,
-      title: "Settings",
+      titleEnum: ProfileOptionsTitle.setTings,
       route: Routes.settingsScreen,
+      labelMapper: (e) => e.label,
     ),
-    ProfileTileModel(
+    CardTileOptionModel(
       imagePath: Assets.icons.mealIcon,
-      title: "Subscription: Starter",
+      titleEnum: ProfileOptionsTitle.subscriptoinType,
       route: Routes.subscriptionScreen,
+      labelMapper: (e) => e.label,
     ),
   ];
 
@@ -82,6 +97,14 @@ class AppList {
 
   /// Gender List
   static final List<String> genderList = ["Male", "Female"];
+
+  /// Personal Data List
+  static final List<PersonalDataModel> personalDataList = [
+    PersonalDataModel(data: "175 Cm", field: "Height"),
+    PersonalDataModel(data: "85 Kg", field: "Weight"),
+    PersonalDataModel(data: "Female", field: "Sex"),
+    PersonalDataModel(data: "A Positive", field: "Blood Type"),
+  ];
 
   ///Height List
   // Height options for humans in cm (from 120cm to 210cm)
@@ -134,5 +157,48 @@ class AppList {
     "140 kg",
     "145 kg",
     "150 kg",
+  ];
+
+  static List<CardTileOptionModel<SettingsOptionTitle>> settingsScreenList = [
+    CardTileOptionModel(
+      imagePath: Assets.icons.lockIcon,
+      titleEnum: SettingsOptionTitle.changePassword,
+      sectionTitle: " Account Management",
+
+      route: Routes.resetPasswordScreen,
+      labelMapper: (e) => e.label,
+    ),
+    CardTileOptionModel(
+      imagePath: Assets.icons.fileIcon,
+      titleEnum: SettingsOptionTitle.termsAndConditions,
+      sectionTitle: "Legal & Privacy",
+      route: Routes.myProfileScreen,
+      labelMapper: (e) => e.label,
+    ),
+    CardTileOptionModel(
+      imagePath: Assets.icons.privacyPolicyIcon,
+      titleEnum: SettingsOptionTitle.privacyPolicy,
+      route: Routes.myProfileScreen,
+      labelMapper: (e) => e.label,
+    ),
+    CardTileOptionModel(
+      imagePath: Assets.icons.warningIcon,
+      titleEnum: SettingsOptionTitle.reportAProblem,
+      sectionTitle: "Support",
+      route: Routes.myProfileScreen,
+      labelMapper: (e) => e.label,
+    ),
+    CardTileOptionModel(
+      imagePath: Assets.icons.faqIcon,
+      titleEnum: SettingsOptionTitle.faq,
+      route: Routes.myProfileScreen,
+      labelMapper: (e) => e.label,
+    ),
+    CardTileOptionModel(
+      imagePath: Assets.icons.deleteUserIcon,
+      titleEnum: SettingsOptionTitle.deleteAccount,
+      route: Routes.myProfileScreen,
+      labelMapper: (e) => e.label,
+    ),
   ];
 }

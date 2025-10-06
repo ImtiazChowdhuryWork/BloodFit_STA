@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../custom_widgets/profile_tile_card_widget.dart';
+import '../../../../custom_widgets/card_tile_option_widget.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -24,7 +24,7 @@ class LogoutButton extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        child: ProfileTileCardWidget(
+        child: CardTileOptionWidget(
           imagePath: Assets.icons.logoutIcon,
           cardColor: AppColors.cb20000,
           suffixColor: AppColors.cFFFFFF,
