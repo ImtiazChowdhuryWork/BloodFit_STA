@@ -1,6 +1,7 @@
 import 'package:bloodfit/controllers/sign_up_screen_controller.dart';
 import 'package:get/get.dart';
 
+import '../controllers/change_password_screen_controller.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
 import '../controllers/otp_validation_controller.dart';
@@ -20,5 +21,6 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => ResetPasswordScreenController());
     Get.lazyPut(() => ProfileScreenController(), fenix: true);
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
+    // Get.lazyPut(() => ChangePasswordScreenController());
   }
 }

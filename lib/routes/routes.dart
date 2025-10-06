@@ -4,6 +4,7 @@ import 'package:bloodfit/features/auth/reset_password/presentation/reset_passwor
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
 import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart';
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
+import 'package:bloodfit/features/change_password/presentation/change_password_screen.dart';
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
@@ -13,9 +14,12 @@ import 'package:bloodfit/features/notification/presentation/notification_screen.
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
+import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
 import 'package:flutter/material.dart'; // 👈 Needed for BuildContext, Widget, FadeTransition
 import 'package:get/get.dart';
 
+import '../controllers/change_password_screen_controller.dart';
+import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 
 class Routes {
@@ -39,6 +43,8 @@ class Routes {
   static const String fitnessScreen = '/fit_ness_screen';
   static const String subscriptionScreen = '/subs_cription_screen';
   static const String viewProfileInfoScreen = '/view_profile_info_screen';
+  static const String changePasswordScreen = '/change_password_screen';
+  static const String termsAndConditionsScreen = '/terms_and_conditions_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -180,6 +186,26 @@ class Routes {
     GetPage(
       name: signOut,
       page: () => SignInScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///changePasswordScreen
+    GetPage(
+      name: changePasswordScreen,
+      page: () => ChangePasswordScreen(),
+      binding: ChangePasswordBinding(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///termsAndConditionsScreen
+    GetPage(
+      name: termsAndConditionsScreen,
+      page: () => TermsAndConditionsScreen(),
+      binding: ChangePasswordBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
