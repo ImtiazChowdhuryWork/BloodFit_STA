@@ -13,6 +13,7 @@ import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart
 import 'package:bloodfit/features/notification/presentation/notification_screen.dart';
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:bloodfit/features/privacy_policy/presentation/privacy_policy_screen.dart';
+import 'package:bloodfit/features/report_a_problem/presentation/report_a_problem_screen.dart';
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
@@ -21,6 +22,7 @@ import 'package:get/get.dart';
 
 import '../controllers/change_password_screen_controller.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
+import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 
 class Routes {
@@ -47,6 +49,7 @@ class Routes {
   static const String changePasswordScreen = '/change_password_screen';
   static const String termsAndConditionsScreen = '/terms_and_conditions_screen';
   static const String privacyPolicyScreen = '/privacy_policy_screen';
+  static const String reportProbelmScreen = '/repor_a_problem_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -207,7 +210,7 @@ class Routes {
     GetPage(
       name: termsAndConditionsScreen,
       page: () => TermsAndConditionsScreen(),
-      binding: ChangePasswordBinding(),
+
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -217,7 +220,17 @@ class Routes {
     GetPage(
       name: privacyPolicyScreen,
       page: () => PrivacyPolicyScreen(),
-      binding: ChangePasswordBinding(),
+
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///reportProbelmScreen
+    GetPage(
+      name: reportProbelmScreen,
+      page: () => ReportAProblemScreen(),
+      binding: ReportAProblemScreenBinging(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

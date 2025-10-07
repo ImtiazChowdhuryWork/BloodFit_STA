@@ -185,7 +185,7 @@ class AppList {
       imagePath: Assets.icons.warningIcon,
       titleEnum: SettingsOptionTitle.reportAProblem,
       sectionTitle: "Support",
-      route: Routes.myProfileScreen,
+      route: Routes.reportProbelmScreen,
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
@@ -200,5 +200,21 @@ class AppList {
       route: Routes.myProfileScreen,
       labelMapper: (e) => e.label,
     ),
+  ];
+
+  static List<String> reportProblemTypeList = [
+    "Account Login Issue",
+    "App Crashing or Freezing",
+    "Data Not Syncing",
+    "Incorrect Information Displayed",
+    "Payment or Subscription Problem",
+    "Feature Not Working",
+    "Bug or Error Message",
+    "Notification Not Showing",
+    "Performance Issue (Slow, Lag, Delay)",
+    "UI/UX Problem",
+    "Request for New Feature",
+    "Feedback or Suggestion",
+    "Other",
   ];
 }

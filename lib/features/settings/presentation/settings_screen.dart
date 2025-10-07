@@ -71,7 +71,9 @@ class SettingsScreen extends StatelessWidget {
                         ? AppColors.c000000
                         : null,
                     isBorderUsed:
-                        data.titleEnum == SettingsOptionTitle.deleteAccount,
+                        data.titleEnum == SettingsOptionTitle.deleteAccount
+                        ? true
+                        : false,
                     borderColor:
                         data.titleEnum == SettingsOptionTitle.deleteAccount
                         ? AppColors.cb20000
