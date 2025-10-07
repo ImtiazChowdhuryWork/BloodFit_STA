@@ -178,7 +178,7 @@ class AppList {
     CardTileOptionModel(
       imagePath: Assets.icons.privacyPolicyIcon,
       titleEnum: SettingsOptionTitle.privacyPolicy,
-      route: Routes.myProfileScreen,
+      route: Routes.privacyPolicyScreen,
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
