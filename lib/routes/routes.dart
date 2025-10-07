@@ -12,6 +12,7 @@ import 'package:bloodfit/features/mealplan/presentation/mealplan_screen.dart';
 import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart';
 import 'package:bloodfit/features/notification/presentation/notification_screen.dart';
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:bloodfit/features/privacy_policy/presentation/privacy_policy_screen.dart';
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
@@ -45,6 +46,7 @@ class Routes {
   static const String viewProfileInfoScreen = '/view_profile_info_screen';
   static const String changePasswordScreen = '/change_password_screen';
   static const String termsAndConditionsScreen = '/terms_and_conditions_screen';
+  static const String privacyPolicyScreen = '/privacy_policy_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -205,6 +207,16 @@ class Routes {
     GetPage(
       name: termsAndConditionsScreen,
       page: () => TermsAndConditionsScreen(),
+      binding: ChangePasswordBinding(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///privacyPolicyScreen
+    GetPage(
+      name: privacyPolicyScreen,
+      page: () => PrivacyPolicyScreen(),
       binding: ChangePasswordBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
