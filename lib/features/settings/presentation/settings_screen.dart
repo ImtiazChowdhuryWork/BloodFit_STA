@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:bloodfit/constants/appList.dart';
 import 'package:bloodfit/custom_widgets/card_tile_option_widget.dart';
+import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +13,7 @@ import 'package:get/get.dart';
 import '../../../constants/app_enums.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
+import '../widgets/show_delete_bottom_sheet.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -62,7 +67,23 @@ class SettingsScreen extends StatelessWidget {
                   /// ----------- Settings Option Card -----------
                   CardTileOptionWidget(
                     onTap: () {
-                      Get.toNamed(data.route);
+                      if (data.titleEnum != SettingsOptionTitle.deleteAccount) {
+                        Get.toNamed(data.route);
+                      } else if (data.titleEnum ==
+                          SettingsOptionTitle.deleteAccount) {
+                        showDeleteBottomSheet(
+                          onDelete: () {
+                            log("Button -> Delete Button Taped!");
+                            Get.back();
+                          },
+                          onCancel: () {
+                            log("Button -> Cancel Button Taped!");
+                            Get.back();
+                          },
+                        );
+                      } else {
+                        return;
+                      }
                     },
 
                     /// Apply a red bordered card style only for "Delete Account"
