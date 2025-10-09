@@ -4,6 +4,7 @@ import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin
 import 'package:bloodfit/features/settings/widgets/settings_option_title_extension.dart';
 import 'package:bloodfit/routes/routes.dart';
 
+import '../features/faq/model/faq_model.dart';
 import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../gen/assets.gen.dart';
@@ -191,7 +192,7 @@ class AppList {
     CardTileOptionModel(
       imagePath: Assets.icons.faqIcon,
       titleEnum: SettingsOptionTitle.faq,
-      route: Routes.myProfileScreen,
+      route: Routes.faqScreen,
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
@@ -216,5 +217,91 @@ class AppList {
     "Request for New Feature",
     "Feedback or Suggestion",
     "Other",
+  ];
+
+  static List<FaqModel> faqList = [
+    FaqModel(
+      question: "How can I reset my password?",
+      ans:
+          "Go to the login page and tap on 'Forgot Password'. Enter your registered email address, and you'll receive a link to reset your password.",
+    ),
+    FaqModel(
+      question: "How do I contact support?",
+      ans:
+          "You can contact our support team through the 'Report a Problem' section inside the app or email us directly at support@bloodfit.com.",
+    ),
+    FaqModel(
+      question: "Can I update my profile information?",
+      ans:
+          "Yes, go to the Profile tab and tap 'Edit Profile' to update your personal details, including name, contact number, and location.",
+    ),
+    FaqModel(
+      question: "Is my data secure?",
+      ans:
+          "Absolutely. All your information is encrypted and stored securely following industry best practices.",
+    ),
+    FaqModel(
+      question: "Can I delete my account?",
+      ans:
+          "Yes, you can delete your account anytime from Settings → Account → Delete Account. Note that this action is irreversible.",
+    ),
+  ];
+
+  static List<String> bodyShapesList = [
+    "Ectomorph",
+    "Mesomorph",
+    "Endomorph",
+    "Hourglass",
+    "Pear",
+    "Apple",
+    "Rectangle",
+    "Inverted Triangle",
+    "Diamond",
+    "Top Hourglass",
+    "Bottom Hourglass",
+  ];
+
+  static List<String> dailyActivityLevelsList = [
+    "Sedentary",
+    "Lightly Active",
+    "Moderately Active",
+    "Very Active",
+    "Extra Active",
+  ];
+
+  static List<String> workoutLevelsList = [
+    "Sedentary",
+    "Light",
+    "Moderate",
+    "Intense",
+    "Very Intense",
+    "Competitive",
+  ];
+
+  static const List<String> workoutGoalsList = [
+    "Build Muscle",
+    "Lose Fat",
+    "Increase Strength",
+    "Improve Endurance",
+    "Enhance Flexibility",
+    "Improve Overall Fitness",
+    "Rehabilitation",
+    "Weight Maintenance",
+  ];
+
+  static List<String> workoutFocusAreasList = [
+    "Full Body",
+    "Upper Body",
+    "Lower Body",
+    "Core / Abs",
+    "Arms",
+    "Legs",
+    "Back",
+    "Chest",
+    "Shoulders",
+    "Glutes",
+    "Cardio / Endurance",
+    "Flexibility / Stretching",
+    "Balance / Stability",
   ];
 }
