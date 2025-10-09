@@ -147,6 +147,10 @@ class $AssetsImagesGen {
   AssetGenImage get profileAvatarDefaultImage =>
       const AssetGenImage('assets/images/profile_avatar_default_image.png');
 
+  /// File path: assets/images/trash_can_image.png
+  AssetGenImage get trashCanImage =>
+      const AssetGenImage('assets/images/trash_can_image.png');
+
   /// File path: assets/images/userImage.png
   AssetGenImage get userImage =>
       const AssetGenImage('assets/images/userImage.png');
@@ -162,6 +166,7 @@ class $AssetsImagesGen {
     onboardingImageThree,
     onboardingImageTwo,
     profileAvatarDefaultImage,
+    trashCanImage,
     userImage,
   ];
 }
