@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:bloodfit/features/auth/forgot_password/presentation/forgot_password_screen.dart';
 import 'package:bloodfit/features/auth/reset_password/presentation/reset_password_screen.dart';
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
@@ -17,11 +18,11 @@ import 'package:bloodfit/features/report_a_problem/presentation/report_a_problem
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
-import 'package:flutter/material.dart'; // 👈 Needed for BuildContext, Widget, FadeTransition
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/change_password_screen_controller.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
+import '../features/faq/presentation/faq_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 
@@ -50,6 +51,7 @@ class Routes {
   static const String termsAndConditionsScreen = '/terms_and_conditions_screen';
   static const String privacyPolicyScreen = '/privacy_policy_screen';
   static const String reportProbelmScreen = '/repor_a_problem_screen';
+  static const String faqScreen = '/faq_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -230,6 +232,16 @@ class Routes {
     GetPage(
       name: reportProbelmScreen,
       page: () => ReportAProblemScreen(),
+      binding: ReportAProblemScreenBinging(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///faqScreen
+    GetPage(
+      name: faqScreen,
+      page: () => FaqScreen(),
       binding: ReportAProblemScreenBinging(),
       transition: _transition(),
       customTransition: _customTransition(),
