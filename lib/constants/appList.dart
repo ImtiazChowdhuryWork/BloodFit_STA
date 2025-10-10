@@ -7,6 +7,7 @@ import 'package:bloodfit/routes/routes.dart';
 import '../features/faq/model/faq_model.dart';
 import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
+import '../features/subscription/model/subscription_package_model.dart';
 import '../gen/assets.gen.dart';
 import '../utils/card_tile_option_model.dart';
 
@@ -387,5 +388,58 @@ class AppList {
     'Bread',
     'Sugar',
     'Artificial Sweeteners',
+  ];
+
+  static final List<SubscriptionPackageModel> subscriptionPackagesList = [
+    SubscriptionPackageModel(
+      isDiscountOfferAvailable: true,
+      packageType: "Free",
+      packagePrice: 0.0,
+      discountOffer: "Get 50% Discount On The First Month",
+      packageOffersList: [
+        "Access to basic features",
+        "Limited meal plan customization",
+        "Community support access",
+      ],
+      isActive: true,
+    ),
+    SubscriptionPackageModel(
+      isDiscountOfferAvailable: true,
+      packageType: "Starter",
+      packagePrice: 19.99,
+      isActive: false,
+      discountOffer: "Get 50% Discount On The First Month",
+      packageOffersList: [
+        "All Free features",
+        "Weekly meal recommendations",
+        "Calorie tracking dashboard",
+      ],
+    ),
+    SubscriptionPackageModel(
+      isDiscountOfferAvailable: true,
+      packageType: "Pro",
+      packagePrice: 49.99,
+      isActive: false,
+      discountOffer: "Get 50% Discount On The First Month",
+      packageOffersList: [
+        "All Starter features",
+        "Personalized AI meal planning",
+        "Fitness tracking integration",
+        "Exclusive pro community access",
+      ],
+    ),
+    SubscriptionPackageModel(
+      isDiscountOfferAvailable: true,
+      packageType: "Elite",
+      packagePrice: 89.99,
+      isActive: false,
+      discountOffer: "Get 50% Discount On The First Month",
+      packageOffersList: [
+        "All Pro features",
+        "1-on-1 nutritionist support",
+        "Priority updates & supportPriority updates & support",
+        "Exclusive elite insights dashboard",
+      ],
+    ),
   ];
 }

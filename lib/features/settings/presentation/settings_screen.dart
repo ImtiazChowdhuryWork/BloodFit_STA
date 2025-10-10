@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/appList.dart';
 import 'package:bloodfit/custom_widgets/card_tile_option_widget.dart';
-import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
-import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
