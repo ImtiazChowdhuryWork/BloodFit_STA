@@ -51,6 +51,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/file_icon.svg
   String get fileIcon => 'assets/icons/file_icon.svg';
 
+  /// File path: assets/icons/fire_icon.svg
+  String get fireIcon => 'assets/icons/fire_icon.svg';
+
   /// File path: assets/icons/fitness_icon.svg
   String get fitnessIcon => 'assets/icons/fitness_icon.svg';
 
@@ -75,6 +78,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/privacy_policy_icon.svg
   String get privacyPolicyIcon => 'assets/icons/privacy_policy_icon.svg';
 
+  /// File path: assets/icons/promo_code_icon.svg
+  String get promoCodeIcon => 'assets/icons/promo_code_icon.svg';
+
   /// File path: assets/icons/red_bell_icon.svg
   String get redBellIcon => 'assets/icons/red_bell_icon.svg';
 
@@ -97,6 +103,7 @@ class $AssetsIconsGen {
     facebookIcon,
     faqIcon,
     fileIcon,
+    fireIcon,
     fitnessIcon,
     googleIcon,
     lockIcon,
@@ -105,6 +112,7 @@ class $AssetsIconsGen {
     penIcon,
     personIcon,
     privacyPolicyIcon,
+    promoCodeIcon,
     redBellIcon,
     searchIocn,
     settingsIcon,

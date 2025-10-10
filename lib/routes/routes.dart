@@ -6,6 +6,7 @@ import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart'
 import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart';
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
 import 'package:bloodfit/features/change_password/presentation/change_password_screen.dart';
+import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cost_details_for_upgrade_plan_screen.dart';
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
@@ -52,6 +53,8 @@ class Routes {
   static const String privacyPolicyScreen = '/privacy_policy_screen';
   static const String reportProbelmScreen = '/repor_a_problem_screen';
   static const String faqScreen = '/faq_screen';
+  static const String costDetailsForUpgradePlanScreen =
+      '/cost_details_for_upgrade_plan_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -243,6 +246,15 @@ class Routes {
       name: faqScreen,
       page: () => FaqScreen(),
       binding: ReportAProblemScreenBinging(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///costDetailsForUpgradePlanScreen
+    GetPage(
+      name: costDetailsForUpgradePlanScreen,
+      page: () => CostDetailsForUpgradePlanScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
