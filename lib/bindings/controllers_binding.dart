@@ -1,15 +1,14 @@
 import 'package:bloodfit/controllers/sign_up_screen_controller.dart';
 import 'package:get/get.dart';
 
-import '../controllers/change_password_screen_controller.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
+import '../controllers/meal_plan_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
 import '../controllers/otp_validation_controller.dart';
 import '../controllers/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
-import '../controllers/report_a_problem_screen_controller.dart';
 import '../controllers/reset_password_screen_controller.dart';
 import '../controllers/sign_in_screen_controller.dart';
 
@@ -26,5 +25,6 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
     Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
+    Get.lazyPut(() => MealPlanScreenController());
   }
 }
