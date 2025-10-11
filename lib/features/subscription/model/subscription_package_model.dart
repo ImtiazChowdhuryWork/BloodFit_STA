@@ -1,6 +1,7 @@
 class SubscriptionPackageModel {
   final String packageType;
   final double packagePrice;
+  final String packageDuration;
   final List<String> packageOffersList;
   final bool isActive;
   final String? discountOffer;
@@ -10,6 +11,7 @@ class SubscriptionPackageModel {
     required this.packageType,
     required this.isDiscountOfferAvailable,
     required this.packagePrice,
+    required this.packageDuration,
     required this.packageOffersList,
     this.isActive = false,
     this.discountOffer,
