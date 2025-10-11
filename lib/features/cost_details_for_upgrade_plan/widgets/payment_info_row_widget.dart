@@ -5,10 +5,12 @@ import '../../../constants/text_font_style.dart';
 class PaymentInfoRowWidget extends StatelessWidget {
   final String title;
   final double price;
+  final TextStyle? textStyle;
   const PaymentInfoRowWidget({
     super.key,
     required this.title,
     required this.price,
+    this.textStyle,
   });
 
   @override
@@ -19,12 +21,12 @@ class PaymentInfoRowWidget extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: TextFontStyle.headline16w500cFFFFFFStylePoppins,
+            style: textStyle ?? TextFontStyle.headline16w500cc6c6c6StylePoppins,
           ),
         ),
         Text(
           "£${price.toString()}",
-          style: TextFontStyle.headline16w500cc6c6c6StylePoppins,
+          style: textStyle ?? TextFontStyle.headline16w500cc6c6c6StylePoppins,
         ),
       ],
     );
