@@ -1,4 +1,6 @@
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/features/subscription/widgets/active_package_header.dart';
+import 'package:bloodfit/features/subscription/widgets/in_active_package_header.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -12,6 +14,7 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
   final String packageType;
   final bool isPackageActive;
   final String? discountOffer;
+  final String? packageDuration;
   final void Function()? onTap;
   final bool isDiscountOfferAvailable;
   const SubscriptionPackageShowingWidget({
@@ -23,6 +26,7 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
     this.onTap,
     this.discountOffer,
     this.isDiscountOfferAvailable = true,
+    this.packageDuration,
   });
 
   @override
@@ -44,36 +48,16 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
           children: [
             ///Section : --------------///Package Title///----------
             ///Section : ------------///Package Price///-----------
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "£$packagePrice",
-                  style: TextFontStyle.headline24w700cfefefeStylePoppins,
-                ),
-
-                Container(
-                  padding: EdgeInsets.all(10.sp),
-                  decoration: BoxDecoration(
-                    color: isPackageActive == true
-                        ? AppColors.c2f772f
-                        : AppColors.c343434,
-                    borderRadius: BorderRadius.circular(8.r),
+            isPackageActive == true
+                ? ActivePackageHeader(
+                    packagePrice: packagePrice,
+                    packageType: packageType,
+                    packageDuration: packageDuration,
+                  )
+                : InActivePackageHeader(
+                    packagePrice: packagePrice,
+                    packageType: packageType,
                   ),
-                  child: Text(
-                    packageType,
-                    style: TextFontStyle.headline14w500cfefefeStylePoppins,
-                  ),
-                ),
-              ],
-            ),
-            UIHelper.verticalSpace(8.h),
-
-            ///Section : -------------///Text -> including tax & auto-renew///-----------------
-            Text(
-              "Including Tax & Auto-Renew",
-              style: TextFontStyle.headline16w400cc6c6c6StylePoppins,
-            ),
             UIHelper.verticalSpace(24.h),
 
             ///Section : ------------///Package Offers///-----------

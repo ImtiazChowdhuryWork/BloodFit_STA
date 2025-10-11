@@ -394,6 +394,7 @@ class AppList {
     SubscriptionPackageModel(
       isDiscountOfferAvailable: true,
       packageType: "Free",
+      packageDuration: "Monthly",
       packagePrice: 0.0,
       discountOffer: "Get 50% Discount On The First Month",
       packageOffersList: [
@@ -406,6 +407,7 @@ class AppList {
     SubscriptionPackageModel(
       isDiscountOfferAvailable: true,
       packageType: "Starter",
+      packageDuration: "Yearly",
       packagePrice: 19.99,
       isActive: false,
       discountOffer: "Get 50% Discount On The First Month",
@@ -418,6 +420,7 @@ class AppList {
     SubscriptionPackageModel(
       isDiscountOfferAvailable: true,
       packageType: "Pro",
+      packageDuration: "Monthly",
       packagePrice: 49.99,
       isActive: false,
       discountOffer: "Get 50% Discount On The First Month",
@@ -431,6 +434,7 @@ class AppList {
     SubscriptionPackageModel(
       isDiscountOfferAvailable: true,
       packageType: "Elite",
+      packageDuration: "Yearly",
       packagePrice: 89.99,
       isActive: false,
       discountOffer: "Get 50% Discount On The First Month",
