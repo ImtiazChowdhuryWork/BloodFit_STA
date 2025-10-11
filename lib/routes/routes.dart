@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bloodfit/features/add_promo_code/presentation/add_promo_code_screen.dart';
 import 'package:bloodfit/features/auth/forgot_password/presentation/forgot_password_screen.dart';
 import 'package:bloodfit/features/auth/reset_password/presentation/reset_password_screen.dart';
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
@@ -55,6 +56,7 @@ class Routes {
   static const String faqScreen = '/faq_screen';
   static const String costDetailsForUpgradePlanScreen =
       '/cost_details_for_upgrade_plan_screen';
+  static const String addPromoCodeScreen = '/add_promo_code_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -255,6 +257,15 @@ class Routes {
     GetPage(
       name: costDetailsForUpgradePlanScreen,
       page: () => CostDetailsForUpgradePlanScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///addPromoCodeScreen
+    GetPage(
+      name: addPromoCodeScreen,
+      page: () => AddPromoCodeScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

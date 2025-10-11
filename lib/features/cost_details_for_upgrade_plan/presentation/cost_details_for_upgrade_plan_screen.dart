@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
@@ -78,6 +80,7 @@ class CostDetailsForUpgradePlanScreen extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     log("Text Button -> Add Promocode Text Button Taped!");
+                    Get.toNamed(Routes.addPromoCodeScreen);
                   },
                   child: Text(
                     "Add Promo Code",
