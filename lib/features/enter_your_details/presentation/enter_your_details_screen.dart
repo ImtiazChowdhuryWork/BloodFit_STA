@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/app_logo_widget.dart';
+import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -60,6 +64,29 @@ class EnterYourDetailsScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              Spacer(),
+
+              Text(
+                "Hey Shabonty!",
+                style: TextFontStyle.headline24w700cfefefeStylePoppins,
+              ),
+              UIHelper.verticalSpace(16.h),
+
+              Text(
+                "To Get Started, We Just Need A Few Basic Details So We Can Tailor Your Nutrition To Your Blood Type.",
+                textAlign: TextAlign.center,
+                style: TextFontStyle.headline14w500cc6c6c6StylePoppins,
+              ),
+              UIHelper.verticalSpace(32.h),
+
+              CustomElevatedButton(
+                onTap: () {
+                  log("Button -> Enter Your Details Taped!");
+                },
+                buttonTitle: "Enter Your Details",
+                buttonWidth: 0.5.sw,
+              ),
+              Spacer(),
             ],
           ),
         ),
