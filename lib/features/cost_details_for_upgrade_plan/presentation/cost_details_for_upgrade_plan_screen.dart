@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/colors.gen.dart';
+import '../widgets/current_plan_widget.dart';
 import '../widgets/payment_info_row_widget.dart';
 import '../widgets/upgrade_plan_widget.dart';
 
@@ -45,52 +46,28 @@ class CostDetailsForUpgradePlanScreen extends StatelessWidget {
             UIHelper.verticalSpace(24.h),
 
             ///Section : ------------///CurrentPlan Details///---------
-            Text(
-              "Current Plan",
-              style: TextFontStyle.headline18w400cfefefeStylePoppins,
+            CurrentPlanWidget(
+              planTitle: "Current Plan",
+              planType: "Starter",
+              planPrice: 3.99,
+              planDuration: "Month",
+              daysRemaining: 15,
+              subscriptionDate: "01/09/2024",
             ),
-            UIHelper.verticalSpace(10.h),
 
-            ///Section : ------------///CurrentPlan Type///---------
-            Text(
-              "Plan: Starter",
-              style: TextFontStyle.headline14w500cfefefeStylePoppins,
-            ),
-            UIHelper.verticalSpace(10.h),
-
-            ///Section : ------------///CurrentPlan Price///---------
-            Text(
-              "Price: £3.99/month",
-              style: TextFontStyle.headline14w500cfefefeStylePoppins,
-            ),
-            UIHelper.verticalSpace(10.h),
-
-            ///Section : ------------///Amount Charged Price///---------
-            Text(
-              "Days Remaining: 15",
-              style: TextFontStyle.headline14w500cfefefeStylePoppins,
-            ),
-            UIHelper.verticalSpace(10.h),
-
-            ///Section : ------------///Subscription Date///---------
-            Text(
-              "Subscription Date: 01/09/2024",
-              style: TextFontStyle.headline14w500cfefefeStylePoppins,
-            ),
             UIHelper.verticalSpace(16.h),
 
             ///-----------///Upgrade Plan///------------
-            ///Section : ------------///CurrentPlan Details///---------
             UpgradePlanWidget(
               planTitle: "Upgraded Plan",
               planType: "Pro",
               price: 6.99,
               planDurationType: "Monthly",
-              daysRemaining: 16,
+              daysRemaining: 15,
               discountOnPreviousPlan: 3.495,
               subscriptionStartDate: "15/09/2025",
             ),
-            UIHelper.verticalSpace(10.h),
+            UIHelper.verticalSpace(24.h),
 
             ///Section : ---------///PromoCode///---------
             Row(
@@ -98,15 +75,20 @@ class CostDetailsForUpgradePlanScreen extends StatelessWidget {
               children: [
                 SvgPicture.asset(Assets.icons.promoCodeIcon),
                 UIHelper.horizontalSpace(8.w),
-                Text(
-                  "Add Promo Code",
-                  style: TextFontStyle.headline16w500ce7b0b0StylePoppins,
+                InkWell(
+                  onTap: () {
+                    log("Text Button -> Add Promocode Text Button Taped!");
+                  },
+                  child: Text(
+                    "Add Promo Code",
+                    style: TextFontStyle.headline16w500ce7b0b0StylePoppins,
+                  ),
                 ),
               ],
             ),
             UIHelper.verticalSpace(24.h),
 
-            ///Section : -----------------------------------///Total Price for Current Plan///----------
+            ///Section : ---------------///Total Price for Current Plan///----------
             Text(
               "Total Price For Current Plan: ",
               style: TextFontStyle.headline16w500cfefefeStylePoppins,
@@ -128,7 +110,11 @@ class CostDetailsForUpgradePlanScreen extends StatelessWidget {
             UIHelper.verticalSpace(10.h),
 
             ///Section:-------///Pay for Upgrade: ///----
-            PaymentInfoRowWidget(title: "Pay for Upgrade:", price: 6.99),
+            PaymentInfoRowWidget(
+              title: "Pay for Upgrade:",
+              price: 6.99,
+              textStyle: TextFontStyle.headline16w500cFFFFFFStylePoppins,
+            ),
             UIHelper.verticalSpace(24.h),
 
             ///Section : -------///Button -> Pay Now///-----------
