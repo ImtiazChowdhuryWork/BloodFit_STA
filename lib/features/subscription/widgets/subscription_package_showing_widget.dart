@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/subscription/widgets/active_package_header.dart';
 import 'package:bloodfit/features/subscription/widgets/in_active_package_header.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
@@ -97,6 +100,22 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
                         style: TextFontStyle.headline16w500cfefefeStylePoppins,
                       ),
                     ],
+                  )
+                : SizedBox.shrink(),
+
+            isDiscountOfferAvailable
+                ? UIHelper.verticalSpace(24.h)
+                : SizedBox.shrink(),
+
+            isPackageActive
+                ? CustomElevatedButton(
+                    onTap: () {
+                      log("Button -> Button Taped -> Cancel This Package!");
+                    },
+                    buttonTitle: "Cancel This Plan",
+                    buttonColor: AppColors.c111111,
+                    isButtonBorderUsed: true,
+                    borderRadius: 24.r,
                   )
                 : SizedBox.shrink(),
           ],
