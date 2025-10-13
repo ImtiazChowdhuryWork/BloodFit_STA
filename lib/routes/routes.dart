@@ -25,6 +25,7 @@ import 'package:get/get.dart';
 
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/faq/presentation/faq_screen.dart';
+import '../features/information_gather/presentation/information_gather_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 
@@ -57,6 +58,7 @@ class Routes {
   static const String costDetailsForUpgradePlanScreen =
       '/cost_details_for_upgrade_plan_screen';
   static const String addPromoCodeScreen = '/add_promo_code_screen';
+  static const String informationGatherScreen = '/information_gather_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -266,6 +268,15 @@ class Routes {
     GetPage(
       name: addPromoCodeScreen,
       page: () => AddPromoCodeScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///informationGatherScreen
+    GetPage(
+      name: informationGatherScreen,
+      page: () => InformationGatherScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
