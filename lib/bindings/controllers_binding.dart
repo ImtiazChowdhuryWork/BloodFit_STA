@@ -5,6 +5,7 @@ import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
 import '../controllers/meal_plan_screen_controller.dart';
+import '../controllers/onboarding_age_picker_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
 import '../controllers/otp_validation_controller.dart';
 import '../controllers/profile_screen_controller.dart';
@@ -26,5 +27,12 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
     Get.lazyPut(() => MealPlanScreenController());
+    Get.lazyPut(
+      () => OnboardingAgePickerScreenController(
+        itemWidth: 60,
+        minValue: 1,
+        maxValue: 100,
+      ),
+    );
   }
 }
