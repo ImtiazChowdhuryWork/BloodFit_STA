@@ -82,6 +82,7 @@ class EnterYourDetailsScreen extends StatelessWidget {
               CustomElevatedButton(
                 onTap: () {
                   log("Button -> Enter Your Details Taped!");
+                  Get.toNamed(Routes.informationGatherScreen);
                 },
                 buttonTitle: "Enter Your Details",
                 buttonWidth: 0.5.sw,

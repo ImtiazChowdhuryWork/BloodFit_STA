@@ -5,6 +5,7 @@ import 'package:bloodfit/features/settings/widgets/settings_option_title_extensi
 import 'package:bloodfit/routes/routes.dart';
 
 import '../features/faq/model/faq_model.dart';
+import '../features/information_gather/presentation/widgets/select_gender/gender_model.dart';
 import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
@@ -95,7 +96,9 @@ class AppList {
   ];
 
   // Blood group list
-  static final bloodGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
+  static final bloodGroups = ["A", "B", "O", "AB"];
+
+  ///"A", "B", "O", "AB"
 
   /// Gender List
   static final List<String> genderList = ["Male", "Female"];
@@ -445,5 +448,10 @@ class AppList {
         "Exclusive elite insights dashboard",
       ],
     ),
+  ];
+
+  static List<GenderModel> genderWithIconList = [
+    GenderModel(iconPath: Assets.icons.maleIcon, title: "Male"),
+    GenderModel(iconPath: Assets.icons.femaleIcon, title: "Female"),
   ];
 }

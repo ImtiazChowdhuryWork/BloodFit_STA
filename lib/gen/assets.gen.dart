@@ -30,6 +30,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/bell_icon.svg
   String get bellIcon => 'assets/icons/bell_icon.svg';
 
+  /// File path: assets/icons/blood_drop.svg
+  String get bloodDrop => 'assets/icons/blood_drop.svg';
+
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
 
@@ -48,6 +51,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/faq_icon.svg
   String get faqIcon => 'assets/icons/faq_icon.svg';
 
+  /// File path: assets/icons/female_icon.svg
+  String get femaleIcon => 'assets/icons/female_icon.svg';
+
   /// File path: assets/icons/file_icon.svg
   String get fileIcon => 'assets/icons/file_icon.svg';
 
@@ -65,6 +71,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/logout_icon.svg
   String get logoutIcon => 'assets/icons/logout_icon.svg';
+
+  /// File path: assets/icons/male_icon.svg
+  String get maleIcon => 'assets/icons/male_icon.svg';
 
   /// File path: assets/icons/meal_icon.svg
   String get mealIcon => 'assets/icons/meal_icon.svg';
@@ -96,18 +105,21 @@ class $AssetsIconsGen {
   /// List of all assets
   List<String> get values => [
     bellIcon,
+    bloodDrop,
     cameraIcon,
     cameraIconWithoutBg,
     crownIcon,
     deleteUserIcon,
     facebookIcon,
     faqIcon,
+    femaleIcon,
     fileIcon,
     fireIcon,
     fitnessIcon,
     googleIcon,
     lockIcon,
     logoutIcon,
+    maleIcon,
     mealIcon,
     penIcon,
     personIcon,
