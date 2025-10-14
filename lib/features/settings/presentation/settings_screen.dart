@@ -53,7 +53,7 @@ class SettingsScreen extends StatelessWidget {
                       ? Text(
                           data.sectionTitle ?? "",
                           style:
-                              TextFontStyle.headline14w500c363636StylePoppins,
+                              TextFontStyle.headline14w500c999999StylePoppins,
                         )
                       : const SizedBox.shrink(),
 
