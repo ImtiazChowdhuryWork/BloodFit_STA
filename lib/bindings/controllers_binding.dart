@@ -11,7 +11,9 @@ import '../controllers/otp_validation_controller.dart';
 import '../controllers/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/reset_password_screen_controller.dart';
+import '../controllers/ruler_controller.dart';
 import '../controllers/sign_in_screen_controller.dart';
+import '../controllers/slider_button_controller.dart';
 
 class ControllerBindings extends Bindings {
   @override
@@ -27,6 +29,9 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
     Get.lazyPut(() => MealPlanScreenController());
+    Get.lazyPut(() => RulerController());
+    Get.lazyPut(() => SliderButtonController());
+
     Get.lazyPut(
       () => OnboardingAgePickerScreenController(
         itemWidth: 60,

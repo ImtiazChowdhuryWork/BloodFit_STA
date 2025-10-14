@@ -11,6 +11,7 @@ import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cos
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
+import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
 import 'package:bloodfit/features/mealplan/presentation/mealplan_screen.dart';
 import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart';
 import 'package:bloodfit/features/notification/presentation/notification_screen.dart';
@@ -59,6 +60,7 @@ class Routes {
       '/cost_details_for_upgrade_plan_screen';
   static const String addPromoCodeScreen = '/add_promo_code_screen';
   static const String informationGatherScreen = '/information_gather_screen';
+  static const String selectWeightScreen = '/select_weight_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -277,6 +279,15 @@ class Routes {
     GetPage(
       name: informationGatherScreen,
       page: () => InformationGatherScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///selectWeightScreen
+    GetPage(
+      name: selectWeightScreen,
+      page: () => SelectWeightScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
