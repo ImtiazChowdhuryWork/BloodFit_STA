@@ -1,19 +1,19 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/custom_widgets/my_simple_ruller.dart';
-import 'package:bloodfit/gen/colors.gen.dart';
-import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../../../../constants/text_font_style.dart';
 import '../../../../../../controllers/ruler_controller.dart';
 import '../../../../../../controllers/slider_button_controller.dart';
 import '../../../../../../custom_widgets/custom_slider_button.dart';
+import '../../../../../../custom_widgets/my_simple_ruller.dart';
+import '../../../../../../gen/colors.gen.dart';
+import '../../../../../../helper/ui_helpers.dart';
 
-class SelectWeightScreen extends StatelessWidget {
-  const SelectWeightScreen({super.key});
+class SelectHeightScreenWidget extends StatelessWidget {
+  const SelectHeightScreenWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +21,22 @@ class SelectWeightScreen extends StatelessWidget {
     final rulerController = Get.find<RulerController>();
 
     // New SliderButtonController
-    final weightTypeController = Get.put(SliderButtonController());
+    final heightTypeController = Get.put(SliderButtonController());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "What’s Your Weight?",
+          "What’s Your Height?",
           style: TextFontStyle.headline22w500cfefefeStylePoppins,
         ),
-        UIHelper.verticalSpace(134.h),
+        UIHelper.verticalSpace(100.h),
 
         Align(
           alignment: Alignment.center,
           child: SliderButton(
-            controller: weightTypeController,
-            items: ["kg", "lb"],
+            controller: heightTypeController,
+            items: ["cm", "ft"],
             onValueChanged: (index, value) {
               log("Selected index: $index, value: $value");
             },
@@ -47,16 +48,19 @@ class SelectWeightScreen extends StatelessWidget {
         Obx(() {
           return SimpleRulerPicker(
             controller: rulerController,
-            dataType: weightTypeController.selectedValue.value,
+            dataType: heightTypeController.selectedValue.value,
+            axis: Axis.vertical,
             selectedValueTextSize: 36.sp,
-            minValue: 0,
-            maxValue: 100,
-            initialValue: 10,
+            minValue: 100,
+            maxValue: 250,
+            initialValue: 170,
             onValueChanged: (value) {
               log("Selected value: $value");
             },
+            numberPadding: 80,
+            containerToSelectedValuePadding: 40,
             scaleLabelSize: 20.sp,
-            scaleBottomPadding: 20,
+            scaleBottomPadding: 200,
             scaleItemWidth: 21,
             longLineHeight: 46,
             shortLineHeight: 24.h,
@@ -65,10 +69,20 @@ class SelectWeightScreen extends StatelessWidget {
             labelColor: AppColors.c000000,
             lineStroke: 3,
             pointerUpwardOffset: 60,
+
             pointerHeight: 70,
-            height: 180.h,
+            height: 480.h,
           );
         }),
+
+        // SimpleRulerPicker(
+        //   controller: Get.find<RulerController>(),
+        //   minValue: 100,
+        //   maxValue: 250,
+        //   initialValue: 170,
+        //   axis: Axis.vertical, // 👈 important
+        //   onValueChanged: (v) => print("Height: $v cm"),
+        // ),
       ],
     );
   }
