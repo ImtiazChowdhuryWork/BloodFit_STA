@@ -20,8 +20,15 @@ class SliderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Fire the default callback once (safe because GetX initializes controllers early)
+    onValueChanged?.call(
+      controller.selectedIndex.value,
+      controller.selectedValue.value,
+    );
+
     return Obx(() {
       final selectedIndex = controller.selectedIndex.value;
+
       return Container(
         height: 50.h,
         width: 0.5.sw,
@@ -53,10 +60,10 @@ class SliderButton extends StatelessWidget {
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      controller.changeIndex(index);
+                      controller.changeIndex(index, items);
                       onValueChanged?.call(
                         index,
-                        controller.selectedValue(items),
+                        controller.selectedValue.value,
                       );
                     },
                     child: Container(

@@ -51,8 +51,8 @@ dependencies:
   dotlottie_loader: ^0.0.5
   video_player: ^2.10.0
   dropdown_button2: ^2.3.9
-  simple_ruler_picker:
-    path: lib/simple_ruler_picker
+  # simple_ruler_picker:
+  #   path: lib/simple_ruler_picker
 
 dev_dependencies:
   flutter_test:

@@ -1,14 +1,24 @@
 import 'package:get/get.dart';
 
 class SliderButtonController extends GetxController {
+  /// Reactive index
   var selectedIndex = 0.obs;
 
-  void changeIndex(int index) {
+  /// Reactive selected value
+  var selectedValue = 'kg'.obs;
+
+  /// Called when user changes the index
+  void changeIndex(int index, List<String> items) {
     selectedIndex.value = index;
+    selectedValue.value = items[index];
   }
 
-  /// Get selected value from a list
-  String selectedValue(List<String> items) {
-    return items[selectedIndex.value];
+  @override
+  void onInit() {
+    super.onInit();
+
+    // ✅ Trigger default selection logic here
+    selectedIndex.value = 0;
+    selectedValue.value = 'kg';
   }
 }
