@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_age/select_age_screen_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_blood_group/select_blood_group_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_gender/select_gender_widget.dart';
+import 'package:bloodfit/features/information_gather/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,10 @@ class InformationGatherScreen extends StatelessWidget {
               // SelectAgeScreenWidgt(),
 
               ///Section : -----///Onboarding -> Weight Selection///----------
-              SelectWeightScreen(),
+              // SelectWeightScreen(),
+
+              ///Section : -----///Onboarding -> Weight Selection///----------
+              SelectHeightScreenWidget(),
             ],
           ),
         ),
