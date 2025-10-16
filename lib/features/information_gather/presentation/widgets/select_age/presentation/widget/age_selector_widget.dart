@@ -2,7 +2,7 @@ import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../../../controllers/onboarding_age_picker_screen_controller.dart';
+import '../../../../../../../controllers/onboarding_age_picker_screen_controller.dart';
 
 class AgeSelectorWidget extends StatelessWidget {
   final double itemWidth;

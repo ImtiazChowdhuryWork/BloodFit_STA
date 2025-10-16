@@ -6,7 +6,7 @@ import 'package:bloodfit/features/settings/widgets/settings_option_title_extensi
 import 'package:bloodfit/routes/routes.dart';
 
 import '../features/faq/model/faq_model.dart';
-import '../features/information_gather/presentation/widgets/select_gender/gender_model.dart';
+import '../features/information_gather/presentation/widgets/select_gender/model/gender_model.dart';
 import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
@@ -362,7 +362,7 @@ class AppList {
     'Processed Foods',
   ];
 
-  static const List<String> dislikedFoodList = [
+  static List<String> dislikedFoodList = [
     'Gluten',
     'Dairy',
     'Eggs',
