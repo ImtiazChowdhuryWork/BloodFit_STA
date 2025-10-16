@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../../constants/text_font_style.dart';
-import '../../../../../gen/assets.gen.dart';
-import '../../../../../gen/colors.gen.dart';
-import '../../../../../helper/ui_helpers.dart';
+import '../../../../../../../constants/text_font_style.dart';
+import '../../../../../../../gen/assets.gen.dart';
+import '../../../../../../../gen/colors.gen.dart';
+import '../../../../../../../helper/ui_helpers.dart';
 
 class GenderShowingWidget extends StatelessWidget {
   final String title;

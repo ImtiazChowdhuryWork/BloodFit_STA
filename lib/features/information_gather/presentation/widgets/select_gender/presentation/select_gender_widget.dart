@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_gender/gender_showing_widget.dart';
+import 'package:bloodfit/features/information_gather/presentation/widgets/select_gender/presentation/widget/gender_showing_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../constants/appList.dart';
-import '../../../../../constants/text_font_style.dart';
-import '../../../../../helper/ui_helpers.dart';
+import '../../../../../../constants/appList.dart';
+import '../../../../../../constants/text_font_style.dart';
+import '../../../../../../helper/ui_helpers.dart';
 
 class SelectGenderWidget extends StatelessWidget {
   const SelectGenderWidget({super.key});
