@@ -102,6 +102,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/settings_icon.svg
   String get settingsIcon => 'assets/icons/settings_icon.svg';
 
+  /// File path: assets/icons/trash_icon.svg
+  String get trashIcon => 'assets/icons/trash_icon.svg';
+
   /// File path: assets/icons/warning_icon.svg
   String get warningIcon => 'assets/icons/warning_icon.svg';
 
@@ -132,6 +135,7 @@ class $AssetsIconsGen {
     redBellIcon,
     searchIocn,
     settingsIcon,
+    trashIcon,
     warningIcon,
   ];
 }

@@ -65,8 +65,8 @@ class SelectWeightScreen extends StatelessWidget {
             labelColor: AppColors.c000000,
             lineStroke: 3,
             pointerUpwardOffset: 60,
-            pointerHeight: 70,
-            height: 180.h,
+            pointerHeight: 90,
+            height: 200.h,
           );
         }),
       ],

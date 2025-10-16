@@ -376,7 +376,7 @@
 //   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 // }
 
-//----------///Vertical Pointer///--------------
+// ----------///Vertical Pointer///--------------
 
 // import 'package:bloodfit/gen/assets.gen.dart';
 // import 'package:bloodfit/helper/ui_helpers.dart';

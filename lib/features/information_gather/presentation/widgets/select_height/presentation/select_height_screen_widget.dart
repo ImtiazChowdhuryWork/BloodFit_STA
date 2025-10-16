@@ -42,7 +42,7 @@ class SelectHeightScreenWidget extends StatelessWidget {
             },
           ),
         ),
-        UIHelper.verticalSpace(100.h),
+        UIHelper.verticalSpace(50.h),
 
         // USAGE EXAMPLE
         Obx(() {
@@ -52,8 +52,8 @@ class SelectHeightScreenWidget extends StatelessWidget {
             axis: Axis.vertical,
             selectedValueTextSize: 36.sp,
             minValue: 100,
-            maxValue: 250,
-            initialValue: 170,
+            maxValue: 500,
+            initialValue: 110,
             onValueChanged: (value) {
               log("Selected value: $value");
             },
@@ -69,20 +69,9 @@ class SelectHeightScreenWidget extends StatelessWidget {
             labelColor: AppColors.c000000,
             lineStroke: 3,
             pointerUpwardOffset: 60,
-
-            pointerHeight: 70,
-            height: 480.h,
+            height: 430.h,
           );
         }),
-
-        // SimpleRulerPicker(
-        //   controller: Get.find<RulerController>(),
-        //   minValue: 100,
-        //   maxValue: 250,
-        //   initialValue: 170,
-        //   axis: Axis.vertical, // 👈 important
-        //   onValueChanged: (v) => print("Height: $v cm"),
-        // ),
       ],
     );
   }
