@@ -1,4 +1,5 @@
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/features/information_gather/presentation/widgets/select_diet/model/picke_your_diet_model.dart';
 import 'package:bloodfit/features/my_profile/model/personal_data_model.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin_tile_extension.dart';
 import 'package:bloodfit/features/settings/widgets/settings_option_title_extension.dart';
@@ -453,5 +454,13 @@ class AppList {
   static List<GenderModel> genderWithIconList = [
     GenderModel(iconPath: Assets.icons.maleIcon, title: "Male"),
     GenderModel(iconPath: Assets.icons.femaleIcon, title: "Female"),
+  ];
+
+  static final List<PickeYourDietModel> pickYourDietList = [
+    PickeYourDietModel(dietName: "Classic", dietType: "No Hold Barred"),
+    PickeYourDietModel(dietName: "Vegan", dietType: "Plant Based"),
+    PickeYourDietModel(dietName: "Pescatarian", dietType: "Seafood-Based"),
+    PickeYourDietModel(dietName: "Carnivore", dietType: "Meat-Focused"),
+    PickeYourDietModel(dietName: "Vagiterian", dietType: "Meat-Focused"),
   ];
 }

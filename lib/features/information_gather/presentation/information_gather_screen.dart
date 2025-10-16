@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_age/select_age_screen_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_blood_group/select_blood_group_widget.dart';
+import 'package:bloodfit/features/information_gather/presentation/widgets/select_country/presentation/select_country_widget.dart';
+import 'package:bloodfit/features/information_gather/presentation/widgets/select_diet/presentation/select_diet_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_gender/select_gender_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
@@ -44,7 +46,13 @@ class InformationGatherScreen extends StatelessWidget {
               // SelectWeightScreen(),
 
               ///Section : -----///Onboarding -> Weight Selection///----------
-              SelectHeightScreenWidget(),
+              // SelectHeightScreenWidget(),
+
+              ///Section : -----///Onboarding -> Country Selection///----------
+              // SelectCountryWidget(),
+
+              ///Section : -----///Onboarding -> Diet Selection///----------
+              SelectDietWidget(),
             ],
           ),
         ),
