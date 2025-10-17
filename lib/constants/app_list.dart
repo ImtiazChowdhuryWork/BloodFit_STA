@@ -7,7 +7,6 @@ import 'package:bloodfit/routes/routes.dart';
 
 import '../features/faq/model/faq_model.dart';
 import '../features/information_gather/presentation/widgets/select_gender/model/gender_model.dart';
-import '../features/my_profile/model/profile_tile_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
 import '../gen/assets.gen.dart';

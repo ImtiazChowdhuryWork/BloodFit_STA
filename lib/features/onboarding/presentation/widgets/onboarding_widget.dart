@@ -1,11 +1,9 @@
-import 'package:bloodfit/constants/appList.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/onboarding/model/onboarding_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../custom_widgets/custom_elevated_button.dart';
-import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
 class OnboardingWidget extends StatelessWidget {

@@ -1,4 +1,5 @@
-import 'dart:async';
+import 'dart:developer';
+
 import 'package:get/get.dart';
 
 class VerifyOtpScreenController extends GetxController {
@@ -24,7 +25,7 @@ class VerifyOtpScreenController extends GetxController {
   // Called when OTP completed
   void onCompleted(String value) {
     pin.value = value;
-    print('Entered OTP: $value');
+    log('Entered OTP: $value');
   }
 
   // Start countdown timer

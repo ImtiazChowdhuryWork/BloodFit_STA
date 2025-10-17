@@ -11,6 +11,7 @@ import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cos
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
+import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
 import 'package:bloodfit/features/mealplan/presentation/mealplan_screen.dart';
 import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart';
@@ -68,6 +69,7 @@ class Routes {
       '/your_daily_calories_intake_screen';
   static const String youAreAllSetScreen = '/you_are_all_set_screen';
   static const String navigationScreen = '/navigation_screen';
+  static const String homeScreen = '/home_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -322,6 +324,15 @@ class Routes {
     GetPage(
       name: navigationScreen,
       page: () => NavigationScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///homeScreen
+    GetPage(
+      name: homeScreen,
+      page: () => HomeScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

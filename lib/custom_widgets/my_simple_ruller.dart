@@ -512,12 +512,10 @@
 //---------///with horizontal mode///--------------
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
 import '../controllers/ruler_controller.dart';
-import '../gen/colors.gen.dart';
 import '../helper/ui_helpers.dart';
-import '../gen/assets.gen.dart';
 
 class SimpleRulerPicker extends StatefulWidget {
   final int minValue;

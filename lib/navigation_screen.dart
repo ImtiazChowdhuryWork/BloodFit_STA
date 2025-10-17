@@ -249,7 +249,7 @@ class _NavItemState extends State<NavItem> with TickerProviderStateMixin {
                 ),
 
                 // Spacing
-                SizedBox(height: 4.h),
+                UIHelper.verticalSpace(4.h),
 
                 // Text - Constrained with Expanded
                 Expanded(
