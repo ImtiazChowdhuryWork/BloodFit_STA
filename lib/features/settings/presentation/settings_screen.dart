@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/appList.dart';
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/custom_widgets/card_tile_option_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';

@@ -48,6 +48,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/delete_user_icon.svg
   String get deleteUserIcon => 'assets/icons/delete_user_icon.svg';
 
+  /// File path: assets/icons/document_icon.svg
+  String get documentIcon => 'assets/icons/document_icon.svg';
+
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
 
@@ -60,8 +63,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/file_icon.svg
   String get fileIcon => 'assets/icons/file_icon.svg';
 
+  /// File path: assets/icons/fire_gray.svg
+  String get fireGray => 'assets/icons/fire_gray.svg';
+
   /// File path: assets/icons/fire_icon.svg
   String get fireIcon => 'assets/icons/fire_icon.svg';
+
+  /// File path: assets/icons/fire_white.svg
+  String get fireWhite => 'assets/icons/fire_white.svg';
 
   /// File path: assets/icons/fitness_icon.svg
   String get fitnessIcon => 'assets/icons/fitness_icon.svg';
@@ -129,11 +138,14 @@ class $AssetsIconsGen {
     cameraIconWithoutBg,
     crownIcon,
     deleteUserIcon,
+    documentIcon,
     facebookIcon,
     faqIcon,
     femaleIcon,
     fileIcon,
+    fireGray,
     fireIcon,
+    fireWhite,
     fitnessIcon,
     googleIcon,
     homeIcon,

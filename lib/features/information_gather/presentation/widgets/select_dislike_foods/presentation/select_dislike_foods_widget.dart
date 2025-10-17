@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../../../constants/appList.dart';
+import '../../../../../../constants/app_list.dart';
 import '../../../../../../constants/text_font_style.dart';
 import '../../../../../../custom_widgets/custom_text_form_field.dart';
 import '../../../../../../gen/assets.gen.dart';

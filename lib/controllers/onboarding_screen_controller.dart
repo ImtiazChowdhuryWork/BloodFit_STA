@@ -1,7 +1,7 @@
 import 'package:bloodfit/features/onboarding/model/onboarding_model.dart';
 import 'package:get/get.dart';
 
-import '../constants/appList.dart';
+import '../constants/app_list.dart';
 
 class OnboardingScreenController extends GetxController {
   RxInt currentIndex = 0.obs;

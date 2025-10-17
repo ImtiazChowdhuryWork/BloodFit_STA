@@ -1,4 +1,4 @@
-import 'package:bloodfit/constants/appList.dart';
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -55,7 +55,7 @@ class ReportAProblemScreen extends StatelessWidget {
                     style: TextFontStyle.headline14w400cc6c6c6StylePoppins,
                   ),
                   items: AppList.reportProblemTypeList.map((String item) {
-                    final isLast = item == AppList.reportProblemTypeList.last;
+                    // final isLast = item == AppList.reportProblemTypeList.last;
                     return DropdownMenuItem<String>(
                       value: item,
                       child: Text(

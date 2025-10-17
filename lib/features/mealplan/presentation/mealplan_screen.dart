@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../constants/appList.dart';
+import '../../../constants/app_list.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../controllers/meal_plan_screen_controller.dart';
 import '../../../custom_widgets/custom_drop_down_field_widget.dart';

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/appList.dart';
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../helper/ui_helpers.dart';
-import '../model/subscription_package_model.dart';
 import '../widgets/subscription_package_showing_widget.dart';
 
 class SubscriptionScreen extends StatefulWidget {

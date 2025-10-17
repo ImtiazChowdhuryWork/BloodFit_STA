@@ -1,5 +1,5 @@
 // 📁 faq_screen.dart
-import 'package:bloodfit/constants/appList.dart';
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/features/faq/presentation/widgets/faq_expansaion_tile.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';

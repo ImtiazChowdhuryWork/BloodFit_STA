@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/appList.dart';
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
@@ -8,7 +8,6 @@ import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../controllers/custom_image_picker_controller.dart';
 import '../../../controllers/edit_profile_screen_controller.dart';
