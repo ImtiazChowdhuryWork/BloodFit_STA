@@ -69,6 +69,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google_icon.svg
   String get googleIcon => 'assets/icons/google_icon.svg';
 
+  /// File path: assets/icons/home_icon.svg
+  String get homeIcon => 'assets/icons/home_icon.svg';
+
   /// File path: assets/icons/lock_icon.svg
   String get lockIcon => 'assets/icons/lock_icon.svg';
 
@@ -90,11 +93,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/privacy_policy_icon.svg
   String get privacyPolicyIcon => 'assets/icons/privacy_policy_icon.svg';
 
+  /// File path: assets/icons/progress_icon.svg
+  String get progressIcon => 'assets/icons/progress_icon.svg';
+
   /// File path: assets/icons/promo_code_icon.svg
   String get promoCodeIcon => 'assets/icons/promo_code_icon.svg';
 
   /// File path: assets/icons/red_bell_icon.svg
   String get redBellIcon => 'assets/icons/red_bell_icon.svg';
+
+  /// File path: assets/icons/scan_icon.svg
+  String get scanIcon => 'assets/icons/scan_icon.svg';
 
   /// File path: assets/icons/search_iocn.svg
   String get searchIocn => 'assets/icons/search_iocn.svg';
@@ -107,6 +116,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/warning_icon.svg
   String get warningIcon => 'assets/icons/warning_icon.svg';
+
+  /// File path: assets/icons/workout_icon.svg
+  String get workoutIcon => 'assets/icons/workout_icon.svg';
 
   /// List of all assets
   List<String> get values => [
@@ -124,6 +136,7 @@ class $AssetsIconsGen {
     fireIcon,
     fitnessIcon,
     googleIcon,
+    homeIcon,
     lockIcon,
     logoutIcon,
     maleIcon,
@@ -131,12 +144,15 @@ class $AssetsIconsGen {
     penIcon,
     personIcon,
     privacyPolicyIcon,
+    progressIcon,
     promoCodeIcon,
     redBellIcon,
+    scanIcon,
     searchIocn,
     settingsIcon,
     trashIcon,
     warningIcon,
+    workoutIcon,
   ];
 }
 

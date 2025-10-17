@@ -21,7 +21,9 @@ import 'package:bloodfit/features/report_a_problem/presentation/report_a_problem
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
+import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
+import 'package:bloodfit/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -64,6 +66,8 @@ class Routes {
   static const String selectWeightScreen = '/select_weight_screen';
   static const String dailyCaloriesIntakeScreen =
       '/your_daily_calories_intake_screen';
+  static const String youAreAllSetScreen = '/you_are_all_set_screen';
+  static const String navigationScreen = '/navigation_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -300,6 +304,24 @@ class Routes {
     GetPage(
       name: dailyCaloriesIntakeScreen,
       page: () => YourDailyCaloriesIntakeScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///selectWeightScreen
+    GetPage(
+      name: youAreAllSetScreen,
+      page: () => YouAreAllSetScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///navigationScreen
+    GetPage(
+      name: navigationScreen,
+      page: () => NavigationScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
