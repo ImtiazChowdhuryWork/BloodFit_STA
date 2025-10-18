@@ -1,14 +1,16 @@
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../constants/app_enums.dart';
+
 class CalenderContainerWidget extends StatelessWidget {
   final double height;
   final double width;
-  final String inCompletedCaloriesIconPath;
   final String completedCaloriesIconPath;
   final String dayName;
   final double progress;
@@ -17,6 +19,8 @@ class CalenderContainerWidget extends StatelessWidget {
   final Color? backgroundColor;
   final Widget? child;
   final bool isCalorieTaskCompleted;
+  final bool isCheatDay;
+  final UserSubscriptionType userSubscriptionType;
   const CalenderContainerWidget({
     super.key,
 
@@ -29,8 +33,9 @@ class CalenderContainerWidget extends StatelessWidget {
     this.backgroundColor,
     this.child,
     required this.isCalorieTaskCompleted,
-    required this.inCompletedCaloriesIconPath,
     required this.completedCaloriesIconPath,
+    this.isCheatDay = false,
+    required this.userSubscriptionType,
   });
 
   @override
@@ -48,28 +53,33 @@ class CalenderContainerWidget extends StatelessWidget {
         SizedBox(
           height: height,
           width: width,
+
           child: Stack(
             children: [
               ///Circular Background
               Container(
                 width: width,
                 height: height,
+
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: isCalorieTaskCompleted
+                  color: isCalorieTaskCompleted || isCheatDay
                       ? AppColors.cb20000
                       : AppColors.c363636,
                   shape: BoxShape.circle,
                 ),
-                child: SvgPicture.asset(
-                  isCalorieTaskCompleted
-                      ? completedCaloriesIconPath
-                      : inCompletedCaloriesIconPath,
-                ),
+                child: isCheatDay
+                    ? SvgPicture.asset(Assets.icons.documentIcon)
+                    : isCalorieTaskCompleted
+                    ? SvgPicture.asset(completedCaloriesIconPath)
+                    : Text(
+                        "21",
+                        style: TextFontStyle.headline16w500c999999StylePoppins,
+                      ),
               ),
 
               // Circular progress ring
-              isCalorieTaskCompleted
+              isCalorieTaskCompleted || isCheatDay
                   ? SizedBox.shrink()
                   : SizedBox(
                       width: width,

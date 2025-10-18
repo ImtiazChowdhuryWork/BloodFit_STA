@@ -1,5 +1,7 @@
+import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
+import 'package:bloodfit/features/home/presentation/widgets/not_free_user_calender_container.dart';
 import 'package:bloodfit/features/home/presentation/widgets/number_section_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/test.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
@@ -35,13 +37,16 @@ class HomeScreen extends StatelessWidget {
               UIHelper.verticalSpace(14.h),
 
               ///Section : -----------///Calender Widget///--------------
-              CustomCalenderWidget(),
+              CustomCalenderWidget(
+                userSubscriptionType: UserSubscriptionType.elite,
+              ),
+
               UIHelper.verticalSpace(20.h),
 
               // TestCircleProgress(),
               CircularProgressContainer(
                 size: 44,
-                progress: 0.6, // 60% progress
+                progress: 1, // 60% progress
                 progressColor: Colors.green,
                 backgroundColor: Colors.grey.shade300,
                 child: Text(
