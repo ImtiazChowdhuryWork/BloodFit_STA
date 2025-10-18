@@ -1,27 +1,26 @@
 import 'dart:developer';
-
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/custom_widgets/my_simple_ruller.dart';
-import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../../../../controllers/ruler_controller.dart';
+import '../../../../../../controllers/weight_picker_widget_controller.dart';
 import '../../../../../../controllers/slider_button_controller.dart';
 import '../../../../../../custom_widgets/custom_slider_button.dart';
+import '../widgets/weight_picker_widget.dart';
 
 class SelectWeightScreen extends StatelessWidget {
   const SelectWeightScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Existing RulerController
-    final rulerController = Get.find<RulerController>();
+    /// Controllers
+    final weightController = Get.put(WeightController());
+    final weightTypeSliderButtonController = Get.put(SliderButtonController());
 
-    // New SliderButtonController
-    final weightTypeController = Get.put(SliderButtonController());
+    // Initialize the slider button controller with items
+    weightTypeSliderButtonController.initialize(["kg", "lb"]);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,44 +30,31 @@ class SelectWeightScreen extends StatelessWidget {
         ),
         UIHelper.verticalSpace(134.h),
 
+        /// --- UNIT SELECTOR (kg / lb) ---
         Align(
           alignment: Alignment.center,
           child: SliderButton(
-            controller: weightTypeController,
-            items: ["kg", "lb"],
+            controller: weightTypeSliderButtonController,
+            items: const ["kg", "lb"],
             onValueChanged: (index, value) {
               log("Selected index: $index, value: $value");
+
+              /// Update the unit type in WeightController
+              if (value == "kg" && weightController.useLb.value) {
+                weightController.toggleUnit();
+              } else if (value == "lb" && !weightController.useLb.value) {
+                weightController.toggleUnit();
+              }
             },
           ),
         ),
         UIHelper.verticalSpace(100.h),
 
-        // USAGE EXAMPLE
-        Obx(() {
-          return SimpleRulerPicker(
-            controller: rulerController,
-            dataType: weightTypeController.selectedValue.value,
-            selectedValueTextSize: 36.sp,
-            minValue: 0,
-            maxValue: 100,
-            initialValue: 10,
-            onValueChanged: (value) {
-              log("Selected value: $value");
-            },
-            scaleLabelSize: 20.sp,
-            scaleBottomPadding: 20,
-            scaleItemWidth: 21,
-            longLineHeight: 46,
-            shortLineHeight: 24.h,
-            lineColor: AppColors.c000000,
-            selectedColor: AppColors.cFFFFFF,
-            labelColor: AppColors.c000000,
-            lineStroke: 3,
-            pointerUpwardOffset: 60,
-            pointerHeight: 90,
-            height: 200.h,
-          );
-        }),
+        /// --- WEIGHT PICKER SLIDER ---
+        WeightPickerWidget(
+          weightController: weightController,
+          weightTypeController: weightTypeSliderButtonController,
+        ),
       ],
     );
   }

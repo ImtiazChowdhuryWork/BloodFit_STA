@@ -38,7 +38,17 @@ class HomeScreen extends StatelessWidget {
               CustomCalenderWidget(),
               UIHelper.verticalSpace(20.h),
 
-              TestCircleProgress(),
+              // TestCircleProgress(),
+              CircularProgressContainer(
+                size: 44,
+                progress: 0.6, // 60% progress
+                progressColor: Colors.green,
+                backgroundColor: Colors.grey.shade300,
+                child: Text(
+                  "60%",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
         ),
