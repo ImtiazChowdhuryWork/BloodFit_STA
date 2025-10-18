@@ -1,17 +1,41 @@
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../constants/app_enums.dart';
+
 class CalenderContainerWidget extends StatelessWidget {
-  final String iconPath;
+  final double height;
+  final double width;
+  final String completedCaloriesIconPath;
   final String dayName;
+  final double progress;
+  final double srokeWidth;
+  final Color? progressColor;
+  final Color? backgroundColor;
+  final Widget? child;
+  final bool isCalorieTaskCompleted;
+  final bool isCheatDay;
+  final UserSubscriptionType userSubscriptionType;
   const CalenderContainerWidget({
     super.key,
-    required this.iconPath,
+
     required this.dayName,
+    required this.height,
+    required this.width,
+    required this.progress,
+    required this.srokeWidth,
+    this.progressColor,
+    this.backgroundColor,
+    this.child,
+    required this.isCalorieTaskCompleted,
+    required this.completedCaloriesIconPath,
+    this.isCheatDay = false,
+    required this.userSubscriptionType,
   });
 
   @override
@@ -26,15 +50,52 @@ class CalenderContainerWidget extends StatelessWidget {
         UIHelper.verticalSpace(10.h),
 
         ///Section : -------///Container Box///-----------------
-        Container(
-          width: 44.w,
-          height: 44.h,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: AppColors.cb20000,
-            shape: BoxShape.circle,
+        SizedBox(
+          height: height,
+          width: width,
+
+          child: Stack(
+            children: [
+              ///Circular Background
+              Container(
+                width: width,
+                height: height,
+
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isCalorieTaskCompleted || isCheatDay
+                      ? AppColors.cb20000
+                      : AppColors.c363636,
+                  shape: BoxShape.circle,
+                ),
+                child: isCheatDay
+                    ? SvgPicture.asset(Assets.icons.documentIcon)
+                    : isCalorieTaskCompleted
+                    ? SvgPicture.asset(completedCaloriesIconPath)
+                    : Text(
+                        "21",
+                        style: TextFontStyle.headline16w500c999999StylePoppins,
+                      ),
+              ),
+
+              // Circular progress ring
+              isCalorieTaskCompleted || isCheatDay
+                  ? SizedBox.shrink()
+                  : SizedBox(
+                      width: width,
+                      height: height,
+                      child: CircularProgressIndicator(
+                        value: progress,
+                        strokeWidth: srokeWidth,
+                        valueColor: AlwaysStoppedAnimation(progressColor),
+                        backgroundColor: backgroundColor,
+                      ),
+                    ),
+
+              // Optional child widget inside the circle
+              if (child != null) child!,
+            ],
           ),
-          child: SvgPicture.asset(iconPath),
         ),
       ],
     );

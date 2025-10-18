@@ -1,16 +1,15 @@
-// import 'package:bloodfit/gen/assets.gen.dart';
-// import 'package:bloodfit/helper/ui_helpers.dart';
+// import 'package:bloodfit/gen/colors.gen.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:flutter_svg/svg.dart';
 // import 'package:get/get.dart';
 // import '../controllers/ruler_controller.dart';
-// import '../gen/colors.gen.dart';
+// import '../helper/ui_helpers.dart';
 
-// class SimpleRulerPicker extends StatelessWidget {
-//   final int minValue;
-//   final int maxValue;
-//   final int initialValue;
+// class UniversalRulerPicker extends StatefulWidget {
+//   final double minValue;
+//   final double maxValue;
+//   final double initialValue;
+//   final double step; // For decimal precision
 //   final int scaleItemWidth;
 //   final double scaleLabelSize;
 //   final double scaleLabelWidth;
@@ -21,25 +20,29 @@
 //   final Color selectedColor;
 //   final Color labelColor;
 //   final double lineStroke;
-//   final double height; // Ruler container height
+//   final double height;
 //   final Axis axis;
-//   final String dataType;
+//   final List<String> unitOptions; // List of possible units
+//   final String initialUnit; // Initial unit value
 //   final double selectedValueTextSize;
-//   final double pointerHeight; // Pointer height only
+//   final double pointerHeight;
 //   final double pointerThickness;
 //   final double pointerUpwardOffset;
 //   final RulerController controller;
-//   final Function(int)? onValueChanged;
+//   final Function(double, String)? onValueChanged; // Passes value and unit
 //   final double numberPadding;
 //   final double containerToNumbersPadding;
 //   final double containerToSelectedValuePadding;
 
-//   const SimpleRulerPicker({
-//     super.key,
+//   const UniversalRulerPicker({
+//     Key? key,
 //     required this.controller,
-//     this.minValue = 0,
-//     this.maxValue = 200,
-//     this.initialValue = 100,
+//     required this.unitOptions,
+//     this.initialUnit = "",
+//     this.minValue = 0.0,
+//     this.maxValue = 200.0,
+//     this.initialValue = 100.0,
+//     this.step = 1.0, // Default to integer steps
 //     this.scaleItemWidth = 10,
 //     this.scaleLabelSize = 14,
 //     this.scaleLabelWidth = 40,
@@ -57,378 +60,301 @@
 //     this.pointerThickness = 6,
 //     this.pointerUpwardOffset = 10,
 //     this.onValueChanged,
-//     required this.dataType,
 //     this.numberPadding = 12.0,
 //     this.containerToNumbersPadding = 8.0,
 //     this.containerToSelectedValuePadding = 16.0,
-//   }) : assert(minValue <= initialValue && initialValue <= maxValue);
+//   }) : assert(minValue <= initialValue && initialValue <= maxValue),
+//        super(key: key);
 
-//   bool get _isHorizontalAxis => axis == Axis.horizontal;
+//   @override
+//   _UniversalRulerPickerState createState() => _UniversalRulerPickerState();
+// }
+
+// class _UniversalRulerPickerState extends State<UniversalRulerPicker> {
+//   late final ScrollController _scrollController;
+//   late final ScrollController _numbersScrollController;
+//   String _currentUnit = "";
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _scrollController = ScrollController();
+//     _numbersScrollController = ScrollController();
+//     _currentUnit = widget.initialUnit;
+
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       _jumpToInitialValue();
+//     });
+
+//     _scrollController.addListener(_onScroll);
+//   }
+
+//   void _jumpToInitialValue() {
+//     final double centerOffset = _centerOffset();
+//     final initialIndex = ((widget.initialValue - widget.minValue) / widget.step).round();
+//     final initialScrollPosition = initialIndex * widget.scaleItemWidth.w - centerOffset;
+//     _scrollController.jumpTo(initialScrollPosition);
+//     widget.controller.selectedValue.value = widget.initialValue.toInt();
+//     _syncNumberScroll();
+//   }
+
+//   double _centerOffset() {
+//     return widget.axis == Axis.horizontal
+//         ? (MediaQuery.of(context).size.width / 2 - widget.scaleItemWidth.w / 2)
+//         : (widget.height.h / 2 - widget.scaleItemWidth.h / 2);
+//   }
+
+//   void _onScroll() {
+//     final double centerOffset = _centerOffset();
+//     final scrollPixels = _scrollController.position.pixels;
+//     final exactPosition = (scrollPixels + centerOffset) / widget.scaleItemWidth.w;
+//     final int index = exactPosition.round();
+//     final double newValue = (index * widget.step + widget.minValue).clamp(widget.minValue, widget.maxValue);
+
+//     if (newValue != widget.controller.selectedValue.value.toDouble()) {
+//       widget.controller.selectedValue.value = newValue.toInt();
+//       widget.onValueChanged?.call(newValue, _currentUnit);
+//     }
+//     _syncNumberScroll();
+//   }
+
+//   // Implement smooth snapping behavior
+//   void _fixScrollPosition() {
+//     final double centerOffset = _centerOffset();
+//     final scrollPixels = _scrollController.position.pixels;
+//     final exactPosition = (scrollPixels + centerOffset) / widget.scaleItemWidth.w;
+//     final int index = exactPosition.round();
+//     final double targetScrollPosition = index * widget.scaleItemWidth.w - centerOffset;
+
+//     if ((scrollPixels - targetScrollPosition).abs() > 0.5) {
+//       _scrollController.jumpTo(targetScrollPosition);
+//     }
+//   }
+
+//   void _syncNumberScroll() {
+//     if (_numbersScrollController.hasClients) {
+//       _numbersScrollController.jumpTo(_scrollController.offset);
+//     }
+//   }
+
+//   void updateUnit(String unit) {
+//     setState(() {
+//       _currentUnit = unit;
+//     });
+//     widget.onValueChanged?.call(
+//       widget.controller.selectedValue.value.toDouble(),
+//       unit
+//     ); // Notify of unit change
+//   }
+
+//   String getCurrentUnit() {
+//     return _currentUnit;
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final ScrollController scrollController = controller.scrollController;
-//     final ScrollController numbersScrollController = ScrollController();
+//     final bool isHorizontal = widget.axis == Axis.horizontal;
+//     final double totalHeight = widget.height.h; // For fixed pointer, we just need the ruler height
 
-//     final double centerOffset = _isHorizontalAxis
-//         ? (MediaQuery.of(context).size.width / 2 - scaleItemWidth.w / 2)
-//         : (height.h / 2 - scaleItemWidth.h / 2);
-
-//     void syncScrollControllers() {
-//       if (scrollController.hasClients && numbersScrollController.hasClients) {
-//         numbersScrollController.jumpTo(scrollController.offset);
-//       }
-//     }
-
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       if (scrollController.hasClients) {
-//         // FIXED: More precise initial positioning
-//         final initialScrollPosition =
-//             (initialValue - minValue) * scaleItemWidth.w - centerOffset;
-//         scrollController.jumpTo(initialScrollPosition);
-//         controller.selectedValue.value = initialValue;
+//     return NotificationListener<ScrollEndNotification>(
+//       onNotification: (notification) {
 //         WidgetsBinding.instance.addPostFrameCallback((_) {
-//           syncScrollControllers();
+//           _fixScrollPosition();
+//           _syncNumberScroll();
 //         });
-//       }
-//     });
+//         return true;
+//       },
+//       child: SizedBox(
+//         height: totalHeight,
+//         width: isHorizontal ? double.infinity : MediaQuery.of(context).size.width,
+//         child: Stack(
+//           children: [
+//             // RULER BACKGROUND - This moves behind the fixed pointer
+//             Container(
+//               color: AppColors.c3c3c3c,
+//               child: ListView.builder(
+//                 controller: _scrollController,
+//                 scrollDirection: widget.axis,
+//                 itemCount: ((widget.maxValue - widget.minValue) / widget.step).ceil() + 1,
+//                 padding: EdgeInsets.zero,
+//                 itemBuilder: (context, index) {
+//                   final double value = widget.minValue + (index * widget.step);
+//                   final bool isLongLine = (value % (widget.step * 5)) == 0; // Mark every 5th item as long
+//                   final double lineHeight = isLongLine ? widget.longLineHeight.h : widget.shortLineHeight.h;
+//                   final bool shouldDisplayLabel = (value % (widget.step * 10)) == 0; // Show label every 10th item
 
-//     void calculateNewValue() {
-//       if (!scrollController.hasClients) return;
-//       final scrollPixels = scrollController.position.pixels;
-
-//       // FIXED: More precise calculation with proper center alignment
-//       final double exactPosition =
-//           (scrollPixels + centerOffset) / scaleItemWidth.w;
-//       final int jumpIndex = exactPosition.round();
-//       final newValue = (jumpIndex + minValue).clamp(minValue, maxValue);
-
-//       if (newValue != controller.selectedValue.value) {
-//         controller.selectedValue.value = newValue;
-//         onValueChanged?.call(newValue);
-//       }
-//     }
-
-//     void fixScrollPosition() {
-//       if (!scrollController.hasClients) return;
-
-//       final scrollPixels = scrollController.position.pixels;
-//       final double exactPosition =
-//           (scrollPixels + centerOffset) / scaleItemWidth.w;
-//       final int jumpIndex = exactPosition.round();
-//       final double targetScrollPosition =
-//           jumpIndex * scaleItemWidth.w - centerOffset;
-
-//       // Only fix if we're not already at the correct position
-//       if ((scrollPixels - targetScrollPosition).abs() > 0.5) {
-//         scrollController.jumpTo(targetScrollPosition);
-//       }
-//     }
-
-//     scrollController.addListener(() {
-//       calculateNewValue();
-//       syncScrollControllers();
-//     });
-
-//     return SizedBox(
-//       height: _isHorizontalAxis
-//           ? height.h + pointerHeight.h + pointerUpwardOffset.h
-//           : height.h,
-//       width: _isHorizontalAxis ? null : MediaQuery.of(context).size.width,
-//       child: Stack(
-//         children: [
-//           // VERTICAL MODE
-//           if (!_isHorizontalAxis)
-//             Stack(
-//               children: [
-//                 // Ruler container with lines
-//                 Positioned(
-//                   right: scaleLabelWidth.w + containerToNumbersPadding.w,
-//                   top: 0,
-//                   bottom: 0,
-//                   child: Container(
-//                     width: longLineHeight.w + 20.w,
-//                     color: AppColors.c3c3c3c,
-//                     padding: EdgeInsets.symmetric(horizontal: 8.w),
-//                     child: Stack(
-//                       children: [
-//                         // Ruler lines
-//                         NotificationListener<ScrollNotification>(
-//                           onNotification: (notification) {
-//                             if (notification is ScrollEndNotification) {
-//                               // FIXED: Use the local fixScrollPosition method
-//                               WidgetsBinding.instance.addPostFrameCallback((_) {
-//                                 fixScrollPosition();
-//                                 syncScrollControllers();
-//                               });
-//                             }
-//                             return true;
-//                           },
-//                           child: ListView.builder(
-//                             controller: scrollController,
-//                             scrollDirection: axis,
-//                             itemCount: (maxValue - minValue) + 1,
-//                             padding: EdgeInsets.zero,
-//                             itemBuilder: (context, index) {
-//                               final int value = minValue + index;
-//                               return SizedBox(
-//                                 height: scaleItemWidth.h,
-//                                 child: CustomPaint(
-//                                   painter: _RulerPainter(
-//                                     value: value,
-//                                     selectedValue:
-//                                         controller.selectedValue.value,
-//                                     scaleLabelSize: scaleLabelSize.sp,
-//                                     scaleBottomPadding: scaleBottomPadding.h,
-//                                     longLineHeight: longLineHeight.h,
-//                                     shortLineHeight: shortLineHeight.h,
-//                                     lineColor: lineColor,
-//                                     selectedColor: selectedColor,
-//                                     labelColor: labelColor,
-//                                     lineStroke: lineStroke.w,
-//                                     axis: axis,
-//                                     maxScaleLabelWidth: scaleLabelWidth.w,
-//                                     isRightAligned: !_isHorizontalAxis,
-//                                     horizontalPadding: 8.w,
-//                                     numberPadding: numberPadding,
-//                                   ),
-//                                 ),
-//                               );
-//                             },
-//                           ),
-//                         ),
-
-//                         // Pointer line
-//                         Positioned(
-//                           left: 0,
-//                           right: 0,
-//                           top: 0,
-//                           bottom: 0,
-//                           child: Center(
-//                             child: Container(
-//                               height: pointerThickness.w,
-//                               width: pointerHeight.h,
-//                               color: selectedColor,
-//                             ),
-//                           ),
-//                         ),
-//                       ],
+//                   return SizedBox(
+//                     width: isHorizontal ? widget.scaleItemWidth.w : null,
+//                     height: isHorizontal ? null : widget.scaleItemWidth.h,
+//                     child: CustomPaint(
+//                       painter: _RulerPainter(
+//                         value: value,
+//                         displayValue: shouldDisplayLabel ? value : null,
+//                         selectedValue: widget.controller.selectedValue.value.toDouble(),
+//                         scaleLabelSize: widget.scaleLabelSize.sp,
+//                         longLineHeight: lineHeight,
+//                         shortLineHeight: widget.shortLineHeight.h,
+//                         lineColor: widget.lineColor,
+//                         selectedColor: widget.selectedColor,
+//                         labelColor: widget.labelColor,
+//                         lineStroke: widget.lineStroke.w,
+//                         axis: widget.axis,
+//                         shouldDisplayLabel: shouldDisplayLabel,
+//                       ),
 //                     ),
-//                   ),
-//                 ),
-
-//                 // Numbers on the RIGHT side
-//                 Positioned(
-//                   right: 0,
-//                   top: 0,
-//                   bottom: 0,
-//                   child: Container(
-//                     width: scaleLabelWidth.w,
-//                     child: ListView.builder(
-//                       controller: numbersScrollController,
-//                       scrollDirection: axis,
-//                       itemCount: (maxValue - minValue) + 1,
-//                       padding: EdgeInsets.zero,
-//                       physics: const NeverScrollableScrollPhysics(),
-//                       itemBuilder: (context, index) {
-//                         final int value = minValue + index;
-//                         final bool isLongLine = value % 5 == 0;
-//                         final bool shouldShowLabel =
-//                             isLongLine && value % 10 == 0;
-
-//                         return SizedBox(
-//                           height: scaleItemWidth.h,
-//                           child: shouldShowLabel
-//                               ? Align(
-//                                   alignment: Alignment.centerLeft,
-//                                   child: Padding(
-//                                     padding: EdgeInsets.only(left: 2.w),
-//                                     child: Text(
-//                                       '$value',
-//                                       style: TextStyle(
-//                                         color: Colors.white,
-//                                         fontSize: scaleLabelSize.sp,
-//                                         fontWeight:
-//                                             value ==
-//                                                 controller.selectedValue.value
-//                                             ? FontWeight.bold
-//                                             : FontWeight.normal,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 )
-//                               : const SizedBox.shrink(),
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                 ),
-//               ],
+//                   );
+//                 },
+//               ),
 //             ),
 
-//           // Selected value display for vertical mode
-//           if (!_isHorizontalAxis)
-//             Obx(
-//               () => Positioned(
-//                 right:
-//                     scaleLabelWidth.w +
-//                     longLineHeight.w +
-//                     containerToNumbersPadding.w +
-//                     containerToSelectedValuePadding.w,
+//             // FIXED POINTER + SELECTED VALUE - Positioned in the center
+//             if (isHorizontal)
+//               Positioned(
 //                 top: 0,
-//                 bottom: 0,
-//                 child: Center(
-//                   child: Row(
+//                 left: MediaQuery.of(context).size.width / 2 - widget.scaleItemWidth.w / 2,
+//                 height: totalHeight,
+//                 width: widget.scaleItemWidth.w * 2.5, // Increase width to prevent overflow
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     // Show the selected value above the pointer only if selectedValueTextSize is greater than 0
+//                     if (widget.selectedValueTextSize > 0)
+//                       Obx(() {
+//                         final selected = widget.controller.selectedValue.value.toDouble();
+//                         return Container(
+//                           constraints: BoxConstraints(maxWidth: widget.scaleItemWidth.w * 2.5 - 10.w), // Ensure text fits
+//                           child: Row(
+//                             mainAxisSize: MainAxisSize.min,
+//                             children: [
+//                               Flexible(
+//                                 child: Text(
+//                                   selected.toStringAsFixed(_getDecimalPlaces()),
+//                                   style: TextStyle(
+//                                     fontSize: widget.selectedValueTextSize.sp,
+//                                     fontWeight: FontWeight.bold,
+//                                     color: widget.selectedColor,
+//                                   ),
+//                                   textAlign: TextAlign.center,
+//                                   overflow: TextOverflow.ellipsis,
+//                                 ),
+//                               ),
+//                               Text(
+//                                 " $_currentUnit",
+//                                 style: TextStyle(
+//                                   fontSize: widget.selectedValueTextSize.sp * 0.7, // Slightly larger unit text but still smaller
+//                                   fontWeight: FontWeight.bold,
+//                                   color: widget.selectedColor,
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         );
+//                       }),
+//                     if (widget.selectedValueTextSize > 0) UIHelper.verticalSpace(5.h),
+//                     // Pointer indicator that stays fixed in the center
+//                     Container(
+//                       height: widget.pointerHeight.h,
+//                       width: widget.pointerThickness.w,
+//                       color: widget.selectedColor,
+//                     ),
+//                     // Small indicator below the pointer
+//                     Container(
+//                       height: 5.h,
+//                       width: widget.pointerThickness.w * 2,
+//                       decoration: BoxDecoration(
+//                         color: widget.selectedColor,
+//                         shape: BoxShape.circle,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               )
+//             else
+//               // Vertical mode - fixed pointer on the center right of the ruler
+//               Positioned(
+//                 right: 0,
+//                 top: 0,
+//                 height: widget.height.h,
+//                 child: Container(
+//                   width: 120.w, // Increased width to accommodate content
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.center,
 //                     mainAxisSize: MainAxisSize.min,
 //                     children: [
-//                       Text(
-//                         "${controller.selectedValue.value} $dataType",
-//                         style: TextStyle(
-//                           fontSize: selectedValueTextSize.sp,
-//                           fontWeight: FontWeight.bold,
-//                           color: selectedColor,
+//                       if (widget.selectedValueTextSize > 0) // Only show if text size is greater than 0
+//                         Row(
+//                           mainAxisSize: MainAxisSize.min,
+//                           children: [
+//                             // Pointer indicator that stays fixed
+//                             Container(
+//                               width: widget.pointerHeight.w,
+//                               height: widget.pointerThickness.h,
+//                               color: widget.selectedColor,
+//                             ),
+//                             UIHelper.horizontalSpace(5.w),
+//                             ConstrainedBox(
+//                               constraints: BoxConstraints(maxWidth: 80.w), // Limit the width of text content
+//                               child: Column(
+//                                 mainAxisSize: MainAxisSize.min,
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   Obx(() {
+//                                     final selected = widget.controller.selectedValue.value.toDouble();
+//                                     return Text(
+//                                       "${selected.toStringAsFixed(_getDecimalPlaces())}",
+//                                       style: TextStyle(
+//                                         fontSize: widget.selectedValueTextSize.sp,
+//                                         fontWeight: FontWeight.bold,
+//                                         color: widget.selectedColor,
+//                                       ),
+//                                       overflow: TextOverflow.ellipsis,
+//                                     );
+//                                   }),
+//                                   Text(
+//                                     _currentUnit,
+//                                     style: TextStyle(
+//                                       fontSize: 14.sp,
+//                                       color: widget.selectedColor,
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
 //                         ),
-//                       ),
-//                       SizedBox(width: 4.w),
-//                       SvgPicture.asset(
-//                         Assets.icons.arrowLeft,
-//                         color: selectedColor,
-//                       ),
 //                     ],
 //                   ),
 //                 ),
 //               ),
-//             ),
-
-//           // HORIZONTAL MODE
-//           if (_isHorizontalAxis)
-//             Column(
-//               children: [
-//                 // Ruler container
-//                 Container(
-//                   height: height.h,
-//                   color: AppColors.c3c3c3c,
-//                   child: NotificationListener<ScrollNotification>(
-//                     onNotification: (notification) {
-//                       if (notification is ScrollEndNotification) {
-//                         // FIXED: Use the local fixScrollPosition method
-//                         WidgetsBinding.instance.addPostFrameCallback((_) {
-//                           fixScrollPosition();
-//                           syncScrollControllers();
-//                         });
-//                       }
-//                       return true;
-//                     },
-//                     child: ListView.builder(
-//                       controller: scrollController,
-//                       scrollDirection: axis,
-//                       itemCount: (maxValue - minValue) + 1,
-//                       padding: EdgeInsets.zero,
-//                       itemBuilder: (context, index) {
-//                         final int value = minValue + index;
-//                         return SizedBox(
-//                           width: scaleItemWidth.w,
-//                           child: CustomPaint(
-//                             painter: _RulerPainter(
-//                               value: value,
-//                               selectedValue: controller.selectedValue.value,
-//                               scaleLabelSize: scaleLabelSize.sp,
-//                               scaleBottomPadding: scaleBottomPadding.h,
-//                               longLineHeight: longLineHeight.h,
-//                               shortLineHeight: shortLineHeight.h,
-//                               lineColor: lineColor,
-//                               selectedColor: selectedColor,
-//                               labelColor: labelColor,
-//                               lineStroke: lineStroke.w,
-//                               axis: axis,
-//                               maxScaleLabelWidth: scaleLabelWidth.w,
-//                               isRightAligned: !_isHorizontalAxis,
-//                               horizontalPadding: 0,
-//                               numberPadding: numberPadding,
-//                             ),
-//                           ),
-//                         );
-//                       },
-//                     ),
-//                   ),
-//                 ),
-//                 // Pointer for horizontal mode
-//                 Obx(
-//                   () => _HorizontalPointer(
-//                     selectedValue: controller.selectedValue.value,
-//                     selectedColor: selectedColor,
-//                     pointerHeight: pointerHeight.h,
-//                     scaleLabelSize: scaleLabelSize.sp,
-//                     scaleBottomPadding: scaleBottomPadding.h,
-//                     selectedValueTextSize: selectedValueTextSize.sp,
-//                     pointerThickness: pointerThickness.w,
-//                     upwardOffset: pointerUpwardOffset.h,
-//                     dataType: dataType,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//         ],
+//           ],
+//         ),
 //       ),
 //     );
 //   }
-// }
 
-// class _HorizontalPointer extends StatelessWidget {
-//   const _HorizontalPointer({
-//     required this.selectedValue,
-//     required this.selectedColor,
-//     required this.pointerHeight,
-//     required this.scaleLabelSize,
-//     required this.scaleBottomPadding,
-//     required this.selectedValueTextSize,
-//     required this.pointerThickness,
-//     required this.dataType,
-//     this.upwardOffset = 10,
-//   });
-
-//   final int selectedValue;
-//   final Color selectedColor;
-//   final double pointerHeight;
-//   final double scaleLabelSize;
-//   final double scaleBottomPadding;
-//   final double selectedValueTextSize;
-//   final double pointerThickness;
-//   final double upwardOffset;
-//   final String dataType;
+//   int _getDecimalPlaces() {
+//     // Determine decimal places based on the step value
+//     String stepStr = widget.step.toString();
+//     if (stepStr.contains('.')) {
+//       return stepStr.split('.').last.length;
+//     }
+//     return 0;
+//   }
 
 //   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       height: pointerHeight,
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Text(
-//             "$selectedValue $dataType",
-//             style: TextStyle(
-//               fontSize: selectedValueTextSize,
-//               fontWeight: FontWeight.bold,
-//               color: selectedColor,
-//             ),
-//           ),
-//           UIHelper.verticalSpace(20.h),
-//           Icon(Icons.arrow_drop_up, color: selectedColor, size: 40.w),
-//           Expanded(
-//             child: Container(width: pointerThickness, color: selectedColor),
-//           ),
-//         ],
-//       ),
-//     );
+//   void dispose() {
+//     _scrollController.dispose();
+//     _numbersScrollController.dispose();
+//     super.dispose();
 //   }
 // }
 
 // class _RulerPainter extends CustomPainter {
-//   final int value;
-//   final int selectedValue;
+//   final double value;
+//   final double? displayValue;
+//   final double selectedValue;
 //   final double scaleLabelSize;
-//   final double maxScaleLabelWidth;
-//   final double scaleBottomPadding;
 //   final double longLineHeight;
 //   final double shortLineHeight;
 //   final Color lineColor;
@@ -436,51 +362,50 @@
 //   final Color labelColor;
 //   final double lineStroke;
 //   final Axis axis;
-//   final bool isRightAligned;
-//   final double horizontalPadding;
-//   final double numberPadding;
+//   final bool shouldDisplayLabel;
 
 //   _RulerPainter({
 //     required this.value,
+//     this.displayValue,
 //     required this.selectedValue,
 //     required this.scaleLabelSize,
-//     this.maxScaleLabelWidth = 40,
-//     this.scaleBottomPadding = 6,
-//     this.longLineHeight = 24,
-//     this.shortLineHeight = 12,
-//     this.lineColor = Colors.grey,
-//     this.selectedColor = Colors.orange,
-//     this.labelColor = Colors.grey,
-//     this.lineStroke = 2,
-//     this.axis = Axis.horizontal,
-//     this.isRightAligned = false,
-//     this.horizontalPadding = 0,
-//     this.numberPadding = 12.0,
+//     required this.longLineHeight,
+//     required this.shortLineHeight,
+//     required this.lineColor,
+//     required this.selectedColor,
+//     required this.labelColor,
+//     required this.lineStroke,
+//     required this.axis,
+//     required this.shouldDisplayLabel,
 //   });
-
-//   bool get _isHorizontalAxis => axis == Axis.horizontal;
 
 //   @override
 //   void paint(Canvas canvas, Size size) {
-//     final Paint paint = Paint()
+//     // Since the selected value is displayed in a fixed position over the ruler,
+//     // we don't need to compare against selectedValue here
+//     // Instead, we just draw the lines normally
+//     final paint = Paint()
 //       ..color = lineColor
 //       ..strokeWidth = lineStroke;
 
-//     final bool isLongLine = value % 5 == 0;
-//     final double lineHeight = isLongLine ? longLineHeight : shortLineHeight;
+//     final bool isLongLine = shouldDisplayLabel;
+//     final double lineLen = isLongLine ? longLineHeight : shortLineHeight;
 
-//     if (_isHorizontalAxis) {
+//     if (axis == Axis.horizontal) {
 //       final double centerY = size.height / 2;
-//       final p1 = Offset(size.width / 2, centerY - lineHeight / 2);
-//       final p2 = Offset(size.width / 2, centerY + lineHeight / 2);
-//       canvas.drawLine(p1, p2, paint);
+//       canvas.drawLine(
+//         Offset(size.width / 2, centerY - lineLen / 2),
+//         Offset(size.width / 2, centerY + lineLen / 2),
+//         paint,
+//       );
 
-//       if (isLongLine && value % 10 == 0) {
+//       // Draw label if needed
+//       if (shouldDisplayLabel) {
 //         final TextPainter textPainter = TextPainter(
 //           text: TextSpan(
-//             text: '$value',
+//             text: displayValue?.toStringAsFixed(0),
 //             style: TextStyle(
-//               color: value == selectedValue ? selectedColor : labelColor,
+//               color: labelColor,
 //               fontSize: scaleLabelSize,
 //             ),
 //           ),
@@ -489,283 +414,20 @@
 //         textPainter.layout();
 //         final offset = Offset(
 //           size.width / 2 - textPainter.width / 2,
-//           centerY + lineHeight / 2 + scaleBottomPadding,
+//           centerY + lineLen / 2 + 5,
 //         );
 //         textPainter.paint(canvas, offset);
 //       }
 //     } else {
-//       final double availableWidth = size.width - (horizontalPadding * 2);
-//       final double lineCenterX = horizontalPadding + (availableWidth / 2);
-//       final double lineStartX = lineCenterX - (lineHeight / 2);
-//       final double lineEndX = lineCenterX + (lineHeight / 2);
-
-//       final p1 = Offset(lineStartX, size.height / 2);
-//       final p2 = Offset(lineEndX, size.height / 2);
-//       canvas.drawLine(p1, p2, paint);
+//       final double centerX = size.width / 2;
+//       canvas.drawLine(
+//         Offset(centerX - lineLen / 2, size.height / 2),
+//         Offset(centerX + lineLen / 2, size.height / 2),
+//         paint,
+//       );
 //     }
 //   }
 
 //   @override
 //   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 // }
-
-//---------///with horizontal mode///--------------
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-
-import '../controllers/ruler_controller.dart';
-import '../helper/ui_helpers.dart';
-
-class SimpleRulerPicker extends StatefulWidget {
-  final int minValue;
-  final int maxValue;
-  final int initialValue;
-  final int scaleItemWidth;
-  final double scaleLabelSize;
-  final double scaleLabelWidth;
-  final double scaleBottomPadding;
-  final double longLineHeight;
-  final double shortLineHeight;
-  final Color lineColor;
-  final Color selectedColor;
-  final Color labelColor;
-  final double lineStroke;
-  final double height;
-  final Axis axis;
-  final String dataType;
-  final double selectedValueTextSize;
-  final double pointerHeight;
-  final double pointerThickness;
-  final double pointerUpwardOffset;
-  final RulerController controller;
-  final Function(int)? onValueChanged;
-  final double numberPadding;
-  final double containerToNumbersPadding;
-  final double containerToSelectedValuePadding;
-
-  const SimpleRulerPicker({
-    Key? key,
-    required this.controller,
-    required this.dataType,
-    this.minValue = 0,
-    this.maxValue = 200,
-    this.initialValue = 100,
-    this.scaleItemWidth = 10,
-    this.scaleLabelSize = 14,
-    this.scaleLabelWidth = 40,
-    this.scaleBottomPadding = 6,
-    this.longLineHeight = 24,
-    this.shortLineHeight = 12,
-    this.lineColor = Colors.grey,
-    this.selectedColor = Colors.orange,
-    this.labelColor = Colors.grey,
-    this.lineStroke = 2,
-    this.height = 100,
-    this.axis = Axis.horizontal,
-    this.selectedValueTextSize = 24,
-    this.pointerHeight = 80,
-    this.pointerThickness = 6,
-    this.pointerUpwardOffset = 10,
-    this.onValueChanged,
-    this.numberPadding = 12.0,
-    this.containerToNumbersPadding = 8.0,
-    this.containerToSelectedValuePadding = 16.0,
-  }) : assert(minValue <= initialValue && initialValue <= maxValue),
-       super(key: key);
-
-  @override
-  _SimpleRulerPickerState createState() => _SimpleRulerPickerState();
-}
-
-class _SimpleRulerPickerState extends State<SimpleRulerPicker> {
-  late final ScrollController _scrollController;
-  late final ScrollController _numbersScrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    _numbersScrollController = ScrollController();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _jumpToInitialValue();
-    });
-
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _jumpToInitialValue() {
-    final double centerOffset = _centerOffset();
-    final initialScrollPosition =
-        (widget.initialValue - widget.minValue) * widget.scaleItemWidth.w -
-        centerOffset;
-    _scrollController.jumpTo(initialScrollPosition);
-    widget.controller.selectedValue.value = widget.initialValue;
-    _syncNumberScroll();
-  }
-
-  double _centerOffset() {
-    return widget.axis == Axis.horizontal
-        ? (MediaQuery.of(context).size.width / 2 - widget.scaleItemWidth.w / 2)
-        : (widget.height.h / 2 - widget.scaleItemWidth.h / 2);
-  }
-
-  void _onScroll() {
-    final double centerOffset = _centerOffset();
-    final scrollPixels = _scrollController.offset;
-    final exactPosition =
-        (scrollPixels + centerOffset) / widget.scaleItemWidth.w;
-    final int newValue = (exactPosition.round() + widget.minValue).clamp(
-      widget.minValue,
-      widget.maxValue,
-    );
-    if (newValue != widget.controller.selectedValue.value) {
-      widget.controller.selectedValue.value = newValue;
-      widget.onValueChanged?.call(newValue);
-    }
-    _syncNumberScroll();
-  }
-
-  void _syncNumberScroll() {
-    if (_numbersScrollController.hasClients) {
-      _numbersScrollController.jumpTo(_scrollController.offset);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isHorizontal = widget.axis == Axis.horizontal;
-
-    return SizedBox(
-      height: isHorizontal ? widget.height.h : widget.height.h,
-      width: isHorizontal ? double.infinity : MediaQuery.of(context).size.width,
-      child: Stack(
-        children: [
-          // RULER LINES
-          ListView.builder(
-            controller: _scrollController,
-            scrollDirection: widget.axis,
-            itemCount: widget.maxValue - widget.minValue + 1,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              final int value = widget.minValue + index;
-              final bool isLongLine = value % 5 == 0;
-              final double lineHeight = isLongLine
-                  ? widget.longLineHeight.h
-                  : widget.shortLineHeight.h;
-
-              return SizedBox(
-                width: isHorizontal ? widget.scaleItemWidth.w : null,
-                height: isHorizontal ? null : widget.scaleItemWidth.h,
-                child: CustomPaint(
-                  painter: _RulerPainter(
-                    value: value,
-                    selectedValue: widget.controller.selectedValue.value,
-                    scaleLabelSize: widget.scaleLabelSize.sp,
-                    longLineHeight: lineHeight,
-                    shortLineHeight: widget.shortLineHeight.h,
-                    lineColor: widget.lineColor,
-                    selectedColor: widget.selectedColor,
-                    labelColor: widget.labelColor,
-                    lineStroke: widget.lineStroke.w,
-                    axis: widget.axis,
-                  ),
-                ),
-              );
-            },
-          ),
-
-          // POINTER + SELECTED VALUE
-          Obx(() {
-            final selected = widget.controller.selectedValue.value;
-            return Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "$selected ${widget.dataType}",
-                    style: TextStyle(
-                      fontSize: widget.selectedValueTextSize.sp,
-                      fontWeight: FontWeight.bold,
-                      color: widget.selectedColor,
-                    ),
-                  ),
-                  UIHelper.verticalSpace(10.h),
-                  Container(
-                    height: widget.pointerHeight.h,
-                    width: widget.pointerThickness.w,
-                    color: widget.selectedColor,
-                  ),
-                ],
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _numbersScrollController.dispose();
-    super.dispose();
-  }
-}
-
-class _RulerPainter extends CustomPainter {
-  final int value;
-  final int selectedValue;
-  final double scaleLabelSize;
-  final double longLineHeight;
-  final double shortLineHeight;
-  final Color lineColor;
-  final Color selectedColor;
-  final Color labelColor;
-  final double lineStroke;
-  final Axis axis;
-
-  _RulerPainter({
-    required this.value,
-    required this.selectedValue,
-    required this.scaleLabelSize,
-    required this.longLineHeight,
-    required this.shortLineHeight,
-    required this.lineColor,
-    required this.selectedColor,
-    required this.labelColor,
-    required this.lineStroke,
-    required this.axis,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = lineColor
-      ..strokeWidth = lineStroke;
-
-    final bool isLongLine = value % 5 == 0;
-    final double lineLen = isLongLine ? longLineHeight : shortLineHeight;
-
-    if (axis == Axis.horizontal) {
-      final double centerY = size.height / 2;
-      canvas.drawLine(
-        Offset(size.width / 2, centerY - lineLen / 2),
-        Offset(size.width / 2, centerY + lineLen / 2),
-        paint,
-      );
-    } else {
-      final double centerX = size.width / 2;
-      canvas.drawLine(
-        Offset(centerX - lineLen / 2, size.height / 2),
-        Offset(centerX + lineLen / 2, size.height / 2),
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}

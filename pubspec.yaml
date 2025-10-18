@@ -51,8 +51,7 @@ dependencies:
   video_player: ^2.10.0
   dropdown_button2: ^2.3.9
   simple_circular_progress_bar: ^1.0.2
-  # simple_ruler_picker:
-  #   path: lib/simple_ruler_picker
+  syncfusion_flutter_sliders: ^31.2.2
 
 dev_dependencies:
   flutter_test:
