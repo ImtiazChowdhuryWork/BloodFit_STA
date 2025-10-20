@@ -11,8 +11,10 @@ import '../../../../constants/app_enums.dart';
 class CalenderContainerWidget extends StatelessWidget {
   final double height;
   final double width;
-  final String completedCaloriesIconPath;
   final String dayName;
+  final String date;
+  final String completedCaloriesIconPath;
+
   final double progress;
   final double srokeWidth;
   final Color? progressColor;
@@ -36,6 +38,7 @@ class CalenderContainerWidget extends StatelessWidget {
     required this.completedCaloriesIconPath,
     this.isCheatDay = false,
     required this.userSubscriptionType,
+    required this.date,
   });
 
   @override
@@ -73,7 +76,7 @@ class CalenderContainerWidget extends StatelessWidget {
                     : isCalorieTaskCompleted
                     ? SvgPicture.asset(completedCaloriesIconPath)
                     : Text(
-                        "21",
+                        date,
                         style: TextFontStyle.headline16w500c999999StylePoppins,
                       ),
               ),

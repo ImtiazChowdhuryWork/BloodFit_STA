@@ -7,7 +7,7 @@ import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
-class NotFreeUserCalendarContainer extends StatelessWidget {
+class EliteUserWorkoutCalender extends StatelessWidget {
   final bool isCheatDay;
   final bool isCalorieTaskCompleted;
   final double height;
@@ -18,7 +18,7 @@ class NotFreeUserCalendarContainer extends StatelessWidget {
   final Color backgroundColor;
   final Widget? child;
 
-  const NotFreeUserCalendarContainer({
+  const EliteUserWorkoutCalender({
     super.key,
     required this.isCheatDay,
     required this.isCalorieTaskCompleted,
