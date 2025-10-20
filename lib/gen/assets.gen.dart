@@ -57,6 +57,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/faq_icon.svg
   String get faqIcon => 'assets/icons/faq_icon.svg';
 
+  /// File path: assets/icons/fat_icon.svg
+  String get fatIcon => 'assets/icons/fat_icon.svg';
+
   /// File path: assets/icons/female_icon.svg
   String get femaleIcon => 'assets/icons/female_icon.svg';
 
@@ -69,11 +72,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/fire_icon.svg
   String get fireIcon => 'assets/icons/fire_icon.svg';
 
+  /// File path: assets/icons/fire_icon_yellow.svg
+  String get fireIconYellow => 'assets/icons/fire_icon_yellow.svg';
+
   /// File path: assets/icons/fire_white.svg
   String get fireWhite => 'assets/icons/fire_white.svg';
 
   /// File path: assets/icons/fitness_icon.svg
   String get fitnessIcon => 'assets/icons/fitness_icon.svg';
+
+  /// File path: assets/icons/gluten_icon.svg
+  String get glutenIcon => 'assets/icons/gluten_icon.svg';
 
   /// File path: assets/icons/google_icon.svg
   String get googleIcon => 'assets/icons/google_icon.svg';
@@ -92,6 +101,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/meal_icon.svg
   String get mealIcon => 'assets/icons/meal_icon.svg';
+
+  /// File path: assets/icons/meat_icon.svg
+  String get meatIcon => 'assets/icons/meat_icon.svg';
 
   /// File path: assets/icons/pen_icon.svg
   String get penIcon => 'assets/icons/pen_icon.svg';
@@ -141,18 +153,22 @@ class $AssetsIconsGen {
     documentIcon,
     facebookIcon,
     faqIcon,
+    fatIcon,
     femaleIcon,
     fileIcon,
     fireGray,
     fireIcon,
+    fireIconYellow,
     fireWhite,
     fitnessIcon,
+    glutenIcon,
     googleIcon,
     homeIcon,
     lockIcon,
     logoutIcon,
     maleIcon,
     mealIcon,
+    meatIcon,
     penIcon,
     personIcon,
     privacyPolicyIcon,

@@ -7,9 +7,9 @@ import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
-class NumberSectionWidget extends StatelessWidget {
+class ConsistancyStakePreviewWidget extends StatelessWidget {
   final int numberValue;
-  const NumberSectionWidget({super.key, required this.numberValue});
+  const ConsistancyStakePreviewWidget({super.key, required this.numberValue});
 
   @override
   Widget build(BuildContext context) {

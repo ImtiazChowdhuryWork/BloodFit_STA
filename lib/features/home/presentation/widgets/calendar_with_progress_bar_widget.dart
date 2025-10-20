@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../constants/app_enums.dart';
 
-class CalenderContainerWidget extends StatelessWidget {
+class CalenderWithProgressbarWidget extends StatelessWidget {
   final double height;
   final double width;
   final String dayName;
@@ -23,7 +23,7 @@ class CalenderContainerWidget extends StatelessWidget {
   final bool isCalorieTaskCompleted;
   final bool isCheatDay;
   final UserSubscriptionType userSubscriptionType;
-  const CalenderContainerWidget({
+  const CalenderWithProgressbarWidget({
     super.key,
 
     required this.dayName,

@@ -1,4 +1,5 @@
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
+import 'package:bloodfit/features/work_out/presentation/work_out_screen.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     HomeScreen(),
     HomeScreen(),
     HomeScreen(),
-    HomeScreen(),
+    WorkOutScreen(),
     HomeScreen(),
   ];
 
