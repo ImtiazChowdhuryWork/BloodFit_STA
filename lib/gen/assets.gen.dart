@@ -81,6 +81,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/fire_icon_yellow.svg
   String get fireIconYellow => 'assets/icons/fire_icon_yellow.svg';
 
+  /// File path: assets/icons/fire_red.svg
+  String get fireRed => 'assets/icons/fire_red.svg';
+
   /// File path: assets/icons/fire_white.svg
   String get fireWhite => 'assets/icons/fire_white.svg';
 
@@ -173,6 +176,7 @@ class $AssetsIconsGen {
     fireGray,
     fireIcon,
     fireIconYellow,
+    fireRed,
     fireWhite,
     fitnessIcon,
     giftBoxIcon,
@@ -219,6 +223,10 @@ class $AssetsImagesGen {
   AssetGenImage get errorImage =>
       const AssetGenImage('assets/images/error_image.png');
 
+  /// File path: assets/images/omlet_egg.png
+  AssetGenImage get omletEgg =>
+      const AssetGenImage('assets/images/omlet_egg.png');
+
   /// File path: assets/images/onboarding_image_four.png
   AssetGenImage get onboardingImageFour =>
       const AssetGenImage('assets/images/onboarding_image_four.png');
@@ -253,6 +261,7 @@ class $AssetsImagesGen {
     bloodDropTransparent,
     bloodFitSplashText,
     errorImage,
+    omletEgg,
     onboardingImageFour,
     onboardingImageOne,
     onboardingImageThree,
