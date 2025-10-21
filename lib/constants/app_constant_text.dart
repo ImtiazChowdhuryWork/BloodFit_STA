@@ -8,5 +8,7 @@ class AppConstants {
   static const UserSubscriptionType defaultSubscriptionType =
       UserSubscriptionType.elite;
 
-  ///Section : ----------///Profile Tag///--------------
+  ///Section : ----------///Meal Plan Availability///--------------
+  static const MealPlanAvailability mealPlanAvailability =
+      MealPlanAvailability.mealPlanNotAvilable;
 }

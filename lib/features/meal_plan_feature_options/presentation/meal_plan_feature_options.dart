@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/controllers/enums_controller.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plans_with_calendar.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,9 @@ import '../../home/presentation/widgets/app_bar_section_widget.dart';
 import '../../home/presentation/widgets/build_meal_plan_icon_widget.dart';
 
 class MealPlanFeatureOptions extends StatelessWidget {
-  const MealPlanFeatureOptions({super.key});
+  MealPlanFeatureOptions({super.key});
+
+  final EnumsController enumsController = Get.find<EnumsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +36,42 @@ class MealPlanFeatureOptions extends StatelessWidget {
               AppBarSectionWidget(),
               UIHelper.verticalSpace(20.h),
 
-              ///Section : -----------///Text -> Meal Plan///-------------
-              Text(
-                "Meal Plan",
-                style: TextFontStyle.headline20w500cfefefeStylePoppins,
-              ),
-              UIHelper.verticalSpace(16.h),
+              Obx(() {
+                return enumsController.isMealPlanAvailable
+                    ? MealPlansWithCalendar()
+                    : Column(
+                        children: [
+                          ///Section : -----------///Text -> Meal Plan///-------------
+                          Text(
+                            "Meal Plan",
+                            style:
+                                TextFontStyle.headline20w500cfefefeStylePoppins,
+                          ),
+                          UIHelper.verticalSpace(16.h),
 
-              ///Section : -----------///Text -> Build Your Meal Plan///-------------
-              ///Available Only When Meal Plan Is Not created
-              BuildMealPlanWidget(
-                onTap: () {
-                  log("Button Taped : Get Started !");
-                  Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
-                },
-                buttonTitle: "Get Started",
-                positionTop: -37.h,
-                positionRight: -20.w,
-                imageIconPath: Assets.icons.disIcon,
-                title: "Build Your Daily Meals",
-                subTitle:
-                    "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
-              ),
+                          ///Section : -----------///Text -> Build Your Meal Plan///-------------
+                          ///Available Only When Meal Plan Is Not created
+                          BuildMealPlanWidget(
+                            onTap: () {
+                              log("Button Taped : Get Started !");
+                              log(
+                                "Is Meal Plan Available : ${enumsController.isMealPlanAvailable}",
+                              );
+                              Get.toNamed(
+                                Routes.chooseFromOurSuggestedMealsScreen,
+                              );
+                            },
+                            buttonTitle: "Get Started",
+                            positionTop: -37.h,
+                            positionRight: -20.w,
+                            imageIconPath: Assets.icons.disIcon,
+                            title: "Build Your Daily Meals",
+                            subTitle:
+                                "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+                          ),
+                        ],
+                      );
+              }),
               UIHelper.verticalSpace(24.h),
             ],
           ),

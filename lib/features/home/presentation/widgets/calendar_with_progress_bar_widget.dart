@@ -22,7 +22,6 @@ class CalenderWithProgressbarWidget extends StatelessWidget {
   final Widget? child;
   final bool isCalorieTaskCompleted;
   final bool isCheatDay;
-  final UserSubscriptionType userSubscriptionType;
   const CalenderWithProgressbarWidget({
     super.key,
 
@@ -37,7 +36,6 @@ class CalenderWithProgressbarWidget extends StatelessWidget {
     required this.isCalorieTaskCompleted,
     required this.completedCaloriesIconPath,
     this.isCheatDay = false,
-    required this.userSubscriptionType,
     required this.date,
   });
 
