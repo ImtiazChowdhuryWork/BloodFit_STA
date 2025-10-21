@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/controllers/profile_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/log_out_button.dart';
@@ -34,6 +35,8 @@ class MyProfileScreen extends StatelessWidget {
 
   final ProfileScreenController controller =
       Get.find<ProfileScreenController>();
+
+  final EnumsController enumsController = Get.find<EnumsController>();
 
   @override
   Widget build(BuildContext context) {

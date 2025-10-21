@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/consistancy_stake_preview.dart';
@@ -20,7 +21,9 @@ import 'package:get/get.dart';
 import '../../../custom_widgets/custom_calender_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final EnumsController enumsController = Get.find<EnumsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +48,7 @@ class HomeScreen extends StatelessWidget {
               UIHelper.verticalSpace(14.h),
 
               ///Section : -----------///Calender Widget with progress, cheat day,...///--------------
-              CustomCalenderWidget(
-                userSubscriptionType: UserSubscriptionType.elite,
-              ),
+              CustomCalenderWidget(),
               UIHelper.verticalSpace(24.h),
 
               ///Section : --------///Text -> your daily calories///----------
@@ -126,20 +127,28 @@ class HomeScreen extends StatelessWidget {
               UIHelper.verticalSpace(24.h),
 
               ///Section : -------------///Build Your Meal Plan////------------
-              BuildMealPlanWidget(
-                onTap: () {
-                  log("Button Taped : Get Started !");
-                  Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
-                },
-                buttonTitle: "Get Started",
-                positionTop: -36.h,
-                positionRight: -20.w,
-                imageIconPath: Assets.icons.chickeMealIcon,
-                title: "Build Your Daily Meals",
-                subTitle:
-                    "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
-              ),
-              UIHelper.verticalSpace(24.h),
+              Obx(() {
+                return enumsController.isMealPlanAvailable
+                    ? SizedBox.shrink()
+                    : BuildMealPlanWidget(
+                        onTap: () {
+                          log("Button Taped : Get Started !");
+                          Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                        },
+                        buttonTitle: "Get Started",
+                        positionTop: -36.h,
+                        positionRight: -20.w,
+                        imageIconPath: Assets.icons.chickeMealIcon,
+                        title: "Build Your Daily Meals",
+                        subTitle:
+                            "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+                      );
+              }),
+              Obx(() {
+                return enumsController.isMealPlanAvailable
+                    ? SizedBox.shrink()
+                    : UIHelper.verticalSpace(24.h);
+              }),
 
               ///Section : -------------///Build Your Meal Plan////------------
               BuildMealPlanWidget(

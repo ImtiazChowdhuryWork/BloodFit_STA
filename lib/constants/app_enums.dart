@@ -18,3 +18,5 @@ enum ProfileOptionsTitle {
   setTings,
   subscriptoinType,
 }
+
+enum MealPlanAvailability { mealPlanAvailable, mealPlanNotAvilable }

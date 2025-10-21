@@ -2,6 +2,7 @@ import 'package:bloodfit/controllers/sign_up_screen_controller.dart';
 import 'package:get/get.dart';
 
 import '../controllers/edit_profile_screen_controller.dart';
+import '../controllers/enums_controller.dart';
 import '../controllers/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
 import '../controllers/home_screen_controller.dart';
@@ -27,6 +28,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => VerifyOtpScreenController());
     Get.lazyPut(() => ResetPasswordScreenController());
     Get.lazyPut(() => ProfileScreenController(), fenix: true);
+    Get.lazyPut(() => EnumsController(), fenix: true);
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
     Get.lazyPut(() => HomeScreenController(), fenix: true);
     Get.lazyPut(() => FaqScreenController());

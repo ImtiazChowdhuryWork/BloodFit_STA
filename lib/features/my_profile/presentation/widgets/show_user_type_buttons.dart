@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,8 @@ class ShowUserTypeButtons extends StatelessWidget {
 
   final ProfileScreenController controller =
       Get.find<ProfileScreenController>();
+
+  final EnumsController enumsController = Get.find<EnumsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,7 @@ class ShowUserTypeButtons extends StatelessWidget {
                     onTap: () {
                       log("Free User Button Taped!");
                       controller.setSubscriptionTypeFree();
+                      enumsController.setMealPlanAvailable();
                     },
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
@@ -57,6 +61,7 @@ class ShowUserTypeButtons extends StatelessWidget {
                     onTap: () {
                       log("Starter User Button Taped!");
                       controller.setSubscriptionTypeStarter();
+                      enumsController.setMealPlanNotAvailable();
                     },
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
@@ -83,6 +88,7 @@ class ShowUserTypeButtons extends StatelessWidget {
                     onTap: () {
                       log("Pro User Button Taped!");
                       controller.setSubscriptionTypePro();
+                      enumsController.setMealPlanNotAvailable();
                     },
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
@@ -101,6 +107,7 @@ class ShowUserTypeButtons extends StatelessWidget {
                     onTap: () {
                       log("Elite User Button Taped!");
                       controller.setSubscriptionTypeElite();
+                      enumsController.setMealPlanNotAvailable();
                     },
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
