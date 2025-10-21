@@ -13,7 +13,7 @@ import 'package:bloodfit/features/enter_your_details/presentation/enter_your_det
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
-import 'package:bloodfit/features/mealplan/presentation/mealplan_screen.dart';
+import 'package:bloodfit/features/profile_mealplan/presentation/profile_mealplan_screen.dart';
 import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart';
 import 'package:bloodfit/features/notification/presentation/notification_screen.dart';
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
@@ -29,6 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../features/change_password/bindings/change_password_bindings.dart';
+import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
 import '../features/information_gather/presentation/information_gather_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
@@ -70,6 +71,8 @@ class Routes {
   static const String youAreAllSetScreen = '/you_are_all_set_screen';
   static const String navigationScreen = '/navigation_screen';
   static const String homeScreen = '/home_screen';
+  static const String chooseFromOurSuggestedMealsScreen =
+      '/choose_from_our_suggested_meals_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -183,7 +186,7 @@ class Routes {
     ///mealPlanScreen
     GetPage(
       name: mealPlanScreen,
-      page: () => MealplanScreen(),
+      page: () => ProfileMealplanScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -333,6 +336,15 @@ class Routes {
     GetPage(
       name: homeScreen,
       page: () => HomeScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///chooseFromOurSuggestedMealsScreen
+    GetPage(
+      name: chooseFromOurSuggestedMealsScreen,
+      page: () => ChooseFromOurSuggestedMealsScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

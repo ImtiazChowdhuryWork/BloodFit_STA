@@ -1,4 +1,5 @@
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/meal_plan_feature_options.dart';
 import 'package:bloodfit/features/work_out/presentation/work_out_screen.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -18,9 +19,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
   late PageController _pageController;
 
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     HomeScreen(),
-    HomeScreen(),
+    MealPlanFeatureOptions(),
     HomeScreen(),
     WorkOutScreen(),
     HomeScreen(),
