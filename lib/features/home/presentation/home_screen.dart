@@ -1,18 +1,22 @@
+import 'dart:developer';
+
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
+import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/consistancy_stake_preview.dart';
+import 'package:bloodfit/features/home/presentation/widgets/current_weight_update_widget.dart';
+import 'package:bloodfit/features/home/presentation/widgets/received_three_meal_plan_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/single_element_showing_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/total_k_cal_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/profile_screen_controller.dart';
 import '../../../custom_widgets/custom_calender_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -113,45 +117,50 @@ class HomeScreen extends StatelessWidget {
               UIHelper.verticalSpace(24.h),
 
               ///Section : ----------------///Text -> update your current weight///------------
-              Text(
-                "Update Your Current Weight",
-                style: TextFontStyle.headline20w500cfefefeStylePoppins,
-              ),
-              UIHelper.verticalSpace(8.h),
-
               ///Section : --------------///Weight Drop Down///----------
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 15.w),
-                decoration: BoxDecoration(
-                  color: AppColors.c262626,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Enter Your Weight",
-                    hintStyle: TextFontStyle.headline12w500c999999StylePoppins,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.cb20000),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.cb20000),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
+              CurrentWeightUpdateWidget(),
+              UIHelper.verticalSpace(24.h),
 
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.cb20000),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
+              ///Section : -------------///received 3 meal plan///--------------
+              ReceivedThreeMealPlansWidget(),
+              UIHelper.verticalSpace(24.h),
 
-                    disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.cb20000),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                  ),
-                ),
+              ///Section : -------------///Build Your Meal Plan////------------
+              BuildMealPlanWidget(
+                onTap: () {
+                  log("Button Taped : Get Started !");
+                  Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                },
+                buttonTitle: "Get Started",
+                positionTop: -36.h,
+                positionRight: -20.w,
+                imageIconPath: Assets.icons.chickeMealIcon,
+                title: "Build Your Daily Meals",
+                subTitle:
+                    "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
               ),
-              UIHelper.verticalSpace(100.h),
+              UIHelper.verticalSpace(24.h),
+
+              ///Section : -------------///Build Your Meal Plan////------------
+              BuildMealPlanWidget(
+                onTap: () {
+                  log("Button Taped : Subscribe Now !");
+                },
+                buttonTitle: "Subscribe Now",
+                isBorderUsed: true,
+                borderWidth: 2.sp,
+                borderColor: AppColors.cb20000,
+                buttonColor: AppColors.c000000,
+                positionTop: -20.h,
+                positionRight: -20.w,
+                imageIconPath: Assets.icons.workoutDumbleIcon,
+                title: "Unlock Personalized Workouts",
+                subTitle:
+                    "Subscribe Now To Get Customized Workout Plans Tailored To Your Fitness Goals",
+              ),
+              UIHelper.verticalSpace(24.h),
+
+              UIHelper.verticalSpace(120.h),
             ],
           ),
         ), // comment

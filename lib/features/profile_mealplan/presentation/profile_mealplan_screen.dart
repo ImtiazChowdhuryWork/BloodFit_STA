@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
-import 'package:bloodfit/features/mealplan/presentation/widgets/search_and_select_widget.dart';
-import 'package:bloodfit/features/mealplan/presentation/widgets/selectable_wrap_box_widget.dart';
+import 'package:bloodfit/features/profile_mealplan/presentation/widgets/search_and_select_widget.dart';
+import 'package:bloodfit/features/profile_mealplan/presentation/widgets/selectable_wrap_box_widget.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,8 +15,8 @@ import '../../../custom_widgets/custom_drop_down_field_widget.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/colors.gen.dart';
 
-class MealplanScreen extends StatelessWidget {
-  MealplanScreen({super.key});
+class ProfileMealplanScreen extends StatelessWidget {
+  ProfileMealplanScreen({super.key});
 
   final MealPlanScreenController controller =
       Get.find<MealPlanScreenController>();

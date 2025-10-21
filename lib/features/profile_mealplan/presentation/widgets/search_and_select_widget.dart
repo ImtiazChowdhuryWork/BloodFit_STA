@@ -1,5 +1,5 @@
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/features/mealplan/presentation/widgets/custom_chip_with_delete_icon.dart';
+import 'package:bloodfit/features/profile_mealplan/presentation/widgets/custom_chip_with_delete_icon.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';

@@ -42,11 +42,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/camera_icon_without_bg.svg
   String get cameraIconWithoutBg => 'assets/icons/camera_icon_without_bg.svg';
 
+  /// File path: assets/icons/chicke_meal_icon.svg
+  String get chickeMealIcon => 'assets/icons/chicke_meal_icon.svg';
+
   /// File path: assets/icons/crown_icon.svg
   String get crownIcon => 'assets/icons/crown_icon.svg';
 
   /// File path: assets/icons/delete_user_icon.svg
   String get deleteUserIcon => 'assets/icons/delete_user_icon.svg';
+
+  /// File path: assets/icons/dis_icon.svg
+  String get disIcon => 'assets/icons/dis_icon.svg';
 
   /// File path: assets/icons/document_icon.svg
   String get documentIcon => 'assets/icons/document_icon.svg';
@@ -80,6 +86,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/fitness_icon.svg
   String get fitnessIcon => 'assets/icons/fitness_icon.svg';
+
+  /// File path: assets/icons/gift_box_icon.svg
+  String get giftBoxIcon => 'assets/icons/gift_box_icon.svg';
 
   /// File path: assets/icons/gluten_icon.svg
   String get glutenIcon => 'assets/icons/gluten_icon.svg';
@@ -138,6 +147,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/warning_icon.svg
   String get warningIcon => 'assets/icons/warning_icon.svg';
 
+  /// File path: assets/icons/workout_dumble_icon.svg
+  String get workoutDumbleIcon => 'assets/icons/workout_dumble_icon.svg';
+
   /// File path: assets/icons/workout_icon.svg
   String get workoutIcon => 'assets/icons/workout_icon.svg';
 
@@ -148,8 +160,10 @@ class $AssetsIconsGen {
     bloodDrop,
     cameraIcon,
     cameraIconWithoutBg,
+    chickeMealIcon,
     crownIcon,
     deleteUserIcon,
+    disIcon,
     documentIcon,
     facebookIcon,
     faqIcon,
@@ -161,6 +175,7 @@ class $AssetsIconsGen {
     fireIconYellow,
     fireWhite,
     fitnessIcon,
+    giftBoxIcon,
     glutenIcon,
     googleIcon,
     homeIcon,
@@ -180,6 +195,7 @@ class $AssetsIconsGen {
     settingsIcon,
     trashIcon,
     warningIcon,
+    workoutDumbleIcon,
     workoutIcon,
   ];
 }
