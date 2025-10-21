@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/sub_presentation/dinner/presentation/dinner_tab.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,8 @@ import '../../../constants/app_list.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../routes/routes.dart';
 import '../../subscription/widgets/subscription_package_showing_widget.dart';
+import '../sub_presentation/breakfast/presentation/breakfast_tab.dart';
+import '../sub_presentation/lunch/presentation/lunch_tab.dart';
 
 class ChooseFromOurSuggestedMealsScreen extends StatefulWidget {
   const ChooseFromOurSuggestedMealsScreen({super.key});
@@ -87,6 +91,7 @@ class _ChooseFromOurSuggestedMealsScreenState
         child: Padding(
           padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Custom TabBar (below AppBar)
               Align(
@@ -144,7 +149,21 @@ class _ChooseFromOurSuggestedMealsScreenState
                   ),
                 ),
               ),
-              UIHelper.verticalSpace(20.h),
+              UIHelper.verticalSpace(32.h),
+
+              ///Section : -------------///Text -> Choose From Our Suggested Meals///------------
+              Text(
+                "Choose From Our Suggested Meals",
+                style: TextFontStyle.headline20w500cfefefeStylePoppins,
+              ),
+              UIHelper.verticalSpace(6.h),
+
+              ///Section : -------------///Text -> Select Any One///------------
+              Text(
+                "Select Any One",
+                style: TextFontStyle.headline14w500cc6c6c6StylePoppins,
+              ),
+              UIHelper.verticalSpace(32.h),
 
               /// TabBarView
               Expanded(
@@ -153,79 +172,13 @@ class _ChooseFromOurSuggestedMealsScreenState
                   children: [
                     /// Monthly Tab
                     /// subscriptionPackagesList
-                    ListView.separated(
-                      itemCount: AppList.subscriptionPackagesList.length,
-                      separatorBuilder: (context, index) =>
-                          UIHelper.verticalSpace(24.h),
-                      itemBuilder: (context, index) {
-                        var data = AppList.subscriptionPackagesList[index];
-                        return SubscriptionPackageShowingWidget(
-                          packagePrice: data.packagePrice,
-                          packageOffersList: data.packageOffersList,
-                          packageType: data.packageType,
-                          packageDuration: data.packageDuration,
-                          isPackageActive: data.isActive,
-                          isDiscountOfferAvailable:
-                              data.isDiscountOfferAvailable,
-                          discountOffer: data.discountOffer,
-                          onTap: () {
-                            // handle selection
-                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
-                            log("${data.packageType} selected");
-                          },
-                        );
-                      },
-                    ),
+                    BreakfastTab(),
 
                     /// subscriptionPackagesList
-                    ListView.separated(
-                      itemCount: AppList.subscriptionPackagesList.length,
-                      separatorBuilder: (context, index) =>
-                          UIHelper.verticalSpace(24.h),
-                      itemBuilder: (context, index) {
-                        var data = AppList.subscriptionPackagesList[index];
-                        return SubscriptionPackageShowingWidget(
-                          packagePrice: data.packagePrice,
-                          packageOffersList: data.packageOffersList,
-                          packageType: data.packageType,
-                          packageDuration: data.packageDuration,
-                          isPackageActive: data.isActive,
-                          isDiscountOfferAvailable:
-                              data.isDiscountOfferAvailable,
-                          discountOffer: data.discountOffer,
-                          onTap: () {
-                            // handle selection
-                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
-                            log("${data.packageType} selected");
-                          },
-                        );
-                      },
-                    ),
+                    LunchTab(),
 
                     /// Yearly Tab
-                    ListView.separated(
-                      itemCount: AppList.subscriptionPackagesList.length,
-                      separatorBuilder: (context, index) =>
-                          UIHelper.verticalSpace(24.h),
-                      itemBuilder: (context, index) {
-                        var data = AppList.subscriptionPackagesList[index];
-                        return SubscriptionPackageShowingWidget(
-                          packagePrice: data.packagePrice,
-                          packageOffersList: data.packageOffersList,
-                          packageType: data.packageType,
-                          packageDuration: data.packageDuration,
-                          isPackageActive: data.isActive,
-                          isDiscountOfferAvailable:
-                              data.isDiscountOfferAvailable,
-                          discountOffer: data.discountOffer,
-                          onTap: () {
-                            // handle selection
-                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
-                            log("${data.packageType} selected");
-                          },
-                        );
-                      },
-                    ),
+                    DinnerTab(),
                   ],
                 ),
               ),
