@@ -61,8 +61,6 @@ class MealPlanCalenderShapeWidget extends StatelessWidget {
                 date,
                 style: TextFontStyle.headline14w400cb20000StylePoppins.copyWith(
                   color: dateColor,
-
-                  // isToday ? AppColors.cb20000 : AppColors.c999999,
                 ),
               ),
             ),
