@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/controllers/home_screen_controller.dart';
+import 'package:bloodfit/controllers/calendar_controller.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -15,8 +15,7 @@ class CustomCalenderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeScreenController homeScreenController =
-        Get.find<HomeScreenController>();
+    CalandarController homeScreenController = Get.find<CalandarController>();
 
     return SizedBox(
       height: 0.1.sh,
