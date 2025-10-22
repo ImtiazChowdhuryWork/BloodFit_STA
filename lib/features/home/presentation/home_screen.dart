@@ -135,6 +135,8 @@ class HomeScreen extends StatelessWidget {
                           log("Button Taped : Get Started !");
                           Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
                         },
+                        showSectionTitle: true,
+                        sectionTitle: "Choose From Our Suggested Meals",
                         buttonTitle: "Get Started",
                         positionTop: -36.h,
                         positionRight: -20.w,

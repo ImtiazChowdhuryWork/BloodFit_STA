@@ -39,37 +39,23 @@ class MealPlanFeatureOptions extends StatelessWidget {
               Obx(() {
                 return enumsController.isMealPlanAvailable
                     ? MealPlansWithCalendar()
-                    : Column(
-                        children: [
-                          ///Section : -----------///Text -> Meal Plan///-------------
-                          Text(
-                            "Meal Plan",
-                            style:
-                                TextFontStyle.headline20w500cfefefeStylePoppins,
-                          ),
-                          UIHelper.verticalSpace(16.h),
-
-                          ///Section : -----------///Text -> Build Your Meal Plan///-------------
-                          ///Available Only When Meal Plan Is Not created
-                          BuildMealPlanWidget(
-                            onTap: () {
-                              log("Button Taped : Get Started !");
-                              log(
-                                "Is Meal Plan Available : ${enumsController.isMealPlanAvailable}",
-                              );
-                              Get.toNamed(
-                                Routes.chooseFromOurSuggestedMealsScreen,
-                              );
-                            },
-                            buttonTitle: "Get Started",
-                            positionTop: -37.h,
-                            positionRight: -20.w,
-                            imageIconPath: Assets.icons.disIcon,
-                            title: "Build Your Daily Meals",
-                            subTitle:
-                                "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
-                          ),
-                        ],
+                    : BuildMealPlanWidget(
+                        onTap: () {
+                          log("Button Taped : Get Started !");
+                          log(
+                            "Is Meal Plan Available : ${enumsController.isMealPlanAvailable}",
+                          );
+                          Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                        },
+                        showSectionTitle: true,
+                        sectionTitle: "Meal Plan",
+                        buttonTitle: "Get Started",
+                        positionTop: -37.h,
+                        positionRight: -20.w,
+                        imageIconPath: Assets.icons.disIcon,
+                        title: "Build Your Daily Meals",
+                        subTitle:
+                            "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
                       );
               }),
               UIHelper.verticalSpace(24.h),

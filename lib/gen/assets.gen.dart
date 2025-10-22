@@ -223,6 +223,10 @@ class $AssetsImagesGen {
   AssetGenImage get errorImage =>
       const AssetGenImage('assets/images/error_image.png');
 
+  /// File path: assets/images/food_image.png
+  AssetGenImage get foodImage =>
+      const AssetGenImage('assets/images/food_image.png');
+
   /// File path: assets/images/omlet_egg.png
   AssetGenImage get omletEgg =>
       const AssetGenImage('assets/images/omlet_egg.png');
@@ -261,6 +265,7 @@ class $AssetsImagesGen {
     bloodDropTransparent,
     bloodFitSplashText,
     errorImage,
+    foodImage,
     omletEgg,
     onboardingImageFour,
     onboardingImageOne,
