@@ -19,6 +19,8 @@ class BuildMealPlanWidget extends StatelessWidget {
   final double positionTop;
   final double positionRight;
   final String buttonTitle;
+  final bool showSectionTitle;
+  final String? sectionTitle;
   const BuildMealPlanWidget({
     super.key,
     this.onTap,
@@ -32,69 +34,86 @@ class BuildMealPlanWidget extends StatelessWidget {
     required this.positionRight,
     required this.buttonTitle,
     this.borderWidth,
+    this.showSectionTitle = false,
+    this.sectionTitle,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 1.sw,
-      padding: EdgeInsets.all(22.sp),
-      decoration: BoxDecoration(
-        color: AppColors.c262626,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Stack(
-        clipBehavior: Clip.none, // allows the icon to overflow
-        children: [
-          /// Inner bordered container
-          Container(
-            width: 1.sw,
-            padding: EdgeInsets.all(10.sp),
-            decoration: BoxDecoration(
-              color: AppColors.c111111,
-              border: Border.all(color: AppColors.cfefefe),
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextFontStyle.headline16w500cfefefeStylePoppins,
-                ),
-                UIHelper.verticalSpace(8.h),
-                Text(
-                  subTitle,
-                  style: TextFontStyle.headline14w400c999999StylePoppins,
-                ),
-                UIHelper.verticalSpace(32.h),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ///Section : -------------///Text -> Choose From Our Suggested Meals///---------------
+        showSectionTitle
+            ? Text(
+                sectionTitle ?? "No Section Title Is Available",
+                style: TextFontStyle.headline20w500cfefefeStylePoppins,
+              )
+            : SizedBox.shrink(),
 
-                /// Section: Button -> Get Started
-                CustomElevatedButton(
-                  onTap: onTap,
-                  buttonHeight: 40.h,
-                  borderRadius: 24.r,
-                  buttonBorderWidth: borderWidth,
-                  isButtonBorderUsed: isBorderUsed,
-                  buttonBorderColor: borderColor,
-                  buttonColor: buttonColor,
-                  buttonTitle: buttonTitle,
-                ),
-                UIHelper.verticalSpace(6.h),
-              ],
-            ),
-          ),
+        showSectionTitle ? UIHelper.verticalSpace(16.h) : SizedBox.shrink(),
 
-          /// Floating gift icon
-          Positioned(
-            // top: -36, // moves above the border
-            // right: -20,
-            top: positionTop,
-            right: positionRight,
-            child: SvgPicture.asset(imageIconPath),
+        Container(
+          width: 1.sw,
+          padding: EdgeInsets.all(22.sp),
+          decoration: BoxDecoration(
+            color: AppColors.c262626,
+            borderRadius: BorderRadius.circular(8.r),
           ),
-        ],
-      ),
+          child: Stack(
+            clipBehavior: Clip.none, // allows the icon to overflow
+            children: [
+              /// Inner bordered container
+              Container(
+                width: 1.sw,
+                padding: EdgeInsets.all(10.sp),
+                decoration: BoxDecoration(
+                  color: AppColors.c111111,
+                  border: Border.all(color: AppColors.cfefefe),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextFontStyle.headline16w500cfefefeStylePoppins,
+                    ),
+                    UIHelper.verticalSpace(8.h),
+                    Text(
+                      subTitle,
+                      style: TextFontStyle.headline14w400c999999StylePoppins,
+                    ),
+                    UIHelper.verticalSpace(32.h),
+
+                    /// Section: Button -> Get Started
+                    CustomElevatedButton(
+                      onTap: onTap,
+                      buttonHeight: 40.h,
+                      borderRadius: 24.r,
+                      buttonBorderWidth: borderWidth,
+                      isButtonBorderUsed: isBorderUsed,
+                      buttonBorderColor: borderColor,
+                      buttonColor: buttonColor,
+                      buttonTitle: buttonTitle,
+                    ),
+                    UIHelper.verticalSpace(6.h),
+                  ],
+                ),
+              ),
+
+              /// Floating gift icon
+              Positioned(
+                // top: -36, // moves above the border
+                // right: -20,
+                top: positionTop,
+                right: positionRight,
+                child: SvgPicture.asset(imageIconPath),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
