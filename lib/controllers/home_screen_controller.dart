@@ -1,29 +1,45 @@
+import 'package:bloodfit/extensions/date_time_extension.dart';
 import 'package:get/get.dart';
 import '../utils/calander_logic.dart';
 
 class HomeScreenController extends GetxController {
-  // Reactive list of all days
-  var allDays = <CalendarDay>[].obs;
+  /// List of all generated calendar days
+  final allCalendarDays = <CalendarDay>[].obs;
 
-  // The CalendarDateManager is created inside the controller
-  late final CalendarDateManager calendar;
+  /// Currently selected date in the calendar (if any)
+  final selectedCalendarDate = Rx<DateTime?>(null);
 
-  // You can optionally set start/end year here
-  final int startYear = 2025;
-  final int endYear = 2040;
+  /// Calendar logic handler
+  late final CalendarDateManager calendarManager;
+
+  /// Define the calendar year range
+  final int calendarStartYear = 2025;
+  final int calendarEndYear = 2040;
 
   @override
   void onInit() {
     super.onInit();
-
-    // Initialize CalendarDateManager inside the controller
-    calendar = CalendarDateManager(startYear: startYear, endYear: endYear);
-
-    // Load all days
-    loadAllDays();
+    calendarManager = CalendarDateManager(
+      startYear: calendarStartYear,
+      endYear: calendarEndYear,
+    );
+    _loadCalendarDays();
   }
 
-  void loadAllDays() {
-    allDays.value = calendar.generateAllDays();
+  void _loadCalendarDays() {
+    allCalendarDays.value = calendarManager.generateAllDays();
+  }
+
+  /// Handles tap selection on a calendar date
+  void toggleCalendarDateSelection(DateTime tappedDate) {
+    final normalizedDate = tappedDate.dateOnly;
+
+    // Toggle off if the same date is tapped again
+    if (selectedCalendarDate.value?.isSameCalendarDay(normalizedDate) ??
+        false) {
+      selectedCalendarDate.value = null;
+    } else {
+      selectedCalendarDate.value = normalizedDate;
+    }
   }
 }

@@ -23,10 +23,10 @@ class CustomCalenderWidget extends StatelessWidget {
       width: 1.sw,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: homeScreenController.allDays.length,
+        itemCount: homeScreenController.allCalendarDays.length,
         separatorBuilder: (context, index) => UIHelper.horizontalSpace(20.w),
         itemBuilder: (context, index) {
-          var data = homeScreenController.allDays[index];
+          var data = homeScreenController.allCalendarDays[index];
           return InkWell(
             onTap: () {
               log("Date Data : ");
