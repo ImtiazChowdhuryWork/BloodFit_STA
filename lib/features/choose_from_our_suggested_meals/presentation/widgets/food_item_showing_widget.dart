@@ -15,6 +15,7 @@ class FoodItemShowingWidget extends StatelessWidget {
   final String itemTitle;
   final double kcalValue;
   final double personValue;
+  final void Function(bool?)? onChanged;
   const FoodItemShowingWidget({
     super.key,
     required this.isSelected,
@@ -22,6 +23,7 @@ class FoodItemShowingWidget extends StatelessWidget {
     required this.itemTitle,
     required this.kcalValue,
     required this.personValue,
+    this.onChanged,
   });
 
   @override
@@ -57,9 +59,7 @@ class FoodItemShowingWidget extends StatelessWidget {
                 activeColor: AppColors.cb20000,
                 side: BorderSide(color: AppColors.cd7d7d7),
                 value: isSelected,
-                onChanged: (value) {
-                  log("Check Box Value : $value");
-                },
+                onChanged: onChanged,
               ),
             ],
           ),
