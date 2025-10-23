@@ -49,6 +49,7 @@ void showSwapMealBottomSheet() {
                         redButtonTitle: "Swap This Meal",
                         redButtonOnTap: () {
                           log("Button Tapped : I Ate This");
+                          Get.back();
                           Get.toNamed(Routes.mealSwapOnboardingScreen);
                         },
                         transparentButtonTitle: "Details",

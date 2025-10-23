@@ -52,6 +52,7 @@ class MealPlanSelectionTracker extends StatelessWidget {
           CustomElevatedButton(
             onTap: () {
               log("Button Taped : Build Meal Plan!");
+              Get.closeCurrentSnackbar(); // dismiss snackbar immediately
               Get.toNamed(Routes.reviewYourChoosenMealScreen);
             },
             buttonTitle: "Build Meal Plan",
