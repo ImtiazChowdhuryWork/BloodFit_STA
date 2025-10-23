@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../constants/text_font_style.dart';
-import '../../../../helper/ui_helpers.dart';
+import '../constants/text_font_style.dart';
+import '../helper/ui_helpers.dart';
 
 class FoodItemDataHelperWidget extends StatelessWidget {
   final String iconPath;
   final double value;
+  final bool isValueVisible;
   final String title;
   final Color? iconColor;
 
@@ -17,6 +18,7 @@ class FoodItemDataHelperWidget extends StatelessWidget {
     required this.value,
     required this.title,
     this.iconColor,
+    this.isValueVisible = true,
   });
 
   @override
@@ -25,10 +27,15 @@ class FoodItemDataHelperWidget extends StatelessWidget {
       children: [
         SvgPicture.asset(iconPath, color: iconColor),
         UIHelper.horizontalSpace(4.w),
-        Text(
-          "${value % 1 == 0 ? value.toInt() : value} $title",
-          style: TextFontStyle.headline14w500cfefefeStylePoppins,
-        ),
+        isValueVisible
+            ? Text(
+                "${value % 1 == 0 ? value.toInt() : value} $title",
+                style: TextFontStyle.headline14w500cfefefeStylePoppins,
+              )
+            : Text(
+                title,
+                style: TextFontStyle.headline14w500cfefefeStylePoppins,
+              ),
       ],
     );
   }
