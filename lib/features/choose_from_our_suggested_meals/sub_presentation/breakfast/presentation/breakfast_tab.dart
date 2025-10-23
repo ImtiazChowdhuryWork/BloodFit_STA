@@ -6,7 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../presentation/widgets/meal_plan_type_widget.dart';
 
 class BreakfastTab extends StatelessWidget {
-  const BreakfastTab({super.key});
+  final VoidCallback? onMealSelected;
+  const BreakfastTab({super.key, this.onMealSelected});
 
   @override
   Widget build(BuildContext context) {

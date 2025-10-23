@@ -72,11 +72,13 @@ void showSwapMealBottomSheet() {
             CustomElevatedButton(
               onTap: () {
                 log("Button Tapped : Confirm");
+                Get.back();
+                Get.toNamed(Routes.navigationScreen);
               },
               buttonHeight: 52.h,
               buttonWidth: 1.sw,
               borderRadius: 24.r,
-              buttonTitle: "confirm",
+              buttonTitle: "Confirm",
               buttonColor: AppColors.c262626,
             ),
           ],

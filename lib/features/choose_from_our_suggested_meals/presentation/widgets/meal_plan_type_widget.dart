@@ -1,6 +1,10 @@
+import 'package:bloodfit/controllers/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/meal_plan_selection_tracker.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../constants/text_font_style.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -12,7 +16,7 @@ class MealPlanTypeWidget extends StatelessWidget {
   final String itemTitle;
   final double kcalValue;
   final double personValue;
-  const MealPlanTypeWidget({
+  MealPlanTypeWidget({
     super.key,
     required this.mealPlanType,
     required this.isSelected,
@@ -21,6 +25,9 @@ class MealPlanTypeWidget extends StatelessWidget {
     required this.kcalValue,
     required this.personValue,
   });
+
+  ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController =
+      Get.find<ChooseFromOurSuggestedMealController>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +49,39 @@ class MealPlanTypeWidget extends StatelessWidget {
             separatorBuilder: (context, index) =>
                 UIHelper.horizontalSpace(16.w),
             itemBuilder: (context, index) {
-              return FoodItemShowingWidget(
-                isSelected: isSelected,
-                itemImagePath: itemImagePath,
-                itemTitle: itemTitle,
-                kcalValue: kcalValue,
-                personValue: personValue,
-              );
+              return Obx(() {
+                return FoodItemShowingWidget(
+                  isSelected: chooseFromOurSuggestedMealController
+                      .isCheckBoxSelectedList[index]
+                      .value,
+                  onChanged: (value) {
+                    chooseFromOurSuggestedMealController
+                        .setIsCheckBoxSelectedValue(index, value ?? false);
+                  },
+                  itemImagePath: itemImagePath,
+                  itemTitle: itemTitle,
+                  kcalValue: kcalValue,
+                  personValue: personValue,
+                );
+              });
             },
           ),
         ),
+
+        ///Section : ----------///BuildMealPlanSnackBar///----------------
+        Obx(() {
+          bool anySelected = chooseFromOurSuggestedMealController
+              .isCheckBoxSelectedList
+              .any((rxBool) => rxBool.value);
+
+          if (anySelected) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              showMealPlanTracker();
+            });
+          }
+
+          return SizedBox.shrink();
+        }),
       ],
     );
   }

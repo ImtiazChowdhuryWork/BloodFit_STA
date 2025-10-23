@@ -6,7 +6,8 @@ import '../../../../../helper/ui_helpers.dart';
 import '../../../presentation/widgets/meal_plan_type_widget.dart';
 
 class LunchTab extends StatelessWidget {
-  const LunchTab({super.key});
+  final VoidCallback? onMealSelected;
+  const LunchTab({super.key, this.onMealSelected});
 
   @override
   Widget build(BuildContext context) {

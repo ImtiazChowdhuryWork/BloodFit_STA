@@ -5,6 +5,7 @@ import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plan_item_card.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/show_meal_plan_build_confirmation_bottom_sheet.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -87,7 +88,21 @@ class MealPlansWithCalendar extends StatelessWidget {
           kcalValue: 302,
           mealImagePath: Assets.images.foodImage.path,
         ),
-        UIHelper.verticalSpace(24.h),
+        UIHelper.verticalSpace(32.h),
+
+        ///Section : -----------///Button -> Confirm Meal Plan///------------
+        CustomElevatedButton(
+          onTap: () {
+            log("Button Taped -> Confirm Mealplan");
+
+            showMealPlanBuildConfirmationBottomSheet();
+          },
+          buttonWidth: 1.sw,
+          buttonHeight: 52.h,
+          borderRadius: 24.r,
+          buttonTitle: "Confirm Mealplan",
+        ),
+        UIHelper.verticalSpace(32.h),
 
         ///Section : ------------///Build Your Next Week Meal Plan///----------
         ///This section will only be available when,
