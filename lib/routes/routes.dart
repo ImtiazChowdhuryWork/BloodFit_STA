@@ -13,6 +13,7 @@ import 'package:bloodfit/features/enter_your_details/presentation/enter_your_det
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
+import 'package:bloodfit/features/meal_details/presentation/meal_details_screen.dart';
 import 'package:bloodfit/features/meal_swap_onboarding/meal_swap_onboarding_screen.dart';
 import 'package:bloodfit/features/profile_mealplan/presentation/profile_mealplan_screen.dart';
 import 'package:bloodfit/features/my_profile/presentation/my_profile_screen.dart';
@@ -78,6 +79,7 @@ class Routes {
   static const String mealSwapOnboardingScreen = '/meal_swap_onboarding_screen';
   static const String reviewYourChoosenMealScreen =
       '/review_your_choosen_meal_screen';
+  static const String mealDetailscreen = '/meal_details_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -368,6 +370,15 @@ class Routes {
     GetPage(
       name: reviewYourChoosenMealScreen,
       page: () => ReviewYourChoosenMealsScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///mealDetailscreen
+    GetPage(
+      name: mealDetailscreen,
+      page: () => MealDetailsScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

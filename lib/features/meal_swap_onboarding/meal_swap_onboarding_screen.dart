@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:bloodfit/constants/app_text.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/food_item_data_helper_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import '../../custom_widgets/custom_elevated_button.dart';
 
 class MealSwapOnboardingScreen extends StatelessWidget {
   const MealSwapOnboardingScreen({super.key});
@@ -20,7 +26,7 @@ class MealSwapOnboardingScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              UIHelper.verticalSpace(0.2.sh),
+              UIHelper.verticalSpace(0.1.sh),
 
               ///Section : --------------///Text -> Meal Swap Onboarding!///---------
               Text(
@@ -64,7 +70,7 @@ class MealSwapOnboardingScreen extends StatelessWidget {
                   Container(
                     width: 2.sp,
                     height: 20.h,
-                    color: AppColors.c727272,
+                    color: AppColors.c282828,
                   ),
                   UIHelper.horizontalSpace(20.w),
 
@@ -77,10 +83,24 @@ class MealSwapOnboardingScreen extends StatelessWidget {
               ),
               UIHelper.verticalSpace(8.h),
 
+              ///Section : ----------///Text -> Food Details///---------------
               Text(
                 foodDetailsText,
                 textAlign: TextAlign.center,
                 style: TextFontStyle.headline14w500c999999StylePoppins,
+              ),
+              UIHelper.verticalSpace(24.w),
+
+              ///Section : -------------///Button -> Continue///-------------
+              CustomElevatedButton(
+                onTap: () {
+                  log("Button Taped -> Confirm Mealplan");
+                  Get.toNamed(Routes.navigationScreen);
+                },
+                buttonWidth: 1.sw,
+                buttonHeight: 52.h,
+                borderRadius: 24.r,
+                buttonTitle: "Confirm Mealplan",
               ),
               UIHelper.verticalSpace(32.h),
             ],

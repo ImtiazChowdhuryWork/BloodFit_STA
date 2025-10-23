@@ -223,6 +223,10 @@ class $AssetsImagesGen {
   AssetGenImage get bloodFitSplashText =>
       const AssetGenImage('assets/images/blood_fit_splash_text.png');
 
+  /// File path: assets/images/egg_omlet_image.jpg
+  AssetGenImage get eggOmletImage =>
+      const AssetGenImage('assets/images/egg_omlet_image.jpg');
+
   /// File path: assets/images/error_image.png
   AssetGenImage get errorImage =>
       const AssetGenImage('assets/images/error_image.png');
@@ -272,6 +276,7 @@ class $AssetsImagesGen {
     appLogo,
     bloodDropTransparent,
     bloodFitSplashText,
+    eggOmletImage,
     errorImage,
     foodImage,
     foodLudusImage,

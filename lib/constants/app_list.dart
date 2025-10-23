@@ -8,6 +8,7 @@ import 'package:bloodfit/routes/routes.dart';
 import '../features/faq/model/faq_model.dart';
 import '../features/information_gather/presentation/widgets/select_gender/model/gender_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
+import '../features/review_your_choosen_meals/model/selected_meal_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
 import '../gen/assets.gen.dart';
 import '../utils/card_tile_option_model.dart';
@@ -461,5 +462,32 @@ class AppList {
     PickeYourDietModel(dietName: "Pescatarian", dietType: "Seafood-Based"),
     PickeYourDietModel(dietName: "Carnivore", dietType: "Meat-Focused"),
     PickeYourDietModel(dietName: "Vagiterian", dietType: "Meat-Focused"),
+  ];
+
+  static final List<SelectedMealModel> reviewMealList = [
+    SelectedMealModel(
+      mealType: "Breakfast",
+      mealTitle: "Avocado Toast & Poached Eggs",
+      kcalValue: 302,
+      imagePath: Assets.images.omletEgg.path,
+      leftButtonTitle: "I Ate This",
+      rightButtonTitle: "Swap Meal",
+    ),
+    SelectedMealModel(
+      mealType: "Launch",
+      mealTitle: "Avocado Toast & Poached Eggs",
+      kcalValue: 302,
+      imagePath: Assets.images.omletEgg.path,
+      leftButtonTitle: "I Ate This",
+      rightButtonTitle: "Swap Meal",
+    ),
+    SelectedMealModel(
+      mealType: "Dinner",
+      mealTitle: "Avocado Toast & Poached Eggs",
+      kcalValue: 302,
+      imagePath: Assets.images.omletEgg.path,
+      leftButtonTitle: "I Ate This",
+      rightButtonTitle: "Swap Meal",
+    ),
   ];
 }
