@@ -46,15 +46,16 @@ void showSwapMealBottomSheet() {
                     separatorBuilder: (_, __) => UIHelper.verticalSpace(16.h),
                     itemBuilder: (context, index) {
                       return MealPlanItemCard(
-                        redButtonTitle: "Swap This Meal",
-                        redButtonOnTap: () {
-                          log("Button Tapped : I Ate This");
+                        leftButtonTitle: "Swap This Meal",
+                        leftButtonOnTap: () {
+                          log("Button Tapped : Swap This Meal");
                           Get.back();
                           Get.toNamed(Routes.mealSwapOnboardingScreen);
                         },
-                        transparentButtonTitle: "Details",
-                        transperentButtonOnTap: () {
-                          log("Button Tapped : Swap Meal");
+                        rightButtonTitle: "Details",
+                        rightButtonOnTap: () {
+                          log("Button Tapped : Details");
+                          Get.toNamed(Routes.mealDetailscreen);
                         },
                         showSectionTitle: false,
                         mealType: "Lunch",

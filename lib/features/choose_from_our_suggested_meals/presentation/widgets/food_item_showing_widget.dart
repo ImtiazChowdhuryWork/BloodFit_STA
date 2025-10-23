@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_data_helper_widget.dart';
+import 'package:bloodfit/custom_widgets/food_item_data_helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

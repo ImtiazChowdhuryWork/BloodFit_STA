@@ -16,21 +16,31 @@ class MealPlanItemCard extends StatelessWidget {
   final String mealType;
   final double kcalValue;
   final bool showSectionTitle;
-  final String redButtonTitle;
-  final void Function()? redButtonOnTap;
-  final String transparentButtonTitle;
-  final void Function()? transperentButtonOnTap;
+  final String leftButtonTitle;
+  final Color? leftButtonColor;
+  final void Function()? leftButtonOnTap;
+  final String rightButtonTitle;
+  final double? leftButtonBorderWidth;
+  final void Function()? rightButtonOnTap;
+  final Color? rightButtonBorderColor;
+  final Color? leftButtonBorderColor;
+  final bool isLeftButtonBorderUsed;
   const MealPlanItemCard({
     super.key,
     required this.mealImagePath,
     required this.mealTitle,
     required this.kcalValue,
-    this.redButtonOnTap,
-    this.transperentButtonOnTap,
+    this.leftButtonOnTap,
+    this.rightButtonOnTap,
     required this.mealType,
     this.showSectionTitle = true,
-    required this.redButtonTitle,
-    required this.transparentButtonTitle,
+    required this.leftButtonTitle,
+    required this.rightButtonTitle,
+    this.rightButtonBorderColor,
+    this.leftButtonBorderColor,
+    this.isLeftButtonBorderUsed = false,
+    this.leftButtonColor,
+    this.leftButtonBorderWidth,
   });
 
   @override
@@ -54,7 +64,7 @@ class MealPlanItemCard extends StatelessWidget {
             height: 130.h,
             padding: EdgeInsets.all(10.sp),
             decoration: BoxDecoration(
-              color: AppColors.c000000,
+              color: AppColors.c262626,
               borderRadius: BorderRadius.circular(16.r),
             ),
             child: Row(
@@ -112,17 +122,21 @@ class MealPlanItemCard extends StatelessWidget {
                       ),
                       UIHelper.verticalSpace(8.h),
 
-                      /// Section : -----------///Red Color Button////------------
-                      /// Section : ----------///Transparent Color Button///-------------
+                      /// Section : -----------///Left Button////------------
+                      /// Section : ----------///Right Button///-------------
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Expanded(
                             child: CustomElevatedButton(
-                              onTap: redButtonOnTap,
+                              onTap: leftButtonOnTap,
                               // buttonWidth: 100.w,
                               buttonHeight: 34.h,
-                              buttonTitle: redButtonTitle,
+                              buttonColor: leftButtonColor,
+                              isButtonBorderUsed: isLeftButtonBorderUsed,
+                              buttonBorderColor: leftButtonBorderColor,
+                              buttonBorderWidth: leftButtonBorderWidth,
+                              buttonTitle: leftButtonTitle,
                               textStyle: TextFontStyle
                                   .headline12w500cfefefeStylePoppins,
                             ),
@@ -130,15 +144,16 @@ class MealPlanItemCard extends StatelessWidget {
                           UIHelper.horizontalSpace(8.w),
                           Expanded(
                             child: CustomElevatedButton(
-                              onTap: transperentButtonOnTap,
+                              onTap: rightButtonOnTap,
                               // buttonWidth: 100.w,
                               buttonHeight: 34.h,
-                              buttonTitle: transparentButtonTitle,
+                              buttonTitle: rightButtonTitle,
                               textStyle: TextFontStyle
                                   .headline12w500cfefefeStylePoppins,
                               isButtonBorderUsed: true,
                               buttonColor: AppColors.scaffoldBackgroundColor,
-                              buttonBorderColor: AppColors.cfefefe,
+                              buttonBorderColor:
+                                  rightButtonBorderColor ?? AppColors.cfefefe,
                             ),
                           ),
                         ],

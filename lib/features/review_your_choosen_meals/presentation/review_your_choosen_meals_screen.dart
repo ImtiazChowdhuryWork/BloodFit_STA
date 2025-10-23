@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,7 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
           child: SingleChildScrollView(
             padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Review Your Chosen Meals",
@@ -72,58 +74,41 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                 ),
                 UIHelper.verticalSpace(24.h),
 
-                ///Section : ---------------///Breakfast///--------------
-                MealPlanItemCard(
-                  redButtonTitle: "I Ate This",
-                  redButtonOnTap: () {
-                    log("Button Taped : I Ate This");
-                  },
-                  transparentButtonTitle: "Swap Meal",
-                  transperentButtonOnTap: () {
-                    log("Button Taped : Swap Meal");
-                    showSwapMealBottomSheet();
-                  },
-                  mealType: "Breakfast",
-                  mealTitle: "Avocado Toast & Poached Eggs",
-                  kcalValue: 302,
-                  mealImagePath: Assets.images.foodImage.path,
-                ),
-                UIHelper.verticalSpace(24.h),
+                ///Section : ---------///Review Meal Items///------
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: AppList.reviewMealList.length,
+                  separatorBuilder: (context, indet) =>
+                      UIHelper.verticalSpace(24.h),
+                  itemBuilder: (context, index) {
+                    var data = AppList.reviewMealList[index];
+                    return MealPlanItemCard(
+                      leftButtonTitle: "Details",
+                      leftButtonOnTap: () {
+                        log("Button Taped : Details");
+                      },
+                      rightButtonOnTap: () {
+                        log("Button Taped : Remove");
+                        showSwapMealBottomSheet();
+                      },
+                      kcalValue: data.kcalValue,
+                      mealType: data.mealType,
+                      mealTitle: data.mealTitle,
 
-                ///Section : ---------------///Lunch///--------------
-                MealPlanItemCard(
-                  redButtonTitle: "I Ate This",
-                  redButtonOnTap: () {
-                    log("Button Taped : I Ate This");
-                  },
-                  transparentButtonTitle: "Swap Meal",
-                  transperentButtonOnTap: () {
-                    log("Button Taped : Swap Meal");
-                    showSwapMealBottomSheet();
-                  },
-                  mealType: "Lunch",
-                  mealTitle: "Avocado Toast & Poached Eggs",
-                  kcalValue: 302,
-                  mealImagePath: Assets.images.foodImage.path,
-                ),
-                UIHelper.verticalSpace(24.h),
+                      rightButtonTitle: "Remove",
+                      rightButtonBorderColor: AppColors.cb20000,
 
-                ///Section : ---------------///Dinner///--------------
-                MealPlanItemCard(
-                  redButtonTitle: "I Ate This",
-                  redButtonOnTap: () {
-                    log("Button Taped : I Ate This");
+                      isLeftButtonBorderUsed: true,
+                      leftButtonBorderWidth: 1.5.sp,
+                      leftButtonBorderColor: AppColors.cc6c6c6,
+                      leftButtonColor: AppColors.c262626,
+
+                      mealImagePath: Assets.images.foodImage.path,
+                    );
                   },
-                  transparentButtonTitle: "Swap Meal",
-                  transperentButtonOnTap: () {
-                    log("Button Taped : Swap Meal");
-                    showSwapMealBottomSheet();
-                  },
-                  mealType: "Dinner",
-                  mealTitle: "Avocado Toast & Poached Eggs",
-                  kcalValue: 302,
-                  mealImagePath: Assets.images.foodImage.path,
                 ),
+
                 UIHelper.verticalSpace(32.h),
 
                 ///Section : -----------///Button -> Confirm Meal Plan///------------
