@@ -1,13 +1,21 @@
+import 'dart:developer';
+
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/app_text.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../custom_widgets/food_item_data_helper_widget.dart';
+import '../widgets/food_menarel_item_tile_widget.dart';
+import '../widgets/ingredients_item_tile_widget.dart';
 import '../widgets/item_image_and_title_widget.dart';
 
 class MealDetailsScreen extends StatelessWidget {
@@ -79,34 +87,61 @@ class MealDetailsScreen extends StatelessWidget {
                   UIHelper.verticalSpace(16.h),
 
                   ///Section : -----///Carbs,Protein,Fat///-----------
-                  Container(
-                    padding: EdgeInsets.all(10.sp),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.cfefefe),
-                      borderRadius: BorderRadius.circular(10.r),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF111111), // top-left tint
-                          Color(0xFF2B1010), // main color
-                        ],
-                        stops: [0.0, 0.50], // small corner effect
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(Assets.icons.glutenIcon),
-                        UIHelper.horizontalSpace(10.w),
-                        Text(
-                          "Test",
-                          style:
-                              TextFontStyle.headline14w400cfefefeStylePoppins,
-                        ),
-                      ],
+                  Center(
+                    child: Wrap(
+                      spacing: 15.w,
+                      alignment: WrapAlignment.center,
+                      children: AppList.foodMenarelList
+                          .map(
+                            (menarel) => FoodMenarelItemTileWidget(
+                              imagePath: menarel.imagePath,
+                              value: menarel.value,
+                              menaralName: menarel.menaralName,
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
+                  UIHelper.verticalSpace(32.h),
+
+                  ///Section : --------------///Text -> Ingredients///-------------
+                  Text(
+                    "Ingredients",
+                    style: TextFontStyle.headline20w500cfefefeStylePoppins,
+                  ),
+                  UIHelper.verticalSpace(16.h),
+
+                  ///Section : -----------///Ingredients Images,Name, Weight, amount///-------
+                  Wrap(
+                    spacing: 42.w,
+                    runSpacing: 16.h,
+                    alignment: WrapAlignment.center,
+                    children: AppList.foodIngredientsDetailsList
+                        .map(
+                          (ingredient) => IngredientItemTileWidget(
+                            imagePath: ingredient.imagePath,
+                            title: ingredient.title,
+                            gValue: ingredient.gValue,
+                            recommendedConsumable:
+                                ingredient.recommendedConsumable,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  UIHelper.verticalSpace(24.h),
+
+                  ///Section : ----------///Button -> Select This Meal///----------
+                  CustomElevatedButton(
+                    onTap: () {
+                      log("Button Taped : Select This Meal!");
+                      Get.toNamed(Routes.reviewYourChoosenMealScreen);
+                    },
+                    buttonWidth: 1.sw,
+                    buttonHeight: 52.h,
+                    borderRadius: 24.r,
+                    buttonTitle: "Select This Meal",
+                  ),
+                  UIHelper.verticalSpace(40.h),
                 ],
               ),
             ),

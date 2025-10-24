@@ -4,7 +4,7 @@ import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
-import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plan_item_card.dart';
+import 'package:bloodfit/custom_widgets/meal_plan_item_card.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/show_meal_plan_build_confirmation_bottom_sheet.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
@@ -64,58 +64,7 @@ class MealPlansWithCalendar extends StatelessWidget {
             );
           },
         ),
-
-        ///Section : ---------------///Breakfast///--------------
-        UIHelper.verticalSpace(24.h),
-
-        ///Section : ---------------///Lunch///--------------
-        MealPlanItemCard(
-          leftButtonTitle: "I Ate This",
-          leftButtonOnTap: () {
-            log("Button Taped : I Ate This");
-          },
-          rightButtonTitle: "Swap Meal",
-          rightButtonOnTap: () {
-            log("Button Taped : Swap Meal");
-          },
-          mealType: "Lunch",
-          mealTitle: "Avocado Toast & Poached Eggs",
-          kcalValue: 302,
-          mealImagePath: Assets.images.foodImage.path,
-        ),
-        UIHelper.verticalSpace(24.h),
-
-        ///Section : ---------------///Dinner///--------------
-        MealPlanItemCard(
-          leftButtonTitle: "I Ate This",
-          leftButtonOnTap: () {
-            log("Button Taped : I Ate This");
-          },
-          rightButtonTitle: "Swap Meal",
-          rightButtonOnTap: () {
-            log("Button Taped : Swap Meal");
-            showSwapMealBottomSheet();
-          },
-          mealType: "Dinner",
-          mealTitle: "Avocado Toast & Poached Eggs",
-          kcalValue: 302,
-          mealImagePath: Assets.images.foodImage.path,
-        ),
         UIHelper.verticalSpace(32.h),
-
-        ///Section : -----------///Button -> Confirm Meal Plan///------------
-        // CustomElevatedButton(
-        //   onTap: () {
-        //     log("Button Taped -> Confirm Mealplan");
-
-        //     showMealPlanBuildConfirmationBottomSheet();
-        //   },
-        //   buttonWidth: 1.sw,
-        //   buttonHeight: 52.h,
-        //   borderRadius: 24.r,
-        //   buttonTitle: "Confirm Mealplan",
-        // ),
-        // UIHelper.verticalSpace(32.h),
 
         ///Section : ------------///Build Your Next Week Meal Plan///----------
         ///This section will only be available when,

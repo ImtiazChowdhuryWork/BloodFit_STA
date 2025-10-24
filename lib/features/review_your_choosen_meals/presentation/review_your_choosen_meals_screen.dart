@@ -13,7 +13,7 @@ import '../../../custom_widgets/custom_elevated_button.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../routes/routes.dart';
-import '../../meal_plan_feature_options/presentation/widgets/meal_plan_item_card.dart';
+import '../../../custom_widgets/meal_plan_item_card.dart';
 import '../../meal_plan_feature_options/presentation/widgets/show_meal_plan_build_confirmation_bottom_sheet.dart';
 import '../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
 
@@ -87,6 +87,7 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                       leftButtonTitle: "Details",
                       leftButtonOnTap: () {
                         log("Button Taped : Details");
+                        Get.toNamed(Routes.mealDetailscreen);
                       },
                       rightButtonOnTap: () {
                         log("Button Taped : Remove");

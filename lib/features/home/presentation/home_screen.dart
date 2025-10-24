@@ -8,6 +8,8 @@ import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon
 import 'package:bloodfit/features/home/presentation/widgets/consistancy_stake_preview.dart';
 import 'package:bloodfit/features/home/presentation/widgets/current_weight_update_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/received_three_meal_plan_widget.dart';
+import 'package:bloodfit/features/home/presentation/widgets/select_your_days_for_meal_plan_widget.dart';
+import 'package:bloodfit/features/home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/single_element_showing_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/total_k_cal_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
@@ -18,7 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../constants/app_list.dart';
 import '../../../custom_widgets/custom_calender_widget.dart';
+import '../../../custom_widgets/meal_plan_item_card.dart';
+import '../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -117,6 +122,11 @@ class HomeScreen extends StatelessWidget {
               ),
               UIHelper.verticalSpace(24.h),
 
+              ///Section : --------------///Selectable Days for Meal Plan,///--------------------
+              /// Not Available only for Free Subscription Type of User///----------
+              SelectYourDaysForMealPlanWidget(isSelected: true),
+              UIHelper.verticalSpace(32.h),
+
               ///Section : ----------------///Text -> update your current weight///------------
               ///Section : --------------///Weight Drop Down///----------
               CurrentWeightUpdateWidget(),
@@ -127,30 +137,9 @@ class HomeScreen extends StatelessWidget {
               UIHelper.verticalSpace(24.h),
 
               ///Section : -------------///Build Your Meal Plan////------------
-              Obx(() {
-                return enumsController.isMealPlanAvailable
-                    ? SizedBox.shrink()
-                    : BuildMealPlanWidget(
-                        onTap: () {
-                          log("Button Taped : Get Started !");
-                          Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
-                        },
-                        showSectionTitle: true,
-                        sectionTitle: "Choose From Our Suggested Meals",
-                        buttonTitle: "Get Started",
-                        positionTop: -36.h,
-                        positionRight: -20.w,
-                        imageIconPath: Assets.icons.chickeMealIcon,
-                        title: "Build Your Daily Meals",
-                        subTitle:
-                            "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
-                      );
-              }),
-              Obx(() {
-                return enumsController.isMealPlanAvailable
-                    ? SizedBox.shrink()
-                    : UIHelper.verticalSpace(24.h);
-              }),
+              ///Section : -------------///Show Selected Meals////------------
+              ShowSelectedMealsOrBuildMealPlanWidget(),
+              UIHelper.verticalSpace(24.h),
 
               ///Section : -------------///Build Your Meal Plan////------------
               BuildMealPlanWidget(
@@ -169,9 +158,8 @@ class HomeScreen extends StatelessWidget {
                 subTitle:
                     "Subscribe Now To Get Customized Workout Plans Tailored To Your Fitness Goals",
               ),
-              UIHelper.verticalSpace(24.h),
 
-              UIHelper.verticalSpace(120.h),
+              UIHelper.verticalSpace(144.h),
             ],
           ),
         ), // comment
