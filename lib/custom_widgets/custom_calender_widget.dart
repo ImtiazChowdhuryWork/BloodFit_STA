@@ -15,17 +15,17 @@ class CustomCalenderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CalandarController homeScreenController = Get.find<CalandarController>();
+    CalandarController calendarController = Get.find<CalandarController>();
 
     return SizedBox(
       height: 0.1.sh,
       width: 1.sw,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: homeScreenController.allCalendarDays.length,
+        itemCount: calendarController.allCalendarDays.length,
         separatorBuilder: (context, index) => UIHelper.horizontalSpace(20.w),
         itemBuilder: (context, index) {
-          var data = homeScreenController.allCalendarDays[index];
+          var data = calendarController.allCalendarDays[index];
           return InkWell(
             onTap: () {
               log("Date Data : ");

@@ -543,13 +543,14 @@ class AppList {
       recommendedConsumable: "About 1 Teaspoon",
     ),
   ];
-  static List<String> dayList = [
-    "Sat",
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-  ];
 }
+
+
+
+/**
+ * I want to create a list of week using enums
+ * I want to take input how many days will be selectable
+ * I want to show the selected days
+ * I want when I tap on any of the days a bottom sheet to appear from ther, I will give select the days.
+ * 
+ */

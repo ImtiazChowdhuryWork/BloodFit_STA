@@ -7,6 +7,7 @@ import '../controllers/enums_controller.dart';
 import '../controllers/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
 import '../controllers/calendar_controller.dart';
+import '../controllers/home_screen_controller.dart';
 import '../controllers/information_gather_screen_controller.dart';
 import '../controllers/meal_plan_screen_controller.dart';
 import '../controllers/onboarding_age_picker_screen_controller.dart';
@@ -39,6 +40,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => RulerController());
     Get.lazyPut(() => SliderButtonController());
     Get.lazyPut(() => InformationGatherController());
+    Get.lazyPut(() => HomeScreenController(), fenix: true);
 
     Get.lazyPut(
       () => OnboardingAgePickerScreenController(

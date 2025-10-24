@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
@@ -15,15 +14,11 @@ import 'package:bloodfit/features/home/presentation/widgets/total_k_cal_widget.d
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
-import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../constants/app_list.dart';
 import '../../../custom_widgets/custom_calender_widget.dart';
-import '../../../custom_widgets/meal_plan_item_card.dart';
-import '../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
