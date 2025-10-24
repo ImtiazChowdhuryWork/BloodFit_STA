@@ -20,3 +20,5 @@ enum ProfileOptionsTitle {
 }
 
 enum MealPlanAvailability { mealPlanAvailable, mealPlanNotAvilable }
+
+enum WeekDayEnum { sat, sun, mon, tue, wed, thu, fri }

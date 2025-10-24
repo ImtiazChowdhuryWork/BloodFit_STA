@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bloodfit/controllers/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +18,8 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
   ShowSelectedMealsOrBuildMealPlanWidget({super.key});
 
   final EnumsController enumsController = Get.find<EnumsController>();
+  final HomeScreenController homeScreenController =
+      Get.find<HomeScreenController>();
 
   @override
   Widget build(BuildContext context) {
