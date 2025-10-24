@@ -1,5 +1,7 @@
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/features/information_gather/presentation/widgets/select_diet/model/picke_your_diet_model.dart';
+import 'package:bloodfit/features/meal_details/model/food_ingredients_details_model.dart';
+import 'package:bloodfit/features/meal_details/model/food_menarel_model.dart';
 import 'package:bloodfit/features/my_profile/model/personal_data_model.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin_tile_extension.dart';
 import 'package:bloodfit/features/settings/widgets/settings_option_title_extension.dart';
@@ -489,5 +491,65 @@ class AppList {
       leftButtonTitle: "I Ate This",
       rightButtonTitle: "Swap Meal",
     ),
+  ];
+
+  static List<FoodMenarelModel> foodMenarelList = [
+    FoodMenarelModel(
+      imagePath: Assets.icons.glutenIcon,
+      value: 20,
+      menaralName: "Kcal",
+    ),
+    FoodMenarelModel(
+      imagePath: Assets.icons.meatIcon,
+      value: 20,
+      menaralName: "Kcal",
+    ),
+    FoodMenarelModel(
+      imagePath: Assets.icons.fatIcon,
+      value: 20,
+      menaralName: "Kcal",
+    ),
+  ];
+
+  static List<FoodIngredientsDetailsModel> foodIngredientsDetailsList = [
+    FoodIngredientsDetailsModel(
+      imagePath: Assets.icons.breadIcon,
+      title: "Wheat Bread",
+      gValue: 28,
+      recommendedConsumable: "1 Slice",
+    ),
+    FoodIngredientsDetailsModel(
+      imagePath: Assets.icons.avocadoIcon,
+      title: "Rip Avocado",
+      gValue: 75,
+      recommendedConsumable: "1/2 Avocado",
+    ),
+    FoodIngredientsDetailsModel(
+      imagePath: Assets.icons.pochedEgg,
+      title: "Poached Egg",
+      gValue: 75,
+      recommendedConsumable: "1 Egg",
+    ),
+    FoodIngredientsDetailsModel(
+      imagePath: Assets.icons.oliveOilIcon,
+      title: "Olive Oil",
+      gValue: 4.5,
+      recommendedConsumable: "1 Teaspoon",
+    ),
+    FoodIngredientsDetailsModel(
+      imagePath: Assets.icons.lemonIcon,
+      title: "Lemon Juice",
+      gValue: 5,
+      recommendedConsumable: "About 1 Teaspoon",
+    ),
+  ];
+  static List<String> dayList = [
+    "Sat",
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
   ];
 }

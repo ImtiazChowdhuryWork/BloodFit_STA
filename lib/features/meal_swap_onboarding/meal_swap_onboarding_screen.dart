@@ -95,7 +95,7 @@ class MealSwapOnboardingScreen extends StatelessWidget {
               CustomElevatedButton(
                 onTap: () {
                   log("Button Taped -> Confirm Mealplan");
-                  Get.toNamed(Routes.navigationScreen);
+                  Get.toNamed(Routes.reviewYourChoosenMealScreen);
                 },
                 buttonWidth: 1.sw,
                 buttonHeight: 52.h,

@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
-import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plan_item_card.dart';
+import 'package:bloodfit/custom_widgets/meal_plan_item_card.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';

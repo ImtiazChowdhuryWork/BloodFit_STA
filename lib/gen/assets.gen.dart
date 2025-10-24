@@ -33,11 +33,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/arrow_left.svg
   String get arrowLeft => 'assets/icons/arrow_left.svg';
 
+  /// File path: assets/icons/avocado_icon.svg
+  String get avocadoIcon => 'assets/icons/avocado_icon.svg';
+
   /// File path: assets/icons/bell_icon.svg
   String get bellIcon => 'assets/icons/bell_icon.svg';
 
   /// File path: assets/icons/blood_drop.svg
   String get bloodDrop => 'assets/icons/blood_drop.svg';
+
+  /// File path: assets/icons/bread_icon.svg
+  String get breadIcon => 'assets/icons/bread_icon.svg';
 
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
@@ -59,6 +65,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/document_icon.svg
   String get documentIcon => 'assets/icons/document_icon.svg';
+
+  /// File path: assets/icons/done_icon_red.svg
+  String get doneIconRed => 'assets/icons/done_icon_red.svg';
 
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
@@ -105,6 +114,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home_icon.svg
   String get homeIcon => 'assets/icons/home_icon.svg';
 
+  /// File path: assets/icons/lemon_icon.svg
+  String get lemonIcon => 'assets/icons/lemon_icon.svg';
+
   /// File path: assets/icons/lock_icon.svg
   String get lockIcon => 'assets/icons/lock_icon.svg';
 
@@ -120,11 +132,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/meat_icon.svg
   String get meatIcon => 'assets/icons/meat_icon.svg';
 
+  /// File path: assets/icons/olive_oil_icon.svg
+  String get oliveOilIcon => 'assets/icons/olive_oil_icon.svg';
+
   /// File path: assets/icons/pen_icon.svg
   String get penIcon => 'assets/icons/pen_icon.svg';
 
   /// File path: assets/icons/person_icon.svg
   String get personIcon => 'assets/icons/person_icon.svg';
+
+  /// File path: assets/icons/poched_egg.svg
+  String get pochedEgg => 'assets/icons/poched_egg.svg';
 
   /// File path: assets/icons/privacy_policy_icon.svg
   String get privacyPolicyIcon => 'assets/icons/privacy_policy_icon.svg';
@@ -163,8 +181,10 @@ class $AssetsIconsGen {
   List<String> get values => [
     aiIcon,
     arrowLeft,
+    avocadoIcon,
     bellIcon,
     bloodDrop,
+    breadIcon,
     cameraIcon,
     cameraIconWithoutBg,
     chickeMealIcon,
@@ -172,6 +192,7 @@ class $AssetsIconsGen {
     deleteUserIcon,
     disIcon,
     documentIcon,
+    doneIconRed,
     facebookIcon,
     faqIcon,
     fatIcon,
@@ -187,13 +208,16 @@ class $AssetsIconsGen {
     glutenIcon,
     googleIcon,
     homeIcon,
+    lemonIcon,
     lockIcon,
     logoutIcon,
     maleIcon,
     mealIcon,
     meatIcon,
+    oliveOilIcon,
     penIcon,
     personIcon,
+    pochedEgg,
     privacyPolicyIcon,
     progressIcon,
     promoCodeIcon,
