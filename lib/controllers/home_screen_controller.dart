@@ -19,7 +19,7 @@ class HomeScreenController extends GetxController {
         );
       }
     }
-    // No need for update() with RxList + Obx
+    // The RxList will automatically notify its observers
   }
 
   bool isDaySelected(WeekDayEnum day) {

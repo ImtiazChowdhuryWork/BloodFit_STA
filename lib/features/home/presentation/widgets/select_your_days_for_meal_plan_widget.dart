@@ -1,4 +1,3 @@
-import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/home_screen_controller.dart';
 import 'package:bloodfit/extensions/week_days_extension.dart';
@@ -11,11 +10,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class SelectYourDaysForMealPlanWidget extends StatelessWidget {
-  final bool isSelected;
   final HomeScreenController homeScreenController =
       Get.find<HomeScreenController>();
 
-  SelectYourDaysForMealPlanWidget({super.key, required this.isSelected});
+  SelectYourDaysForMealPlanWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,42 +32,39 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
         UIHelper.verticalSpace(12.h),
 
         ///Section : ------///Select Day's///----------------
-        Obx(() {
-          // Access reactive variables inside Obx builder
-          final selectedDays = homeScreenController.selectedDaysList;
-          final maxDays = homeScreenController.mealCalanderSelectableDays.value;
-
-          return Container(
-            width: 1.sw,
-            height: 120.h,
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 18.h),
-            decoration: BoxDecoration(
-              color: AppColors.c262626,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: ListView.separated(
+        Container(
+          width: 1.sw,
+          height: 120.h,
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 18.h),
+          decoration: BoxDecoration(
+            color: AppColors.c262626,
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          child: Obx(() {
+            // Create a list of widgets inside the Obx so GetX can track observables properly
+            List<Widget> dayWidgets = homeScreenController.weekDayList.map((day) {
+              bool isSelected = homeScreenController.selectedDaysList.contains(day);
+              return HomeScreenSelectableDaysShowingWidget(
+                onTap: () {
+                  showWeekDayBottomSheet();
+                },
+                isSelected: isSelected,
+                title: day.dayNames.substring(0, 3),
+              );
+            }).toList();
+            
+            return ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: homeScreenController.weekDayList.length,
-              separatorBuilder: (context, index) =>
-                  UIHelper.horizontalSpace(10.w),
-              itemBuilder: (context, index) {
-                var day = homeScreenController.weekDayList[index];
-                return HomeScreenSelectableDaysShowingWidget(
-                  onTap: () {
-                    showWeekDayBottomSheet();
-                  },
-                  isSelected: homeScreenController.isDaySelected(day),
-                  title: day.dayNames.substring(0, 3),
-                );
-              },
-            ),
-          );
-        }),
+              itemCount: dayWidgets.length,
+              separatorBuilder: (context, index) => UIHelper.horizontalSpace(10.w),
+              itemBuilder: (context, index) => dayWidgets[index],
+            );
+          }),
+        ),
 
         ///Section: Show selected days count
         Obx(
           () => Padding(
-            // Change to Obx
             padding: EdgeInsets.only(top: 8.h),
             child: Text(
               "Selected: ${homeScreenController.selectedDaysList.length}/${homeScreenController.mealCalanderSelectableDays.value} days",

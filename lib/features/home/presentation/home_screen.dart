@@ -119,7 +119,7 @@ class HomeScreen extends StatelessWidget {
 
               ///Section : --------------///Selectable Days for Meal Plan,///--------------------
               /// Not Available only for Free Subscription Type of User///----------
-              SelectYourDaysForMealPlanWidget(isSelected: true),
+              SelectYourDaysForMealPlanWidget(),
               UIHelper.verticalSpace(32.h),
 
               ///Section : ----------------///Text -> update your current weight///------------
