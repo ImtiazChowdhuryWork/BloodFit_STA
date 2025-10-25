@@ -178,6 +178,13 @@ class TextFontStyle {
     fontSize: 14.sp,
     fontWeight: FontWeight.w700,
   );
+  static final headline14w700cfefefeStylePoppins = TextStyle(
+    fontFamily: 'Poppins',
+    fontFamilyFallback: const ['Montserrat', 'Poppins'],
+    color: AppColors.cfefefe,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+  );
   static final headline14w400c4d4d4dStylePoppins = TextStyle(
     fontFamily: 'Poppins',
     fontFamilyFallback: const ['Montserrat', 'Poppins'],
