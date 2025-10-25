@@ -5,7 +5,7 @@ import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/consistancy_stake_preview.dart';
-import 'package:bloodfit/features/home/presentation/widgets/current_weight_update_widget.dart';
+import 'package:bloodfit/custom_widgets/current_weight_update_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/received_three_meal_plan_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/select_your_days_for_meal_plan_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
