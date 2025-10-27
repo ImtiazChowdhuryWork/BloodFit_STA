@@ -51,6 +51,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/camera_icon_without_bg.svg
   String get cameraIconWithoutBg => 'assets/icons/camera_icon_without_bg.svg';
 
+  /// File path: assets/icons/cancel_icon.svg
+  String get cancelIcon => 'assets/icons/cancel_icon.svg';
+
   /// File path: assets/icons/chicke_meal_icon.svg
   String get chickeMealIcon => 'assets/icons/chicke_meal_icon.svg';
 
@@ -65,6 +68,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/document_icon.svg
   String get documentIcon => 'assets/icons/document_icon.svg';
+
+  /// File path: assets/icons/done_icon.svg
+  String get doneIcon => 'assets/icons/done_icon.svg';
 
   /// File path: assets/icons/done_icon_red.svg
   String get doneIconRed => 'assets/icons/done_icon_red.svg';
@@ -187,11 +193,13 @@ class $AssetsIconsGen {
     breadIcon,
     cameraIcon,
     cameraIconWithoutBg,
+    cancelIcon,
     chickeMealIcon,
     crownIcon,
     deleteUserIcon,
     disIcon,
     documentIcon,
+    doneIcon,
     doneIconRed,
     facebookIcon,
     faqIcon,

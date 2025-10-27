@@ -68,6 +68,12 @@ class MealScannerScreenController extends GetxController {
     }
   }
 
+  // Method to clear nutrition data and hide the details widget
+  void clearNutritionData() {
+    nutritionData.clear();
+    scanStatus.value = 'Point camera at food and tap capture';
+  }
+
   // Simulated API response - REMOVE THIS WHEN YOU ADD REAL API
   void _simulateAPIResponse() {
     // Simulate different food responses randomly
@@ -122,13 +128,13 @@ class MealScannerScreenController extends GetxController {
         '${nutritionData['foodName']} - ${nutritionData['calories']} kcal';
 
     // Show success
-    Get.snackbar(
-      'Food Analyzed!',
-      '${nutritionData['foodName']}: ${nutritionData['calories']} calories',
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      duration: Duration(seconds: 3),
-    );
+    // Get.snackbar(
+    //   'Food Analyzed!',
+    //   '${nutritionData['foodName']}: ${nutritionData['calories']} calories',
+    //   backgroundColor: Colors.green,
+    //   colorText: Colors.white,
+    //   duration: Duration(seconds: 3),
+    // );
 
     print('Simulated Nutrition Data: $nutritionData');
   }
