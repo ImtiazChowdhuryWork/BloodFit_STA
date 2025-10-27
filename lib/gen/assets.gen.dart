@@ -307,6 +307,10 @@ class $AssetsImagesGen {
   AssetGenImage get userImage =>
       const AssetGenImage('assets/images/userImage.png');
 
+  /// File path: assets/images/workout_image.png
+  AssetGenImage get workoutImage =>
+      const AssetGenImage('assets/images/workout_image.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     appLogo,
@@ -325,6 +329,7 @@ class $AssetsImagesGen {
     scannerButtonImage,
     trashCanImage,
     userImage,
+    workoutImage,
   ];
 }
 
