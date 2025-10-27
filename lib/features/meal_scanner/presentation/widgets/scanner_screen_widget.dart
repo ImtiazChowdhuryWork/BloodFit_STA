@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/scanner_camera_capture_button.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/scanner_nutrition_details_widget.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/scanner_overlay_widget.dart';
@@ -10,9 +12,8 @@ import '../../../../controllers/meal_scanner_screen_controller.dart';
 import '../../../../gen/colors.gen.dart';
 
 class ScannerScreenWidget extends StatelessWidget {
-  final MealScannerScreenController controller = Get.put(
-    MealScannerScreenController(),
-  );
+  final MealScannerScreenController controller =
+      Get.find<MealScannerScreenController>();
   ScannerScreenWidget({super.key});
 
   @override
@@ -34,8 +35,10 @@ class ScannerScreenWidget extends StatelessWidget {
           left: 10.w,
           child: IconButton(
             icon: Icon(Icons.close, color: AppColors.cb20000, size: 30.sp),
-            onPressed: () =>
-                Navigator.pop(context), // Go back to NavigationScreen
+            onPressed: () {
+              log("Button Taped : Close Button");
+              Get.back();
+            },
           ),
         ),
 
