@@ -1,3 +1,99 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_svg/svg.dart';
+
+// import '../../../../constants/text_font_style.dart';
+// import '../../../../gen/assets.gen.dart';
+// import '../../../../gen/colors.gen.dart';
+// import '../../../../helper/ui_helpers.dart';
+
+// class EliteUserWorkoutCalender extends StatelessWidget {
+//   final bool isCheatDay;
+//   final String dayName;
+//   final bool isCalorieTaskCompleted;
+//   final double height;
+//   final double width;
+//   final Color backgroundColor;
+//   final Widget? child;
+//   final Function()? onTap;
+//   final int? day;
+//   final int? month;
+//   final int? year;
+//   final bool isToday;
+//   final bool isSelected;
+
+//   const EliteUserWorkoutCalender({
+//     super.key,
+//     required this.isCheatDay,
+//     required this.isCalorieTaskCompleted,
+//     required this.height,
+//     required this.width,
+//     required this.backgroundColor,
+//     this.child,
+//     required this.dayName,
+//     this.onTap,
+//     this.day,
+//     this.month,
+//     this.year,
+//     this.isToday = false,
+//     this.isSelected = false,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       onTap: onTap,
+//       child: Container(
+//         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+//         decoration: BoxDecoration(
+//           color: backgroundColor, // Now using the dynamic background color
+//           borderRadius: BorderRadius.only(
+//             topLeft: Radius.circular(8.r),
+//             topRight: Radius.circular(8.r),
+//             bottomLeft: Radius.circular(50.r),
+//             bottomRight: Radius.circular(50.r),
+//           ),
+//         ),
+//         child: Column(
+//           children: [
+//             Text(
+//               dayName,
+//               style: TextFontStyle.headline16w500cfefefeStylePoppins.copyWith(
+//                 color: isToday
+//                     ? AppColors.cfefefe
+//                     : isToday && isSelected
+//                     ? AppColors.cfefefe
+//                     : isToday && !isSelected
+//                     ? AppColors.c111111
+//                     : AppColors.cfefefe,
+//               ),
+//             ),
+//             UIHelper.verticalSpace(10.h),
+
+//             ///Section : ----------///Background Color Handaler///-------------------
+//             Container(
+//               width: width,
+//               height: height,
+//               decoration: BoxDecoration(
+//                 color: isToday
+//                     ? AppColors.cfefefe
+//                     : isToday && isSelected
+//                     ? AppColors.cfefefe
+//                     : isToday && !isSelected
+//                     ? AppColors.c262626
+//                     : AppColors.c262626,
+//                 shape: BoxShape.circle,
+//               ),
+//               alignment: Alignment.center,
+//               child: SvgPicture.asset(Assets.icons.workoutIcon),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,14 +105,19 @@ import '../../../../helper/ui_helpers.dart';
 
 class EliteUserWorkoutCalender extends StatelessWidget {
   final bool isCheatDay;
+  final String dayName;
   final bool isCalorieTaskCompleted;
   final double height;
   final double width;
-  final double progress;
-  final double strokeWidth;
-  final Color progressColor;
   final Color backgroundColor;
   final Widget? child;
+  final Function()? onTap;
+  final int? day;
+  final int? month;
+  final int? year;
+  final bool isToday;
+  final bool isSelected;
+  final bool isAnyDateSelected;
 
   const EliteUserWorkoutCalender({
     super.key,
@@ -24,79 +125,95 @@ class EliteUserWorkoutCalender extends StatelessWidget {
     required this.isCalorieTaskCompleted,
     required this.height,
     required this.width,
-    required this.progress,
-    required this.strokeWidth,
-    required this.progressColor,
     required this.backgroundColor,
     this.child,
+    required this.dayName,
+    this.onTap,
+    this.day,
+    this.month,
+    this.year,
+    this.isToday = false,
+    this.isSelected = false,
+    required this.isAnyDateSelected,
   });
+
+  /// Main Container Color Logic
+  Color get mainContainerColor {
+    return isToday && isSelected
+        ? AppColors.cb20000
+        : isToday && !isSelected && isAnyDateSelected
+        ? AppColors.cd7d7d7
+        : isToday && !isSelected && !isAnyDateSelected
+        ? AppColors.cb20000
+        : !isToday && isSelected
+        ? AppColors.cb20000
+        : backgroundColor;
+  }
+
+  /// Text Color Logic
+  Color get textColor {
+    return isToday && isSelected
+        ? AppColors.cfefefe
+        : isToday && !isSelected && isAnyDateSelected
+        ? AppColors.c111111
+        : isToday && !isSelected && !isAnyDateSelected
+        ? AppColors.cfefefe
+        : !isToday && isSelected
+        ? AppColors.cfefefe
+        : AppColors.cfefefe;
+  }
+
+  /// Circular Container Color Logic
+  Color get circularContainerColor {
+    return isToday && isSelected
+        ? AppColors.cfefefe
+        : isToday && !isSelected && isAnyDateSelected
+        ? AppColors.c262626
+        : isToday && !isSelected && !isAnyDateSelected
+        ? AppColors.cfefefe
+        : !isToday && isSelected
+        ? AppColors.cfefefe
+        : AppColors.c262626;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
-      decoration: BoxDecoration(
-        color: AppColors.cb20000,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8.r),
-          topRight: Radius.circular(8.r),
-          bottomLeft: Radius.circular(50.r),
-          bottomRight: Radius.circular(50.r),
-        ),
-      ),
-      child: Column(
-        children: [
-          Text("Thu", style: TextFontStyle.headline16w500cfefefeStylePoppins),
-          UIHelper.verticalSpace(10.h),
-          SizedBox(
-            width: width,
-            height: height,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Circle background
-                Container(
-                  width: width - strokeWidth, // So progress is visible
-                  height: height - strokeWidth,
-                  decoration: BoxDecoration(
-                    color: AppColors.cFFFFFF,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: isCheatDay
-                      ? SvgPicture.asset(
-                          Assets.icons.documentIcon,
-                          color: AppColors.c000000,
-                        )
-                      : isCalorieTaskCompleted
-                      ? SvgPicture.asset(Assets.icons.fireGray)
-                      : Text(
-                          "21",
-                          style:
-                              TextFontStyle.headline16w500cb20000StylePoppins,
-                        ),
-                ),
-
-                // Circular progress indicator behind content
-                !isCalorieTaskCompleted || isCheatDay || progress < 1
-                    ? SizedBox(
-                        width: width,
-                        height: height,
-                        child: CircularProgressIndicator(
-                          value: progress,
-                          strokeWidth: strokeWidth,
-                          valueColor: AlwaysStoppedAnimation(progressColor),
-                          backgroundColor: backgroundColor,
-                        ),
-                      )
-                    : SizedBox.shrink(),
-
-                // Optional child
-                if (child != null) child!,
-              ],
-            ),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
+        decoration: BoxDecoration(
+          color: mainContainerColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8.r),
+            topRight: Radius.circular(8.r),
+            bottomLeft: Radius.circular(50.r),
+            bottomRight: Radius.circular(50.r),
           ),
-        ],
+        ),
+        child: Column(
+          children: [
+            Text(
+              dayName,
+              style: TextFontStyle.headline16w500cfefefeStylePoppins.copyWith(
+                color: textColor,
+              ),
+            ),
+            UIHelper.verticalSpace(10.h),
+
+            /// Circular Container
+            Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                color: circularContainerColor,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: SvgPicture.asset(Assets.icons.workoutIcon),
+            ),
+          ],
+        ),
       ),
     );
   }
