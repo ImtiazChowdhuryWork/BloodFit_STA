@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/calendar_controller.dart';
 import 'package:bloodfit/controllers/work_out_screen_controller.dart';
+import 'package:bloodfit/features/work_out/presentation/widgets/current_day_workout_type_widget.dart';
+import 'package:bloodfit/features/work_out/presentation/widgets/workout_video_showing_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -91,6 +93,14 @@ class WorkOutScreen extends StatelessWidget {
                   ),
                 );
               }),
+              UIHelper.verticalSpace(24.h),
+
+              ///Section : ----------///Current Day Workout Type Widget///-----------------
+              CurrentDayWorkoutTypeWidget(),
+              UIHelper.verticalSpace(16.h),
+
+              ///Section : -----------///Workout Video Showing Widget///------------
+              WorkoutVideoShowingWidget(isChecked: true, onChanged: (value) {}),
             ],
           ),
         ),
