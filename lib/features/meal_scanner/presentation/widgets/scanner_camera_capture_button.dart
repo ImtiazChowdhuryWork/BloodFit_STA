@@ -8,9 +8,8 @@ import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 
 class ScannerCameraCaptureButton extends StatelessWidget {
-  final MealScannerScreenController controller = Get.put(
-    MealScannerScreenController(),
-  );
+  final MealScannerScreenController controller =
+      Get.find<MealScannerScreenController>();
   ScannerCameraCaptureButton({super.key});
 
   @override
