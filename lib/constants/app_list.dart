@@ -12,6 +12,7 @@ import '../features/information_gather/presentation/widgets/select_gender/model/
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/review_your_choosen_meals/model/selected_meal_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
+import '../features/work_out/model/video_details_model.dart';
 import '../gen/assets.gen.dart';
 import '../utils/card_tile_option_model.dart';
 
@@ -543,14 +544,79 @@ class AppList {
       recommendedConsumable: "About 1 Teaspoon",
     ),
   ];
+
+  static final List<VideoDetailsModel> videoDetailsList = [
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+    VideoDetailsModel(
+      imagePath: Assets.images.workoutImage.path,
+      videoTitle: "Leg Stretching",
+      isWatched: true,
+      duration: "03",
+      totalSets: 3,
+      totalCal: 500,
+    ),
+  ];
 }
-
-
-
-/**
- * I want to create a list of week using enums
- * I want to take input how many days will be selectable
- * I want to show the selected days
- * I want when I tap on any of the days a bottom sheet to appear from ther, I will give select the days.
- * 
- */

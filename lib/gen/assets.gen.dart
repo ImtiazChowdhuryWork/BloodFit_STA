@@ -27,6 +27,9 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/abs_icon.svg
+  String get absIcon => 'assets/icons/abs_icon.svg';
+
   /// File path: assets/icons/ai_icon.svg
   String get aiIcon => 'assets/icons/ai_icon.svg';
 
@@ -185,6 +188,7 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
+    absIcon,
     aiIcon,
     arrowLeft,
     avocadoIcon,
