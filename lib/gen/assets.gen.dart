@@ -78,6 +78,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/done_icon_red.svg
   String get doneIconRed => 'assets/icons/done_icon_red.svg';
 
+  /// File path: assets/icons/dumble_icon.svg
+  String get dumbleIcon => 'assets/icons/dumble_icon.svg';
+
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
 
@@ -205,6 +208,7 @@ class $AssetsIconsGen {
     documentIcon,
     doneIcon,
     doneIconRed,
+    dumbleIcon,
     facebookIcon,
     faqIcon,
     fatIcon,

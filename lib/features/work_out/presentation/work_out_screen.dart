@@ -6,7 +6,7 @@ import 'package:bloodfit/controllers/work_out_screen_controller.dart';
 import 'package:bloodfit/features/work_out/presentation/widgets/current_day_workout_type_widget.dart';
 import 'package:bloodfit/features/work_out/presentation/widgets/extra_workout_widget.dart';
 import 'package:bloodfit/features/work_out/presentation/widgets/work_out_completed_bottom_sheet.dart';
-import 'package:bloodfit/features/work_out/presentation/widgets/workout_video_showing_widget.dart';
+import 'package:bloodfit/custom_widgets/workout_video_showing_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';

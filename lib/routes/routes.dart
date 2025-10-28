@@ -7,6 +7,7 @@ import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart'
 import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart';
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
 import 'package:bloodfit/features/change_password/presentation/change_password_screen.dart';
+import 'package:bloodfit/features/choose_extra_workout/presentation/choose_extra_workout_screen.dart';
 import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cost_details_for_upgrade_plan_screen.dart';
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
@@ -80,6 +81,7 @@ class Routes {
   static const String reviewYourChoosenMealScreen =
       '/review_your_choosen_meal_screen';
   static const String mealDetailscreen = '/meal_details_screen';
+  static const String chooseExtraWorkoutScreen = '/choose_extra_workout_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -379,6 +381,15 @@ class Routes {
     GetPage(
       name: mealDetailscreen,
       page: () => MealDetailsScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///chooseExtraWorkoutScreen
+    GetPage(
+      name: chooseExtraWorkoutScreen,
+      page: () => ChooseExtraWorkoutScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

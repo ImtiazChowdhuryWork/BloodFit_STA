@@ -5,7 +5,7 @@ import 'package:bloodfit/features/work_out/presentation/widgets/current_day_work
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../helper/ui_helpers.dart';
+import '../helper/ui_helpers.dart';
 
 class WorkoutVideoShowingWidget extends StatelessWidget {
   final String imagePath;
