@@ -57,6 +57,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/cancel_icon.svg
   String get cancelIcon => 'assets/icons/cancel_icon.svg';
 
+  /// File path: assets/icons/challanging_icon.svg
+  String get challangingIcon => 'assets/icons/challanging_icon.svg';
+
   /// File path: assets/icons/chicke_meal_icon.svg
   String get chickeMealIcon => 'assets/icons/chicke_meal_icon.svg';
 
@@ -80,6 +83,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/dumble_icon.svg
   String get dumbleIcon => 'assets/icons/dumble_icon.svg';
+
+  /// File path: assets/icons/easy_to_start_icon.svg
+  String get easyToStartIcon => 'assets/icons/easy_to_start_icon.svg';
 
   /// File path: assets/icons/facebook_icon.svg
   String get facebookIcon => 'assets/icons/facebook_icon.svg';
@@ -128,6 +134,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/lemon_icon.svg
   String get lemonIcon => 'assets/icons/lemon_icon.svg';
+
+  /// File path: assets/icons/light_sweat_icon.svg
+  String get lightSweatIcon => 'assets/icons/light_sweat_icon.svg';
 
   /// File path: assets/icons/lock_icon.svg
   String get lockIcon => 'assets/icons/lock_icon.svg';
@@ -201,6 +210,7 @@ class $AssetsIconsGen {
     cameraIcon,
     cameraIconWithoutBg,
     cancelIcon,
+    challangingIcon,
     chickeMealIcon,
     crownIcon,
     deleteUserIcon,
@@ -209,6 +219,7 @@ class $AssetsIconsGen {
     doneIcon,
     doneIconRed,
     dumbleIcon,
+    easyToStartIcon,
     facebookIcon,
     faqIcon,
     fatIcon,
@@ -225,6 +236,7 @@ class $AssetsIconsGen {
     googleIcon,
     homeIcon,
     lemonIcon,
+    lightSweatIcon,
     lockIcon,
     logoutIcon,
     maleIcon,
@@ -250,6 +262,22 @@ class $AssetsIconsGen {
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/activity_level_active.png
+  AssetGenImage get activityLevelActive =>
+      const AssetGenImage('assets/images/activity_level_active.png');
+
+  /// File path: assets/images/activity_level_lightly_active.png
+  AssetGenImage get activityLevelLightlyActive =>
+      const AssetGenImage('assets/images/activity_level_lightly_active.png');
+
+  /// File path: assets/images/activity_level_sedentary.png
+  AssetGenImage get activityLevelSedentary =>
+      const AssetGenImage('assets/images/activity_level_sedentary.png');
+
+  /// File path: assets/images/activity_level_very_active.png
+  AssetGenImage get activityLevelVeryActive =>
+      const AssetGenImage('assets/images/activity_level_very_active.png');
 
   /// File path: assets/images/app_logo.png
   AssetGenImage get appLogo =>
@@ -337,6 +365,10 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    activityLevelActive,
+    activityLevelLightlyActive,
+    activityLevelSedentary,
+    activityLevelVeryActive,
     appLogo,
     bloodDropTransparent,
     bloodFitSplashText,

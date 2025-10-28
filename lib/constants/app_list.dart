@@ -10,6 +10,8 @@ import 'package:bloodfit/routes/routes.dart';
 import '../features/faq/model/faq_model.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_gender/model/gender_model.dart';
 import '../features/information_gather_workout/presentation/widgets/current_body_shape/model/body_type_model.dart';
+import '../features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/activity_level/model/activity_level_model.dart';
+import '../features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/prefered_activity_level/model/prefered_activity_level_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/review_your_choosen_meals/model/selected_meal_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
@@ -636,6 +638,44 @@ class AppList {
     BodyTypeModel(
       bodyType: "Muscular",
       bodyImage: Assets.images.bodyTypeMuscular.path,
+    ),
+  ];
+
+  static List<ActivityLevelModel> activityLevelList = [
+    ActivityLevelModel(
+      imagePath: Assets.images.activityLevelSedentary.path,
+      subTitle:
+          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+    ),
+    ActivityLevelModel(
+      imagePath: Assets.images.activityLevelLightlyActive.path,
+      subTitle:
+          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+    ),
+    ActivityLevelModel(
+      imagePath: Assets.images.activityLevelActive.path,
+      subTitle:
+          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+    ),
+    ActivityLevelModel(
+      imagePath: Assets.images.activityLevelVeryActive.path,
+      subTitle:
+          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+    ),
+  ];
+
+  static List<PreferedActivityLevelModel> preferedActivityLevelList = [
+    PreferedActivityLevelModel(
+      iconPath: Assets.icons.easyToStartIcon,
+      title: "Easy to Start",
+    ),
+    PreferedActivityLevelModel(
+      iconPath: Assets.icons.lightSweatIcon,
+      title: "Break A Light Sweat",
+    ),
+    PreferedActivityLevelModel(
+      iconPath: Assets.icons.challangingIcon,
+      title: "Challenging ",
     ),
   ];
 }
