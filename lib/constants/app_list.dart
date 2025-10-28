@@ -1,5 +1,5 @@
 import 'package:bloodfit/constants/app_enums.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_diet/model/picke_your_diet_model.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_diet/model/picke_your_diet_model.dart';
 import 'package:bloodfit/features/meal_details/model/food_ingredients_details_model.dart';
 import 'package:bloodfit/features/meal_details/model/food_menarel_model.dart';
 import 'package:bloodfit/features/my_profile/model/personal_data_model.dart';
@@ -8,7 +8,8 @@ import 'package:bloodfit/features/settings/widgets/settings_option_title_extensi
 import 'package:bloodfit/routes/routes.dart';
 
 import '../features/faq/model/faq_model.dart';
-import '../features/information_gather/presentation/widgets/select_gender/model/gender_model.dart';
+import '../features/information_gather_meal_plan/presentation/widgets/select_gender/model/gender_model.dart';
+import '../features/information_gather_workout/presentation/widgets/current_body_shape/model/body_type_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/review_your_choosen_meals/model/selected_meal_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
@@ -617,6 +618,24 @@ class AppList {
       duration: "03",
       totalSets: 3,
       totalCal: 500,
+    ),
+  ];
+  static List<BodyTypeModel> bodyTypeList = [
+    BodyTypeModel(
+      bodyType: "Medium",
+      bodyImage: Assets.images.bodyTypeMedium.path,
+    ),
+    BodyTypeModel(
+      bodyType: "Flabby",
+      bodyImage: Assets.images.bodyTypeFlabby.path,
+    ),
+    BodyTypeModel(
+      bodyType: "Skinny",
+      bodyImage: Assets.images.bodyTypeSkinny.path,
+    ),
+    BodyTypeModel(
+      bodyType: "Muscular",
+      bodyImage: Assets.images.bodyTypeMuscular.path,
     ),
   ];
 }

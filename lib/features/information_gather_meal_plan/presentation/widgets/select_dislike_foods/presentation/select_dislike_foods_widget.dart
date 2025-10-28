@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_dislike_foods/presentation/widgets/diagonial_line_painer.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_dislike_foods/presentation/widgets/diagonial_line_painer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';

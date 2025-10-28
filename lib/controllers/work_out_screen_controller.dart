@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class WorkOutScreenController extends GetxController {
+  RxBool isSubscriptionTypeElite = false.obs;
+  void setIsSubscriptionTypeElite({required bool newValue}) {
+    isSubscriptionTypeElite.value = newValue;
+  }
+
   RxBool isExtraWorkoutVisible = false.obs;
   void setIsExtraWorkoutVisible({required bool newValue}) {
     isExtraWorkoutVisible.value = newValue;

@@ -1,15 +1,15 @@
 import 'dart:developer';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/page_indicator.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_age/presentation/select_age_screen_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_blood_group/presentation/select_blood_group_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_country/presentation/select_country_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_diet/presentation/select_diet_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_dislike_foods/presentation/select_dislike_foods_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_food_allergies/presentation/select_foood_allergies_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_gender/presentation/select_gender_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
+import 'package:bloodfit/custom_widgets/page_indicator.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_age/presentation/select_age_screen_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_blood_group/presentation/select_blood_group_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_country/presentation/select_country_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_diet/presentation/select_diet_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_dislike_foods/presentation/select_dislike_foods_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_food_allergies/presentation/select_foood_allergies_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_gender/presentation/select_gender_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,13 +19,13 @@ import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../routes/routes.dart';
 
-class InformationGatherScreen extends StatelessWidget {
-  const InformationGatherScreen({super.key});
+class InformationGatherMealScreen extends StatelessWidget {
+  const InformationGatherMealScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final InformationGatherController controller = Get.put(
-      InformationGatherController(),
+    final InformationGatherMealPlanController controller = Get.put(
+      InformationGatherMealPlanController(),
     );
 
     return Scaffold(

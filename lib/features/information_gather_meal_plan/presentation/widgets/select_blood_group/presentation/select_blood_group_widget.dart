@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_blood_group/presentation/widget/blood_group_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_blood_group/presentation/widget/blood_group_widget.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

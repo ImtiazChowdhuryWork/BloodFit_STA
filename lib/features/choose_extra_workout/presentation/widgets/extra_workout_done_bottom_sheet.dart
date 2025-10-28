@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bloodfit/controllers/work_out_screen_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +14,8 @@ import '../../../../helper/ui_helpers.dart';
 import '../../../../routes/routes.dart';
 
 void showExtraWorkoutDoneBottomSheet() {
+  final WorkOutScreenController workOutScreenController =
+      Get.find<WorkOutScreenController>();
   Get.bottomSheet(
     Container(
       width: 1.sw,
@@ -57,6 +60,7 @@ void showExtraWorkoutDoneBottomSheet() {
           CustomElevatedButton(
             onTap: () {
               log("Button Taped : Continue");
+              workOutScreenController.setIsExtraWorkoutVisible(newValue: false);
               Get.back();
               Get.toNamed(Routes.navigationScreen);
             },
