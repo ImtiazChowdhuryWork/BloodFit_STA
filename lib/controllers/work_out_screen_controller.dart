@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class WorkOutScreenController extends GetxController {
+  RxBool isExtraWorkoutVisible = false.obs;
+  void setIsExtraWorkoutVisible({required bool newValue}) {
+    isExtraWorkoutVisible.value = newValue;
+  }
+
   RxBool isTapedOnCurrentDay = false.obs;
   final todayDate = DateTime.now().dateOnly;
 

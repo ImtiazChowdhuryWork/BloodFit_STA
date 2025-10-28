@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:bloodfit/controllers/home_screen_controller.dart';
+import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -29,74 +32,112 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
             color: AppColors.c262626,
             borderRadius: BorderRadius.circular(16.r),
           ),
-          child: TextFormField(
-            controller: homeScreenController.weightController,
-            style: TextFontStyle.headline14w700cfefefeStylePoppins,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: "Enter Your Weight",
-              hintStyle: TextFontStyle.headline12w500c999999StylePoppins,
-
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.cb20000),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.cb20000),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.cb20000),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-
-              disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.cb20000),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              suffixIcon: Container(
-                margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 15.w),
-                padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 10.w),
-                decoration: BoxDecoration(
-                  color: AppColors.c363636,
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-
-                child: Obx(() {
-                  return DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      padding: EdgeInsets.zero,
-
-                      isDense: true,
-                      dropdownColor: AppColors.c262626,
-                      value: homeScreenController
-                          .selectedWeightUnit
-                          .value, // default value
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: AppColors.cfefefe,
-                      ),
-                      items: ['Kg', 'lb'].map((unit) {
-                        return DropdownMenuItem<String>(
-                          value: unit,
-                          child: Text(
-                            unit,
-                            style:
-                                TextFontStyle.headline12w500cfefefeStylePoppins,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        homeScreenController.setSelectedWeightUnit(
-                          unit: value ?? "",
-                        );
-                      },
-                    ),
+          child: Column(
+            children: [
+              ///Section : -----------///Text Form Field -> Current Weight Update Widget///--------------
+              TextFormField(
+                controller: homeScreenController.weightController,
+                style: TextFontStyle.headline14w700cfefefeStylePoppins,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  // Update the reactive variable when text changes
+                  homeScreenController.setIsWeightAvailableValue(
+                    newValue: value.trim().isNotEmpty,
                   );
-                }),
+                },
+                decoration: InputDecoration(
+                  hintText: "Enter Your Weight",
+                  hintStyle: TextFontStyle.headline12w500c999999StylePoppins,
+
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.cb20000),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.cb20000),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.cb20000),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.cb20000),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  suffixIcon: Container(
+                    margin: EdgeInsets.symmetric(
+                      vertical: 12.h,
+                      horizontal: 15.w,
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 3.h,
+                      horizontal: 10.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.c363636,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+
+                    child: Obx(() {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          padding: EdgeInsets.zero,
+
+                          isDense: true,
+                          dropdownColor: AppColors.c262626,
+                          value: homeScreenController
+                              .selectedWeightUnit
+                              .value, // default value
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: AppColors.cfefefe,
+                          ),
+                          items: ['Kg', 'lb'].map((unit) {
+                            return DropdownMenuItem<String>(
+                              value: unit,
+                              child: Text(
+                                unit,
+                                style: TextFontStyle
+                                    .headline12w500cfefefeStylePoppins,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            homeScreenController.setSelectedWeightUnit(
+                              unit: value ?? "",
+                            );
+                          },
+                        ),
+                      );
+                    }),
+                  ),
+                ),
               ),
-            ),
+
+              /// Only show the button and spacing when weight is available
+              Obx(() {
+                return homeScreenController.isWeightAvailable.value
+                    ? Column(
+                        children: [
+                          UIHelper.verticalSpace(14.h),
+                          CustomElevatedButton(
+                            onTap: () {
+                              log("Button Taped : Submit Button!");
+                            },
+                            buttonHeight: 32.h,
+                            buttonColor: AppColors.c111111,
+                            isButtonBorderUsed: true,
+                            buttonBorderColor: AppColors.cb20000,
+                            buttonTitle: "Submit",
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink();
+              }),
+            ],
           ),
         ),
       ],

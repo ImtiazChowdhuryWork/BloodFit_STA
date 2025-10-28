@@ -1,99 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:flutter_svg/svg.dart';
-
-// import '../../../../constants/text_font_style.dart';
-// import '../../../../gen/assets.gen.dart';
-// import '../../../../gen/colors.gen.dart';
-// import '../../../../helper/ui_helpers.dart';
-
-// class EliteUserWorkoutCalender extends StatelessWidget {
-//   final bool isCheatDay;
-//   final String dayName;
-//   final bool isCalorieTaskCompleted;
-//   final double height;
-//   final double width;
-//   final Color backgroundColor;
-//   final Widget? child;
-//   final Function()? onTap;
-//   final int? day;
-//   final int? month;
-//   final int? year;
-//   final bool isToday;
-//   final bool isSelected;
-
-//   const EliteUserWorkoutCalender({
-//     super.key,
-//     required this.isCheatDay,
-//     required this.isCalorieTaskCompleted,
-//     required this.height,
-//     required this.width,
-//     required this.backgroundColor,
-//     this.child,
-//     required this.dayName,
-//     this.onTap,
-//     this.day,
-//     this.month,
-//     this.year,
-//     this.isToday = false,
-//     this.isSelected = false,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       onTap: onTap,
-//       child: Container(
-//         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
-//         decoration: BoxDecoration(
-//           color: backgroundColor, // Now using the dynamic background color
-//           borderRadius: BorderRadius.only(
-//             topLeft: Radius.circular(8.r),
-//             topRight: Radius.circular(8.r),
-//             bottomLeft: Radius.circular(50.r),
-//             bottomRight: Radius.circular(50.r),
-//           ),
-//         ),
-//         child: Column(
-//           children: [
-//             Text(
-//               dayName,
-//               style: TextFontStyle.headline16w500cfefefeStylePoppins.copyWith(
-//                 color: isToday
-//                     ? AppColors.cfefefe
-//                     : isToday && isSelected
-//                     ? AppColors.cfefefe
-//                     : isToday && !isSelected
-//                     ? AppColors.c111111
-//                     : AppColors.cfefefe,
-//               ),
-//             ),
-//             UIHelper.verticalSpace(10.h),
-
-//             ///Section : ----------///Background Color Handaler///-------------------
-//             Container(
-//               width: width,
-//               height: height,
-//               decoration: BoxDecoration(
-//                 color: isToday
-//                     ? AppColors.cfefefe
-//                     : isToday && isSelected
-//                     ? AppColors.cfefefe
-//                     : isToday && !isSelected
-//                     ? AppColors.c262626
-//                     : AppColors.c262626,
-//                 shape: BoxShape.circle,
-//               ),
-//               alignment: Alignment.center,
-//               child: SvgPicture.asset(Assets.icons.workoutIcon),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -104,6 +8,7 @@ import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
 class EliteUserWorkoutCalender extends StatelessWidget {
+  final String workoutImage;
   final bool isCheatDay;
   final String dayName;
   final bool isCalorieTaskCompleted;
@@ -135,6 +40,7 @@ class EliteUserWorkoutCalender extends StatelessWidget {
     this.isToday = false,
     this.isSelected = false,
     required this.isAnyDateSelected,
+    required this.workoutImage,
   });
 
   /// Main Container Color Logic
@@ -210,7 +116,7 @@ class EliteUserWorkoutCalender extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: SvgPicture.asset(Assets.icons.workoutIcon),
+              child: SvgPicture.asset(workoutImage),
             ),
           ],
         ),

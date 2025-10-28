@@ -14,6 +14,7 @@ import 'package:bloodfit/features/home/presentation/widgets/total_k_cal_widget.d
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -140,6 +141,7 @@ class HomeScreen extends StatelessWidget {
               BuildMealPlanWidget(
                 onTap: () {
                   log("Button Taped : Subscribe Now !");
+                  Get.toNamed(Routes.subscriptionScreen);
                 },
                 buttonTitle: "Subscribe Now",
                 isBorderUsed: true,
@@ -157,7 +159,7 @@ class HomeScreen extends StatelessWidget {
               UIHelper.verticalSpace(144.h),
             ],
           ),
-        ), // comment
+        ),
       ),
     );
   }
