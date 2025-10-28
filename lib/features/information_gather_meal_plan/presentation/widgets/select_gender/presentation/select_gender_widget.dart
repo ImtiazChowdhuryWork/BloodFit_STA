@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_gender/presentation/widget/gender_showing_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_gender/presentation/widget/gender_showing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

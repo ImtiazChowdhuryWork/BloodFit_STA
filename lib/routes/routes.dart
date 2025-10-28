@@ -13,7 +13,7 @@ import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.d
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
 import 'package:bloodfit/features/meal_details/presentation/meal_details_screen.dart';
 import 'package:bloodfit/features/meal_swap_onboarding/meal_swap_onboarding_screen.dart';
 import 'package:bloodfit/features/profile_mealplan/presentation/profile_mealplan_screen.dart';
@@ -34,7 +34,8 @@ import 'package:get/get.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
-import '../features/information_gather/presentation/information_gather_screen.dart';
+import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
+import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
@@ -68,7 +69,10 @@ class Routes {
   static const String costDetailsForUpgradePlanScreen =
       '/cost_details_for_upgrade_plan_screen';
   static const String addPromoCodeScreen = '/add_promo_code_screen';
-  static const String informationGatherScreen = '/information_gather_screen';
+  static const String informationGatherMealScreen =
+      '/information_gather_meal_screen';
+  static const String informationGatherWorkoutScreen =
+      '/information_gather_workout_screen';
   static const String selectWeightScreen = '/select_weight_screen';
   static const String dailyCaloriesIntakeScreen =
       '/your_daily_calories_intake_screen';
@@ -298,8 +302,8 @@ class Routes {
 
     ///informationGatherScreen
     GetPage(
-      name: informationGatherScreen,
-      page: () => InformationGatherScreen(),
+      name: informationGatherMealScreen,
+      page: () => InformationGatherMealScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -390,6 +394,15 @@ class Routes {
     GetPage(
       name: chooseExtraWorkoutScreen,
       page: () => ChooseExtraWorkoutScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///informationGatherWorkoutScreen
+    GetPage(
+      name: informationGatherWorkoutScreen,
+      page: () => InformationGatherWorkoutScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

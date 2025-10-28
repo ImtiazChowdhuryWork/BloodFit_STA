@@ -6,7 +6,11 @@ class AppConstants {
 
   ///Section : -----------///Check user subscription type///-----------------
   static const UserSubscriptionType defaultSubscriptionType =
-      UserSubscriptionType.elite;
+      UserSubscriptionType.pro;
+
+  ///Section : -----------///Check user subscription type///-----------------
+  static const UserSubscriptionType eliteSubscriptionType =
+      UserSubscriptionType.free;
 
   ///Section : ----------///Meal Plan Availability///--------------
   static const MealPlanAvailability mealPlanAvailability =

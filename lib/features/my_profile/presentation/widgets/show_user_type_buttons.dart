@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
+import 'package:bloodfit/controllers/work_out_screen_controller.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,8 @@ class ShowUserTypeButtons extends StatelessWidget {
       Get.find<ProfileScreenController>();
 
   final EnumsController enumsController = Get.find<EnumsController>();
+  final WorkOutScreenController workOutScreenController =
+      Get.find<WorkOutScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +109,9 @@ class ShowUserTypeButtons extends StatelessWidget {
                   return CustomElevatedButton(
                     onTap: () {
                       log("Elite User Button Taped!");
+                      workOutScreenController.setIsSubscriptionTypeElite(
+                        newValue: true,
+                      );
                       controller.setSubscriptionTypeElite();
                       enumsController.setMealPlanNotAvailable();
                     },

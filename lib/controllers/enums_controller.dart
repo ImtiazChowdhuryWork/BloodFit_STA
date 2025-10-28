@@ -18,4 +18,11 @@ class EnumsController extends GetxController {
   void setMealPlanNotAvailable() {
     mealPlanAvailability.value = MealPlanAvailability.mealPlanNotAvilable;
   }
+
+  ///Section : -----///Set UserType to Subscription Type Elite User///-------------
+  Rx<UserSubscriptionType> userSubscriptionTypeElite =
+      AppConstants.eliteSubscriptionType.obs;
+  void setUserSubscriptionTypeToElite() {
+    userSubscriptionTypeElite.value = UserSubscriptionType.elite;
+  }
 }

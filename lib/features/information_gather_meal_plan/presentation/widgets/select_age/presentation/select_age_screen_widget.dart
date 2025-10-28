@@ -1,4 +1,4 @@
-import 'package:bloodfit/features/information_gather/presentation/widgets/select_age/presentation/widget/age_selector_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_age/presentation/widget/age_selector_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

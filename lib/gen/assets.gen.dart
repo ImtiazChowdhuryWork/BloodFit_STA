@@ -263,6 +263,22 @@ class $AssetsImagesGen {
   AssetGenImage get bloodFitSplashText =>
       const AssetGenImage('assets/images/blood_fit_splash_text.png');
 
+  /// File path: assets/images/body_type_flabby.png
+  AssetGenImage get bodyTypeFlabby =>
+      const AssetGenImage('assets/images/body_type_flabby.png');
+
+  /// File path: assets/images/body_type_medium.png
+  AssetGenImage get bodyTypeMedium =>
+      const AssetGenImage('assets/images/body_type_medium.png');
+
+  /// File path: assets/images/body_type_muscular.png
+  AssetGenImage get bodyTypeMuscular =>
+      const AssetGenImage('assets/images/body_type_muscular.png');
+
+  /// File path: assets/images/body_type_skinny.png
+  AssetGenImage get bodyTypeSkinny =>
+      const AssetGenImage('assets/images/body_type_skinny.png');
+
   /// File path: assets/images/egg_omlet_image.jpg
   AssetGenImage get eggOmletImage =>
       const AssetGenImage('assets/images/egg_omlet_image.jpg');
@@ -324,6 +340,10 @@ class $AssetsImagesGen {
     appLogo,
     bloodDropTransparent,
     bloodFitSplashText,
+    bodyTypeFlabby,
+    bodyTypeMedium,
+    bodyTypeMuscular,
+    bodyTypeSkinny,
     eggOmletImage,
     errorImage,
     foodImage,

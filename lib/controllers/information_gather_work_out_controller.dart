@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 
-// class InformationGatherMealPlanController extends GetxController {
+// class InformationGatherWorkOutController extends GetxController {
 //   final PageController pageController = PageController();
 
 //   final RxInt currentIndex = 0.obs;
@@ -49,7 +49,7 @@ import 'package:get/get.dart';
 
 import '../utils/page_indicator_interface.dart';
 
-class InformationGatherMealPlanController extends GetxController
+class InformationGatherWorkOutController extends GetxController
     implements PageIndicatorInterface {
   final PageController pageController = PageController();
 
