@@ -1,21 +1,23 @@
-import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/gen/assets.gen.dart';
-import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BodyShapeWidget extends StatelessWidget {
+import '../../../../../../../constants/text_font_style.dart';
+import '../../../../../../../gen/colors.gen.dart';
+
+class WorkoutMainGoalTile extends StatelessWidget {
   final String boydType;
   final String bodyImage;
+  final double? imageWidth;
   final void Function()? onTap;
   final bool isSelected;
 
-  const BodyShapeWidget({
+  const WorkoutMainGoalTile({
     super.key,
     required this.boydType,
     required this.bodyImage,
     this.onTap,
     required this.isSelected,
+    this.imageWidth,
   });
 
   @override
@@ -45,8 +47,8 @@ class BodyShapeWidget extends StatelessWidget {
                 Image.asset(
                   bodyImage,
                   height: 130.h,
-                  width: 137.w,
-                  fit: BoxFit.cover,
+                  width: imageWidth ?? 137.w,
+                  fit: BoxFit.contain,
                 ),
 
                 /// Selection indicator

@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/activity_level/presentation/activity_level_widget.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/current_body_shape/current_body_shape_widget.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/prefered_activity_level/presentation/prefered_activity_level_widget.dart';
+import 'package:bloodfit/features/information_gather_workout/presentation/widgets/activity_level/presentation/activity_level_widget.dart';
+import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/current_body_shape_widget.dart';
+import 'package:bloodfit/features/information_gather_workout/presentation/widgets/prefered_workout_level/presentation/prefered_workout_level_widget.dart';
+import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_main_goal/presentation/workout_main_goal_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,8 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
                   children: [
                     CurrentBodyShapeWidget(),
                     ActivityLevelWidget(),
-                    PreferedActivityLevelWidget(),
+                    PreferedWorkoutLevelWidget(),
+                    WorkoutMainGoalWidget(),
                   ],
                 ),
               ),

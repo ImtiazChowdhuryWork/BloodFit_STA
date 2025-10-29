@@ -323,6 +323,10 @@ class $AssetsImagesGen {
   AssetGenImage get foodLudusImage =>
       const AssetGenImage('assets/images/food_ludus_image.png');
 
+  /// File path: assets/images/lose_weight_image.png
+  AssetGenImage get loseWeightImage =>
+      const AssetGenImage('assets/images/lose_weight_image.png');
+
   /// File path: assets/images/omlet_egg.png
   AssetGenImage get omletEgg =>
       const AssetGenImage('assets/images/omlet_egg.png');
@@ -350,6 +354,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/scanner_button_image.png
   AssetGenImage get scannerButtonImage =>
       const AssetGenImage('assets/images/scanner_button_image.png');
+
+  /// File path: assets/images/stay_fit_image.png
+  AssetGenImage get stayFitImage =>
+      const AssetGenImage('assets/images/stay_fit_image.png');
 
   /// File path: assets/images/trash_can_image.png
   AssetGenImage get trashCanImage =>
@@ -380,6 +388,7 @@ class $AssetsImagesGen {
     errorImage,
     foodImage,
     foodLudusImage,
+    loseWeightImage,
     omletEgg,
     onboardingImageFour,
     onboardingImageOne,
@@ -387,6 +396,7 @@ class $AssetsImagesGen {
     onboardingImageTwo,
     profileAvatarDefaultImage,
     scannerButtonImage,
+    stayFitImage,
     trashCanImage,
     userImage,
     workoutImage,

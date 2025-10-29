@@ -1,15 +1,15 @@
 import 'package:bloodfit/constants/app_list.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/prefered_activity_level/presentation/widget/prefered_workout_level_showing_widget.dart';
+import 'package:bloodfit/features/information_gather_workout/presentation/widgets/prefered_workout_level/presentation/widget/prefered_workout_level_showing_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../../../../../../../constants/text_font_style.dart';
-import '../../../../../../../../../controllers/ig_prefered_activity_level_controller.dart';
+import '../../../../../../constants/text_font_style.dart';
+import '../../../../../../controllers/ig_prefered_activity_level_controller.dart';
 
-class PreferedActivityLevelWidget extends StatelessWidget {
-  PreferedActivityLevelWidget({super.key});
+class PreferedWorkoutLevelWidget extends StatelessWidget {
+  PreferedWorkoutLevelWidget({super.key});
 
   final IgPreferedActivityLevelController controller =
       Get.find<IgPreferedActivityLevelController>();
@@ -28,10 +28,10 @@ class PreferedActivityLevelWidget extends StatelessWidget {
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: AppList.preferedActivityLevelList.length,
+          itemCount: AppList.preferedWorkoutLevelList.length,
           separatorBuilder: (context, index) => UIHelper.verticalSpace(10.h),
           itemBuilder: (context, index) {
-            var data = AppList.preferedActivityLevelList[index];
+            var data = AppList.preferedWorkoutLevelList[index];
             return Obx(() {
               return PreferedWorkOutLevelShowingWidget(
                 iconPath: data.iconPath,
