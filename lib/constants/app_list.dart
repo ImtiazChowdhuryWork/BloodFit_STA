@@ -10,8 +10,9 @@ import 'package:bloodfit/routes/routes.dart';
 import '../features/faq/model/faq_model.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_gender/model/gender_model.dart';
 import '../features/information_gather_workout/presentation/widgets/current_body_shape/model/body_type_model.dart';
-import '../features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/activity_level/model/activity_level_model.dart';
-import '../features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widgets/prefered_activity_level/model/prefered_activity_level_model.dart';
+import '../features/information_gather_workout/presentation/widgets/activity_level/model/activity_level_model.dart';
+import '../features/information_gather_workout/presentation/widgets/prefered_workout_level/model/prefered_workout_level_model.dart';
+import '../features/information_gather_workout/presentation/widgets/workout_main_goal/model/workout_main_goal_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/review_your_choosen_meals/model/selected_meal_model.dart';
 import '../features/subscription/model/subscription_package_model.dart';
@@ -664,18 +665,33 @@ class AppList {
     ),
   ];
 
-  static List<PreferedActivityLevelModel> preferedActivityLevelList = [
-    PreferedActivityLevelModel(
+  static List<PreferedWorkoutLevelModel> preferedWorkoutLevelList = [
+    PreferedWorkoutLevelModel(
       iconPath: Assets.icons.easyToStartIcon,
       title: "Easy to Start",
     ),
-    PreferedActivityLevelModel(
+    PreferedWorkoutLevelModel(
       iconPath: Assets.icons.lightSweatIcon,
       title: "Break A Light Sweat",
     ),
-    PreferedActivityLevelModel(
+    PreferedWorkoutLevelModel(
       iconPath: Assets.icons.challangingIcon,
       title: "Challenging ",
+    ),
+  ];
+
+  static List<WorkoutMainGoalModel> workoutMainGoalList = [
+    WorkoutMainGoalModel(
+      title: "Lose Weight",
+      imagePath: Assets.images.loseWeightImage.path,
+    ),
+    WorkoutMainGoalModel(
+      title: "Gain Muscle",
+      imagePath: Assets.images.bodyTypeMuscular.path,
+    ),
+    WorkoutMainGoalModel(
+      title: "Stay Fit",
+      imagePath: Assets.images.stayFitImage.path,
     ),
   ];
 }
