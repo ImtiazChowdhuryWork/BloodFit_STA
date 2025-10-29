@@ -9,6 +9,7 @@ import '../controllers/fitness_screen_controller.dart';
 import '../controllers/calendar_controller.dart';
 import '../controllers/home_screen_controller.dart';
 import '../controllers/ig_current_body_type_controller.dart';
+import '../controllers/ig_desired_weight_controller.dart';
 import '../controllers/ig_prefered_activity_level_controller.dart';
 import '../controllers/ig_workout_main_goal_controller.dart';
 import '../controllers/information_gather_screen_controller.dart';
@@ -51,6 +52,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => InformationGatherWorkOutController(), fenix: true);
     Get.lazyPut(() => IgPreferedActivityLevelController(), fenix: true);
     Get.lazyPut(() => IgWorkoutMainGoalController(), fenix: true);
+    Get.lazyPut(() => IgDesiredWeightController(), fenix: true);
 
     Get.lazyPut(
       () => OnboardingAgePickerScreenController(
