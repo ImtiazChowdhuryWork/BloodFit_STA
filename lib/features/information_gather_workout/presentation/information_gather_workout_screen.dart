@@ -6,7 +6,9 @@ import 'package:bloodfit/features/information_gather_workout/presentation/widget
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/current_body_shape_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/desired_weight/presentation/desired_weight_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/prefered_workout_level/presentation/prefered_workout_level_widget.dart';
+import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_focus_area/presentation/workout_focus_area_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_main_goal/presentation/workout_main_goal_widget.dart';
+import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ import 'package:get/get.dart';
 import '../../../controllers/information_gather_work_out_controller.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../custom_widgets/page_indicator.dart';
+import '../../../routes/routes.dart';
 
 class InformationGatherWorkoutScreen extends StatelessWidget {
   const InformationGatherWorkoutScreen({super.key});
@@ -62,6 +65,8 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
                     PreferedWorkoutLevelWidget(),
                     WorkoutMainGoalWidget(),
                     DesiredWeightWidget(),
+                    WorkoutFocusAreaWidget(),
+                    // YouAreAllSetScreen(),
                   ],
                 ),
               ),
@@ -88,7 +93,7 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
                 // Finish onboarding or navigate to next screen
                 log("Information Gathering Completed!");
                 // Example navigation:
-                // Get.toNamed(Routes.dailyCaloriesIntakeScreen);
+                Get.toNamed(Routes.youAreAllSetScreen);
               } else {
                 // Go to next page
                 controller.nextPage();

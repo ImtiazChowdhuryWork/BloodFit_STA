@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -22,11 +23,8 @@ class SelectHeightScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text("Select Your Height"),
-        backgroundColor: Colors.black,
-      ),
+      backgroundColor: AppColors.scaffoldBackgroundColor,
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

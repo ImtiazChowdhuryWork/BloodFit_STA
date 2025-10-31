@@ -283,6 +283,14 @@ class $AssetsImagesGen {
   AssetGenImage get appLogo =>
       const AssetGenImage('assets/images/app_logo.png');
 
+  /// File path: assets/images/arms_not_selected.png
+  AssetGenImage get armsNotSelected =>
+      const AssetGenImage('assets/images/arms_not_selected.png');
+
+  /// File path: assets/images/arms_selected.png
+  AssetGenImage get armsSelected =>
+      const AssetGenImage('assets/images/arms_selected.png');
+
   /// File path: assets/images/blood_drop_transparent.gif
   AssetGenImage get bloodDropTransparent =>
       const AssetGenImage('assets/images/blood_drop_transparent.gif');
@@ -314,6 +322,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/error_image.png
   AssetGenImage get errorImage =>
       const AssetGenImage('assets/images/error_image.png');
+
+  /// File path: assets/images/focus_area_full_body_image.png
+  AssetGenImage get focusAreaFullBodyImage =>
+      const AssetGenImage('assets/images/focus_area_full_body_image.png');
 
   /// File path: assets/images/food_image.png
   AssetGenImage get foodImage =>
@@ -359,9 +371,21 @@ class $AssetsImagesGen {
   AssetGenImage get stayFitImage =>
       const AssetGenImage('assets/images/stay_fit_image.png');
 
+  /// File path: assets/images/timeline_image.png
+  AssetGenImage get timelineImage =>
+      const AssetGenImage('assets/images/timeline_image.png');
+
   /// File path: assets/images/trash_can_image.png
   AssetGenImage get trashCanImage =>
       const AssetGenImage('assets/images/trash_can_image.png');
+
+  /// File path: assets/images/upper_body_not_selected.png
+  AssetGenImage get upperBodyNotSelected =>
+      const AssetGenImage('assets/images/upper_body_not_selected.png');
+
+  /// File path: assets/images/upper_body_selected.png
+  AssetGenImage get upperBodySelected =>
+      const AssetGenImage('assets/images/upper_body_selected.png');
 
   /// File path: assets/images/userImage.png
   AssetGenImage get userImage =>
@@ -378,6 +402,8 @@ class $AssetsImagesGen {
     activityLevelSedentary,
     activityLevelVeryActive,
     appLogo,
+    armsNotSelected,
+    armsSelected,
     bloodDropTransparent,
     bloodFitSplashText,
     bodyTypeFlabby,
@@ -386,6 +412,7 @@ class $AssetsImagesGen {
     bodyTypeSkinny,
     eggOmletImage,
     errorImage,
+    focusAreaFullBodyImage,
     foodImage,
     foodLudusImage,
     loseWeightImage,
@@ -397,7 +424,10 @@ class $AssetsImagesGen {
     profileAvatarDefaultImage,
     scannerButtonImage,
     stayFitImage,
+    timelineImage,
     trashCanImage,
+    upperBodyNotSelected,
+    upperBodySelected,
     userImage,
     workoutImage,
   ];

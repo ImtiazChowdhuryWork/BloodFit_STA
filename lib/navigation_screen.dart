@@ -304,6 +304,7 @@
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/meal_plan_feature_options.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/meal_scanner_screen.dart';
+import 'package:bloodfit/features/weight_history/presentation/weight_history_screen.dart';
 import 'package:bloodfit/features/work_out/presentation/work_out_screen.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -329,7 +330,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     MealPlanFeatureOptions(),
     Container(), // Placeholder for scanner index
     WorkOutScreen(),
-    HomeScreen(), // Replace with your Progress screen
+    WeightHistoryScreen(), // Replace with your Progress screen
   ];
 
   @override
