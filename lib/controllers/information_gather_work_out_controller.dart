@@ -57,7 +57,7 @@ class InformationGatherWorkOutController extends GetxController
   final RxInt currentIndex = 0.obs;
 
   @override
-  final int totalPages = 9;
+  final int totalPages = 6;
 
   void nextPage() {
     if (currentIndex.value < totalPages - 1) {

@@ -21,10 +21,10 @@ class YouAreAllSetScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ///Section : ------------///CustomBackButton///----------
-              CustomBackButton(),
+              Align(alignment: Alignment.centerLeft, child: CustomBackButton()),
               UIHelper.verticalSpace(66.h),
 
               ///Section : ----------///Text-> you are all set///---------

@@ -56,16 +56,6 @@ class SelectDietWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.cb20000 : AppColors.c3c3c3c,
                       borderRadius: BorderRadius.circular(8.r),
-
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                color: AppColors.cfefefe.withOpacity(0.4),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]
-                          : [],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

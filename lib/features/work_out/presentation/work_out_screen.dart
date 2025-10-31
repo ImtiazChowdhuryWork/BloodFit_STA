@@ -189,6 +189,7 @@ class WorkOutScreen extends StatelessWidget {
                           );
                         },
                       ),
+                      UIHelper.spacerFromBottomNav,
                     ],
                   ),
                 ],

@@ -22,7 +22,7 @@ class YourDailyCaloriesIntakeScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ///Section : -------------///Back Button///--------
               Align(alignment: Alignment.centerLeft, child: CustomBackButton()),
