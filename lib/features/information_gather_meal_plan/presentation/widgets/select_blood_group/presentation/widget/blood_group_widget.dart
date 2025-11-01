@@ -1,6 +1,8 @@
+import 'package:bloodfit/controllers/ig_select_blood_grop_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../../../../constants/text_font_style.dart';
 import '../../../../../../../gen/assets.gen.dart';
@@ -9,20 +11,30 @@ import '../../../../../../../helper/ui_helpers.dart';
 
 class BloodGroupWidget extends StatelessWidget {
   final String title;
+  final int index;
+  final Color bgColor;
   final void Function()? onTap;
-  const BloodGroupWidget({super.key, required this.title, this.onTap});
+
+  const BloodGroupWidget({
+    super.key,
+    required this.title,
+    this.onTap,
+    required this.index,
+    required this.bgColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return IntrinsicWidth(
       child: InkWell(
+        borderRadius: BorderRadius.circular(16.r),
         onTap: onTap,
         child: Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints(),
           padding: EdgeInsets.symmetric(vertical: 17.h, horizontal: 40.w),
           decoration: BoxDecoration(
-            color: AppColors.c111111,
+            color: bgColor,
             border: Border.all(color: AppColors.cfefefe),
             borderRadius: BorderRadius.circular(16.r),
           ),

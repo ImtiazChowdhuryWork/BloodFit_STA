@@ -58,9 +58,6 @@
 //   }
 // }
 
-import 'dart:developer';
-
-import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/features/onboarding/presentation/widgets/onboarding_widget.dart';
 import 'package:bloodfit/features/onboarding/presentation/widgets/page_indicator_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -70,7 +67,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../constants/text_font_style.dart';
 import '../../../controllers/onboarding_screen_controller.dart';
 import '../../../custom_widgets/custom_elevated_button.dart';
 
@@ -103,23 +99,6 @@ class OnboardingScreen extends StatelessWidget {
                       title: data.title,
                       subTitle: data.subTitle,
                       imagePath: data.imagePath,
-                      // onTap: () {
-                      //   if (index < controller.onboardingList.length - 1) {
-                      //     log(
-                      //       "----------///Onboarding $index///----------------",
-                      //     );
-                      //     log("Title : ${data.title}");
-                      //     log("SubTitle : ${data.subTitle}");
-                      //     log("ImagePath : ${data.imagePath}");
-                      //     log(
-                      //       "----------///Onboarding $index data Finished///----------------",
-                      //     );
-                      //     controller.goToNextPage();
-                      //   } else {
-                      //     log("Onboarding Finished");
-                      //     Get.toNamed(Routes.signInScreen);
-                      //   }
-                      // },
                     );
                   },
                 ),
