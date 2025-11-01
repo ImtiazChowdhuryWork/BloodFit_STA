@@ -8,6 +8,7 @@ import '../../../../../../../helper/ui_helpers.dart';
 
 class GenderShowingWidget extends StatelessWidget {
   final String title;
+  final Color bgColor;
   final String imagePath;
   final void Function()? onTap;
   const GenderShowingWidget({
@@ -15,19 +16,20 @@ class GenderShowingWidget extends StatelessWidget {
     required this.title,
     required this.imagePath,
     this.onTap,
+    required this.bgColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return IntrinsicWidth(
-      child: InkWell(
+      child: GestureDetector(
         onTap: onTap,
         child: Container(
           alignment: Alignment.center,
           constraints: const BoxConstraints(),
           padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 54.w),
           decoration: BoxDecoration(
-            color: AppColors.c111111,
+            color: bgColor,
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.cfefefe),
           ),

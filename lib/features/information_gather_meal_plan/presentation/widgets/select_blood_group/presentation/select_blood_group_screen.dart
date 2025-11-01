@@ -50,7 +50,6 @@ class SelectBloodGroupWidget extends StatelessWidget {
                         selectBloodGropController.selectedIndex.value == index
                         ? AppColors.c620000
                         : AppColors.c111111,
-                    index: selectBloodGropController.selectedIndex.value,
                   );
                 }),
               );
