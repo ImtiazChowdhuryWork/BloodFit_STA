@@ -1,15 +1,20 @@
 import 'dart:developer';
 
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_gender/presentation/widget/gender_showing_widget.dart';
+import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../../../constants/app_list.dart';
 import '../../../../../../constants/text_font_style.dart';
+import '../../../../../../controllers/ig_select_gender_screen_controller.dart';
 import '../../../../../../helper/ui_helpers.dart';
 
 class SelectGenderWidget extends StatelessWidget {
-  const SelectGenderWidget({super.key});
+  final IgSelectGenderScreenController selectGenderScreenController =
+      Get.find<IgSelectGenderScreenController>();
+  SelectGenderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class SelectGenderWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Select Your Blood Group",
+          "Select Your Gender",
           style: TextFontStyle.headline22w500cfefefeStylePoppins,
         ),
         UIHelper.verticalSpace(120.h),
@@ -31,14 +36,26 @@ class SelectGenderWidget extends StatelessWidget {
               var data = AppList.genderWithIconList[index];
               return Padding(
                 padding: EdgeInsets.only(bottom: 64.h),
-                child: GenderShowingWidget(
-                  onTap: () {
-                    log("Gender List Index : $index");
-                    log("Gender : ${data.title}");
-                  },
-                  title: data.title,
-                  imagePath: data.iconPath,
-                ),
+                child: Obx(() {
+                  return GenderShowingWidget(
+                    onTap: () {
+                      log("Gender List Index : $index");
+                      log("Gender : ${data.title}");
+                      selectGenderScreenController.setSelectedGenderIndex(
+                        newValue: index,
+                      );
+                    },
+                    title: data.title,
+                    bgColor:
+                        selectGenderScreenController
+                                .selectedGenderIndex
+                                .value ==
+                            index
+                        ? AppColors.c620000
+                        : AppColors.c111111,
+                    imagePath: data.iconPath,
+                  );
+                }),
               );
             }),
           ),

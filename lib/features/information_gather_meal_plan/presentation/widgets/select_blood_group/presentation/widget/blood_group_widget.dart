@@ -11,7 +11,7 @@ import '../../../../../../../helper/ui_helpers.dart';
 
 class BloodGroupWidget extends StatelessWidget {
   final String title;
-  final int index;
+
   final Color bgColor;
   final void Function()? onTap;
 
@@ -19,7 +19,7 @@ class BloodGroupWidget extends StatelessWidget {
     super.key,
     required this.title,
     this.onTap,
-    required this.index,
+
     required this.bgColor,
   });
 
