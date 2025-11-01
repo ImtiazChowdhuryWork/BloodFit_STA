@@ -6,9 +6,15 @@ import 'package:bloodfit/features/information_gather_meal_plan/presentation/widg
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import '../../../../../../controllers/ig_select_blood_grop_controller.dart';
+import '../../../../../../gen/colors.gen.dart';
 
 class SelectBloodGroupWidget extends StatelessWidget {
-  const SelectBloodGroupWidget({super.key});
+  final IgSelectBloodGropController selectBloodGropController =
+      Get.find<IgSelectBloodGropController>();
+  SelectBloodGroupWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +36,23 @@ class SelectBloodGroupWidget extends StatelessWidget {
               var data = AppList.bloodGroups[index];
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
-                child: BloodGroupWidget(
-                  title: data,
-                  onTap: () {
-                    log("Blood Group Index : $index");
-                    log("Blood Group : $data");
-                  },
-                ),
+                child: Obx(() {
+                  return BloodGroupWidget(
+                    onTap: () {
+                      log("Blood Group Index : $index");
+                      log("Blood Group : $data");
+                      selectBloodGropController.getSelectedIndex(
+                        newValue: index,
+                      );
+                    },
+                    title: data,
+                    bgColor:
+                        selectBloodGropController.selectedIndex.value == index
+                        ? AppColors.c620000
+                        : AppColors.c111111,
+                    index: selectBloodGropController.selectedIndex.value,
+                  );
+                }),
               );
             }),
           ),
