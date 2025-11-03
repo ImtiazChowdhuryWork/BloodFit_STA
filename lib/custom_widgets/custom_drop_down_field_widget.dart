@@ -49,6 +49,7 @@ final class CustomDropdownField<T> extends StatelessWidget {
         autovalidateMode: validation
             ? AutovalidateMode.always
             : AutovalidateMode.onUserInteraction,
+        menuMaxHeight: 400.h,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.transparent,

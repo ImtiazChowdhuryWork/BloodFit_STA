@@ -48,6 +48,13 @@ class $AssetsIconsGen {
   /// File path: assets/icons/bread_icon.svg
   String get breadIcon => 'assets/icons/bread_icon.svg';
 
+  /// File path: assets/icons/bullet_not_selected_icon.svg
+  String get bulletNotSelectedIcon =>
+      'assets/icons/bullet_not_selected_icon.svg';
+
+  /// File path: assets/icons/bullet_selected_icon.svg
+  String get bulletSelectedIcon => 'assets/icons/bullet_selected_icon.svg';
+
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
 
@@ -174,6 +181,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/promo_code_icon.svg
   String get promoCodeIcon => 'assets/icons/promo_code_icon.svg';
 
+  /// File path: assets/icons/pwd_not_obsecured.svg
+  String get pwdNotObsecured => 'assets/icons/pwd_not_obsecured.svg';
+
+  /// File path: assets/icons/pwd_obsecured.svg
+  String get pwdObsecured => 'assets/icons/pwd_obsecured.svg';
+
   /// File path: assets/icons/red_bell_icon.svg
   String get redBellIcon => 'assets/icons/red_bell_icon.svg';
 
@@ -207,6 +220,8 @@ class $AssetsIconsGen {
     bellIcon,
     bloodDrop,
     breadIcon,
+    bulletNotSelectedIcon,
+    bulletSelectedIcon,
     cameraIcon,
     cameraIconWithoutBg,
     cancelIcon,
@@ -249,6 +264,8 @@ class $AssetsIconsGen {
     privacyPolicyIcon,
     progressIcon,
     promoCodeIcon,
+    pwdNotObsecured,
+    pwdObsecured,
     redBellIcon,
     scanIcon,
     searchIcon,
@@ -379,13 +396,13 @@ class $AssetsImagesGen {
   AssetGenImage get trashCanImage =>
       const AssetGenImage('assets/images/trash_can_image.png');
 
-  /// File path: assets/images/upper_body_not_selected.png
-  AssetGenImage get upperBodyNotSelected =>
-      const AssetGenImage('assets/images/upper_body_not_selected.png');
+  /// File path: assets/images/upper_body_not_selected_image.png
+  AssetGenImage get upperBodyNotSelectedImage =>
+      const AssetGenImage('assets/images/upper_body_not_selected_image.png');
 
-  /// File path: assets/images/upper_body_selected.png
-  AssetGenImage get upperBodySelected =>
-      const AssetGenImage('assets/images/upper_body_selected.png');
+  /// File path: assets/images/uppper_body_selected_image.png
+  AssetGenImage get uppperBodySelectedImage =>
+      const AssetGenImage('assets/images/uppper_body_selected_image.png');
 
   /// File path: assets/images/userImage.png
   AssetGenImage get userImage =>
@@ -426,8 +443,8 @@ class $AssetsImagesGen {
     stayFitImage,
     timelineImage,
     trashCanImage,
-    upperBodyNotSelected,
-    upperBodySelected,
+    upperBodyNotSelectedImage,
+    uppperBodySelectedImage,
     userImage,
     workoutImage,
   ];

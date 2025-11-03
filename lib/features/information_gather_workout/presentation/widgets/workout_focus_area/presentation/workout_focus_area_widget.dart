@@ -65,8 +65,9 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                 onTap: () {
                   igWorkoutFocusAreaController.setUpperBodySelection();
                 },
-                selectedImagePath: Assets.images.upperBodySelected.path,
-                unselectedImagePath: Assets.images.upperBodyNotSelected.path,
+                selectedImagePath: Assets.images.uppperBodySelectedImage.path,
+                unselectedImagePath:
+                    Assets.images.upperBodyNotSelectedImage.path,
                 right: 40,
                 top: 100,
               ),

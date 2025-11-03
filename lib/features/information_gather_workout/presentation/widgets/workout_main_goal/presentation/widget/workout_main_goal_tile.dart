@@ -24,14 +24,22 @@ class WorkoutMainGoalTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(10.r),
       child: Container(
         padding: EdgeInsets.only(left: 32.w, right: 10.w),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.cde0000 : AppColors.cfefefe,
-          borderRadius: BorderRadius.circular(10.r),
-          border: isSelected
-              ? Border.all(color: AppColors.cde0000, width: 2.w)
+          color: !isSelected ? AppColors.cfefefe : null,
+          gradient: isSelected
+              ? LinearGradient(
+                  colors: [
+                    AppColors.cb20000, // Left side
+                    AppColors.c4e000b, // Right side
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )
               : null,
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,14 +70,10 @@ class WorkoutMainGoalTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColors.cfefefe,
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.cde0000,
-                          width: 2.w,
-                        ),
                       ),
                       child: Icon(
                         Icons.check,
-                        color: AppColors.cde0000,
+                        color: AppColors.c3c3c3c,
                         size: 16.h,
                       ),
                     ),

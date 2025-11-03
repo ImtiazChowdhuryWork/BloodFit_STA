@@ -214,6 +214,7 @@ class EditProfileScreen extends StatelessWidget {
                 CustomElevatedButton(
                   onTap: () {
                     log("Button -> Save Changes Button Taped!");
+                    Get.back();
                   },
                   buttonHeight: 52.h,
                   borderRadius: 24.r,

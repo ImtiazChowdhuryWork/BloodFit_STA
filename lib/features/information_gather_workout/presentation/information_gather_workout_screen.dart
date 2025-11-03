@@ -92,6 +92,7 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
               if (isLastPage) {
                 // Finish onboarding or navigate to next screen
                 log("Information Gathering Completed!");
+                // controller.currentIndex.value = 0;
                 // Example navigation:
                 Get.toNamed(Routes.youAreAllSetScreen);
               } else {

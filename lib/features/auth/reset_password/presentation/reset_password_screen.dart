@@ -5,11 +5,13 @@ import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../constants/text_font_style.dart';
 import '../../../../custom_widgets/app_logo_widget.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
+import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 import '../../../../routes/routes.dart';
 
@@ -56,15 +58,14 @@ class ResetPasswordScreen extends StatelessWidget {
                     controller: controller.newPasswordController,
                     isPass: true,
                     isObsecure: controller.isNewPasswordVisible.value,
-                    suffixIcon: InkWell(
+                    suffixIcon: GestureDetector(
                       onTap: () {
                         controller.setNewPasswordVisibility();
                       },
-                      child: Icon(
+                      child: SvgPicture.asset(
                         controller.isNewPasswordVisible.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: AppColors.cfefefe,
+                            ? Assets.icons.pwdNotObsecured
+                            : Assets.icons.pwdObsecured,
                       ),
                     ),
                     hintText: "Enter Your New Password",
@@ -78,15 +79,14 @@ class ResetPasswordScreen extends StatelessWidget {
                     controller: controller.confirmPasswordController,
                     isPass: true,
                     isObsecure: controller.isConfirmNewPasswordVisible.value,
-                    suffixIcon: InkWell(
+                    suffixIcon: GestureDetector(
                       onTap: () {
                         controller.setConfirmNewPasswordVisibility();
                       },
-                      child: Icon(
+                      child: SvgPicture.asset(
                         controller.isConfirmNewPasswordVisible.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: AppColors.cfefefe,
+                            ? Assets.icons.pwdNotObsecured
+                            : Assets.icons.pwdObsecured,
                       ),
                     ),
                     hintText: "Confirm Your New Password",

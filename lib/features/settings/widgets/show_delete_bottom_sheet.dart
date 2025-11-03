@@ -44,20 +44,21 @@ void showDeleteBottomSheet({
             "Are You Sure You Want To Delete Your Account?",
             style: TextFontStyle.headline12w400cfefefeStylePoppins,
           ),
-          UIHelper.verticalSpace(24.h),
+          UIHelper.verticalSpace(80.h),
 
           /// Trash Box Image
           Container(
-            height: 220.h,
-            width: 220.w,
+            height: 150.h,
+            width: 150.w,
             padding: EdgeInsets.all(40.sp),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.cb20000),
             ),
             child: Image.asset(
-              height: 120.h,
-              width: 120.h,
+              height: 100.h,
+              width: 100.w,
               fit: BoxFit.cover,
               Assets.images.trashCanImage.path,
             ),
