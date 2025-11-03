@@ -30,7 +30,7 @@ class BodyShapeShowingWidget extends StatelessWidget {
               ? LinearGradient(
                   colors: [
                     AppColors.cb20000, // Left side
-                    AppColors.c220e0e, // Right side
+                    AppColors.c4e000b, // Right side
                   ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,

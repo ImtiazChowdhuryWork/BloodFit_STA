@@ -29,12 +29,18 @@ class PreferedWorkOutLevelShowingWidget extends StatelessWidget {
         padding: EdgeInsets.all(12.sp),
         margin: EdgeInsets.only(bottom: 12.h),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.cb20000 : AppColors.cfefefe,
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(
-            color: isSelected ? AppColors.cb20000 : Colors.transparent,
-            width: 2.w,
-          ),
+          color: !isSelected ? AppColors.cfefefe : null,
+          gradient: isSelected
+              ? LinearGradient(
+                  colors: [
+                    AppColors.cb20000, // Left side
+                    AppColors.c4e000b, // Right side
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )
+              : null,
         ),
         child: Row(
           children: [
@@ -53,12 +59,15 @@ class PreferedWorkOutLevelShowingWidget extends StatelessWidget {
               ),
             ),
             Container(
-              width: 14.w,
-              height: 14.h,
+              width: 24.w,
+              height: 24.h,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected ? Colors.white : AppColors.cb20000,
+                color: isSelected ? Colors.white : AppColors.c3c3c3c,
               ),
+              child: isSelected
+                  ? Icon(Icons.done, color: AppColors.c111111, size: 20.sp)
+                  : SizedBox.shrink(),
             ),
           ],
         ),

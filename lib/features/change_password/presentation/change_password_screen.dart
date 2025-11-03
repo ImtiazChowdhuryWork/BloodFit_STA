@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
@@ -10,6 +11,7 @@ import '../../../controllers/change_password_screen_controller.dart';
 import '../../../custom_widgets/custom_elevated_button.dart';
 import '../../../custom_widgets/custom_text_form_field.dart';
 import '../../../custom_widgets/go_back_widget.dart';
+import '../../../gen/assets.gen.dart';
 import '../../../helper/ui_helpers.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
@@ -47,11 +49,10 @@ class ChangePasswordScreen extends StatelessWidget {
                     onTap: () {
                       controller.setOldPasswordVisibility();
                     },
-                    child: Icon(
+                    child: SvgPicture.asset(
                       controller.isOldPasswordVisible.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: AppColors.cfefefe,
+                          ? Assets.icons.pwdNotObsecured
+                          : Assets.icons.pwdObsecured,
                     ),
                   ),
                   hintText: "Enter Your Old Password",
@@ -69,11 +70,10 @@ class ChangePasswordScreen extends StatelessWidget {
                     onTap: () {
                       controller.setNewPasswordVisibility();
                     },
-                    child: Icon(
+                    child: SvgPicture.asset(
                       controller.isNewPasswordVisible.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: AppColors.cfefefe,
+                          ? Assets.icons.pwdNotObsecured
+                          : Assets.icons.pwdObsecured,
                     ),
                   ),
                   hintText: "Enter Your New Password",
@@ -91,11 +91,10 @@ class ChangePasswordScreen extends StatelessWidget {
                     onTap: () {
                       controller.setConfirmNewPasswordVisibility();
                     },
-                    child: Icon(
+                    child: SvgPicture.asset(
                       controller.isConfirmNewPasswordVisible.value
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: AppColors.cfefefe,
+                          ? Assets.icons.pwdNotObsecured
+                          : Assets.icons.pwdObsecured,
                     ),
                   ),
                   hintText: "Enter Your New Password",
@@ -108,6 +107,7 @@ class ChangePasswordScreen extends StatelessWidget {
               CustomElevatedButton(
                 onTap: () {
                   log("Button -> Save Changes Button Taped!");
+                  Get.back();
                 },
                 buttonHeight: 52.h,
                 borderRadius: 24.r,

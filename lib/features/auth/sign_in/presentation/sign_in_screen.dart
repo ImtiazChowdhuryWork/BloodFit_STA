@@ -4,11 +4,13 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/sign_in_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../custom_widgets/app_logo_widget.dart';
@@ -69,10 +71,10 @@ class SignInScreen extends StatelessWidget {
                           "Is Password Visible : ${controller.isPasswordVisible}",
                         );
                       },
-                      child: Icon(
+                      child: SvgPicture.asset(
                         controller.isPasswordVisible.value
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                            ? Assets.icons.pwdNotObsecured
+                            : Assets.icons.pwdObsecured,
                         color: AppColors.cfefefe,
                       ),
                     ),

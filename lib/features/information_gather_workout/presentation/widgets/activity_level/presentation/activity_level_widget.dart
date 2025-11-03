@@ -61,17 +61,11 @@ class ActivityLevelWidget extends StatelessWidget {
             children: [
               Text(
                 "Sedentary",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 12.sp,
-                ),
+                style: TextFontStyle.headline14w400cfefefeStylePoppins,
               ),
               Text(
                 "Very Active",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 12.sp,
-                ),
+                style: TextFontStyle.headline14w400cfefefeStylePoppins,
               ),
             ],
           ),

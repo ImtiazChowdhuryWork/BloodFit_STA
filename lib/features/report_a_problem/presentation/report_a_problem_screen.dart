@@ -55,7 +55,6 @@ class ReportAProblemScreen extends StatelessWidget {
                     style: TextFontStyle.headline14w400cc6c6c6StylePoppins,
                   ),
                   items: AppList.reportProblemTypeList.map((String item) {
-                    // final isLast = item == AppList.reportProblemTypeList.last;
                     return DropdownMenuItem<String>(
                       value: item,
                       child: Text(
@@ -72,7 +71,7 @@ class ReportAProblemScreen extends StatelessWidget {
                   },
                   iconStyleData: IconStyleData(
                     icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    iconEnabledColor: Colors.yellow,
+                    iconEnabledColor: AppColors.cc6c6c6,
                     iconDisabledColor: Colors.grey,
                   ),
                   dropdownStyleData: DropdownStyleData(
@@ -105,8 +104,7 @@ class ReportAProblemScreen extends StatelessWidget {
             maxLines: 8,
             decoration: InputDecoration(
               filled: true,
-              fillColor: AppColors.c6a6a6a,
-
+              fillColor: AppColors.c3c3c3c,
               hintText: "Describe What Issue You’re Facing",
               hintStyle: TextFontStyle.headline14w400c999999StylePoppins,
               border: OutlineInputBorder(borderSide: BorderSide.none),
