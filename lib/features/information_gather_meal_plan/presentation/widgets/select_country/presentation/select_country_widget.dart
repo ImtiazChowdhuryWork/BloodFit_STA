@@ -28,7 +28,7 @@ class SelectCountryWidget extends StatelessWidget {
         CustomFormField(
           hintText: "Search",
           borderRadius: 16.r,
-          suffixIcon: SvgPicture.asset(Assets.icons.searchIocn),
+          suffixIcon: SvgPicture.asset(Assets.icons.searchIcon),
         ),
         UIHelper.verticalSpace(24.h),
 

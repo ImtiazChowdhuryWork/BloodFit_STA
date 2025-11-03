@@ -44,7 +44,7 @@ class SearchAndSelectWidget extends StatelessWidget {
 
             suffixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 16.h),
-              child: SvgPicture.asset(Assets.icons.searchIocn),
+              child: SvgPicture.asset(Assets.icons.searchIcon),
             ),
             filled: true,
             fillColor: AppColors.c111111,

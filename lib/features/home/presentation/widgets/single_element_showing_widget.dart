@@ -20,6 +20,7 @@ class SingleElementShowingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 75.w,
       padding: EdgeInsets.all(10.sp),
       decoration: BoxDecoration(
         color: AppColors.c3c3c3c,

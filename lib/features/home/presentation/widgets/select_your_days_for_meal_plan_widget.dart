@@ -34,7 +34,7 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
         ///Section : ------///Select Day's///----------------
         Container(
           width: 1.sw,
-          height: 120.h,
+          height: 100.h,
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 18.h),
           decoration: BoxDecoration(
             color: AppColors.c262626,
@@ -42,8 +42,12 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
           ),
           child: Obx(() {
             // Create a list of widgets inside the Obx so GetX can track observables properly
-            List<Widget> dayWidgets = homeScreenController.weekDayList.map((day) {
-              bool isSelected = homeScreenController.selectedDaysList.contains(day);
+            List<Widget> dayWidgets = homeScreenController.weekDayList.map((
+              day,
+            ) {
+              bool isSelected = homeScreenController.selectedDaysList.contains(
+                day,
+              );
               return HomeScreenSelectableDaysShowingWidget(
                 onTap: () {
                   showWeekDayBottomSheet();
@@ -52,11 +56,12 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
                 title: day.dayNames.substring(0, 3),
               );
             }).toList();
-            
+
             return ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: dayWidgets.length,
-              separatorBuilder: (context, index) => UIHelper.horizontalSpace(10.w),
+              separatorBuilder: (context, index) =>
+                  UIHelper.horizontalSpace(10.w),
               itemBuilder: (context, index) => dayWidgets[index],
             );
           }),

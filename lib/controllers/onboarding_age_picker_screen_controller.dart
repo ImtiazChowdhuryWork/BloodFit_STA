@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OnboardingAgePickerScreenController extends GetxController {
+class IgAgePickerScreenController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxDouble currentScroll = 0.0.obs;
 
@@ -12,7 +12,7 @@ class OnboardingAgePickerScreenController extends GetxController {
 
   late final List<int> numbers;
 
-  OnboardingAgePickerScreenController({
+  IgAgePickerScreenController({
     required this.itemWidth,
     required this.minValue,
     required this.maxValue,
@@ -22,10 +22,9 @@ class OnboardingAgePickerScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    numbers = List.generate(
-      maxValue - minValue + 1,
-      (index) => minValue + index,
-    );
+    numbers = List.generate(maxValue - minValue + 1, (index) {
+      return combineMinValueAndIndex(minValue: minValue, indexValue: index);
+    });
 
     scrollController.addListener(() {
       currentScroll.value = scrollController.offset;
@@ -49,6 +48,14 @@ class OnboardingAgePickerScreenController extends GetxController {
       if (isIndexCentered(i, scrollOffset, containerWidth)) return i;
     }
     return 0;
+  }
+
+  int combineMinValueAndIndex({
+    required int minValue,
+    required int indexValue,
+  }) {
+    int combinedValue = minValue + indexValue;
+    return combinedValue;
   }
 
   @override

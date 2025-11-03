@@ -33,11 +33,10 @@ class AgeSelectorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final tag = _tag();
 
-    final controller =
-        Get.isRegistered<OnboardingAgePickerScreenController>(tag: tag)
-        ? Get.find<OnboardingAgePickerScreenController>(tag: tag)
+    final controller = Get.isRegistered<IgAgePickerScreenController>(tag: tag)
+        ? Get.find<IgAgePickerScreenController>(tag: tag)
         : Get.put(
-            OnboardingAgePickerScreenController(
+            IgAgePickerScreenController(
               itemWidth: itemWidth.w,
               itemSpacing: itemSpacing.w,
               minValue: minValue,

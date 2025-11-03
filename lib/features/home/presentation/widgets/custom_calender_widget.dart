@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../features/home/presentation/widgets/calendar_with_progress_bar_widget.dart';
+import 'calendar_with_progress_bar_widget.dart';
 
 class CustomCalenderWidget extends StatelessWidget {
   const CustomCalenderWidget({super.key});
@@ -34,6 +34,7 @@ class CustomCalenderWidget extends StatelessWidget {
               log("${data.month} month");
               log("${data.year} year");
             },
+            borderRadius: BorderRadius.circular(8.r),
             child: CalenderWithProgressbarWidget(
               height: 44.h,
               width: 44.w,
@@ -45,7 +46,7 @@ class CustomCalenderWidget extends StatelessWidget {
               progressColor: AppColors.cb20000,
               completedCaloriesIconPath: Assets.icons.fireGray,
               isCalorieTaskCompleted: true,
-              isCheatDay: true,
+              isCheatDay: false,
             ),
           );
         },

@@ -180,8 +180,8 @@ class $AssetsIconsGen {
   /// File path: assets/icons/scan_icon.svg
   String get scanIcon => 'assets/icons/scan_icon.svg';
 
-  /// File path: assets/icons/search_iocn.svg
-  String get searchIocn => 'assets/icons/search_iocn.svg';
+  /// File path: assets/icons/search_icon.svg
+  String get searchIcon => 'assets/icons/search_icon.svg';
 
   /// File path: assets/icons/settings_icon.svg
   String get settingsIcon => 'assets/icons/settings_icon.svg';
@@ -251,7 +251,7 @@ class $AssetsIconsGen {
     promoCodeIcon,
     redBellIcon,
     scanIcon,
-    searchIocn,
+    searchIcon,
     settingsIcon,
     trashIcon,
     warningIcon,

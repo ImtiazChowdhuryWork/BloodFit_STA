@@ -45,11 +45,10 @@ class HomeScreenSelectableDaysShowingWidget extends StatelessWidget {
               ),
               child: Icon(
                 Icons.done,
-                size: 14.sp,
+                size: 10.sp,
                 color: isSelected ? AppColors.c3c3c3c : AppColors.cfefefe,
               ),
             ),
-            UIHelper.verticalSpace(10.h),
             Text(title, style: TextFontStyle.headline16w500cfefefeStylePoppins),
           ],
         ),

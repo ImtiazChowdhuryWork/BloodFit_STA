@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../custom_widgets/custom_calender_widget.dart';
+import 'widgets/custom_calender_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -67,28 +67,28 @@ class HomeScreen extends StatelessWidget {
                   color: AppColors.c262626,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ///Section : ------------///Total Calories///---------------
-                    TotalKCalWidget(
-                      size: 150.w,
-                      progress: 0.75,
-                      strokeWidth: 8,
-                      capColor: AppColors.cFFFFFF,
-                      capSizeMultiplier: 0.3,
-                      capPadding: 0,
-                      capRadialOffset: 0,
-                      progressColor: AppColors.cb20000,
-                      progressBoldColor: AppColors.c7e0101,
-                    ),
-                    UIHelper.horizontalSpace(16.w),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ///Section : ------------///Total Calories///---------------
+                      TotalKCalWidget(
+                        size: 120.w,
+                        progress: 0.75,
+                        strokeWidth: 8,
+                        capColor: AppColors.cFFFFFF,
+                        capSizeMultiplier: 0.3,
+                        capPadding: 0,
+                        capRadialOffset: 0,
+                        progressColor: AppColors.cb20000,
+                        progressBoldColor: AppColors.c7e0101,
+                      ),
+                      UIHelper.horizontalSpace(16.w),
 
-                    ///Section : ------------///Total Carbs///---------------
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ///Section : ------------///Total Carbs///---------------
+                      Row(
                         children: [
                           ///Section : ------------///Total Carbs///---------------
                           SingleElementShowingWidget(
@@ -96,6 +96,7 @@ class HomeScreen extends StatelessWidget {
                             elementTitle: "Carbs",
                             elementAmount: 30,
                           ),
+                          UIHelper.horizontalSpace(8.w),
 
                           ///Section : ------------///Total protein///---------------
                           SingleElementShowingWidget(
@@ -103,6 +104,7 @@ class HomeScreen extends StatelessWidget {
                             elementTitle: "Protein",
                             elementAmount: 30,
                           ),
+                          UIHelper.horizontalSpace(8.w),
 
                           ///Section : ------------///Total Carbs///---------------
                           SingleElementShowingWidget(
@@ -112,8 +114,8 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               UIHelper.verticalSpace(24.h),

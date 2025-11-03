@@ -1,56 +1,23 @@
+import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/gen/assets.gen.dart';
+import 'package:bloodfit/controllers/ig_whats_your_activity_level_controller.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-// Example model
-class ActivityLevelModel {
-  final String imagePath;
-  final String subTitle;
-  ActivityLevelModel({required this.imagePath, required this.subTitle});
-}
+import '../widgets/activity_Image_and_desription_showing_widget.dart';
+import '../widgets/selectable_bar_widget.dart';
 
-// Data
-class ActivityLevelData {
-  static List<ActivityLevelModel> activityLevelList = [
-    ActivityLevelModel(
-      imagePath: Assets.images.activityLevelSedentary.path,
-      subTitle:
-          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
-    ),
-    ActivityLevelModel(
-      imagePath: Assets.images.activityLevelLightlyActive.path,
-      subTitle:
-          "If You Engage In Light Physical Activity Such As Walking Or Doing Household Chores, This Level Is For You.",
-    ),
-    ActivityLevelModel(
-      imagePath: Assets.images.activityLevelActive.path,
-      subTitle:
-          "If You Regularly Exercise Or Have A Physically Demanding Job, This Level Is For You.",
-    ),
-    ActivityLevelModel(
-      imagePath: Assets.images.activityLevelVeryActive.path,
-      subTitle:
-          "If You Perform Intense Physical Activity Or Sports Most Days, This Level Is For You.",
-    ),
-  ];
-}
+class ActivityLevelWidget extends StatelessWidget {
+  ActivityLevelWidget({super.key});
 
-// Widget
-class ActivityLevelWidget extends StatefulWidget {
-  const ActivityLevelWidget({super.key});
-
-  @override
-  State<ActivityLevelWidget> createState() => _ActivityLevelWidgetState();
-}
-
-class _ActivityLevelWidgetState extends State<ActivityLevelWidget> {
-  int selectedIndex = 0;
+  final IgWhatsYourActivityLevelController activityLevelController =
+      Get.find<IgWhatsYourActivityLevelController>();
 
   @override
   Widget build(BuildContext context) {
-    final list = ActivityLevelData.activityLevelList;
+    final list = AppList.activityLevelList;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,70 +26,33 @@ class _ActivityLevelWidgetState extends State<ActivityLevelWidget> {
           "What’s Your Activity Level?",
           style: TextFontStyle.headline22w500cfefefeStylePoppins,
         ),
-        UIHelper.verticalSpace(20.h),
+        UIHelper.verticalSpace(0.1.sh),
 
         // --- Image & Description ---
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Column(
-            children: [
-              Image.asset(list[selectedIndex].imagePath, height: 100.h),
-              UIHelper.verticalSpace(10.h),
-              Text(
-                list[selectedIndex].subTitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14.sp,
-                  height: 1.4,
-                ),
-              ),
-            ],
-          ),
-        ),
+        Obx(() {
+          final selectedIndex =
+              activityLevelController.selectedActivityLevel.value;
+          return ActivityImageAndDescriptionShowingWidget(
+            selectedIndex: selectedIndex,
+            imagePath: list[selectedIndex].imagePath,
+            subTitle: list[selectedIndex].subTitle,
+          );
+        }),
 
-        UIHelper.verticalSpace(20.h),
+        UIHelper.verticalSpace(56.h),
 
         // --- Selector Bar ---
-        Container(
-          height: 14.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(50.r),
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(list.length, (index) {
-              final isSelected = index == selectedIndex;
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  width: 20.w,
-                  height: 20.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.black,
-                    border: isSelected
-                        ? Border.all(color: Colors.red, width: 3.w)
-                        : null,
-                  ),
-                ),
-              );
-            }),
-          ),
-        ),
+        Obx(() {
+          return SelectableBarWidget(
+            onChanged: (index) {
+              activityLevelController.setSelectedActivityLevel(newValue: index);
+            },
+            selectedIndex: activityLevelController.selectedActivityLevel.value,
+          );
+        }),
+
         UIHelper.verticalSpace(10.h),
+
         // --- Labels ---
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
