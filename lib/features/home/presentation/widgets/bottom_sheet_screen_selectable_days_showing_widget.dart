@@ -45,6 +45,7 @@ class _BottomSheetScreenSelectableDaysShowingWidgetState
   Widget build(BuildContext context) {
     return InkWell(
       onTap: widget.onTap,
+      borderRadius: BorderRadius.circular(8.r),
       child: Container(
         // Remove fixed padding or add constraints that allow shrinking
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),

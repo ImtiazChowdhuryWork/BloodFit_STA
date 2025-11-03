@@ -70,7 +70,10 @@ class CalenderWithProgressbarWidget extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: isCheatDay
-                    ? SvgPicture.asset(Assets.icons.documentIcon)
+                    ? Padding(
+                        padding: EdgeInsets.all(8.sp),
+                        child: SvgPicture.asset(Assets.icons.documentIcon),
+                      )
                     : isCalorieTaskCompleted
                     ? SvgPicture.asset(completedCaloriesIconPath)
                     : Text(
