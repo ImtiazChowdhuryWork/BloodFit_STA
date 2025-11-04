@@ -24,4 +24,16 @@ class IgWorkoutFocusAreaController extends GetxController {
       return;
     }
   }
+
+  ///Section : Body Part -> UpperBody
+  RxBool isLegSelected = false.obs;
+  void setLegSelection() {
+    if (isLegSelected.value == true) {
+      isLegSelected.value = false;
+    } else if (isLegSelected.value == false) {
+      isLegSelected.value = true;
+    } else {
+      return;
+    }
+  }
 }

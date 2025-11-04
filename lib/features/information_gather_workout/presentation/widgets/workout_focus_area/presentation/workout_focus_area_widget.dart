@@ -4,6 +4,7 @@ import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../constants/text_font_style.dart';
@@ -29,7 +30,7 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
         Container(
           width: 1.sw,
           height: 0.5.sh,
-          decoration: BoxDecoration(color: Colors.purple),
+          // decoration: BoxDecoration(color: Colors.purple),
           child: Stack(
             children: [
               ///Section : Full  Body Image
@@ -37,40 +38,66 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                 right: 0.w,
                 top: 0.h,
                 bottom: 0.h,
-                child: Card(
-                  child: Image.asset(
-                    Assets.images.focusAreaFullBodyImage.path,
-                    fit: BoxFit.contain,
-                    height: 1.sh,
-                    width: 150.w,
-                  ),
+                child: Image.asset(
+                  Assets.images.focusAreaFullBodyImage.path,
+                  fit: BoxFit.contain,
+                  height: 1.sh,
+                  width: 150.w,
                 ),
               ),
 
               ///Section : Arms
-              FocusAreaItem(
-                isSelected: igWorkoutFocusAreaController.isArmsSelected,
-                onTap: () {
-                  igWorkoutFocusAreaController.setArmsSelection();
-                },
-                selectedImagePath: Assets.images.armsSelected.path,
-                unselectedImagePath: Assets.images.armsNotSelected.path,
-                right: 80,
-                top: 70,
-              ),
+              Obx(() {
+                return FocusAreaItem(
+                  onTap: () {
+                    igWorkoutFocusAreaController.setArmsSelection();
+                  },
+                  title: "Arms",
+                  buttonWidth: 180,
+                  buttonTopPosition: 70,
+                  buttonLeftPosition: 0,
+                  pointerImagPath:
+                      igWorkoutFocusAreaController.isArmsSelected.value
+                      ? Assets.icons.armsArowSelected
+                      : Assets.icons.armsArrowNotSelected,
+                  pointerTopPosition:
+                      igWorkoutFocusAreaController.isArmsSelected.value
+                      ? -5
+                      : 20,
+                  pointerRightPosition:
+                      igWorkoutFocusAreaController.isArmsSelected.value
+                      ? -142
+                      : -130,
+                  isSelected: igWorkoutFocusAreaController.isArmsSelected.value,
+                );
+              }),
 
               ///Section : UpperBody
-              FocusAreaItem(
-                isSelected: igWorkoutFocusAreaController.isUpperBodySelected,
-                onTap: () {
-                  igWorkoutFocusAreaController.setUpperBodySelection();
-                },
-                selectedImagePath: Assets.images.uppperBodySelectedImage.path,
-                unselectedImagePath:
-                    Assets.images.upperBodyNotSelectedImage.path,
-                right: 40,
-                top: 100,
-              ),
+              Obx(() {
+                return FocusAreaItem(
+                  onTap: () {
+                    igWorkoutFocusAreaController.setUpperBodySelection();
+                  },
+                  title: "Upper Body",
+                  buttonWidth: 150,
+                  buttonTopPosition: 140,
+                  buttonLeftPosition: 0,
+                  pointerImagPath:
+                      igWorkoutFocusAreaController.isUpperBodySelected.value
+                      ? Assets.icons.upperBodyArrowSelected
+                      : Assets.icons.upperBodyArrowNotSelected,
+                  pointerTopPosition:
+                      igWorkoutFocusAreaController.isUpperBodySelected.value
+                      ? -70
+                      : -70,
+                  pointerRightPosition:
+                      igWorkoutFocusAreaController.isUpperBodySelected.value
+                      ? -275
+                      : -270,
+                  isSelected:
+                      igWorkoutFocusAreaController.isUpperBodySelected.value,
+                );
+              }),
             ],
           ),
         ),
