@@ -33,6 +33,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ai_icon.svg
   String get aiIcon => 'assets/icons/ai_icon.svg';
 
+  /// File path: assets/icons/arms_arow_selected.svg
+  String get armsArowSelected => 'assets/icons/arms_arow_selected.svg';
+
+  /// File path: assets/icons/arms_arrow_not_selected.svg
+  String get armsArrowNotSelected => 'assets/icons/arms_arrow_not_selected.svg';
+
   /// File path: assets/icons/arrow_left.svg
   String get arrowLeft => 'assets/icons/arrow_left.svg';
 
@@ -47,13 +53,6 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/bread_icon.svg
   String get breadIcon => 'assets/icons/bread_icon.svg';
-
-  /// File path: assets/icons/bullet_not_selected_icon.svg
-  String get bulletNotSelectedIcon =>
-      'assets/icons/bullet_not_selected_icon.svg';
-
-  /// File path: assets/icons/bullet_selected_icon.svg
-  String get bulletSelectedIcon => 'assets/icons/bullet_selected_icon.svg';
 
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
@@ -202,6 +201,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/trash_icon.svg
   String get trashIcon => 'assets/icons/trash_icon.svg';
 
+  /// File path: assets/icons/upper_body_arrow_not_selected.svg
+  String get upperBodyArrowNotSelected =>
+      'assets/icons/upper_body_arrow_not_selected.svg';
+
+  /// File path: assets/icons/upper_body_arrow_selected.svg
+  String get upperBodyArrowSelected =>
+      'assets/icons/upper_body_arrow_selected.svg';
+
   /// File path: assets/icons/warning_icon.svg
   String get warningIcon => 'assets/icons/warning_icon.svg';
 
@@ -215,13 +222,13 @@ class $AssetsIconsGen {
   List<String> get values => [
     absIcon,
     aiIcon,
+    armsArowSelected,
+    armsArrowNotSelected,
     arrowLeft,
     avocadoIcon,
     bellIcon,
     bloodDrop,
     breadIcon,
-    bulletNotSelectedIcon,
-    bulletSelectedIcon,
     cameraIcon,
     cameraIconWithoutBg,
     cancelIcon,
@@ -271,6 +278,8 @@ class $AssetsIconsGen {
     searchIcon,
     settingsIcon,
     trashIcon,
+    upperBodyArrowNotSelected,
+    upperBodyArrowSelected,
     warningIcon,
     workoutDumbleIcon,
     workoutIcon,
