@@ -27,6 +27,12 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/abs_arow_not_selected.svg
+  String get absArowNotSelected => 'assets/icons/abs_arow_not_selected.svg';
+
+  /// File path: assets/icons/abs_arrow_selected.svg
+  String get absArrowSelected => 'assets/icons/abs_arrow_selected.svg';
+
   /// File path: assets/icons/abs_icon.svg
   String get absIcon => 'assets/icons/abs_icon.svg';
 
@@ -53,6 +59,12 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/bread_icon.svg
   String get breadIcon => 'assets/icons/bread_icon.svg';
+
+  /// File path: assets/icons/butt_arrow_not_selected.svg
+  String get buttArrowNotSelected => 'assets/icons/butt_arrow_not_selected.svg';
+
+  /// File path: assets/icons/butt_arrow_selected.svg
+  String get buttArrowSelected => 'assets/icons/butt_arrow_selected.svg';
 
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
@@ -138,6 +150,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home_icon.svg
   String get homeIcon => 'assets/icons/home_icon.svg';
 
+  /// File path: assets/icons/leg_arrow_not_selected.svg
+  String get legArrowNotSelected => 'assets/icons/leg_arrow_not_selected.svg';
+
+  /// File path: assets/icons/leg_arrow_selected.svg
+  String get legArrowSelected => 'assets/icons/leg_arrow_selected.svg';
+
   /// File path: assets/icons/lemon_icon.svg
   String get lemonIcon => 'assets/icons/lemon_icon.svg';
 
@@ -220,6 +238,8 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
+    absArowNotSelected,
+    absArrowSelected,
     absIcon,
     aiIcon,
     armsArowSelected,
@@ -229,6 +249,8 @@ class $AssetsIconsGen {
     bellIcon,
     bloodDrop,
     breadIcon,
+    buttArrowNotSelected,
+    buttArrowSelected,
     cameraIcon,
     cameraIconWithoutBg,
     cancelIcon,
@@ -257,6 +279,8 @@ class $AssetsIconsGen {
     glutenIcon,
     googleIcon,
     homeIcon,
+    legArrowNotSelected,
+    legArrowSelected,
     lemonIcon,
     lightSweatIcon,
     lockIcon,
@@ -316,6 +340,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/arms_selected.png
   AssetGenImage get armsSelected =>
       const AssetGenImage('assets/images/arms_selected.png');
+
+  /// File path: assets/images/arms_selected_image.png
+  AssetGenImage get armsSelectedImage =>
+      const AssetGenImage('assets/images/arms_selected_image.png');
 
   /// File path: assets/images/blood_drop_transparent.gif
   AssetGenImage get bloodDropTransparent =>
@@ -409,6 +437,10 @@ class $AssetsImagesGen {
   AssetGenImage get upperBodyNotSelectedImage =>
       const AssetGenImage('assets/images/upper_body_not_selected_image.png');
 
+  /// File path: assets/images/upper_body_selected_image.png
+  AssetGenImage get upperBodySelectedImage =>
+      const AssetGenImage('assets/images/upper_body_selected_image.png');
+
   /// File path: assets/images/uppper_body_selected_image.png
   AssetGenImage get uppperBodySelectedImage =>
       const AssetGenImage('assets/images/uppper_body_selected_image.png');
@@ -430,6 +462,7 @@ class $AssetsImagesGen {
     appLogo,
     armsNotSelected,
     armsSelected,
+    armsSelectedImage,
     bloodDropTransparent,
     bloodFitSplashText,
     bodyTypeFlabby,
@@ -453,6 +486,7 @@ class $AssetsImagesGen {
     timelineImage,
     trashCanImage,
     upperBodyNotSelectedImage,
+    upperBodySelectedImage,
     uppperBodySelectedImage,
     userImage,
     workoutImage,

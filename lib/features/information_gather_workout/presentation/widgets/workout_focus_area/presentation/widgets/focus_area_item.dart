@@ -41,6 +41,23 @@ class FocusAreaItem extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          ///Section : Pointer
+          Positioned(
+            right: pointerRightPosition.w,
+            top: pointerTopPosition.h,
+            child: Opacity(
+              opacity: 0.9,
+              child: Container(
+                // width: 30.w, // Fixed width for consistent positioning
+                // height: 30.h, // Fixed height for consistent positioning
+                child: SvgPicture.asset(
+                  pointerImagPath,
+                  fit: BoxFit
+                      .contain, // Ensure the SVG fits properly in the container
+                ),
+              ),
+            ),
+          ),
           InkWell(
             onTap: onTap,
             child: Container(
@@ -90,16 +107,6 @@ class FocusAreaItem extends StatelessWidget {
                       : SizedBox.shrink(),
                 ],
               ),
-            ),
-          ),
-
-          ///Section : Pointer
-          Positioned(
-            right: pointerRightPosition.w,
-            top: pointerTopPosition.h,
-            child: Opacity(
-              opacity: 0.9,
-              child: SvgPicture.asset(pointerImagPath),
             ),
           ),
         ],

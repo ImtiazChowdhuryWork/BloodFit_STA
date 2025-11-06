@@ -33,10 +33,10 @@ class WorkoutVideoShowingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        /// Main Content (Your existing code)
+        ///Section : VideoThumbmail and Details showing Container
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
           decoration: BoxDecoration(
             color: AppColors.c191919,
             borderRadius: BorderRadius.circular(12.r),
@@ -49,28 +49,26 @@ class WorkoutVideoShowingWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// Video Thumbnail
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.r),
-                      child: Image.asset(
-                        imagePath,
-                        height: 138.h,
-                        width: 120.w,
-                        fit: BoxFit.cover,
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: Image.asset(
+                      imagePath,
+                      height: 150.h,
+                      width: 120.w,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  UIHelper.horizontalSpace(16.w),
+                  UIHelper.horizontalSpace(26.w),
 
                   /// Video Content
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// Title and Checkbox Row - PROPERLY ALIGNED
+                        /// Section : Title and Checkbox Row
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center, // This ensures proper vertical alignment
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             /// Title - takes available space
                             Expanded(
@@ -98,7 +96,7 @@ class WorkoutVideoShowingWidget extends StatelessWidget {
                         ),
                         UIHelper.verticalSpace(12.h),
 
-                        /// Workout Details
+                        /// Workout Details : Duration, Sets, Cal.
                         Row(
                           children: [
                             CurrentDayWorkoutDetailsTileWidget(

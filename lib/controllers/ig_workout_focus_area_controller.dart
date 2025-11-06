@@ -25,7 +25,31 @@ class IgWorkoutFocusAreaController extends GetxController {
     }
   }
 
-  ///Section : Body Part -> UpperBody
+  ///Section : Body Part -> Abs
+  RxBool isAbsSelected = false.obs;
+  void setAbsSelection() {
+    if (isAbsSelected.value == true) {
+      isAbsSelected.value = false;
+    } else if (isAbsSelected.value == false) {
+      isAbsSelected.value = true;
+    } else {
+      return;
+    }
+  }
+
+  ///Section : Body Part -> Butt
+  RxBool isButtSelected = false.obs;
+  void setButtSelection() {
+    if (isButtSelected.value == true) {
+      isButtSelected.value = false;
+    } else if (isButtSelected.value == false) {
+      isButtSelected.value = true;
+    } else {
+      return;
+    }
+  }
+
+  ///Section : Body Part -> leg
   RxBool isLegSelected = false.obs;
   void setLegSelection() {
     if (isLegSelected.value == true) {
