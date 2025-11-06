@@ -34,7 +34,7 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
         ///Section : ------///Select Day's///----------------
         Container(
           width: 1.sw,
-          height: 100.h,
+          height: 120.h,
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 18.h),
           decoration: BoxDecoration(
             color: AppColors.c262626,
