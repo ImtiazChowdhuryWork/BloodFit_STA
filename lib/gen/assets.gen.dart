@@ -27,23 +27,11 @@ class $AssetsFontsGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/abs_arow_not_selected.svg
-  String get absArowNotSelected => 'assets/icons/abs_arow_not_selected.svg';
-
-  /// File path: assets/icons/abs_arrow_selected.svg
-  String get absArrowSelected => 'assets/icons/abs_arrow_selected.svg';
-
   /// File path: assets/icons/abs_icon.svg
   String get absIcon => 'assets/icons/abs_icon.svg';
 
   /// File path: assets/icons/ai_icon.svg
   String get aiIcon => 'assets/icons/ai_icon.svg';
-
-  /// File path: assets/icons/arms_arow_selected.svg
-  String get armsArowSelected => 'assets/icons/arms_arow_selected.svg';
-
-  /// File path: assets/icons/arms_arrow_not_selected.svg
-  String get armsArrowNotSelected => 'assets/icons/arms_arrow_not_selected.svg';
 
   /// File path: assets/icons/arrow_left.svg
   String get arrowLeft => 'assets/icons/arrow_left.svg';
@@ -59,12 +47,6 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/bread_icon.svg
   String get breadIcon => 'assets/icons/bread_icon.svg';
-
-  /// File path: assets/icons/butt_arrow_not_selected.svg
-  String get buttArrowNotSelected => 'assets/icons/butt_arrow_not_selected.svg';
-
-  /// File path: assets/icons/butt_arrow_selected.svg
-  String get buttArrowSelected => 'assets/icons/butt_arrow_selected.svg';
 
   /// File path: assets/icons/camera_icon.svg
   String get cameraIcon => 'assets/icons/camera_icon.svg';
@@ -150,12 +132,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home_icon.svg
   String get homeIcon => 'assets/icons/home_icon.svg';
 
-  /// File path: assets/icons/leg_arrow_not_selected.svg
-  String get legArrowNotSelected => 'assets/icons/leg_arrow_not_selected.svg';
-
-  /// File path: assets/icons/leg_arrow_selected.svg
-  String get legArrowSelected => 'assets/icons/leg_arrow_selected.svg';
-
   /// File path: assets/icons/lemon_icon.svg
   String get lemonIcon => 'assets/icons/lemon_icon.svg';
 
@@ -219,14 +195,6 @@ class $AssetsIconsGen {
   /// File path: assets/icons/trash_icon.svg
   String get trashIcon => 'assets/icons/trash_icon.svg';
 
-  /// File path: assets/icons/upper_body_arrow_not_selected.svg
-  String get upperBodyArrowNotSelected =>
-      'assets/icons/upper_body_arrow_not_selected.svg';
-
-  /// File path: assets/icons/upper_body_arrow_selected.svg
-  String get upperBodyArrowSelected =>
-      'assets/icons/upper_body_arrow_selected.svg';
-
   /// File path: assets/icons/warning_icon.svg
   String get warningIcon => 'assets/icons/warning_icon.svg';
 
@@ -238,19 +206,13 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-    absArowNotSelected,
-    absArrowSelected,
     absIcon,
     aiIcon,
-    armsArowSelected,
-    armsArrowNotSelected,
     arrowLeft,
     avocadoIcon,
     bellIcon,
     bloodDrop,
     breadIcon,
-    buttArrowNotSelected,
-    buttArrowSelected,
     cameraIcon,
     cameraIconWithoutBg,
     cancelIcon,
@@ -279,8 +241,6 @@ class $AssetsIconsGen {
     glutenIcon,
     googleIcon,
     homeIcon,
-    legArrowNotSelected,
-    legArrowSelected,
     lemonIcon,
     lightSweatIcon,
     lockIcon,
@@ -302,8 +262,6 @@ class $AssetsIconsGen {
     searchIcon,
     settingsIcon,
     trashIcon,
-    upperBodyArrowNotSelected,
-    upperBodyArrowSelected,
     warningIcon,
     workoutDumbleIcon,
     workoutIcon,
@@ -312,6 +270,14 @@ class $AssetsIconsGen {
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/abs_arrow_not_selected.png
+  AssetGenImage get absArrowNotSelected =>
+      const AssetGenImage('assets/images/abs_arrow_not_selected.png');
+
+  /// File path: assets/images/abs_arrow_selected.png
+  AssetGenImage get absArrowSelected =>
+      const AssetGenImage('assets/images/abs_arrow_selected.png');
 
   /// File path: assets/images/activity_level_active.png
   AssetGenImage get activityLevelActive =>
@@ -333,17 +299,13 @@ class $AssetsImagesGen {
   AssetGenImage get appLogo =>
       const AssetGenImage('assets/images/app_logo.png');
 
-  /// File path: assets/images/arms_not_selected.png
-  AssetGenImage get armsNotSelected =>
-      const AssetGenImage('assets/images/arms_not_selected.png');
+  /// File path: assets/images/arms_arrow_not_selected.png
+  AssetGenImage get armsArrowNotSelected =>
+      const AssetGenImage('assets/images/arms_arrow_not_selected.png');
 
-  /// File path: assets/images/arms_selected.png
-  AssetGenImage get armsSelected =>
-      const AssetGenImage('assets/images/arms_selected.png');
-
-  /// File path: assets/images/arms_selected_image.png
-  AssetGenImage get armsSelectedImage =>
-      const AssetGenImage('assets/images/arms_selected_image.png');
+  /// File path: assets/images/arms_arrow_selected.png
+  AssetGenImage get armsArrowSelected =>
+      const AssetGenImage('assets/images/arms_arrow_selected.png');
 
   /// File path: assets/images/blood_drop_transparent.gif
   AssetGenImage get bloodDropTransparent =>
@@ -369,6 +331,14 @@ class $AssetsImagesGen {
   AssetGenImage get bodyTypeSkinny =>
       const AssetGenImage('assets/images/body_type_skinny.png');
 
+  /// File path: assets/images/butt_arrow_not_selected.png
+  AssetGenImage get buttArrowNotSelected =>
+      const AssetGenImage('assets/images/butt_arrow_not_selected.png');
+
+  /// File path: assets/images/butt_arrow_selected.png
+  AssetGenImage get buttArrowSelected =>
+      const AssetGenImage('assets/images/butt_arrow_selected.png');
+
   /// File path: assets/images/egg_omlet_image.jpg
   AssetGenImage get eggOmletImage =>
       const AssetGenImage('assets/images/egg_omlet_image.jpg');
@@ -388,6 +358,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/food_ludus_image.png
   AssetGenImage get foodLudusImage =>
       const AssetGenImage('assets/images/food_ludus_image.png');
+
+  /// File path: assets/images/leg_arrow_not_selected.png
+  AssetGenImage get legArrowNotSelected =>
+      const AssetGenImage('assets/images/leg_arrow_not_selected.png');
+
+  /// File path: assets/images/leg_arrow_selected.png
+  AssetGenImage get legArrowSelected =>
+      const AssetGenImage('assets/images/leg_arrow_selected.png');
 
   /// File path: assets/images/lose_weight_image.png
   AssetGenImage get loseWeightImage =>
@@ -433,17 +411,13 @@ class $AssetsImagesGen {
   AssetGenImage get trashCanImage =>
       const AssetGenImage('assets/images/trash_can_image.png');
 
-  /// File path: assets/images/upper_body_not_selected_image.png
-  AssetGenImage get upperBodyNotSelectedImage =>
-      const AssetGenImage('assets/images/upper_body_not_selected_image.png');
+  /// File path: assets/images/upper_body_arrow_not_selected.png
+  AssetGenImage get upperBodyArrowNotSelected =>
+      const AssetGenImage('assets/images/upper_body_arrow_not_selected.png');
 
-  /// File path: assets/images/upper_body_selected_image.png
-  AssetGenImage get upperBodySelectedImage =>
-      const AssetGenImage('assets/images/upper_body_selected_image.png');
-
-  /// File path: assets/images/uppper_body_selected_image.png
-  AssetGenImage get uppperBodySelectedImage =>
-      const AssetGenImage('assets/images/uppper_body_selected_image.png');
+  /// File path: assets/images/upper_body_arrow_selected.png
+  AssetGenImage get upperBodyArrowSelected =>
+      const AssetGenImage('assets/images/upper_body_arrow_selected.png');
 
   /// File path: assets/images/userImage.png
   AssetGenImage get userImage =>
@@ -455,25 +429,30 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    absArrowNotSelected,
+    absArrowSelected,
     activityLevelActive,
     activityLevelLightlyActive,
     activityLevelSedentary,
     activityLevelVeryActive,
     appLogo,
-    armsNotSelected,
-    armsSelected,
-    armsSelectedImage,
+    armsArrowNotSelected,
+    armsArrowSelected,
     bloodDropTransparent,
     bloodFitSplashText,
     bodyTypeFlabby,
     bodyTypeMedium,
     bodyTypeMuscular,
     bodyTypeSkinny,
+    buttArrowNotSelected,
+    buttArrowSelected,
     eggOmletImage,
     errorImage,
     focusAreaFullBodyImage,
     foodImage,
     foodLudusImage,
+    legArrowNotSelected,
+    legArrowSelected,
     loseWeightImage,
     omletEgg,
     onboardingImageFour,
@@ -485,9 +464,8 @@ class $AssetsImagesGen {
     stayFitImage,
     timelineImage,
     trashCanImage,
-    upperBodyNotSelectedImage,
-    upperBodySelectedImage,
-    uppperBodySelectedImage,
+    upperBodyArrowNotSelected,
+    upperBodyArrowSelected,
     userImage,
     workoutImage,
   ];
