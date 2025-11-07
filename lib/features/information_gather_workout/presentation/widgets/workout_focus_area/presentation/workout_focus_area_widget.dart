@@ -1,10 +1,8 @@
 import 'package:bloodfit/controllers/ig_workout_focus_area_controller.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_focus_area/presentation/widgets/focus_area_item.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
-import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../constants/text_font_style.dart';
@@ -56,17 +54,19 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                   buttonWidth: 160,
                   buttonTopPosition: 94,
                   buttonLeftPosition: 0,
+                  pointerImageHeight: 90,
+                  pointerImageWidth: 127,
                   pointerImagPath:
                       igWorkoutFocusAreaController.isArmsSelected.value
-                      ? Assets.icons.armsArowSelected
-                      : Assets.icons.armsArrowNotSelected,
+                      ? Assets.images.armsArrowSelected.path
+                      : Assets.images.armsArrowNotSelected.path,
                   pointerTopPosition:
                       igWorkoutFocusAreaController.isArmsSelected.value
-                      ? -6
+                      ? 16
                       : 22,
                   pointerRightPosition:
                       igWorkoutFocusAreaController.isArmsSelected.value
-                      ? -125
+                      ? -112
                       : -112,
                   isSelected: igWorkoutFocusAreaController.isArmsSelected.value,
                 );
@@ -83,18 +83,20 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                   buttonWidth: 160,
                   buttonTopPosition: 180,
                   buttonLeftPosition: 0,
+                  pointerImageHeight: 112,
+                  pointerImageWidth: 261,
                   pointerImagPath:
                       igWorkoutFocusAreaController.isUpperBodySelected.value
-                      ? Assets.icons.upperBodyArrowSelected
-                      : Assets.icons.upperBodyArrowNotSelected,
+                      ? Assets.images.upperBodyArrowSelected.path
+                      : Assets.images.upperBodyArrowNotSelected.path,
                   pointerTopPosition:
                       igWorkoutFocusAreaController.isUpperBodySelected.value
-                      ? -90
-                      : -80,
+                      ? -65
+                      : -65,
                   pointerRightPosition:
                       igWorkoutFocusAreaController.isUpperBodySelected.value
-                      ? -255
-                      : -255,
+                      ? -245
+                      : -245,
                   isSelected:
                       igWorkoutFocusAreaController.isUpperBodySelected.value,
                 );
@@ -109,19 +111,21 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                   title: "Abs",
                   buttonHeight: 50,
                   buttonWidth: 160,
-                  buttonTopPosition: 270,
+                  buttonTopPosition: 260,
                   buttonLeftPosition: 0,
+                  pointerImageHeight: 80,
+                  pointerImageWidth: 235,
                   pointerImagPath:
                       igWorkoutFocusAreaController.isAbsSelected.value
-                      ? Assets.icons.absArrowSelected
-                      : Assets.icons.absArowNotSelected,
+                      ? Assets.images.absArrowSelected.path
+                      : Assets.images.absArrowNotSelected.path,
                   pointerTopPosition:
                       igWorkoutFocusAreaController.isAbsSelected.value
-                      ? -72
-                      : -50,
+                      ? -38
+                      : -42,
                   pointerRightPosition:
                       igWorkoutFocusAreaController.isAbsSelected.value
-                      ? -242
+                      ? -230
                       : -220,
                   isSelected: igWorkoutFocusAreaController.isAbsSelected.value,
                 );
@@ -136,20 +140,22 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                   title: "Butt",
                   buttonHeight: 50,
                   buttonWidth: 160,
-                  buttonTopPosition: 350,
+                  buttonTopPosition: 340,
                   buttonLeftPosition: 0,
+                  pointerImageHeight: 60,
+                  pointerImageWidth: 246,
                   pointerImagPath:
                       igWorkoutFocusAreaController.isButtSelected.value
-                      ? Assets.icons.buttArrowSelected
-                      : Assets.icons.buttArrowNotSelected,
+                      ? Assets.images.buttArrowSelected.path
+                      : Assets.images.buttArrowNotSelected.path,
                   pointerTopPosition:
                       igWorkoutFocusAreaController.isButtSelected.value
-                      ? -55
-                      : -34,
+                      ? -30
+                      : -30,
                   pointerRightPosition:
                       igWorkoutFocusAreaController.isButtSelected.value
-                      ? -258
-                      : -238,
+                      ? -238
+                      : -230,
                   isSelected: igWorkoutFocusAreaController.isButtSelected.value,
                 );
               }),
@@ -163,20 +169,22 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
                   title: "Legs",
                   buttonHeight: 50,
                   buttonWidth: 160,
-                  buttonTopPosition: 446,
+                  buttonTopPosition: 440,
                   buttonLeftPosition: 0,
+                  pointerImageHeight: 140,
+                  pointerImageWidth: 171,
                   pointerImagPath:
                       igWorkoutFocusAreaController.isLegSelected.value
-                      ? Assets.icons.legArrowSelected
-                      : Assets.icons.legArrowNotSelected,
+                      ? Assets.images.legArrowSelected.path
+                      : Assets.images.legArrowNotSelected.path,
                   pointerTopPosition:
                       igWorkoutFocusAreaController.isLegSelected.value
-                      ? -92
-                      : -67,
+                      ? -55
+                      : -55,
                   pointerRightPosition:
                       igWorkoutFocusAreaController.isLegSelected.value
-                      ? -180
-                      : -157,
+                      ? -165
+                      : -152,
                   isSelected: igWorkoutFocusAreaController.isLegSelected.value,
                 );
               }),

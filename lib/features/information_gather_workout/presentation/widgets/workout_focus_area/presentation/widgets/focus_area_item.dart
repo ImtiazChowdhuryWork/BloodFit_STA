@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 import '../../../../../../../constants/text_font_style.dart';
-import '../../../../../../../gen/assets.gen.dart';
 import '../../../../../../../gen/colors.gen.dart';
 
 class FocusAreaItem extends StatelessWidget {
@@ -18,6 +16,8 @@ class FocusAreaItem extends StatelessWidget {
   final bool isSelected;
   final double buttonWidth;
   final double buttonHeight;
+  final double pointerImageHeight;
+  final double pointerImageWidth;
 
   const FocusAreaItem({
     super.key,
@@ -31,6 +31,8 @@ class FocusAreaItem extends StatelessWidget {
     this.isSelected = false,
     required this.buttonWidth,
     this.buttonHeight = 44,
+    required this.pointerImageHeight,
+    required this.pointerImageWidth,
   });
 
   @override
@@ -48,12 +50,11 @@ class FocusAreaItem extends StatelessWidget {
             child: Opacity(
               opacity: 0.9,
               child: Container(
-                // width: 30.w, // Fixed width for consistent positioning
-                // height: 30.h, // Fixed height for consistent positioning
-                child: SvgPicture.asset(
+                child: Image.asset(
                   pointerImagPath,
-                  fit: BoxFit
-                      .contain, // Ensure the SVG fits properly in the container
+                  height: pointerImageHeight.h,
+                  width: pointerImageWidth.w,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -63,15 +64,12 @@ class FocusAreaItem extends StatelessWidget {
             child: Container(
               width: buttonWidth.w,
               height: buttonHeight.h,
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10.sp),
               decoration: BoxDecoration(
                 color: AppColors.cFFFFFF,
                 gradient: isSelected
                     ? LinearGradient(
-                        colors: [
-                          AppColors.cb20000, // Left side
-                          AppColors.c4e000b, // Right side
-                        ],
+                        colors: [AppColors.cb20000, AppColors.c4e000b],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       )
