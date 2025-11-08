@@ -22,7 +22,7 @@ class AgeSelectorWidget extends StatelessWidget {
     this.height = 120,
     this.textColor = Colors.black,
     this.baseFontSize = 24,
-    this.itemSpacing = 12,
+    this.itemSpacing = 0,
     this.dividerGap = 6,
   });
 

@@ -195,6 +195,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/trash_icon.svg
   String get trashIcon => 'assets/icons/trash_icon.svg';
 
+  /// File path: assets/icons/upper_arrow_icon.svg
+  String get upperArrowIcon => 'assets/icons/upper_arrow_icon.svg';
+
   /// File path: assets/icons/warning_icon.svg
   String get warningIcon => 'assets/icons/warning_icon.svg';
 
@@ -262,6 +265,7 @@ class $AssetsIconsGen {
     searchIcon,
     settingsIcon,
     trashIcon,
+    upperArrowIcon,
     warningIcon,
     workoutDumbleIcon,
     workoutIcon,

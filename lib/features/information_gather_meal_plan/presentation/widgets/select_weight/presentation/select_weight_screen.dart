@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../../../../controllers/weight_picker_widget_controller.dart';
 import '../../../../../../controllers/slider_button_controller.dart';
 import '../../../../../../custom_widgets/custom_slider_button.dart';
-import '../widgets/weight_picker_widget.dart';
+import 'widgets/weight_picker_widget.dart';
 
 class SelectWeightScreen extends StatelessWidget {
   const SelectWeightScreen({super.key});

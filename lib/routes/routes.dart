@@ -28,6 +28,7 @@ import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_co
 import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
 import 'package:bloodfit/navigation_screen.dart';
+import 'package:bloodfit/ruler/presentation/ruler_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,6 +87,7 @@ class Routes {
       '/review_your_choosen_meal_screen';
   static const String mealDetailscreen = '/meal_details_screen';
   static const String chooseExtraWorkoutScreen = '/choose_extra_workout_screen';
+  static const String customRulerScreen = "/custom_ruler_screen";
 
   static final appRoutes = [
     ///Splash Screen
@@ -403,6 +405,15 @@ class Routes {
     GetPage(
       name: informationGatherWorkoutScreen,
       page: () => InformationGatherWorkoutScreen(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///customPainterScreen
+    GetPage(
+      name: customRulerScreen,
+      page: () => RulerScreen(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
