@@ -10,7 +10,7 @@ import '../../../../../../controllers/slider_button_controller.dart';
 import '../../../../../../controllers/weight_picker_widget_controller.dart';
 import '../../../../../../custom_widgets/custom_slider_button.dart';
 import '../../../../../../helper/ui_helpers.dart';
-import '../../../../../information_gather_meal_plan/presentation/widgets/select_weight/widgets/weight_picker_widget.dart';
+import '../../../../../information_gather_meal_plan/presentation/widgets/select_weight/presentation/widgets/weight_picker_widget.dart';
 
 class DesiredWeightWidget extends StatelessWidget {
   DesiredWeightWidget({super.key});

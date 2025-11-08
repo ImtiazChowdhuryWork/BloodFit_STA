@@ -27,7 +27,7 @@ class SelectAgeScreenWidgt extends StatelessWidget {
           itemWidth: 60,
 
           height: 80,
-          itemSpacing: 26,
+          itemSpacing: 0,
           baseFontSize: 24,
           dividerGap: 30,
           textColor: AppColors.cFFFFFF,
