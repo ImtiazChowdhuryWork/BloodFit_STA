@@ -48,7 +48,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
     Get.lazyPut(() => MealPlanScreenController());
-    Get.lazyPut(() => RulerController());
+    // Get.lazyPut(() => RulerController());
     // Get.lazyPut(() => SliderButtonController());
     Get.lazyPut(() => InformationGatherMealPlanController());
     Get.lazyPut(() => HomeScreenController(), fenix: true);
@@ -70,6 +70,10 @@ class ControllerBindings extends Bindings {
     // Add SliderButtonController bindings with tags
     Get.lazyPut(() => SliderButtonController(), tag: 'current_weight_unit');
     Get.lazyPut(() => SliderButtonController(), tag: 'desired_weight_unit');
+
+    // Add tagged bindings for height controllers
+    Get.lazyPut(() => WeightController(), tag: 'current_height');
+    Get.lazyPut(() => SliderButtonController(), tag: 'current_height_unit');
 
     Get.lazyPut(
       () => IgAgePickerScreenController(
