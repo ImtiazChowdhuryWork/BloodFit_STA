@@ -413,7 +413,7 @@ class Routes {
     ///customPainterScreen
     GetPage(
       name: customRulerScreen,
-      page: () => RulerScreen(),
+      page: () => CustomWeightRuler(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

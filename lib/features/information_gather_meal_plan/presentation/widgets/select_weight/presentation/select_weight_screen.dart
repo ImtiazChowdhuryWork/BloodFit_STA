@@ -37,23 +37,20 @@ class SelectWeightScreen extends StatelessWidget {
             controller: weightTypeSliderButtonController,
             items: const ["kg", "lb"],
             onValueChanged: (index, value) {
-              log("Selected index: $index, value: $value");
-
-              /// Update the unit type in WeightController
-              if (value == "kg" && weightController.useLb.value) {
-                weightController.toggleUnit();
-              } else if (value == "lb" && !weightController.useLb.value) {
-                weightController.toggleUnit();
-              }
+              log("Selected unit: $value");
+              weightController.isLbSelected.value = (value == "lb");
             },
           ),
         ),
-        UIHelper.verticalSpace(100.h),
+        UIHelper.verticalSpace(20.h),
 
         /// --- WEIGHT PICKER SLIDER ---
-        WeightPickerWidget(
-          weightController: weightController,
-          weightTypeController: weightTypeSliderButtonController,
+        CustomWeightRuler(
+          title: "Measurement Ruler",
+          unit: "Kg",
+          minValue: 0,
+          maxValue: 99,
+          centerIndicatorColor: Colors.purple,
         ),
       ],
     );
