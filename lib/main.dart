@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
           // home: WorkCompletedDetailsScreen(),
           debugShowCheckedModeBanner: false,
 
-          // initialRoute: Routes.welcomeScreen,
-          initialRoute: Routes.customRulerScreen,
+          initialRoute: Routes.welcomeScreen,
+          // initialRoute: Routes.customRulerScreen,
           //initialRoute: Routes.navigationScreen,
           getPages: Routes.appRoutes,
           initialBinding: ControllerBindings(),

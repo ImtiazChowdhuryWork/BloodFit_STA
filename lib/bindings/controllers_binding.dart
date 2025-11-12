@@ -28,6 +28,7 @@ import '../controllers/reset_password_screen_controller.dart';
 import '../controllers/ruler_controller.dart';
 import '../controllers/sign_in_screen_controller.dart';
 import '../controllers/slider_button_controller.dart';
+import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
 
 class ControllerBindings extends Bindings {
@@ -48,7 +49,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => FitnessScreenController());
     Get.lazyPut(() => MealPlanScreenController());
     Get.lazyPut(() => RulerController());
-    Get.lazyPut(() => SliderButtonController());
+    // Get.lazyPut(() => SliderButtonController());
     Get.lazyPut(() => InformationGatherMealPlanController());
     Get.lazyPut(() => HomeScreenController(), fenix: true);
     Get.lazyPut(() => WorkOutScreenController(), fenix: true);
@@ -61,6 +62,14 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => IgSelectBloodGropController(), fenix: true);
     Get.lazyPut(() => IgSelectGenderScreenController(), fenix: true);
     Get.lazyPut(() => IgWhatsYourActivityLevelController(), fenix: true);
+
+    // Add WeightController bindings with tags
+    Get.lazyPut(() => WeightController(), tag: 'current_weight');
+    Get.lazyPut(() => WeightController(), tag: 'desired_weight');
+
+    // Add SliderButtonController bindings with tags
+    Get.lazyPut(() => SliderButtonController(), tag: 'current_weight_unit');
+    Get.lazyPut(() => SliderButtonController(), tag: 'desired_weight_unit');
 
     Get.lazyPut(
       () => IgAgePickerScreenController(
