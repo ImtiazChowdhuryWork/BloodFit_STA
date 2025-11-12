@@ -28,7 +28,6 @@ import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_co
 import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
 import 'package:bloodfit/navigation_screen.dart';
-import 'package:bloodfit/ruler/presentation/horizontal_ruler_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,11 +35,11 @@ import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
 import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
+import '../features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
-import '../ruler/presentation/vertical_ruler_screen.dart';
 
 class Routes {
   ///Section : Common Screens Routing
@@ -88,7 +87,7 @@ class Routes {
       '/review_your_choosen_meal_screen';
   static const String mealDetailscreen = '/meal_details_screen';
   static const String chooseExtraWorkoutScreen = '/choose_extra_workout_screen';
-  static const String customRulerScreen = "/custom_ruler_screen";
+  static const String selectHeightScreenWidget = '/select_height_screen_widget';
 
   static final appRoutes = [
     ///Splash Screen
@@ -411,10 +410,10 @@ class Routes {
       transitionDuration: _duration(),
     ),
 
-    ///customPainterScreen
+    ///informationGatherWorkoutScreen
     GetPage(
-      name: customRulerScreen,
-      page: () => CustomVerticalRuler(),
+      name: selectHeightScreenWidget,
+      page: () => SelectHeightScreenWidget(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

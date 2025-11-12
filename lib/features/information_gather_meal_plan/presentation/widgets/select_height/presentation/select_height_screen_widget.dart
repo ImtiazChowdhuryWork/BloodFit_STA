@@ -1,53 +1,66 @@
 import 'dart:developer';
 
-import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_height/presentation/widgets/height_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../constants/text_font_style.dart';
-import '../../../../../../controllers/ruler_controller.dart';
 import '../../../../../../controllers/slider_button_controller.dart';
+import '../../../../../../controllers/weight_picker_widget_controller.dart';
 import '../../../../../../custom_widgets/custom_slider_button.dart';
+import '../../../../../../gen/colors.gen.dart';
 import '../../../../../../helper/ui_helpers.dart';
 
 class SelectHeightScreenWidget extends StatelessWidget {
-  SelectHeightScreenWidget({super.key});
+  const SelectHeightScreenWidget({super.key});
 
-  // Instantiate your RulerController
-  final RulerController rulerController = Get.put(RulerController());
-
-  // New SliderButtonController
-  final heightTypeController = Get.put(SliderButtonController());
+  // // Instantiate your RulerController
+  // final RulerController rulerController = Get.put(RulerController());
 
   @override
   Widget build(BuildContext context) {
+    /// Controllers - use DIFFERENT tags for height screen
+    final heightController = Get.find<WeightController>(tag: 'current_height');
+    final heightTypeSliderButtonController = Get.find<SliderButtonController>(
+      tag: 'current_height_unit',
+    );
+
+    // Initialize the slider button controller with items
+    heightTypeSliderButtonController.initialize(["cm", "ft"]);
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
-
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SafeArea(
         child: Column(
           children: [
             Text(
-              "What’s Your Height?",
+              "What's Your Height?",
               style: TextFontStyle.headline22w500cfefefeStylePoppins,
             ),
             UIHelper.verticalSpace(50.h),
 
+            /// --- UNIT SELECTOR (cm / ft) ---
             Align(
               alignment: Alignment.center,
               child: SliderButton(
-                controller: heightTypeController,
-                items: ["cm", "ft"],
+                controller: heightTypeSliderButtonController,
+                items: const ["cm", "ft"],
                 onValueChanged: (index, value) {
-                  log("Selected index: $index, value: $value");
-                  // Update the unit in the ruler picker controller
-                  // The ruler picker will automatically reflect the unit change
+                  log("Selected unit: $value");
+                  heightController.isLbSelected.value = (value == "ft");
                 },
               ),
             ),
-            UIHelper.verticalSpace(50.h),
+            UIHelper.verticalSpace(20.h),
+
+            /// --- HEIGHT PICKER SLIDER ---
+            CustomHeightRuler(
+              controller: heightController,
+              minValue: 1, // Different range for height (e.g., 50cm to 250cm)
+              maxValue: 250,
+              centerIndicatorColor: Colors.green, // Different color for height
+            ),
           ],
         ),
       ),
