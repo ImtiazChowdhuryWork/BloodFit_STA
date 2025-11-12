@@ -14,9 +14,11 @@ class SelectWeightScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// Controllers
-    final weightController = Get.put(WeightController());
-    final weightTypeSliderButtonController = Get.put(SliderButtonController());
+    /// Controllers - use Get.find() with tags
+    final weightController = Get.find<WeightController>(tag: 'current_weight');
+    final weightTypeSliderButtonController = Get.find<SliderButtonController>(
+      tag: 'current_weight_unit',
+    );
 
     // Initialize the slider button controller with items
     weightTypeSliderButtonController.initialize(["kg", "lb"]);
@@ -25,7 +27,7 @@ class SelectWeightScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "What’s Your Weight?",
+          "What's Your Weight?",
           style: TextFontStyle.headline22w500cfefefeStylePoppins,
         ),
         UIHelper.verticalSpace(134.h),
@@ -46,11 +48,10 @@ class SelectWeightScreen extends StatelessWidget {
 
         /// --- WEIGHT PICKER SLIDER ---
         CustomWeightRuler(
-          title: "Measurement Ruler",
-          unit: "Kg",
-          minValue: 0,
-          maxValue: 99,
-          centerIndicatorColor: Colors.purple,
+          controller: weightController,
+          minValue: 1, // Start from 1 instead of 0
+          maxValue: 500,
+          centerIndicatorColor: Colors.blue,
         ),
       ],
     );

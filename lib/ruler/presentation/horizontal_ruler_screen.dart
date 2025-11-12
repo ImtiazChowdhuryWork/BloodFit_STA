@@ -249,6 +249,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/weight_picker_widget_controller.dart';
+import '../../features/information_gather_meal_plan/presentation/widgets/select_weight/presentation/widgets/number_indicator_widget.dart';
 
 class CustomWeightRuler extends StatelessWidget {
   final String title;
@@ -268,7 +269,7 @@ class CustomWeightRuler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WeightController controller = Get.put(WeightController());
+    final WeightController weightController = Get.put(WeightController());
     final double containerWidth = 1.sw - 20.sp;
     final double centerPadding = (containerWidth / 2) - 12.w;
 
@@ -289,31 +290,35 @@ class CustomWeightRuler extends StatelessWidget {
             // Number indicators
             Container(
               width: 1.sw,
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              child: Obx(
-                () => Row(
+              padding: EdgeInsets.symmetric(vertical: 12.h),
+              child: Obx(() {
+                double currentValue = weightController.centerValue.value;
+                return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildNumberIndicator(
-                      controller.centerIndex.value - 2,
-                      false,
+                    NumberIndicator(
+                      value: currentValue - 0.4, // Pass double directly
+                      isCenter: false,
                     ),
-                    _buildNumberIndicator(
-                      controller.centerIndex.value - 1,
-                      false,
+                    NumberIndicator(
+                      value: currentValue - 0.2, // Pass double directly
+                      isCenter: false,
                     ),
-                    _buildNumberIndicator(controller.centerIndex.value, true),
-                    _buildNumberIndicator(
-                      controller.centerIndex.value + 1,
-                      false,
+                    NumberIndicator(
+                      value: currentValue, // Pass double directly
+                      isCenter: true,
                     ),
-                    _buildNumberIndicator(
-                      controller.centerIndex.value + 2,
-                      false,
+                    NumberIndicator(
+                      value: currentValue + 0.2, // Pass double directly
+                      isCenter: false,
+                    ),
+                    NumberIndicator(
+                      value: currentValue + 0.4, // Pass double directly
+                      isCenter: false,
                     ),
                   ],
-                ),
-              ),
+                );
+              }),
             ),
 
             // Ruler
@@ -332,16 +337,16 @@ class CustomWeightRuler extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(10.sp),
                     child: ListView.builder(
-                      controller: controller.scrollController,
+                      controller: weightController.scrollController,
                       scrollDirection: Axis.horizontal,
-                      itemCount: WeightController.totalItems + 1,
+                      itemCount: weightController.totalItems + 1,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return SizedBox(width: centerPadding);
                         }
                         final int itemIndex = index - 1;
-                        return _buildDivider(itemIndex, controller);
+                        return _buildDivider(itemIndex, weightController);
                       },
                     ),
                   ),
@@ -376,7 +381,8 @@ class CustomWeightRuler extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: controller.centerIndex.value.toString(),
+                              text: weightController.centerValue.value
+                                  .toString(),
                               style: TextFontStyle
                                   .headline36w500cFFFFFFStylePoppins
                                   .copyWith(fontWeight: FontWeight.w700),
@@ -423,8 +429,7 @@ class CustomWeightRuler extends StatelessWidget {
   }
 
   Widget _buildDivider(int itemIndex, WeightController controller) {
-    final bool isBigDivider =
-        itemIndex % WeightController.bigDividerInterval == 0;
+    final bool isBigDivider = itemIndex % controller.bigDividerInterval == 0;
     return Container(
       margin: EdgeInsets.only(right: controller.computedItemSpacing),
       child: Align(

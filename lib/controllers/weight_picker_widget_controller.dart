@@ -21,20 +21,73 @@ class WeightController extends GetxController {
 
   ///Section : Weight Controller
   final ScrollController scrollController = ScrollController();
-  final RxInt centerIndex = 0.obs;
-  int lastValidCenterIndex = 0;
+  final RxDouble centerValue = 1.0.obs; // Change default to 1.0
+  double lastValidCenterValue = 1.0;
 
-  // Constants - make them public
-  static const double itemWidth = 2;
-  static const double itemSpacing = 10;
-  static const int minValue = 0;
-  static const int maxValue = 99;
-  static const int totalItems = 100;
-  static const int bigDividerInterval = 5;
+  // Make these instance variables instead of static constants
+  double itemWidth = 2;
+  double itemSpacing = 10;
+  double minValue = 1.0; // Change minValue to 1.0
+  double maxValue = 99;
+  int totalItems = 0; // Will be calculated
+  int bigDividerInterval = 5; // Every 5 small dividers = 1 big divider
+  double smallDividerValue = 0.2; // Each small divider represents 0.2
+
+  // Method to initialize with custom values
+  void initializeRuler({
+    double? itemWidth,
+    double? itemSpacing,
+    double? minValue,
+    double? maxValue,
+    int? bigDividerInterval,
+    double? smallDividerValue,
+  }) {
+    this.itemWidth = itemWidth ?? this.itemWidth;
+    this.itemSpacing = itemSpacing ?? this.itemSpacing;
+    this.minValue = minValue ?? 1.0; // Ensure minValue is at least 1.0
+    this.maxValue = maxValue ?? this.maxValue;
+    this.bigDividerInterval = bigDividerInterval ?? this.bigDividerInterval;
+    this.smallDividerValue = smallDividerValue ?? this.smallDividerValue;
+
+    // Calculate total items based on min and max values
+    double totalRange = this.maxValue - this.minValue;
+    int bigDividerCount =
+        (totalRange ~/ (this.bigDividerInterval * this.smallDividerValue))
+            .toInt() +
+        1;
+    totalItems = bigDividerCount * this.bigDividerInterval;
+
+    // Reset center value to min value (which is now 1.0)
+    centerValue.value = this.minValue;
+
+    update(); // Notify listeners
+  }
 
   // Computed values
   double get computedItemWidth => itemWidth.sp;
   double get computedItemSpacing => itemSpacing.w;
+
+  // Helper methods to get value from index and vice versa
+  double getValueFromIndex(int index) {
+    return minValue + (index * smallDividerValue);
+  }
+
+  int getIndexFromValue(double value) {
+    return ((value - minValue) / smallDividerValue).round();
+  }
+
+  bool isBigDivider(int itemIndex) {
+    return itemIndex % bigDividerInterval == 0;
+  }
+
+  String getDisplayValue(int itemIndex) {
+    double value = getValueFromIndex(itemIndex);
+    if (isBigDivider(itemIndex)) {
+      return value.toInt().toString(); // Show whole numbers for big dividers
+    } else {
+      return value.toStringAsFixed(1); // Show decimal for small dividers
+    }
+  }
 
   @override
   void onInit() {
@@ -56,9 +109,11 @@ class WeightController extends GetxController {
     return (visibleItemCenter - centerX).abs() <= (computedItemWidth / 2);
   }
 
-  int getCenteredIndex(double scrollOffset, double containerWidth) {
+  double getCenteredValue(double scrollOffset, double containerWidth) {
     for (int i = 0; i < totalItems; i++) {
-      if (isIndexCentered(i, scrollOffset, containerWidth)) return i;
+      if (isIndexCentered(i, scrollOffset, containerWidth)) {
+        return getValueFromIndex(i);
+      }
     }
     return -1; // Return -1 when no item is centered
   }
@@ -66,17 +121,20 @@ class WeightController extends GetxController {
   void _updateCenterIndex() {
     final double scrollOffset = scrollController.offset;
     final double containerWidth = 1.sw - 20.sp;
-    final int calculatedIndex = getCenteredIndex(scrollOffset, containerWidth);
+    final double calculatedValue = getCenteredValue(
+      scrollOffset,
+      containerWidth,
+    );
 
-    if (calculatedIndex != centerIndex.value) {
-      // Only update centerIndex if we found a valid centered item
+    if (calculatedValue != centerValue.value) {
+      // Only update centerValue if we found a valid centered item
       // Otherwise keep the last valid value
-      if (calculatedIndex >= 0) {
-        centerIndex.value = calculatedIndex;
-        lastValidCenterIndex = calculatedIndex; // Update last valid value
+      if (calculatedValue >= minValue && calculatedValue <= maxValue) {
+        centerValue.value = calculatedValue;
+        lastValidCenterValue = calculatedValue; // Update last valid value
       } else {
-        // When between items, use the last valid centered index
-        centerIndex.value = lastValidCenterIndex;
+        // When between items, use the last valid centered value
+        centerValue.value = lastValidCenterValue;
       }
     }
   }

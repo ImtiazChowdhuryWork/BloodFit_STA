@@ -28,7 +28,7 @@ import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_co
 import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
 import 'package:bloodfit/navigation_screen.dart';
-import 'package:bloodfit/ruler/presentation/ruler_screen.dart';
+import 'package:bloodfit/ruler/presentation/horizontal_ruler_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,6 +40,7 @@ import '../features/information_gather_workout/presentation/information_gather_w
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
+import '../ruler/presentation/vertical_ruler_screen.dart';
 
 class Routes {
   ///Section : Common Screens Routing
@@ -413,7 +414,7 @@ class Routes {
     ///customPainterScreen
     GetPage(
       name: customRulerScreen,
-      page: () => CustomWeightRuler(),
+      page: () => CustomVerticalRuler(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

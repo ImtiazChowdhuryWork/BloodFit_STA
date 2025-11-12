@@ -16,8 +16,7 @@ class RulerDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isBigDivider =
-        itemIndex % WeightController.bigDividerInterval == 0;
+    final bool isBigDivider = itemIndex % controller.bigDividerInterval == 0;
 
     return Container(
       margin: EdgeInsets.only(right: controller.computedItemSpacing),
