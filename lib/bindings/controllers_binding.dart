@@ -26,6 +26,7 @@ import '../controllers/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/reset_password_screen_controller.dart';
 import '../controllers/ruler_controller.dart';
+import '../controllers/select_height_screen_controller.dart';
 import '../controllers/sign_in_screen_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
@@ -74,6 +75,7 @@ class ControllerBindings extends Bindings {
     // Add tagged bindings for height controllers
     Get.lazyPut(() => WeightController(), tag: 'current_height');
     Get.lazyPut(() => SliderButtonController(), tag: 'current_height_unit');
+    Get.lazyPut(() => SelectHeightScreenController(), fenix: true);
 
     Get.lazyPut(
       () => IgAgePickerScreenController(
