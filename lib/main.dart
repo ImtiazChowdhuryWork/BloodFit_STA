@@ -1,5 +1,7 @@
 import 'package:bloodfit/bindings/controllers_binding.dart';
 import 'package:bloodfit/helper/di.dart';
+import 'package:bloodfit/helper/helper_methods.dart';
+import 'package:bloodfit/loading_screen.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,21 +20,46 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    rotation();
+    setInitValue();
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return UtilScreenMobile();
+      },
+    );
+  }
+}
+
+class UtilScreenMobile extends StatelessWidget {
+  const UtilScreenMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return ScreenUtilInit(
       // designSize: const Size(375, 812),
       designSize: const Size(440, 956),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {
-        return GetMaterialApp(
-          // home: WorkCompletedDetailsScreen(),
-          debugShowCheckedModeBanner: false,
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, _) async {
+            showMaterialDialog(context);
+          },
+          child: GetMaterialApp(
+            // home: WorkCompletedDetailsScreen(),
+            debugShowCheckedModeBanner: false,
+            builder: (context, widget) {
+              return MediaQuery(data: MediaQuery.of(context), child: widget!);
+            },
 
-          // initialRoute: Routes.welcomeScreen,
-          initialRoute: Routes.selectHeightScreenWidget,
-          //initialRoute: Routes.navigationScreen,
-          getPages: Routes.appRoutes,
-          initialBinding: ControllerBindings(),
+            // initialRoute: Routes.welcomeScreen,
+            // initialRoute: Routes.selectHeightScreenWidget,
+            //initialRoute: Routes.navigationScreen,
+            getPages: Routes.appRoutes,
+            initialBinding: ControllerBindings(),
+            home: Loading(),
+          ),
         );
       },
     );

@@ -16,3 +16,15 @@ class AppConstants {
   static const MealPlanAvailability mealPlanAvailability =
       MealPlanAvailability.mealPlanNotAvilable;
 }
+
+const String kKeyAccessToken = 'access_token';
+const String kKeyName = 'name';
+const String kKeyFirstName = 'first_name';
+const String kKeyLastName = 'lst_name';
+const String kImageUrl = 'imageUrl';
+const String kKeyfirstTime = "first";
+const String kKeyStatus = 'status';
+const String kEmail = 'email';
+const String kPassword = 'password';
+const String kKeyIsLoggedIn = 'is_logged_in';
+const String kKeyDeviceID = 'device_id';

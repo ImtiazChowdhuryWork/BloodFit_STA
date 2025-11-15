@@ -38,9 +38,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     });
 
     /// 🔑 Navigate after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.offAllNamed(Routes.onboardingScreen);
-    });
+    // Future.delayed(const Duration(seconds: 3), () {
+    //   Get.offAllNamed(Routes.onboardingScreen);
+    // });
   }
 
   @override
