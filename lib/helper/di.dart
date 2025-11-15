@@ -6,10 +6,6 @@ final locator = GetIt.instance;
 
 /// Lazy getter for global access
 GetStorage get appData => locator.get<GetStorage>();
-// List<CameraDescription> get cameras => locator.get<List<CameraDescription>>();
-// CameraDescription get myFrontCamera => cameras.firstWhere((c) {
-//   return c.lensDirection == CameraLensDirection.front;
-// });
 
 Future<void> diSetup() async {
   // locator.registerSingleton<GetStorage>(GetStorage());
