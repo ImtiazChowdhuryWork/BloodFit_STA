@@ -2,7 +2,7 @@
 
 // const String url = "https://sebaev.softvencefsd.xyz";
 
-const String url = "https://srv828368.hstgr.cloud";
+const String url = "https://blood-api.billal.space";
 
 final class NetworkConstants {
   NetworkConstants._();
@@ -17,6 +17,8 @@ final class NetworkConstants {
 final class Endpoints {
   Endpoints._();
   //backend_url
+
+  static String signIn() => "/api/auth/login";
 }
 
 

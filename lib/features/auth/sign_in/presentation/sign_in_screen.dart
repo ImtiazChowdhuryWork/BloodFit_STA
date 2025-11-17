@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/constants/validator.dart';
 import 'package:bloodfit/controllers/sign_in_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
@@ -20,7 +21,7 @@ class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
 
   final SignInScreenController controller = Get.find<SignInScreenController>();
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,36 +52,45 @@ class SignInScreen extends StatelessWidget {
                 ),
                 UIHelper.verticalSpace(48.h),
 
-                ///Section : -------------///FormField -> Email///--------------------
-                CustomFormField(
-                  controller: controller.emailController,
-                  hintText: "Enter Your Email Address",
-                ),
-                UIHelper.verticalSpace(24.h),
-
-                ///Section : -------------///FormField -> Password///--------------------
-                Obx(() {
-                  return CustomFormField(
-                    controller: controller.passwordController,
-                    isPass: true,
-                    isObsecure: controller.isPasswordVisible.value,
-                    suffixIcon: InkWell(
-                      onTap: () {
-                        controller.setPasswordVisibility();
-                        log(
-                          "Is Password Visible : ${controller.isPasswordVisible}",
-                        );
-                      },
-                      child: SvgPicture.asset(
-                        controller.isPasswordVisible.value
-                            ? Assets.icons.pwdNotObsecured
-                            : Assets.icons.pwdObsecured,
-                        color: AppColors.cfefefe,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      ///Section : -------------///FormField -> Email///--------------------
+                      CustomFormField(
+                        controller: controller.emailController,
+                        validator: emailValidator,
+                        hintText: "Enter Your Email Address",
                       ),
-                    ),
-                    hintText: "Enter Your Password",
-                  );
-                }),
+                      UIHelper.verticalSpace(24.h),
+
+                      ///Section : -------------///FormField -> Password///--------------------
+                      Obx(() {
+                        return CustomFormField(
+                          controller: controller.passwordController,
+                          validator: passwordValidator,
+                          isPass: true,
+                          isObsecure: controller.isPasswordVisible.value,
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              controller.setPasswordVisibility();
+                              log(
+                                "Is Password Visible : ${controller.isPasswordVisible}",
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              controller.isPasswordVisible.value
+                                  ? Assets.icons.pwdNotObsecured
+                                  : Assets.icons.pwdObsecured,
+                              color: AppColors.cfefefe,
+                            ),
+                          ),
+                          hintText: "Enter Your Password",
+                        );
+                      }),
+                    ],
+                  ),
+                ),
                 UIHelper.verticalSpace(16.h),
 
                 ///Section : -----------------///Checkbox///----------------
@@ -129,7 +139,8 @@ class SignInScreen extends StatelessWidget {
                 CustomElevatedButton(
                   onTap: () {
                     log("Button Taped -> Login");
-                    Get.toNamed(Routes.enterYourDetailsScreen);
+                    // Get.toNamed(Routes.enterYourDetailsScreen);
+                    controller.signIn();
                   },
                   borderRadius: 24.r,
                   buttonHeight: 52.h,

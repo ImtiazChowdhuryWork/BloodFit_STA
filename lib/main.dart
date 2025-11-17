@@ -2,6 +2,7 @@ import 'package:bloodfit/bindings/controllers_binding.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
 import 'package:bloodfit/loading_screen.dart';
+import 'package:bloodfit/networks/dio/dio.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await diSetup();
+  DioSingleton.instance.create();
   runApp(MyApp());
 }
 

@@ -40,10 +40,6 @@ class _LoadingState extends State<Loading> {
       await performPostLoginActions();
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // initDeepLinks(); // if used
-    });
-
     _startScreen = _determineStartScreen();
 
     setState(() => _isLoading = false);
