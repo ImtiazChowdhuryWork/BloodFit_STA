@@ -1,6 +1,8 @@
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/onboarding/presentation/widgets/onboarding_widget.dart';
 import 'package:bloodfit/features/onboarding/presentation/widgets/page_indicator_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    appData.write(kKeyfirstTime, false);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SafeArea(
@@ -59,7 +62,7 @@ class OnboardingScreen extends StatelessWidget {
                     controller.currentIndex <=
                             controller.onboardingList.length - 1
                         ? controller.goToNextPage()
-                        : Get.toNamed(Routes.signInScreen);
+                        : Get.offAllNamed(Routes.signInScreen);
                   },
                   buttonTitle:
                       controller.currentIndex.value <=

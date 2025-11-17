@@ -18,6 +18,7 @@ class AppConstants {
 }
 
 const String kKeyAccessToken = 'access_token';
+const String kKeyRefreshToken = 'refresh_token';
 const String kKeyName = 'name';
 const String kKeyFirstName = 'first_name';
 const String kKeyLastName = 'lst_name';
