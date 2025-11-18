@@ -18,7 +18,10 @@ final class Endpoints {
   Endpoints._();
   //backend_url
 
+  static String refreshToken() => "/api/auth/refresh-token";
+  static String signUp() => "/api/auth/signup";
   static String signIn() => "/api/auth/login";
+  static String signOut() => "/api/auth/logout";
 }
 
 

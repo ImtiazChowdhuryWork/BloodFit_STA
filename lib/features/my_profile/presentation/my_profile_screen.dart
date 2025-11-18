@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/custom_image_picker_controller.dart';
+import '../../../controllers/sign_out_controller.dart';
 import '../../../custom_widgets/card_tile_option_widget.dart';
 import '../../../custom_widgets/custom_image_picker_widget.dart';
 import '../../../utils/image_picker_handler.dart';
@@ -37,6 +38,7 @@ class MyProfileScreen extends StatelessWidget {
       Get.find<ProfileScreenController>();
 
   final EnumsController enumsController = Get.find<EnumsController>();
+  final SignOutController signOutController = Get.find<SignOutController>();
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +140,7 @@ class MyProfileScreen extends StatelessWidget {
       bottomNavigationBar: LogoutButton(
         onTap: () {
           log("Button -> Logout Button Taped!");
+          signOutController.signOut();
         },
         buttonTitle: "Logout",
       ),

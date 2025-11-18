@@ -8,8 +8,14 @@ import '../../../../helper/ui_helpers.dart';
 
 class LogoutButton extends StatelessWidget {
   final String buttonTitle;
+  final bool isLoading;
   final void Function()? onTap;
-  const LogoutButton({super.key, required this.buttonTitle, this.onTap});
+  const LogoutButton({
+    super.key,
+    required this.buttonTitle,
+    this.onTap,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class LogoutButton extends StatelessWidget {
         top: UIHelper.kDefaulutPadding(),
       ),
       child: InkWell(
-        onTap: onTap,
+        onTap: isLoading ? null : onTap,
         child: CardTileOptionWidget(
           imagePath: Assets.icons.logoutIcon,
           cardColor: AppColors.cb20000,

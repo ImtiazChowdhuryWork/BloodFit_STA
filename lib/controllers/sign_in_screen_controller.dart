@@ -1,6 +1,8 @@
 // import 'dart:developer';
 
-// import 'package:bloodfit/features/auth/sign_in/data/repository/sign_in_repository.dart';
+// import 'package:bloodfit/constants/app_constant_text.dart';
+// import 'package:bloodfit/repositories/sign_in_repository.dart';
+// import 'package:bloodfit/helper/di.dart';
 // import 'package:bloodfit/helper/loading_helper.dart';
 // import 'package:bloodfit/routes/routes.dart';
 // import 'package:flutter/material.dart';
@@ -62,22 +64,63 @@
 //           .login(email, password)
 //           .waitingForFutureWithoutBg();
 
-//       // Handle successful login
+//       // ✅ EXTRACT DATA AND HEADERS
 //       final userData = response['data'];
-//       final token = userData['token'];
+//       final headers = response['headers'];
 
-//       log("📨 Message: ${response['message']}");
+//       // ✅ EXTRACT TOKENS FROM HEADERS
+//       final accessToken = _extractToken(headers, 'access-token');
+//       final refreshToken = _extractToken(headers, 'refresh-token');
 
-//       // Store token in your secure storage
-//       // await SecureStorage.saveToken(token);
+//       // ✅ LOG SUCCESS WITH TOKENS
+//       log("🎉 LOGIN SUCCESS");
+//       log("📨 Message: ${userData['message']}");
+//       log("🔑 Access Token: ${accessToken != null ? '✓' : '✗'}");
+//       log("🔄 Refresh Token: ${refreshToken != null ? '✓' : '✗'}");
+//       log(
+//         "👤 User: ${userData['user']['firstName']} ${userData['user']['lastName']}",
+//       );
 
-//       // Update Dio headers with new token
-//       ApiService.instance.updateHeaders();
+//       // ✅ STORE TOKENS IN GET_STORAGE USING YOUR CONSTANTS
+//       if (accessToken != null) {
+//         appData.write(kKeyAccessToken, accessToken);
+//         log("✅ Access Token Saved");
+//         log("Access-Token : ${appData.read(kKeyAccessToken)}");
+//       } else {
+//         log("❌ Could Not Save Access Token");
+//       }
 
-//       // Show success message
+//       if (refreshToken != null) {
+//         appData.write(kKeyRefreshToken, refreshToken);
+//         log("✅ Refresh Token Saved");
+//         log("Refres-Token : ${appData.read(kKeyRefreshToken)}");
+//       } else {
+//         log("❌ Could Not Save Refresh Token");
+//       }
+
+//       // ✅ UPDATE DIO HEADERS WITH NEW TOKEN
+//       if (accessToken != null) {
+//         ApiService.instance.updateHeaders();
+//       }
+
+//       // ✅ CORRECTED: Tokens are in response headers, not in response body
+//       // From your logs, tokens are in headers:
+//       // access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+//       // refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+//       // If you need to extract tokens from headers, you'll need to modify ApiService
+//       // For now, let's focus on the successful login flow
+
+//       // Store user data (you can save this to GetStorage or SharedPreferences)
+//       // await storage.write('user', response['user']);
+
+//       // Update Dio headers with new token (if you extract it from headers)
+//       // ApiService.instance.updateHeaders();
+
+//       // Show success message - use the actual message from API
 //       Get.snackbar(
 //         'Success',
-//         'Login successful!',
+//         response['message'] ?? 'Login successful!',
 //         snackPosition: SnackPosition.BOTTOM,
 //         backgroundColor: Colors.green,
 //         colorText: Colors.white,
@@ -88,6 +131,8 @@
 //     } on Failure catch (failure) {
 //       errorMessage.value = failure.responseMessage;
 
+//       log("❌ LOGIN FAILED: ${failure.responseMessage}");
+
 //       Get.snackbar(
 //         'Login Failed',
 //         failure.responseMessage,
@@ -97,6 +142,9 @@
 //       );
 //     } catch (e) {
 //       errorMessage.value = 'An unexpected error occurred';
+
+//       log("🚨 UNEXPECTED ERROR: $e");
+//       log("🚨 ERROR TYPE: ${e.runtimeType}");
 
 //       Get.snackbar(
 //         'Error',
@@ -114,6 +162,24 @@
 //     errorMessage.value = '';
 //   }
 
+//   // ✅ HELPER METHOD TO EXTRACT TOKENS FROM HEADERS
+//   String? _extractToken(Map<String, dynamic> headers, String tokenName) {
+//     try {
+//       if (headers.containsKey(tokenName)) {
+//         final tokenHeader = headers[tokenName];
+//         if (tokenHeader is List && tokenHeader.isNotEmpty) {
+//           return tokenHeader.first;
+//         } else if (tokenHeader is String) {
+//           return tokenHeader;
+//         }
+//       }
+//       return null;
+//     } catch (e) {
+//       log("⚠️ Error extracting $tokenName: $e");
+//       return null;
+//     }
+//   }
+
 //   @override
 //   void onClose() {
 //     emailController.dispose();
@@ -125,7 +191,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/app_constant_text.dart';
-import 'package:bloodfit/features/auth/sign_in/data/repository/sign_in_repository.dart';
+import 'package:bloodfit/repositories/sign_in_repository.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/loading_helper.dart';
 import 'package:bloodfit/routes/routes.dart';
@@ -135,9 +201,12 @@ import 'package:get/get.dart';
 import '../../../../constants/validator.dart';
 import '../../../../helper/api_service.dart';
 import '../../../../networks/exception_handler/data_source.dart';
+import '../../../../services/auth_service.dart'; // ← ADD THIS IMPORT
 
 class SignInScreenController extends GetxController {
   SignInRepository signInRepository = SignInRepository();
+  final AuthService authService = Get.find<AuthService>(); // ← ADD THIS
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -217,9 +286,15 @@ class SignInScreenController extends GetxController {
       if (refreshToken != null) {
         appData.write(kKeyRefreshToken, refreshToken);
         log("✅ Refresh Token Saved");
-        log("Refres-Token : ${appData.read(kKeyRefreshToken)}");
+        log("Refresh-Token : ${appData.read(kKeyRefreshToken)}");
       } else {
         log("❌ Could Not Save Refresh Token");
+      }
+
+      // ✅ UPDATE AUTH SERVICE STATE - ADD THIS SECTION
+      if (accessToken != null) {
+        authService.handleLogin(); // ← ADD THIS LINE
+        log("✅ AuthService updated with login state");
       }
 
       // ✅ UPDATE DIO HEADERS WITH NEW TOKEN
@@ -227,24 +302,11 @@ class SignInScreenController extends GetxController {
         ApiService.instance.updateHeaders();
       }
 
-      // ✅ CORRECTED: Tokens are in response headers, not in response body
-      // From your logs, tokens are in headers:
-      // access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-      // refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-
-      // If you need to extract tokens from headers, you'll need to modify ApiService
-      // For now, let's focus on the successful login flow
-
-      // Store user data (you can save this to GetStorage or SharedPreferences)
-      // await storage.write('user', response['user']);
-
-      // Update Dio headers with new token (if you extract it from headers)
-      // ApiService.instance.updateHeaders();
-
       // Show success message - use the actual message from API
       Get.snackbar(
         'Success',
-        response['message'] ?? 'Login successful!',
+        userData['message'] ??
+            'Login successful!', // ← FIXED: use userData instead of response
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,

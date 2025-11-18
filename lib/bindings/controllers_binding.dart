@@ -28,9 +28,12 @@ import '../controllers/reset_password_screen_controller.dart';
 import '../controllers/ruler_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
 import '../controllers/sign_in_screen_controller.dart';
+import '../controllers/sign_out_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
+import '../repositories/sign_up_repository.dart';
+import '../services/auth_service.dart';
 
 class ControllerBindings extends Bindings {
   @override
@@ -76,6 +79,11 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => WeightController(), tag: 'current_height');
     Get.lazyPut(() => SliderButtonController(), tag: 'current_height_unit');
     Get.lazyPut(() => SelectHeightScreenController(), fenix: true);
+    Get.lazyPut(() => SignOutController(), fenix: true);
+
+    ///Repositiories
+    Get.lazyPut(() => AuthService(), fenix: true);
+    Get.lazyPut(() => SignUpRepository(), fenix: true);
 
     Get.lazyPut(
       () => IgAgePickerScreenController(
