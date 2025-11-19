@@ -91,9 +91,17 @@ class SignUpScreenController extends GetxController {
         passwordController.text,
       );
 
+      log("📦 Repository response: $response");
+      log("📦 Response type: ${response.runtimeType}");
+
+      // Let's see what keys are available in the response
+      if (response is Map) {
+        log("📦 Response keys: ${response.keys}");
+      }
+
       // Extract data and headers from ApiService response format
       final responseData = response['data'];
-      final responseStatusCode = response['statusCode'];
+      final responseStatusCode = response['status-code'];
 
       // Handle success response
       if (responseData != null && responseStatusCode == 201) {

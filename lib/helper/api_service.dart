@@ -99,8 +99,12 @@ final class ApiService extends GetxService {
   }
 
   dynamic _handleSuccessResponse(dio_package.Response response) {
-    if (response.statusCode == 200) {
-      return {'data': response.data, 'headers': response.headers.map};
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return {
+        'data': response.data,
+        'headers': response.headers.map,
+        'status-code': response.statusCode,
+      };
     } else {
       throw dio_package.DioException(
         response: response,

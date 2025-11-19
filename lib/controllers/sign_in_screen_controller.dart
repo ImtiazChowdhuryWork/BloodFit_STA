@@ -201,11 +201,11 @@ import 'package:get/get.dart';
 import '../../../../constants/validator.dart';
 import '../../../../helper/api_service.dart';
 import '../../../../networks/exception_handler/data_source.dart';
-import '../../../../services/auth_service.dart'; // ← ADD THIS IMPORT
+import '../../../../services/auth_service.dart';
 
 class SignInScreenController extends GetxController {
   SignInRepository signInRepository = SignInRepository();
-  final AuthService authService = Get.find<AuthService>(); // ← ADD THIS
+  final AuthService authService = Get.find<AuthService>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -260,60 +260,75 @@ class SignInScreenController extends GetxController {
       // ✅ EXTRACT DATA AND HEADERS
       final userData = response['data'];
       final headers = response['headers'];
+      final statusCode = response['status-code'];
 
-      // ✅ EXTRACT TOKENS FROM HEADERS
-      final accessToken = _extractToken(headers, 'access-token');
-      final refreshToken = _extractToken(headers, 'refresh-token');
+      if (statusCode == 200 || statusCode == 201) {
+        // ✅ EXTRACT TOKENS FROM HEADERS
+        final accessToken = _extractToken(headers, 'access-token');
+        final refreshToken = _extractToken(headers, 'refresh-token');
 
-      // ✅ LOG SUCCESS WITH TOKENS
-      log("🎉 LOGIN SUCCESS");
-      log("📨 Message: ${userData['message']}");
-      log("🔑 Access Token: ${accessToken != null ? '✓' : '✗'}");
-      log("🔄 Refresh Token: ${refreshToken != null ? '✓' : '✗'}");
-      log(
-        "👤 User: ${userData['user']['firstName']} ${userData['user']['lastName']}",
-      );
+        // ✅ LOG SUCCESS WITH TOKENS
+        log("🎉 LOGIN SUCCESS");
+        log("📨 Message: ${userData['message']}");
+        log("🔑 Access Token: ${accessToken != null ? '✓' : '✗'}");
+        log("🔄 Refresh Token: ${refreshToken != null ? '✓' : '✗'}");
+        log(
+          "👤 User: ${userData['user']['firstName']} ${userData['user']['lastName']}",
+        );
 
-      // ✅ STORE TOKENS IN GET_STORAGE USING YOUR CONSTANTS
-      if (accessToken != null) {
-        appData.write(kKeyAccessToken, accessToken);
-        log("✅ Access Token Saved");
-        log("Access-Token : ${appData.read(kKeyAccessToken)}");
+        // ✅ STORE TOKENS IN GET_STORAGE USING YOUR CONSTANTS
+        if (accessToken != null) {
+          appData.write(kKeyAccessToken, accessToken);
+          log("✅ Access Token Saved");
+          log("Access-Token : ${appData.read(kKeyAccessToken)}");
+        } else {
+          log("❌ Could Not Save Access Token");
+        }
+
+        if (refreshToken != null) {
+          appData.write(kKeyRefreshToken, refreshToken);
+          log("✅ Refresh Token Saved");
+          log("Refresh-Token : ${appData.read(kKeyRefreshToken)}");
+        } else {
+          log("❌ Could Not Save Refresh Token");
+        }
+
+        // ✅ UPDATE AUTH SERVICE STATE
+        if (accessToken != null) {
+          authService.handleLogin();
+          log("✅ AuthService updated with login state");
+        }
+
+        // ✅ UPDATE DIO HEADERS WITH NEW TOKEN
+        if (accessToken != null) {
+          ApiService.instance.updateHeaders();
+        }
+
+        // Show success message - use the actual message from API
+        Get.snackbar(
+          'Success',
+          userData['message'] ?? 'Login successful!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        // Navigate to home screen
+        Get.offAllNamed(Routes.enterYourDetailsScreen);
       } else {
-        log("❌ Could Not Save Access Token");
+        // Handle non-success status codes
+        log("❌ LOGIN FAILED - Status Code: $statusCode");
+        errorMessage.value =
+            userData['message'] ?? 'Login failed. Please try again.';
+
+        Get.snackbar(
+          'Login Failed',
+          userData['message'] ?? 'Login failed. Please try again.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
-
-      if (refreshToken != null) {
-        appData.write(kKeyRefreshToken, refreshToken);
-        log("✅ Refresh Token Saved");
-        log("Refresh-Token : ${appData.read(kKeyRefreshToken)}");
-      } else {
-        log("❌ Could Not Save Refresh Token");
-      }
-
-      // ✅ UPDATE AUTH SERVICE STATE - ADD THIS SECTION
-      if (accessToken != null) {
-        authService.handleLogin(); // ← ADD THIS LINE
-        log("✅ AuthService updated with login state");
-      }
-
-      // ✅ UPDATE DIO HEADERS WITH NEW TOKEN
-      if (accessToken != null) {
-        ApiService.instance.updateHeaders();
-      }
-
-      // Show success message - use the actual message from API
-      Get.snackbar(
-        'Success',
-        userData['message'] ??
-            'Login successful!', // ← FIXED: use userData instead of response
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-
-      // Navigate to home screen
-      Get.offAllNamed(Routes.enterYourDetailsScreen);
     } on Failure catch (failure) {
       errorMessage.value = failure.responseMessage;
 
