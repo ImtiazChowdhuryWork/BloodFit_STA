@@ -2,24 +2,21 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 
+import '../repositories/verify_otp_repository.dart';
+import '../routes/routes.dart';
+
 class VerifyOtpScreenController extends GetxController {
   var pin = ''.obs;
+  var isLoading = false.obs;
+  final VerifyOtpRepository _repository = VerifyOtpRepository();
 
-  // Timer
-  // var secondsRemaining = 30.obs;
-  // Timer? _timer;
-  // RxBool isOtpExpired = false.obs;
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   startTimer();
-  // }
-
-  // Validate OTP
+  // Validate OTP format (6 digits)
   String? validatePin(String? value) {
     if (value == null || value.isEmpty) return 'OTP cannot be empty';
-    return value == '222222' ? null : 'OTP is incorrect';
+    if (value.length != 6) return 'OTP must be 6 digits';
+    if (!RegExp(r'^\d+$').hasMatch(value))
+      return 'OTP must contain only numbers';
+    return null;
   }
 
   // Called when OTP completed
@@ -28,24 +25,36 @@ class VerifyOtpScreenController extends GetxController {
     log('Entered OTP: $value');
   }
 
-  // Start countdown timer
-  // void startTimer() {
-  //   _timer?.cancel();
-  //   secondsRemaining.value = 30;
-  //   _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-  //     if (secondsRemaining.value > 0) {
-  //       secondsRemaining.value--;
-  //     } else {
-  //       timer.cancel();
-  //       isOtpExpired.value = true;
-  //     }
-  //   });
-  // }
+  // Verify OTP with API
+  Future<void> verifyOtp() async {
+    if (pin.value.isEmpty || pin.value.length != 6) {
+      Get.snackbar('Error', 'Please enter a valid 6-digit OTP');
+      return;
+    }
 
-  // Dispose timer
-  // @override
-  // void onClose() {
-  //   _timer?.cancel();
-  //   super.onClose();
-  // }
+    try {
+      isLoading.value = true;
+
+      final response = await _repository.verifyOtp(pin.value);
+
+      // Extract data from the response structure
+      final responseData = response['data'];
+      final statusCode = response['status-code'];
+
+      if (responseData != null && statusCode == 200 ||
+          responseData != null && statusCode == 201) {
+        Get.snackbar('Success', 'OTP verified successfully');
+        // Navigate to reset password screen
+        Get.toNamed(Routes.resetPasswordScreen);
+      } else {
+        Get.snackbar('Error', 'Invalid OTP or verification failed');
+      }
+    } catch (e) {
+      log('OTP Verification Error: $e');
+      // The error handling is already done in ApiService, so we just show a generic message
+      Get.snackbar('Error', 'Failed to verify OTP. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

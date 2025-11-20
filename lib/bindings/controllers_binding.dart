@@ -7,6 +7,7 @@ import '../controllers/enums_controller.dart';
 import '../controllers/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
 import '../controllers/calendar_controller.dart';
+import '../controllers/forgot_password_controller.dart';
 import '../controllers/home_screen_controller.dart';
 import '../controllers/ig_current_body_type_controller.dart';
 import '../controllers/ig_desired_weight_controller.dart';
@@ -32,7 +33,9 @@ import '../controllers/sign_out_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
+import '../repositories/forgot_password_repository.dart';
 import '../repositories/sign_up_repository.dart';
+import '../repositories/verify_otp_repository.dart';
 import '../services/auth_service.dart';
 
 class ControllerBindings extends Bindings {
@@ -66,6 +69,15 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => IgSelectBloodGropController(), fenix: true);
     Get.lazyPut(() => IgSelectGenderScreenController(), fenix: true);
     Get.lazyPut(() => IgWhatsYourActivityLevelController(), fenix: true);
+    Get.lazyPut(() => ForgotPasswordController(), fenix: true);
+
+    Get.lazyPut(
+      () => IgAgePickerScreenController(
+        itemWidth: 60,
+        minValue: 1,
+        maxValue: 100,
+      ),
+    );
 
     // Add WeightController bindings with tags
     Get.lazyPut(() => WeightController(), tag: 'current_weight');
@@ -84,13 +96,7 @@ class ControllerBindings extends Bindings {
     ///Repositiories
     Get.lazyPut(() => AuthService(), fenix: true);
     Get.lazyPut(() => SignUpRepository(), fenix: true);
-
-    Get.lazyPut(
-      () => IgAgePickerScreenController(
-        itemWidth: 60,
-        minValue: 1,
-        maxValue: 100,
-      ),
-    );
+    Get.lazyPut(() => ForgotPasswordRepository(), fenix: true);
+    Get.lazyPut(() => VerifyOtpRepository(), fenix: true);
   }
 }
