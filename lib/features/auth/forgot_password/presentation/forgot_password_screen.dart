@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/controllers/forgot_password_controller.dart';
 import 'package:bloodfit/custom_widgets/app_logo_widget.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -13,7 +14,11 @@ import 'package:get/get.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
-  const ForgotPasswordScreen({super.key});
+  ForgotPasswordScreen({super.key});
+
+  ForgotPasswordController forgotPasswordController =
+      Get.find<ForgotPasswordController>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +52,51 @@ class ForgotPasswordScreen extends StatelessWidget {
                 UIHelper.verticalSpace(28.h),
 
                 ///Section : ----------///FormField -> Email///-------------
-                CustomFormField(hintText: "Enter Your Email Address"),
+                Form(
+                  key: _formKey,
+                  child: CustomFormField(
+                    controller: forgotPasswordController.accountEmail,
+                    hintText: "Enter Your Email Address",
+                  ),
+                ),
+
+                forgotPasswordController.errorMessage.isNotEmpty
+                    ? UIHelper.verticalSpace(10.h)
+                    : SizedBox.shrink(),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Obx(() {
+                    return forgotPasswordController.errorMessage.isNotEmpty
+                        ? Text(
+                            forgotPasswordController.errorMessage.value,
+                            style:
+                                TextFontStyle.headline14w400cb20000StylePoppins,
+                          )
+                        : SizedBox.shrink();
+                  }),
+                ),
                 UIHelper.verticalSpace(28.h),
 
                 ///Section : -----------------///Button -> Get OTP///----------------
-                CustomElevatedButton(
-                  onTap: () {
-                    log("Button Taped -> Get OTP");
-                    Get.toNamed(Routes.verifyOtpScreen);
-                  },
-                  borderRadius: 24.r,
-                  buttonHeight: 52.h,
-                  buttonTitle: "Get OTP",
-                ),
+                Obx(() {
+                  return CustomElevatedButton(
+                    onTap: forgotPasswordController.isLoading.value
+                        ? null
+                        : () {
+                            log("Button Taped -> Get OTP");
+                            // Get.toNamed(Routes.verifyOtpScreen);
+                            if (_formKey.currentState!.validate()) {
+                              forgotPasswordController.getOTP();
+                            }
+                          },
+                    borderRadius: 24.r,
+                    buttonHeight: 52.h,
+                    buttonTitle: forgotPasswordController.isLoading.value
+                        ? "Sending OTP..."
+                        : "Get OTP",
+                  );
+                }),
                 UIHelper.verticalSpace(20.h),
               ],
             ),

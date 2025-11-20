@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 import '../../../../../../../controllers/select_height_screen_controller.dart';
 
-// Custom Height Ruler Vertical Widget
 class CustomHeightRulerVertical extends StatefulWidget {
   final SelectHeightScreenController? controller;
   final int minValue;
@@ -19,8 +18,8 @@ class CustomHeightRulerVertical extends StatefulWidget {
   const CustomHeightRulerVertical({
     super.key,
     this.controller,
-    this.minValue = 50, // Default min height in cm
-    this.maxValue = 250, // Default max height in cm
+    this.minValue = 0,
+    this.maxValue = 250,
     this.centerIndicatorColor = Colors.purple,
   });
 
@@ -31,20 +30,13 @@ class CustomHeightRulerVertical extends StatefulWidget {
 
 class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
   late SelectHeightScreenController heightController;
+  bool _isControllerInitialized = false;
 
   @override
   void initState() {
     super.initState();
     heightController =
         widget.controller ?? Get.find<SelectHeightScreenController>();
-
-    // Initialize the controller with the passed values
-    heightController.initializeRuler(
-      minValue: widget.minValue.toDouble(),
-      maxValue: widget.maxValue.toDouble(),
-      smallDividerValue: 0.5, // 0.5 cm per small divider
-      bigDividerInterval: 2, // Every 2 small dividers = 1 cm
-    );
   }
 
   @override
@@ -71,32 +63,17 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
               clipBehavior: Clip.none,
               alignment: Alignment.centerRight,
               children: [
-                // Ruler content - Centered
+                // Ruler content - Centered with padding
                 Padding(
                   padding: EdgeInsets.all(10.sp),
-                  child: ListView.builder(
-                    controller: heightController.scrollController,
-                    scrollDirection: Axis.vertical,
-                    itemCount: heightController.totalItems + 1,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return SizedBox(height: centerPadding);
-                      }
-                      final int itemIndex = index - 1;
-                      return RulerDividerVertical(
-                        itemIndex: itemIndex,
-                        controller: heightController,
-                      );
-                    },
-                  ),
+                  child: _buildRulerContent(containerHeight, centerPadding),
                 ),
 
-                // Center indicator with glow effect
+                // Center indicator with glow effect - at exact center
                 Positioned(
                   left: 0,
                   right: 0,
-                  top: (containerHeight / 2) - 12.sp,
+                  top: (containerHeight / 2) - 1.5.sp, // Exactly at center
                   child: Container(
                     height: 3.sp,
                     decoration: BoxDecoration(
@@ -142,13 +119,19 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
             child: Obx(() {
               double currentValue = heightController.centerValue.value;
               return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  NumberIndicator(value: currentValue + 0.4, isCenter: false),
-                  NumberIndicator(value: currentValue + 0.2, isCenter: false),
+                  NumberIndicator(value: currentValue + 1, isCenter: false),
+                  UIHelper.verticalSpace(70.h),
                   NumberIndicator(value: currentValue, isCenter: true),
-                  NumberIndicator(value: currentValue - 0.2, isCenter: false),
-                  NumberIndicator(value: currentValue - 0.4, isCenter: false),
+                  UIHelper.verticalSpace(70.h),
+                  currentValue > 0
+                      ? NumberIndicator(
+                          value: currentValue - 1,
+                          isCenter: false,
+                        )
+                      : const SizedBox.shrink(),
+                  UIHelper.verticalSpace(currentValue <= 0 ? 40.h : 20.h),
                 ],
               );
             }),
@@ -158,15 +141,59 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
     );
   }
 
-  // Build the height display based on selected unit
+  Widget _buildRulerContent(double containerHeight, double centerPadding) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final initialValue =
+            widget.minValue + (widget.maxValue - widget.minValue) / 2;
+
+        // Initialize controller only once
+        if (!_isControllerInitialized) {
+          heightController.setRulerConfiguration(
+            minValue: widget.minValue.toDouble(),
+            maxValue: widget.maxValue.toDouble(),
+            smallDividerValue: 1.0,
+            bigDividerInterval: 5,
+            containerHeight: containerHeight,
+          );
+
+          // Set initial value after a small delay
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            heightController.setInitialValue(initialValue);
+            heightController.scrollToInitialPosition(initialValue);
+          });
+
+          _isControllerInitialized = true;
+        }
+
+        return ListView.builder(
+          controller: heightController.scrollController,
+          scrollDirection: Axis.vertical,
+          itemCount: heightController.totalItems + 1, // +1 for center padding
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // Add center padding to start dividers from center
+              return SizedBox(height: centerPadding);
+            }
+            final int itemIndex = index - 1;
+            return RulerDividerVertical(
+              itemIndex: itemIndex,
+              controller: heightController,
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _buildHeightDisplay() {
     if (heightController.unit.value == "cm") {
-      // Format for cm: "170 cm"
       return RichText(
         text: TextSpan(
           children: [
             TextSpan(
-              text: heightController.centerValue.value.toStringAsFixed(1),
+              text: heightController.centerValue.value.toStringAsFixed(0),
               style: TextFontStyle.headline22w600cfefefeStylePoppins.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -179,7 +206,6 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
         ),
       );
     } else {
-      // Format for ft: "6ft 9in"
       final String feetInches = heightController.getFormattedFeetInches();
       return RichText(
         text: TextSpan(
@@ -255,7 +281,7 @@ class NumberIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      value.toStringAsFixed(1),
+      value.toStringAsFixed(0),
       style: isCenter
           ? TextFontStyle.headline22w500cfefefeStylePoppins
           : TextFontStyle.headline16w500cFFFFFFStylePoppins,

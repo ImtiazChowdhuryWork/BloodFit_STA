@@ -45,10 +45,10 @@ class SelectHeightScreenWidget extends StatelessWidget {
                 items: const ["cm", "ft"],
                 onValueChanged: (index, value) {
                   log("Selected unit: $value");
-                  heightController.isLbSelected.value = (value == "ft");
-                  heightController.changeUnit(
-                    value,
-                  ); // Also update the unit in height controller
+                  // heightController.isLbSelected.value = (value == "ft");
+                  // heightController.changeUnit(
+                  //   value,
+                  // ); // Also update the unit in height controller
                 },
               ),
             ),
@@ -57,7 +57,7 @@ class SelectHeightScreenWidget extends StatelessWidget {
             /// --- HEIGHT PICKER SLIDER ---
             CustomHeightRulerVertical(
               controller: heightController,
-              minValue: 50, // Adjusted for height range
+              minValue: 0, // Adjusted for height range
               maxValue: 250,
               centerIndicatorColor: Colors.blue,
             ),
