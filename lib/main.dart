@@ -2,6 +2,7 @@ import 'package:bloodfit/bindings/controllers_binding.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
+import 'package:bloodfit/loading_screen.dart';
 import 'package:bloodfit/networks/dio/dio.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,8 @@ class UtilScreenMobile extends StatelessWidget {
             //initialRoute: Routes.navigationScreen,
             getPages: Routes.appRoutes,
             initialBinding: ControllerBindings(),
-            // home: Loading(),
-            home: SelectHeightScreenWidget(),
+            home: Loading(),
+            // home: SelectHeightScreenWidget(),
           ),
         );
       },
