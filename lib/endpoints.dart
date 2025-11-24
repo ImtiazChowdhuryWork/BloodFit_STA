@@ -23,7 +23,9 @@ final class Endpoints {
   static String signIn() => "/api/auth/login";
   static String signOut() => "/api/auth/logout";
   static String forgotPassword() => "/api/auth/forgot-password";
-  static String verifyOtp(String otp) => "/api/auth/verify/otp/$otp";
+  static String verifyUserOtp(String otp) => "/api/auth/verify/otp/$otp";
+  static String resetPasswordOtp(String otp) =>
+      "/api/auth/reset-password-otp/$otp";
 }
 
 

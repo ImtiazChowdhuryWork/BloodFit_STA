@@ -1,8 +1,12 @@
 import 'dart:developer';
 
+import 'package:bloodfit/constants/app_constant_text.dart';
+import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../networks/dio/dio.dart';
 import '../networks/exception_handler/data_source.dart';
 import '../repositories/sign_up_repository.dart';
 import '../routes/routes.dart';
@@ -91,32 +95,59 @@ class SignUpScreenController extends GetxController {
         passwordController.text,
       );
 
-      log("📦 Repository response: $response");
-      log("📦 Response type: ${response.runtimeType}");
+      log("----------📦 Repository response: $response-----------------");
 
-      // Let's see what keys are available in the response
-      if (response is Map) {
-        log("📦 Response keys: ${response.keys}");
-      }
-
-      // Extract data and headers from ApiService response format
+      // Extract data and headers
       final responseData = response['data'];
+      final headers = response['headers'];
       final responseStatusCode = response['status-code'];
+
+      // Extract tokens
+      final accessToken = _extractToken(headers, 'access-token');
+      final refreshToken = _extractToken(headers, 'refresh-token');
 
       // Handle success response
       if (responseData != null && responseStatusCode == 201) {
-        Get.snackbar(
-          'Success',
-          responseData['message'] ?? 'Account created successfully!',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        // Store tokens
+        if (accessToken != null) {
+          appData.write(kKeyAccessToken, accessToken);
+          log("------Access Token stored successfully-----------");
+          log(
+            "--------------Access Token : ${appData.read(kKeyAccessToken)}-----------",
+          );
+        }
 
-        // Navigate to next screen
-        Get.offAllNamed(Routes.signInScreen);
+        if (refreshToken != null) {
+          appData.write(kKeyRefreshToken, refreshToken);
+          log("-----------Refresh Token stored successfully----------------");
+          log(
+            "--------------Access Token : ${appData.read(kKeyRefreshToken)}-----------",
+          );
+        }
+
+        // ✅ CRITICAL FIX: Update Dio instance with new tokens
+        DioSingleton.instance.update();
+
+        // Extract user verification status from nested user object
+        final isUserVerified = responseData['isVerified'] ?? false;
+        appData.write(kKeyIsUserVerified, isUserVerified);
+        log("--------------Is User Verified : $isUserVerified----------------");
+
+        // Check if tokens were stored successfully
+        if (appData.read(kKeyAccessToken) != null &&
+            appData.read(kKeyRefreshToken) != null &&
+            appData.read(kKeyIsUserVerified) == false) {
+          ///Show Toast Message On Creating Account Successfully
+          CustomToast.success("Account Created Successfully!");
+
+          // Navigate to appropriate screen
+          Get.offAllNamed(Routes.verifyUserScreen);
+        } else {
+          CustomToast.error(
+            "Authentication failed - tokens not stored properly",
+          );
+        }
       } else {
-        // Handle unexpected response format
         throw Failure(500, 'Unexpected response format from server');
       }
     } on Failure catch (failure) {
@@ -133,7 +164,6 @@ class SignUpScreenController extends GetxController {
     } catch (e) {
       errorMessage.value = 'An unexpected error occurred';
       log("🚨 UNEXPECTED ERROR: $e");
-      log("🚨 ERROR TYPE: ${e.runtimeType}");
 
       Get.snackbar(
         'Error',
@@ -157,5 +187,23 @@ class SignUpScreenController extends GetxController {
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.onClose();
+  }
+}
+
+// ✅ HELPER METHOD TO EXTRACT TOKENS FROM HEADERS
+String? _extractToken(Map<String, dynamic> headers, String tokenName) {
+  try {
+    if (headers.containsKey(tokenName)) {
+      final tokenHeader = headers[tokenName];
+      if (tokenHeader is List && tokenHeader.isNotEmpty) {
+        return tokenHeader.first;
+      } else if (tokenHeader is String) {
+        return tokenHeader;
+      }
+    }
+    return null;
+  } catch (e) {
+    log("⚠️ Error extracting $tokenName: $e");
+    return null;
   }
 }

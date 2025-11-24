@@ -1,5 +1,4 @@
 import 'package:bloodfit/bindings/controllers_binding.dart';
-import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
 import 'package:bloodfit/loading_screen.dart';
