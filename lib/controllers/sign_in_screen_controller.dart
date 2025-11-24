@@ -81,6 +81,7 @@ class SignInScreenController extends GetxController {
         // ✅ EXTRACT TOKENS FROM HEADERS
         final accessToken = _extractToken(headers, 'access-token');
         final refreshToken = _extractToken(headers, 'refresh-token');
+        final isUserVerified = appData.read(kKeyIsUserVerified);
 
         // ✅ LOG SUCCESS WITH TOKENS
         log("🎉 LOGIN SUCCESS");
@@ -126,7 +127,11 @@ class SignInScreenController extends GetxController {
         );
 
         // Navigate to home screen
-        Get.offAllNamed(Routes.enterYourDetailsScreen);
+        if (appData.read(kKeyAccessToken) != null &&
+            appData.read(kKeyRefreshToken) != null &&
+            appData.read(kKeyIsUserVerified) == true) {
+          Get.offAllNamed(Routes.enterYourDetailsScreen);
+        }
       } else {
         // Handle non-success status codes
         log("❌ LOGIN FAILED - Status Code: $statusCode");
