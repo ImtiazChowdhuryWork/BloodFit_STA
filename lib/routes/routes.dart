@@ -31,6 +31,7 @@ import 'package:bloodfit/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../features/auth/forgot_password/binding/forgot_password_binding.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
@@ -130,6 +131,7 @@ class Routes {
     GetPage(
       name: forgotPasswordScreen,
       page: () => ForgotPasswordScreen(),
+      binding: ForgotPasswordBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

@@ -69,7 +69,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => IgSelectBloodGropController(), fenix: true);
     Get.lazyPut(() => IgSelectGenderScreenController(), fenix: true);
     Get.lazyPut(() => IgWhatsYourActivityLevelController(), fenix: true);
-    Get.lazyPut(() => ForgotPasswordController(), fenix: true);
+    // Get.lazyPut(() => ForgotPasswordController(), fenix: true);
 
     Get.lazyPut(
       () => IgAgePickerScreenController(
