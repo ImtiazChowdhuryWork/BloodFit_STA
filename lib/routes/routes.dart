@@ -6,6 +6,8 @@ import 'package:bloodfit/features/auth/reset_password/presentation/reset_passwor
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
 import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart';
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
+import 'package:bloodfit/features/auth/verify_user_otp/bindings/verify_user_binding.dart';
+import 'package:bloodfit/features/auth/verify_user_otp/presentation/verify_user_otp_screen.dart';
 import 'package:bloodfit/features/change_password/presentation/change_password_screen.dart';
 import 'package:bloodfit/features/choose_extra_workout/presentation/choose_extra_workout_screen.dart';
 import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cost_details_for_upgrade_plan_screen.dart';
@@ -32,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../features/auth/forgot_password/binding/forgot_password_binding.dart';
+import '../features/auth/sign_up/binding/sign_up_binding.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
@@ -89,6 +92,7 @@ class Routes {
   static const String mealDetailscreen = '/meal_details_screen';
   static const String chooseExtraWorkoutScreen = '/choose_extra_workout_screen';
   static const String selectHeightScreenWidget = '/select_height_screen_widget';
+  static const String verifyUserScreen = '/verify_user_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -122,6 +126,7 @@ class Routes {
     GetPage(
       name: signUpScreen,
       page: () => SignUpScreen(),
+      binding: SignUpBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -416,6 +421,16 @@ class Routes {
     GetPage(
       name: selectHeightScreenWidget,
       page: () => SelectHeightScreenWidget(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///verifyUserScreen
+    GetPage(
+      name: verifyUserScreen,
+      page: () => VerifyUserScreen(),
+      binding: VerifyUserBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

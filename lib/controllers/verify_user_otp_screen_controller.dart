@@ -1,3 +1,76 @@
+// import 'dart:developer';
+
+// import 'package:bloodfit/constants/app_constant_text.dart';
+// import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
+// import 'package:bloodfit/helper/di.dart';
+// import 'package:get/get.dart';
+// import '../repositories/verify_user_repository.dart';
+// import '../routes/routes.dart';
+
+// class VerifyUserOtpScreenController extends GetxController {
+//   var pin = ''.obs;
+//   var isLoading = false.obs;
+//   final VerifyUserRepository _repository = VerifyUserRepository();
+
+//   // Validate OTP format (6 digits)
+//   String? validatePin(String? value) {
+//     if (value == null || value.isEmpty) return 'OTP cannot be empty';
+//     if (value.length != 6) return 'OTP must be 6 digits';
+//     if (!RegExp(r'^\d+$').hasMatch(value))
+//       return 'OTP must contain only numbers';
+//     return null;
+//   }
+
+//   // Called when OTP completed
+//   void onCompleted(String value) {
+//     pin.value = value;
+//     log('Entered OTP: $value');
+//   }
+
+//   // Verify OTP with API
+//   Future<void> verifyOtp() async {
+//     if (pin.value.isEmpty || pin.value.length != 6) {
+//       Get.snackbar('Error', 'Please enter a valid 6-digit OTP');
+//       return;
+//     }
+
+//     try {
+//       isLoading.value = true;
+
+//       // final response = await _repository.verifyUserOtp(pin.value);
+//       final response = await _repository.verifyUser(pin.value);
+
+//       // Extract data from the response structure
+//       final responseData = response['data'];
+//       final statusCode = response['status-code'];
+
+//       if (responseData != null && statusCode == 200 ||
+//           responseData != null && statusCode == 201) {
+//         Get.snackbar('Success', 'OTP verified successfully');
+
+//         if (appData.read(kKeyAccessToken) &&
+//             appData.read(kKeyRefreshToken) == null) {
+//           log("Access Token Or Refresh Token Not Found!");
+//           log("Access Token : ${appData.read(kKeyAccessToken)}");
+//           log("Refresh Token : ${appData.read(kKeyRefreshToken)}");
+//           CustomToast.error("User Not Found");
+//         } else {
+//           // Navigate to reset password screen
+//           Get.toNamed(Routes.homeScreen);
+//         }
+//       } else {
+//         Get.snackbar('Error', 'Invalid OTP or verification failed');
+//       }
+//     } catch (e) {
+//       log('OTP Verification Error: $e');
+//       // The error handling is already done in ApiService, so we just show a generic message
+//       Get.snackbar('Error', 'Failed to verify OTP. Please try again.');
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
+// }
+
 import 'dart:developer';
 
 import 'package:bloodfit/constants/app_constant_text.dart';
@@ -10,6 +83,7 @@ import '../routes/routes.dart';
 class VerifyUserOtpScreenController extends GetxController {
   var pin = ''.obs;
   var isLoading = false.obs;
+  var errorMessage = ''.obs;
   final VerifyUserRepository _repository = VerifyUserRepository();
 
   // Validate OTP format (6 digits)
@@ -24,47 +98,74 @@ class VerifyUserOtpScreenController extends GetxController {
   // Called when OTP completed
   void onCompleted(String value) {
     pin.value = value;
+    errorMessage.value = ''; // Clear previous errors
     log('Entered OTP: $value');
   }
 
   // Verify OTP with API
   Future<void> verifyOtp() async {
-    if (pin.value.isEmpty || pin.value.length != 6) {
-      Get.snackbar('Error', 'Please enter a valid 6-digit OTP');
+    // Clear previous errors
+    errorMessage.value = '';
+
+    // Validate OTP
+    final validationError = validatePin(pin.value);
+    if (validationError != null) {
+      errorMessage.value = validationError;
+
+      CustomToast.error(validationError);
       return;
     }
 
     try {
       isLoading.value = true;
 
-      // final response = await _repository.verifyUserOtp(pin.value);
       final response = await _repository.verifyUser(pin.value);
 
       // Extract data from the response structure
       final responseData = response['data'];
       final statusCode = response['status-code'];
 
-      if (responseData != null && statusCode == 200 ||
-          responseData != null && statusCode == 201) {
-        Get.snackbar('Success', 'OTP verified successfully');
-
-        if (appData.read(kKeyAccessToken) &&
-            appData.read(kKeyRefreshToken) != null) {
+      // ✅ FIXED: Proper condition with parentheses
+      if (responseData != null && statusCode == 200) {
+        // ✅ FIXED: Correct token existence check
+        if (appData.read(kKeyAccessToken) == null ||
+            appData.read(kKeyRefreshToken) == null) {
           log("Access Token Or Refresh Token Not Found!");
           log("Access Token : ${appData.read(kKeyAccessToken)}");
           log("Refresh Token : ${appData.read(kKeyRefreshToken)}");
-          CustomToast.error("User Not Found");
-        } else {
-          // Navigate to reset password screen
-          Get.toNamed(Routes.homeScreen);
+          CustomToast.error("Authentication tokens missing");
+          Get.toNamed(Routes.signInScreen);
+          return;
+        }
+
+        // Update user status
+        appData.write(kKeyIsUserVerified, true);
+
+        log("---------------Verify User Screen :----------");
+        log("Access Token : ${appData.read(kKeyAccessToken)}");
+        log("Refresh Token : ${appData.read(kKeyRefreshToken)}");
+        log("Is User Verified : ${appData.read(kKeyIsUserVerified)}");
+
+        CustomToast.success(
+          responseData['message'] ?? 'OTP verified successfully',
+        );
+
+        if (appData.read(kKeyAccessToken) != null &&
+            appData.read(kKeyRefreshToken) != null &&
+            appData.read(kKeyIsUserVerified) == true) {
+          // Navigate to home screen
+          Get.offAllNamed(Routes.homeScreen);
         }
       } else {
-        Get.snackbar('Error', 'Invalid OTP or verification failed');
+        errorMessage.value = 'Invalid OTP or verification failed';
+
+        CustomToast.error('Invalid OTP or verification failed');
       }
     } catch (e) {
       log('OTP Verification Error: $e');
-      // The error handling is already done in ApiService, so we just show a generic message
-      Get.snackbar('Error', 'Failed to verify OTP. Please try again.');
+      errorMessage.value = 'Failed to verify OTP. Please try again.';
+
+      CustomToast.error('Failed to verify OTP. Please try again.');
     } finally {
       isLoading.value = false;
     }

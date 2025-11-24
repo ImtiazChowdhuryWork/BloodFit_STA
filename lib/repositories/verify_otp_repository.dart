@@ -6,7 +6,7 @@ class VerifyOtpRepository {
 
   Future<dynamic> verifyOtp(String otp) async {
     try {
-      final response = await _apiService.get(Endpoints.verifyOtp(otp));
+      final response = await _apiService.get(Endpoints.resetPasswordOtp(otp));
       return response;
     } catch (e) {
       rethrow;
