@@ -77,11 +77,14 @@ class SignInScreenController extends GetxController {
       final headers = response['headers'];
       final statusCode = response['status-code'];
 
-      if (statusCode == 200 || statusCode == 201) {
+      if (statusCode == 200) {
         // ✅ EXTRACT TOKENS FROM HEADERS
         final accessToken = _extractToken(headers, 'access-token');
         final refreshToken = _extractToken(headers, 'refresh-token');
         final isUserVerified = appData.read(kKeyIsUserVerified);
+        log(
+          "<---------------------Is User Verified : $isUserVerified-------------->",
+        );
 
         // ✅ LOG SUCCESS WITH TOKENS
         log("🎉 LOGIN SUCCESS");
@@ -192,8 +195,8 @@ class SignInScreenController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
+    emailController.clear();
+    passwordController.clear();
     super.onClose();
   }
 }

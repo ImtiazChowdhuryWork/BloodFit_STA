@@ -40,7 +40,7 @@ class SignOutController extends GetxService {
 
       // 3. Navigate to sign-in screen safely
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.offAllNamed(Routes.signInScreen);
+        Get.offAndToNamed(Routes.signInScreen);
       });
 
       Get.snackbar(
@@ -59,23 +59,23 @@ class SignOutController extends GetxService {
   }
 
   // Force logout without API call (for token refresh failures, etc.)
-  void forceLogout() {
-    if (kDebugMode) {
-      debugPrint("🚨 SignOutController - Force logout initiated");
-    }
+  // void forceLogout() {
+  //   if (kDebugMode) {
+  //     debugPrint("🚨 SignOutController - Force logout initiated");
+  //   }
 
-    _authService.performLogout();
+  //   _authService.performLogout();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.offAllNamed(Routes.signInScreen);
-    });
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     Get.offAllNamed(Routes.signInScreen);
+  //   });
 
-    Get.snackbar(
-      'Logged Out',
-      'You have been logged out',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blue,
-      colorText: Colors.white,
-    );
-  }
+  //   Get.snackbar(
+  //     'Logged Out',
+  //     'You have been logged out',
+  //     snackPosition: SnackPosition.BOTTOM,
+  //     backgroundColor: Colors.blue,
+  //     colorText: Colors.white,
+  //   );
+  // }
 }

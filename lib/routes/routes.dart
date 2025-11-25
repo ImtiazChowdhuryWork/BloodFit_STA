@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../features/auth/forgot_password/binding/forgot_password_binding.dart';
+import '../features/auth/sign_in/binding/sign_in_binding.dart';
 import '../features/auth/sign_up/binding/sign_up_binding.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
@@ -117,6 +118,7 @@ class Routes {
     GetPage(
       name: signInScreen,
       page: () => SignInScreen(),
+      binding: SignInBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
