@@ -194,25 +194,13 @@ final class DioSingleton {
 
 // HTTP method helpers
 Future<dio_package.Response> postHttp(String path, [dynamic data]) =>
-    DioSingleton.instance.dio.post(
-      path,
-      data: data,
-      cancelToken: DioSingleton.cancelToken,
-    );
+    DioSingleton.instance.dio.post(path, data: data);
 
 Future<dio_package.Response> putHttp(String path, [dynamic data]) =>
-    DioSingleton.instance.dio.put(
-      path,
-      data: data,
-      cancelToken: DioSingleton.cancelToken,
-    );
+    DioSingleton.instance.dio.put(path, data: data);
 
 Future<dio_package.Response> getHttp(String path, [dynamic data]) =>
-    DioSingleton.instance.dio.get(path, cancelToken: DioSingleton.cancelToken);
+    DioSingleton.instance.dio.get(path);
 
 Future<dio_package.Response> deleteHttp(String path, [dynamic data]) =>
-    DioSingleton.instance.dio.delete(
-      path,
-      data: data,
-      cancelToken: DioSingleton.cancelToken,
-    );
+    DioSingleton.instance.dio.delete(path, data: data);

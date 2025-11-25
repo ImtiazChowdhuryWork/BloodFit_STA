@@ -123,17 +123,28 @@ class SignInScreenController extends GetxController {
           ApiService.instance.updateHeaders();
         }
 
+        // Determine if user is verified from the login response
+        bool isUserVerifiedFromResponse = false;
+        if (userData['user'] != null && userData['user']['isVerified'] != null) {
+          isUserVerifiedFromResponse = userData['user']['isVerified'] as bool;
+          // Update the verification status in storage
+          appData.write(kKeyIsUserVerified, isUserVerifiedFromResponse);
+        } else {
+          // If verification status is not in the response, check existing storage
+          isUserVerifiedFromResponse = appData.read(kKeyIsUserVerified) ?? false;
+        }
+
         // Show success message using UI-driven toast
         CustomToast.success(
           userData['message'] ?? 'Login successful!',
           duration: 3,
         );
 
-        // Navigate to home screen
+        // Navigate to navigation screen (main app) since login was successful
+        // The user verification status should have been handled during sign up
         if (appData.read(kKeyAccessToken) != null &&
-            appData.read(kKeyRefreshToken) != null &&
-            appData.read(kKeyIsUserVerified) == true) {
-          Get.offAllNamed(Routes.enterYourDetailsScreen);
+            appData.read(kKeyRefreshToken) != null) {
+          Get.offAllNamed(Routes.navigationScreen); // Go to main app
         }
       } else {
         // Handle non-success status codes

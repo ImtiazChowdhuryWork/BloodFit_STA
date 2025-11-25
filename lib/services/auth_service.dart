@@ -21,13 +21,10 @@ class AuthService extends GetxService {
   }
 
   Future<void> performLogout() async {
-    // 1. Cancel any ongoing API requests
-    _apiService.cancelRequests();
-
-    // 2. Clear authentication tokens
+    // 1. Clear authentication tokens
     _clearTokens();
 
-    // 3. Update auth state
+    // 2. Update auth state
     isLoggedIn.value = false;
 
     if (kDebugMode) {

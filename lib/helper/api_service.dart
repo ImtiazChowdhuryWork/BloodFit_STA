@@ -80,6 +80,7 @@ final class ApiService extends GetxService {
   }
 
   void cancelRequests() {
-    DioSingleton.cancelToken.cancel('Request cancelled by user');
+    // No longer cancelling requests as we're not using cancel tokens globally
+    // to prevent logout from cancelling login requests
   }
 }
