@@ -44,6 +44,7 @@ final class CustomFormField extends StatelessWidget {
   final Color? borderColor;
   final Widget? child;
   final bool? showVerticalDivider;
+  final String? errorText;
 
   const CustomFormField({
     super.key,
@@ -83,6 +84,7 @@ final class CustomFormField extends StatelessWidget {
     this.borderColor,
     this.showVerticalDivider = true,
     this.child,
+    this.errorText,
   });
 
   @override
@@ -155,6 +157,7 @@ final class CustomFormField extends StatelessWidget {
           labelText: labelText,
           labelStyle:
               labelStyle ?? TextFontStyle.headline14w400cFFFFFFStylePoppins,
+          errorText: errorText,
           errorStyle: TextStyle(
             fontSize: 10.sp,
             fontWeight: FontWeight.w400,

@@ -22,9 +22,8 @@ class VerifyOtpScreenController extends GetxController {
     log('Email received for OTP verification: $email');
 
     if (email.isEmpty) {
-      // Get.snackbar('Error', 'Email not found. Please try again.');
       CustomToast.error('Email not found. Please try again.');
-      Get.back(); // Go back if no email
+      Get.back();
     }
   }
 
@@ -46,12 +45,14 @@ class VerifyOtpScreenController extends GetxController {
   // Verify OTP with API
   Future<void> verifyOtp() async {
     if (pin.value.isEmpty || pin.value.length != 6) {
-      Get.snackbar('Error', 'Please enter a valid 6-digit OTP');
+      // Get.snackbar('Error', 'Please enter a valid 6-digit OTP');
+      CustomToast.error('Please enter a valid 6-digit OTP');
       return;
     }
 
     if (email.isEmpty) {
-      Get.snackbar('Error', 'Email not found. Please try the process again.');
+      // Get.snackbar('Error', 'Email not found. Please try the process again.');
+      CustomToast.error('Email not found. Please try the process again.');
       return;
     }
 
@@ -66,20 +67,27 @@ class VerifyOtpScreenController extends GetxController {
       // Extract data from the response structure
       final responseData = response['data'];
       final statusCode = response['status-code'];
+      final otpToken = responseData['token'];
 
       if (responseData != null && (statusCode == 200 || statusCode == 201)) {
-        Get.snackbar('Success', 'OTP verified successfully');
+        // Get.snackbar('Success', 'OTP verified successfully');
+        CustomToast.success('OTP verified successfully');
         // Navigate to reset password screen and pass the email
-        Get.toNamed(
-          Routes.resetPasswordScreen,
-          arguments: {'email': email}, // Pass email to next screen if needed
-        );
+
+        if (otpToken != null) {
+          Get.toNamed(
+            Routes.resetPasswordScreen,
+            arguments: {'token': otpToken},
+          );
+        }
       } else {
-        Get.snackbar('Error', 'Invalid OTP or verification failed');
+        // Get.snackbar('Error', 'Invalid OTP or verification failed');
+        CustomToast.error('Invalid OTP or verification failed');
       }
     } catch (e) {
       log('OTP Verification Error: $e');
-      Get.snackbar('Error', 'Failed to verify OTP. Please try again.');
+      // Get.snackbar('Error', 'Failed to verify OTP. Please try again.');
+      CustomToast.error('Failed to verify OTP. Please try again.');
     } finally {
       isLoading.value = false;
     }
