@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
 import 'package:bloodfit/helper/loading_helper.dart';
 import 'package:bloodfit/networks/exception_handler/data_source.dart';
 import 'package:bloodfit/repositories/forgot_password_repository.dart';
@@ -34,13 +35,9 @@ class ForgotPasswordController extends GetxController {
       final validationError = validateEmail();
       if (validationError != null) {
         errorMessage.value = validationError;
-        Get.snackbar(
-          'Validation Error',
-          validationError,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
+
+        CustomToast.error(validationError);
+
         return;
       }
 
@@ -56,13 +53,7 @@ class ForgotPasswordController extends GetxController {
 
       if (responseBodyData != null && statusCode == 200 ||
           responseBodyData != null && statusCode == 201) {
-        Get.snackbar(
-          'Success',
-          'OTP sent successfully to your email',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+        CustomToast.success('OTP sent successfully to your email');
 
         // Navigate to OTP verification screen with email
         Get.toNamed(
@@ -75,25 +66,14 @@ class ForgotPasswordController extends GetxController {
     } on Failure catch (failure) {
       errorMessage.value = failure.responseMessage;
       log("❌ SEND OTP FAILED: ${failure.responseMessage}");
+      ;
 
-      Get.snackbar(
-        'Failed',
-        failure.responseMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      CustomToast.showFromFailure(failure);
     } catch (e) {
       errorMessage.value = 'An unexpected error occurred';
       log("🚨 UNEXPECTED ERROR: $e");
 
-      Get.snackbar(
-        'Error',
-        'An unexpected error occurred',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      CustomToast.error('An unexpected error occurred');
     } finally {
       isLoading.value = false;
     }
