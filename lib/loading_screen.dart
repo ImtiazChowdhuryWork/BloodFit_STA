@@ -28,15 +28,18 @@ class _LoadingState extends State<Loading> {
   }
 
   Future<void> _initializeApp() async {
-    final bool isLoggedIn = appData.read(kKeyIsLoggedIn);
+    // Initialize default values first
+    await setInitValue();
+
+    // Read the current state after initialization
+    // Use access token as the authoritative source for login state
+    final bool isLoggedIn = appData.read(kKeyAccessToken) != null;
     final bool isFirstTime = appData.read(kKeyfirstTime) ?? false;
 
     log('isFirstTime: $isFirstTime');
     log('isLoggedIn: $isLoggedIn');
 
-    await setInitValue();
-
-    if (appData.read(kKeyAccessToken) != null) {
+    if (isLoggedIn) {
       await performPostLoginActions();
     }
 
@@ -46,6 +49,7 @@ class _LoadingState extends State<Loading> {
   }
 
   Widget _determineStartScreen() {
+    // Use the same logic as _initializeApp() for consistency
     final bool isLoggedIn = appData.read(kKeyAccessToken) != null;
     final bool isFirstTime = appData.read(kKeyfirstTime) ?? false;
 

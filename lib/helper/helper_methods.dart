@@ -13,7 +13,11 @@ import '../gen/colors.gen.dart';
 
 Future<void> setInitValue() async {
   appData.writeIfNull(kKeyfirstTime, true);
-  await appData.writeIfNull(kKeyIsLoggedIn, false);
+  // Only set isLoggedIn to false if no access token exists
+  // This ensures logout state persists
+  if (!appData.hasData(kKeyAccessToken)) {
+    await appData.writeIfNull(kKeyIsLoggedIn, false);
+  }
 
   // this is a temporary token. which should be removed
 

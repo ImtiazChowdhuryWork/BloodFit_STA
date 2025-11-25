@@ -24,7 +24,10 @@ class AuthService extends GetxService {
     // 1. Clear authentication tokens
     _clearTokens();
 
-    // 2. Update auth state
+    // 2. Clear login state flag
+    appData.write(kKeyIsLoggedIn, false);
+
+    // 3. Update auth state
     isLoggedIn.value = false;
 
     if (kDebugMode) {
