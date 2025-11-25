@@ -20,6 +20,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
   final ResetPasswordScreenController controller =
       Get.find<ResetPasswordScreenController>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,57 +54,74 @@ class ResetPasswordScreen extends StatelessWidget {
                 UIHelper.verticalSpace(21.h),
 
                 ///Section : -----------------///Form Field -> New Password///-----------------------
-                Obx(() {
-                  return CustomFormField(
-                    controller: controller.newPasswordController,
-                    isPass: true,
-                    isObsecure: controller.isNewPasswordVisible.value,
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        controller.setNewPasswordVisibility();
-                      },
-                      child: SvgPicture.asset(
-                        controller.isNewPasswordVisible.value
-                            ? Assets.icons.pwdNotObsecured
-                            : Assets.icons.pwdObsecured,
-                      ),
-                    ),
-                    hintText: "Enter Your New Password",
-                  );
-                }),
-                UIHelper.verticalSpace(24.h),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Obx(() {
+                        return CustomFormField(
+                          controller: controller.newPasswordController,
+                          isPass: true,
+                          isObsecure: controller.isNewPasswordVisible.value,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              controller.setNewPasswordVisibility();
+                            },
+                            child: SvgPicture.asset(
+                              controller.isNewPasswordVisible.value
+                                  ? Assets.icons.pwdNotObsecured
+                                  : Assets.icons.pwdObsecured,
+                            ),
+                          ),
+                          hintText: "Enter Your New Password",
+                          errorText: controller.validateNewPassword(
+                            controller.newPasswordController.text,
+                          ),
+                        );
+                      }),
+                      UIHelper.verticalSpace(24.h),
 
-                ///Section : -----------------///Form Field -> Confirm Password///-----------------------
-                Obx(() {
-                  return CustomFormField(
-                    controller: controller.confirmPasswordController,
-                    isPass: true,
-                    isObsecure: controller.isConfirmNewPasswordVisible.value,
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        controller.setConfirmNewPasswordVisibility();
-                      },
-                      child: SvgPicture.asset(
-                        controller.isConfirmNewPasswordVisible.value
-                            ? Assets.icons.pwdNotObsecured
-                            : Assets.icons.pwdObsecured,
-                      ),
-                    ),
-                    hintText: "Confirm Your New Password",
-                  );
-                }),
+                      ///Section : -----------------///Form Field -> Confirm Password///-----------------------
+                      Obx(() {
+                        return CustomFormField(
+                          controller: controller.confirmPasswordController,
+                          isPass: true,
+                          isObsecure:
+                              controller.isConfirmNewPasswordVisible.value,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              controller.setConfirmNewPasswordVisibility();
+                            },
+                            child: SvgPicture.asset(
+                              controller.isConfirmNewPasswordVisible.value
+                                  ? Assets.icons.pwdNotObsecured
+                                  : Assets.icons.pwdObsecured,
+                            ),
+                          ),
+                          hintText: "Confirm Your New Password",
+                          errorText: controller.validateConfirmPassword(
+                            controller.confirmPasswordController.text,
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
                 UIHelper.verticalSpace(24.h),
 
                 ///Section : -----------------///Button ->Verify///----------------
-                CustomElevatedButton(
-                  onTap: () {
-                    log("Button Taped -> Reset");
-                    Get.toNamed(Routes.signInScreen);
-                  },
-                  borderRadius: 24.r,
-                  buttonHeight: 52.h,
-                  buttonTitle: "Reset",
-                ),
+                Obx(() {
+                  return CustomElevatedButton(
+                    onTap: controller.isLoading.value
+                        ? null
+                        : controller.resetNewPassword,
+                    borderRadius: 24.r,
+                    buttonHeight: 52.h,
+                    buttonTitle: controller.isLoading.value
+                        ? "Reseting New Password..."
+                        : "Reset",
+                  );
+                }),
                 UIHelper.verticalSpace(20.h),
               ],
             ),
