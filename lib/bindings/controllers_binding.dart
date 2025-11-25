@@ -35,7 +35,7 @@ import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
 import '../repositories/forgot_password_repository.dart';
 import '../repositories/sign_up_repository.dart';
-import '../repositories/verify_otp_repository.dart';
+import '../repositories/forgot_password_verify_otp_repository.dart';
 import '../services/auth_service.dart';
 
 class ControllerBindings extends Bindings {
@@ -97,6 +97,6 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => AuthService(), fenix: true);
     // Get.lazyPut(() => SignUpRepository(), fenix: true);
     Get.lazyPut(() => ForgotPasswordRepository(), fenix: true);
-    Get.lazyPut(() => VerifyOtpRepository(), fenix: true);
+    Get.lazyPut(() => ForgotPasswordVerifyOtpRepository(), fenix: true);
   }
 }
