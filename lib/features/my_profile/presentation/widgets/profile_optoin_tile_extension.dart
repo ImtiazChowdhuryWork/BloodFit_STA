@@ -3,8 +3,8 @@ import 'package:bloodfit/constants/app_enums.dart';
 extension ProfileOptoinTileExtension on ProfileOptionsTitle {
   String get label {
     switch (this) {
-      case ProfileOptionsTitle.editProfile:
-        return "Edit Profile";
+      case ProfileOptionsTitle.viewProfile:
+        return "View Profile";
 
       case ProfileOptionsTitle.mealPlan:
         return "Mealplan";
