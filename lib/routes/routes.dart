@@ -27,6 +27,7 @@ import 'package:bloodfit/features/report_a_problem/presentation/report_a_problem
 import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
+import 'package:bloodfit/features/view_profile_sub_type_free/presentation/view_profile_subscription_type_free_screen.dart';
 import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
 import 'package:bloodfit/navigation_screen.dart';
@@ -45,6 +46,7 @@ import '../features/information_gather_meal_plan/presentation/widgets/select_hei
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
+import '../features/view_profile_sub_type_free/bindings/view_profile_sub_type_free_binding.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 
 class Routes {
@@ -95,6 +97,8 @@ class Routes {
   static const String chooseExtraWorkoutScreen = '/choose_extra_workout_screen';
   static const String selectHeightScreenWidget = '/select_height_screen_widget';
   static const String verifyUserScreen = '/verify_user_screen';
+  static const String viewProfileSubscriptionTypeFreeScreen =
+      '/view_profile_subscription_type_free_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -435,6 +439,16 @@ class Routes {
       name: verifyUserScreen,
       page: () => VerifyUserScreen(),
       binding: VerifyUserBinding(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///viewProfileSubscriptionTypeFreeScreen
+    GetPage(
+      name: viewProfileSubscriptionTypeFreeScreen,
+      page: () => ViewProfileSubscriptionTypeFreeScreen(),
+      binding: ViewProfileSubTypeFreeBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

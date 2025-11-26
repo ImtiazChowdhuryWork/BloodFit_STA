@@ -26,6 +26,7 @@ final class Endpoints {
   static String verifyUserOtp(String otp) => "/api/auth/verify/otp/$otp";
   static String resetPasswordOtp() => "/api/auth/reset-password-otp";
   static String resetPassword() => '/api/auth/reset-password';
+  static String userProfile() => '/api/auth/reset-password';
 }
 
 

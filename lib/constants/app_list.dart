@@ -50,9 +50,9 @@ class AppList {
   static List<CardTileOptionModel<ProfileOptionsTitle>>
   freeUserProfileTileList = [
     CardTileOptionModel(
-      imagePath: Assets.icons.penIcon,
-      titleEnum: ProfileOptionsTitle.editProfile,
-      route: Routes.editProfileScreen,
+      imagePath: Assets.icons.personIcon,
+      titleEnum: ProfileOptionsTitle.viewProfile,
+      route: Routes.viewProfileSubscriptionTypeFreeScreen,
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
@@ -62,7 +62,7 @@ class AppList {
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
-      imagePath: Assets.icons.mealIcon,
+      imagePath: Assets.icons.crownIcon,
       titleEnum: ProfileOptionsTitle.subscriptoinType,
       route: Routes.subscriptionScreen,
       labelMapper: (e) => e.label,
@@ -73,7 +73,7 @@ class AppList {
   premimumUserProfileTileList = [
     CardTileOptionModel(
       imagePath: Assets.icons.personIcon,
-      titleEnum: ProfileOptionsTitle.editProfile,
+      titleEnum: ProfileOptionsTitle.viewProfile,
       route: Routes.editProfileScreen,
       labelMapper: (e) => e.label,
     ),
@@ -96,7 +96,7 @@ class AppList {
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
-      imagePath: Assets.icons.mealIcon,
+      imagePath: Assets.icons.crownIcon,
       titleEnum: ProfileOptionsTitle.subscriptoinType,
       route: Routes.subscriptionScreen,
       labelMapper: (e) => e.label,

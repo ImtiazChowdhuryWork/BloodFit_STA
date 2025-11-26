@@ -12,7 +12,7 @@ enum SettingsOptionTitle {
 }
 
 enum ProfileOptionsTitle {
-  editProfile,
+  viewProfile,
   mealPlan,
   fitNess,
   setTings,
