@@ -3,16 +3,10 @@ import 'dart:developer';
 import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
 import 'package:get/get.dart';
 
-import '../repositories/forgot_password_verify_otp_repository.dart';
-import '../routes/routes.dart';
-
 class VerifyOtpScreenController extends GetxController {
   var pin = ''.obs;
   var isLoading = false.obs;
   late String email; // Add email field
-
-  final ForgotPasswordVerifyOtpRepository _repository =
-      ForgotPasswordVerifyOtpRepository();
 
   @override
   void onInit() {
@@ -40,56 +34,5 @@ class VerifyOtpScreenController extends GetxController {
   void onCompleted(String value) {
     pin.value = value;
     log('Entered OTP: $value for email: $email');
-  }
-
-  // Verify OTP with API
-  Future<void> verifyOtp() async {
-    if (pin.value.isEmpty || pin.value.length != 6) {
-      // Get.snackbar('Error', 'Please enter a valid 6-digit OTP');
-      CustomToast.error('Please enter a valid 6-digit OTP');
-      return;
-    }
-
-    if (email.isEmpty) {
-      // Get.snackbar('Error', 'Email not found. Please try the process again.');
-      CustomToast.error('Email not found. Please try the process again.');
-      return;
-    }
-
-    try {
-      isLoading.value = true;
-
-      final response = await _repository.forgotPasswordVerifyOtp(
-        pin.value,
-        email,
-      );
-
-      // Extract data from the response structure
-      final responseData = response['data'];
-      final statusCode = response['status-code'];
-      final otpToken = responseData['token'];
-
-      if (responseData != null && (statusCode == 200 || statusCode == 201)) {
-        // Get.snackbar('Success', 'OTP verified successfully');
-        CustomToast.success('OTP verified successfully');
-        // Navigate to reset password screen and pass the email
-
-        if (otpToken != null) {
-          Get.toNamed(
-            Routes.resetPasswordScreen,
-            arguments: {'token': otpToken},
-          );
-        }
-      } else {
-        // Get.snackbar('Error', 'Invalid OTP or verification failed');
-        CustomToast.error('Invalid OTP or verification failed');
-      }
-    } catch (e) {
-      log('OTP Verification Error: $e');
-      // Get.snackbar('Error', 'Failed to verify OTP. Please try again.');
-      CustomToast.error('Failed to verify OTP. Please try again.');
-    } finally {
-      isLoading.value = false;
-    }
   }
 }
