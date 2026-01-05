@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
 class VerifyOtpScreenController extends GetxController {
@@ -16,7 +16,7 @@ class VerifyOtpScreenController extends GetxController {
     log('Email received for OTP verification: $email');
 
     if (email.isEmpty) {
-      CustomToast.error('Email not found. Please try again.');
+      LoggerUtils.error('Email not found. Please try again.');
       Get.back();
     }
   }

@@ -1,9 +1,8 @@
 import 'dart:developer';
 
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
-import '../helper/advanced_custom_toast_message.dart';
 
 class ResetPasswordScreenController extends GetxController {
   late String otpToken;
@@ -18,7 +17,7 @@ class ResetPasswordScreenController extends GetxController {
     log('Token received for OTP verification: $otpToken');
 
     if (otpToken.isEmpty) {
-      CustomToast.error('OTP Token not found. Please try again.');
+      LoggerUtils.error('OTP Token not found. Please try again.');
       Get.back();
     }
   }
@@ -62,7 +61,7 @@ class ResetPasswordScreenController extends GetxController {
   void validateSamePassword() {
     if (newPasswordController.text != confirmPasswordController.text) {
       errorMessage.value = 'Passwords do not match';
-      CustomToast.error('Passwords do not match');
+      LoggerUtils.error('Passwords do not match');
     } else {
       errorMessage.value = '';
     }

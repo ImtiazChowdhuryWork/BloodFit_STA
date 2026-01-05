@@ -1,8 +1,9 @@
 import 'package:bloodfit/bindings/controllers_binding.dart';
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
 import 'package:bloodfit/loading_screen.dart';
-import 'package:bloodfit/networks/dio/dio.dart';
+import 'package:bloodfit/localization/presentation/languages.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await diSetup();
-  DioSingleton.instance.create();
+
   runApp(MyApp());
 }
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     rotation();
     setInitValue();
+    setInitialLanguagePreference(); // Ensure language preferences are set
     return LayoutBuilder(
       builder: (context, constraints) {
         return UtilScreenMobile();
@@ -51,6 +53,12 @@ class UtilScreenMobile extends StatelessWidget {
           child: GetMaterialApp(
             // home: WorkCompletedDetailsScreen(),
             debugShowCheckedModeBanner: false,
+            translations: Languages(),
+            locale: (appData.read(kKeyEnglish) ?? false)
+                ? Locale('en', 'US')
+                : (appData.read(kKeyBangla) ?? false)
+                ? Locale('bn', 'BD')
+                : Locale('en', 'US'),
             builder: (context, widget) {
               return MediaQuery(data: MediaQuery.of(context), child: widget!);
             },

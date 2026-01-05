@@ -140,7 +140,7 @@ class SignInScreen extends StatelessWidget {
                   onTap: () {
                     log("Button Taped -> Login");
                     // Get.toNamed(Routes.enterYourDetailsScreen);
-                    controller.signIn();
+                    // controller.signIn();
                   },
                   borderRadius: 24.r,
                   buttonHeight: 52.h,

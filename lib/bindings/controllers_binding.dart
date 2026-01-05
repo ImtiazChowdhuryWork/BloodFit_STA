@@ -30,7 +30,6 @@ import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
 import '../features/auth/sign_in/data/controller/sign_in_screen_controller.dart';
-import '../services/auth_service.dart';
 
 class ControllerBindings extends Bindings {
   @override
@@ -88,6 +87,6 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => SignOutController(), fenix: true);
 
     ///Repositiories
-    Get.lazyPut(() => AuthService(), fenix: true);
+    // Get.lazyPut(() => AuthService(), fenix: true);
   }
 }

@@ -152,15 +152,13 @@ class SignUpScreen extends StatelessWidget {
                 ///Section : -----------------///Button -> Signup///----------------
                 Obx(
                   () => CustomElevatedButton(
-                    onTap: controller.isLoading.value
-                        ? null
-                        : () {
-                            log("Button Taped -> Signup");
-                            // Validate form and call signup
-                            if (_formKey.currentState!.validate()) {
-                              controller.signUp();
-                            }
-                          },
+                    onTap: () {
+                      log("Button Taped -> Signup");
+                      // Validate form and call signup
+                      if (_formKey.currentState!.validate()) {
+                        // controller.signUp();
+                      }
+                    },
                     borderRadius: 24.r,
                     buttonHeight: 52.h,
                     buttonTitle: controller.isLoading.value
