@@ -140,7 +140,7 @@ class MyProfileScreen extends StatelessWidget {
       bottomNavigationBar: LogoutButton(
         onTap: () {
           log("Button -> Logout Button Taped!");
-          signOutController.signOut();
+          // signOutController.signOut();
         },
         buttonTitle: "Logout",
       ),

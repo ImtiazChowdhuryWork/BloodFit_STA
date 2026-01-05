@@ -12,6 +12,6 @@ class VerifyUserBinding extends Bindings {
     // Get.lazyPut<VerifyUserRepository>(() => VerifyUserRepository());
 
     Get.lazyPut<SignInScreenController>(() => SignInScreenController());
-    Get.lazyPut<SignInRepository>(() => SignInRepository());
+    // Get.lazyPut<SignInRepository>(() => SignInRepository());
   }
 }

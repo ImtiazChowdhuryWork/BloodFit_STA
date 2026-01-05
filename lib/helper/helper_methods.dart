@@ -44,6 +44,11 @@ Future<void> setInitValue() async {
   await Future.delayed(const Duration(seconds: 2));
 }
 
+void setInitialLanguagePreference() {
+  appData.writeIfNull(kKeyEnglish, true);
+  appData.writeIfNull(kKeyBangla, false);
+}
+
 void showMaterialDialog(BuildContext context) {
   showDialog<bool>(
     context: context,

@@ -1,10 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/app_constant_text.dart';
-import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:get/get.dart';
-import '../routes/routes.dart';
 
 class VerifyUserOtpScreenController extends GetxController {
   var pin = ''.obs;

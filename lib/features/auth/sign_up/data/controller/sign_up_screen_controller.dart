@@ -1,15 +1,7 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/app_constant_text.dart';
-import 'package:bloodfit/helper/advanced_custom_toast_message.dart';
-import 'package:bloodfit/helper/di.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../../networks/dio/dio.dart';
-import '../../../../../networks/exception_handler/data_source.dart';
-import '../repository/sign_up_repository.dart';
-import '../../../../../routes/routes.dart';
 
 class SignUpScreenController extends GetxController {
   // Text Editing Controllers
@@ -19,9 +11,6 @@ class SignUpScreenController extends GetxController {
   TextEditingController contactNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-
-  // Repository
-  final SignUpRepository _signUpRepository = Get.find<SignUpRepository>();
 
   // Reactive States
   RxBool isChecked = false.obs;
@@ -65,105 +54,6 @@ class SignUpScreenController extends GetxController {
       return "Please agree to the terms & conditions";
     }
     return null;
-  }
-
-  Future<void> signUp() async {
-    try {
-      // Validate form
-      final validationError = validateFields();
-
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      // Call repository to perform signup
-      final response = await _signUpRepository.signup(
-        firstNameController.text.trim(),
-        lastNameController.text.trim(),
-        contactNumberController.text.trim(),
-        emailController.text.trim(),
-        passwordController.text,
-      );
-
-      log("----------📦 Repository response: $response-----------------");
-
-      // Extract data and headers
-      final responseData = response['data'];
-      final headers = response['headers'];
-      final responseStatusCode = response['status-code'];
-
-      // Extract tokens
-      final accessToken = _extractToken(headers, 'access-token');
-      final refreshToken = _extractToken(headers, 'refresh-token');
-
-      // Handle success response
-      if (responseData != null && responseStatusCode == 201) {
-        // Store tokens
-        if (accessToken != null) {
-          appData.write(kKeyAccessToken, accessToken);
-          log("------Access Token stored successfully-----------");
-          log(
-            "--------------Access Token : ${appData.read(kKeyAccessToken)}-----------",
-          );
-        }
-
-        if (refreshToken != null) {
-          appData.write(kKeyRefreshToken, refreshToken);
-          log("-----------Refresh Token stored successfully----------------");
-          log(
-            "--------------Access Token : ${appData.read(kKeyRefreshToken)}-----------",
-          );
-        }
-
-        // ✅ CRITICAL FIX: Update Dio instance with new tokens
-        DioSingleton.instance.update();
-
-        // Extract user verification status from nested user object
-        final isUserVerified = responseData['isVerified'] ?? false;
-        appData.write(kKeyIsUserVerified, isUserVerified);
-        log("--------------Is User Verified : $isUserVerified----------------");
-
-        // Check if tokens were stored successfully
-        if (appData.read(kKeyAccessToken) != null &&
-            appData.read(kKeyRefreshToken) != null &&
-            appData.read(kKeyIsUserVerified) == false) {
-          ///Show Toast Message On Creating Account Successfully
-          CustomToast.success("Account Created Successfully!");
-
-          // Navigate to appropriate screen
-          Get.offAllNamed(Routes.verifyUserScreen);
-        } else {
-          CustomToast.error(
-            "Authentication failed - tokens not stored properly",
-          );
-        }
-      } else {
-        throw Failure(500, 'Unexpected response format from server');
-      }
-    } on Failure catch (failure) {
-      errorMessage.value = failure.responseMessage;
-      log("❌ SIGNUP FAILED: ${failure.responseMessage}");
-
-      Get.snackbar(
-        'Signup Failed',
-        failure.responseMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    } catch (e) {
-      errorMessage.value = 'An unexpected error occurred';
-      log("🚨 UNEXPECTED ERROR: $e");
-
-      Get.snackbar(
-        'Error',
-        'An unexpected error occurred',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
-    }
   }
 
   @override

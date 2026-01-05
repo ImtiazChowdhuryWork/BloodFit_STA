@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class SignInBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<SignInRepository>(() => SignInRepository());
+    // Get.lazyPut<SignInRepository>(() => SignInRepository());
     Get.lazyPut<SignInScreenController>(() => SignInScreenController());
   }
 }

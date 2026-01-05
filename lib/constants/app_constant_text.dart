@@ -30,3 +30,5 @@ const String kPassword = 'password';
 const String kKeyIsLoggedIn = 'is_logged_in';
 const String kKeyDeviceID = 'device_id';
 const String kKeyIsUserVerified = 'user-verified';
+const String kKeyEnglish = 'english';
+const String kKeyBangla = 'bangla';
