@@ -2,7 +2,7 @@
 
 // const String url = "https://sebaev.softvencefsd.xyz";
 
-const String url = "https://blood-api.billal.space";
+const String url = "https://faisal5000.merinasib.shop/api/v1";
 
 final class NetworkConstants {
   NetworkConstants._();
@@ -18,15 +18,9 @@ final class Endpoints {
   Endpoints._();
   //backend_url
 
-  static String refreshToken() => "/api/auth/refresh-token";
   static String signUp() => "/api/auth/signup";
-  static String signIn() => "/api/auth/login";
+  static String signIn() => "/auth/register";
   static String signOut() => "/api/auth/logout";
-  static String forgotPassword() => "/api/auth/forgot-password";
-  static String verifyUserOtp(String otp) => "/api/auth/verify/otp/$otp";
-  static String resetPasswordOtp() => "/api/auth/reset-password-otp";
-  static String resetPassword() => '/api/auth/reset-password';
-  static String userProfile() => '/api/auth/reset-password';
 }
 
 

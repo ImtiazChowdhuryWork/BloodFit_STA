@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:bloodfit/controllers/sign_up_screen_controller.dart';
+import 'package:bloodfit/constants/validator.dart';
+import 'package:bloodfit/features/auth/sign_up/data/controller/sign_up_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/app_logo_widget.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -51,30 +52,6 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 UIHelper.verticalSpace(30.h),
 
-                // Error Message Display
-                Obx(
-                  () => controller.errorMessage.isNotEmpty
-                      ? Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(12.h),
-                          margin: EdgeInsets.only(bottom: 16.h),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8.r),
-                            border: Border.all(
-                              color: Colors.red.withOpacity(0.3),
-                            ),
-                          ),
-                          child: Text(
-                            controller.errorMessage.value,
-                            style:
-                                TextFontStyle.headline14w400cb20000StylePoppins,
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                ),
-
                 Form(
                   key: _formKey,
                   child: Column(
@@ -83,6 +60,7 @@ class SignUpScreen extends StatelessWidget {
                       CustomFormField(
                         controller: controller.firstNameController,
                         hintText: "Enter Your First Name",
+                        validator: firstNameValidator,
                       ),
                       UIHelper.verticalSpace(24.h),
 
@@ -90,6 +68,7 @@ class SignUpScreen extends StatelessWidget {
                       CustomFormField(
                         controller: controller.lastNameController,
                         hintText: "Enter Your Last Name",
+                        validator: lastNameValidator,
                       ),
                       UIHelper.verticalSpace(24.h),
 
@@ -97,6 +76,7 @@ class SignUpScreen extends StatelessWidget {
                       CustomFormField(
                         controller: controller.emailController,
                         hintText: "Enter Your Email Address",
+                        validator: emailValidator,
                       ),
                       UIHelper.verticalSpace(24.h),
 
@@ -104,18 +84,20 @@ class SignUpScreen extends StatelessWidget {
                       CustomFormField(
                         controller: controller.contactNumberController,
                         hintText: "Enter Your Contact Number",
+                        validator: mobileNumberValidator,
                       ),
                       UIHelper.verticalSpace(24.h),
 
                       ///Section : --------------///FormField -> Password///--------------
                       CustomFormField(
                         controller: controller.passwordController,
+                        hintText: "Enter Your Password",
                         isPass: true,
                         suffixIcon: Icon(
                           Icons.visibility_off,
                           color: AppColors.cfefefe,
                         ),
-                        hintText: "Enter Your Password",
+                        validator: passwordValidator,
                       ),
                       UIHelper.verticalSpace(24.h),
 
@@ -123,11 +105,16 @@ class SignUpScreen extends StatelessWidget {
                       CustomFormField(
                         controller: controller.confirmPasswordController,
                         isPass: true,
+
+                        hintText: "Confirm Your Password",
                         suffixIcon: Icon(
                           Icons.visibility_off,
                           color: AppColors.cfefefe,
                         ),
-                        hintText: "Confirm Your Password",
+                        validator: (value) => confirmPasswordValidator(
+                          value,
+                          controller.passwordController.text,
+                        ),
                       ),
                     ],
                   ),

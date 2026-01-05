@@ -1,19 +1,19 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/app_constant_text.dart';
-import 'package:bloodfit/repositories/sign_in_repository.dart';
+import 'package:bloodfit/features/auth/sign_in/data/repository/sign_in_repository.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/loading_helper.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../constants/validator.dart';
-import '../../../../helper/api_service.dart';
-import '../../../../networks/exception_handler/data_source.dart';
-import '../../../../services/auth_service.dart';
-import '../helper/advanced_custom_toast_message.dart';
-import '../networks/exception_handler/error_response.dart';
+import '../../../../../../../../constants/validator.dart';
+import '../../../../../../../../helper/api_service.dart';
+import '../../../../../../../../networks/exception_handler/data_source.dart';
+import '../../../../../../../../services/auth_service.dart';
+import '../../../../../helper/advanced_custom_toast_message.dart';
+import '../../../../../networks/exception_handler/error_response.dart';
 
 class SignInScreenController extends GetxController {
   SignInRepository signInRepository = SignInRepository();
@@ -125,13 +125,15 @@ class SignInScreenController extends GetxController {
 
         // Determine if user is verified from the login response
         bool isUserVerifiedFromResponse = false;
-        if (userData['user'] != null && userData['user']['isVerified'] != null) {
+        if (userData['user'] != null &&
+            userData['user']['isVerified'] != null) {
           isUserVerifiedFromResponse = userData['user']['isVerified'] as bool;
           // Update the verification status in storage
           appData.write(kKeyIsUserVerified, isUserVerifiedFromResponse);
         } else {
           // If verification status is not in the response, check existing storage
-          isUserVerifiedFromResponse = appData.read(kKeyIsUserVerified) ?? false;
+          isUserVerifiedFromResponse =
+              appData.read(kKeyIsUserVerified) ?? false;
         }
 
         // Show success message using UI-driven toast

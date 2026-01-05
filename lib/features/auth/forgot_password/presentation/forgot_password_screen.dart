@@ -87,7 +87,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                             log("Button Taped -> Get OTP");
                             // Get.toNamed(Routes.verifyOtpScreen);
                             if (_formKey.currentState!.validate()) {
-                              forgotPasswordController.getOTP();
+                              // forgotPasswordController.getOTP();
                             }
                           },
                     borderRadius: 24.r,

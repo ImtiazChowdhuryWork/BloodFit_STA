@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/constants/validator.dart';
-import 'package:bloodfit/controllers/sign_in_screen_controller.dart';
+import 'package:bloodfit/features/auth/sign_in/data/controller/sign_in_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
 import 'package:bloodfit/gen/assets.gen.dart';

@@ -1,6 +1,6 @@
 // repositories/sign_up_repository.dart
 import 'package:bloodfit/endpoints.dart';
-import '../helper/api_service.dart';
+import '../../../../../helper/api_service.dart';
 
 class SignUpRepository {
   final ApiService _apiService = ApiService.instance;

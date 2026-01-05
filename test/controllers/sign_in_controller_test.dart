@@ -1,5 +1,5 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
-import 'package:bloodfit/controllers/sign_in_screen_controller.dart';
+import 'package:bloodfit/features/auth/sign_in/data/controller/sign_in_screen_controller.dart';
 import 'package:bloodfit/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,10 +12,10 @@ void main() {
   setUp(() async {
     // Initialize GetStorage first
     await GetStorage.init();
-    
+
     // Register dependencies
     Get.put<AuthService>(AuthService());
-    
+
     // Create controller
     controller = SignInScreenController();
   });
@@ -36,7 +36,10 @@ void main() {
 
       // Assert
       expect(isValid, false);
-      expect(controller.errorMessage.value, 'Please enter a valid email address');
+      expect(
+        controller.errorMessage.value,
+        'Please enter a valid email address',
+      );
     });
 
     test('Form validation fails with weak password', () {
@@ -49,7 +52,10 @@ void main() {
 
       // Assert
       expect(isValid, false);
-      expect(controller.errorMessage.value, 'Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character');
+      expect(
+        controller.errorMessage.value,
+        'Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character',
+      );
     });
 
     test('Form validation succeeds with valid inputs', () {

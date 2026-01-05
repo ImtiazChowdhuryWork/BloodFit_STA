@@ -6,10 +6,10 @@ import 'package:bloodfit/helper/di.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../networks/dio/dio.dart';
-import '../networks/exception_handler/data_source.dart';
-import '../repositories/sign_up_repository.dart';
-import '../routes/routes.dart';
+import '../../../../../networks/dio/dio.dart';
+import '../../../../../networks/exception_handler/data_source.dart';
+import '../repository/sign_up_repository.dart';
+import '../../../../../routes/routes.dart';
 
 class SignUpScreenController extends GetxController {
   // Text Editing Controllers
@@ -71,17 +71,6 @@ class SignUpScreenController extends GetxController {
     try {
       // Validate form
       final validationError = validateFields();
-      if (validationError != null) {
-        errorMessage.value = validationError;
-        Get.snackbar(
-          'Validation Error',
-          validationError,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
-        return;
-      }
 
       isLoading.value = true;
       errorMessage.value = '';

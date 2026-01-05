@@ -112,9 +112,7 @@ class ResetPasswordScreen extends StatelessWidget {
                 ///Section : -----------------///Button ->Verify///----------------
                 Obx(() {
                   return CustomElevatedButton(
-                    onTap: controller.isLoading.value
-                        ? null
-                        : controller.resetNewPassword,
+                    onTap: () {},
                     borderRadius: 24.r,
                     buttonHeight: 52.h,
                     buttonTitle: controller.isLoading.value

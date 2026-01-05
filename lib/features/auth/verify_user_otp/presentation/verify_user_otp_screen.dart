@@ -56,12 +56,10 @@ class VerifyUserScreen extends StatelessWidget {
                 /// Verify Button
                 Obx(
                   () => CustomElevatedButton(
-                    onTap: controller.isLoading.value
-                        ? null
-                        : () {
-                            log("Button Tapped -> Verify");
-                            controller.verifyOtp();
-                          },
+                    onTap: () {
+                      log("Button Tapped -> Verify");
+                      // controller.verifyOtp();
+                    },
                     borderRadius: 24.r,
                     buttonHeight: 52.h,
                     buttonTitle: controller.isLoading.value

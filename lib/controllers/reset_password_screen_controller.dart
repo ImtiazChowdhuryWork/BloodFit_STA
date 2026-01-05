@@ -1,17 +1,11 @@
 import 'dart:developer';
 
-import 'package:bloodfit/helper/loading_helper.dart';
-import 'package:bloodfit/repositories/reset_password_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../helper/advanced_custom_toast_message.dart';
-import '../routes/routes.dart';
 
 class ResetPasswordScreenController extends GetxController {
-  final ResetPasswordRepository _repository = ResetPasswordRepository();
-
   late String otpToken;
   RxBool isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -84,53 +78,6 @@ class ResetPasswordScreenController extends GetxController {
     return newPasswordError == null &&
         confirmPasswordError == null &&
         newPasswordController.text == confirmPasswordController.text;
-  }
-
-  Future<void> resetNewPassword() async {
-    try {
-      // Validate form first
-      if (!isFormValid()) {
-        validateSamePassword();
-        return;
-      }
-
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final response = await _repository
-          .resetPassword(otpToken, newPasswordController.text.toString())
-          .waitingForFutureWithoutBg();
-
-      // Extract data from the response structure
-      final responseData = response['data'];
-      final statusCode = response['status-code'];
-
-      if (statusCode == 200 || statusCode == 201) {
-        final message =
-            responseData['message'] ?? 'Password reset successfully';
-        CustomToast.success(message);
-
-        // Clear controllers
-        newPasswordController.clear();
-        confirmPasswordController.clear();
-
-        // Navigate to sign in screen
-        Get.offAllNamed(Routes.signInScreen);
-      } else {
-        final errorMsg = responseData['message'] ?? 'Failed to reset password';
-        throw Exception(errorMsg);
-      }
-    } on Exception catch (e) {
-      errorMessage.value = e.toString();
-      log("❌ RESET PASSWORD FAILED: $e");
-      CustomToast.error('Failed to reset password: ${e.toString()}');
-    } catch (e) {
-      errorMessage.value = 'An unexpected error occurred';
-      log("🚨 UNEXPECTED ERROR: $e");
-      CustomToast.error('An unexpected error occurred');
-    } finally {
-      isLoading.value = false;
-    }
   }
 
   @override
