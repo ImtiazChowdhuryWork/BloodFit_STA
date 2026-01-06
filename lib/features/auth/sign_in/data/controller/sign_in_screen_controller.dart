@@ -54,6 +54,7 @@ class SignInScreenController extends GetxController {
     final validationError = validateForm();
     if (validationError != null) {
       errorMessage.value = validationError;
+      LoggerUtils.error("Validation Error : ${errorMessage.value}");
       return;
     }
 

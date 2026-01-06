@@ -142,11 +142,26 @@ class SignUpScreen extends StatelessWidget {
 
                     ///Section : -----------------///Text-> Agree to the Terms & Conditions///----------------
                     Text(
-                      "Agree To The Terms & Conditions ",
+                      "Agree To The Terms & Conditions",
                       style: TextFontStyle.headline14w400cd7d7d7StylePoppins,
                     ),
                   ],
                 ),
+
+                Obx(() {
+                  return (!controller.isChecked.value && controller.isButtonPressed.value)
+                      ? UIHelper.verticalSpace(5.h)
+                      : SizedBox.shrink();
+                }),
+                Obx(() {
+                  return (!controller.isChecked.value && controller.isButtonPressed.value)
+                      ? Text(
+                          "Please agree to the Terms & Conditions to continue.",
+                          style:
+                              TextFontStyle.headline14w400cb20000StylePoppins,
+                        )
+                      : SizedBox.shrink();
+                }),
                 UIHelper.verticalSpace(30.h),
 
                 ///Section : -----------------///Button -> Signup///----------------
@@ -154,9 +169,13 @@ class SignUpScreen extends StatelessWidget {
                   () => CustomElevatedButton(
                     onTap: () {
                       log("Button Taped -> Signup");
+                      // Set button pressed to true to show error if checkbox not checked
+                      controller.isButtonPressed.value = true;
+
                       // Validate form and call signup
-                      if (_formKey.currentState!.validate()) {
-                        // controller.signUp();
+                      if (_formKey.currentState!.validate() &&
+                          controller.isChecked.value == true) {
+                        controller.postSignUpApi();
                       }
                     },
                     borderRadius: 24.r,

@@ -140,7 +140,9 @@ class SignInScreen extends StatelessWidget {
                   onTap: () async {
                     log("Button Taped -> Login");
 
-                    await controller.postSignInApi();
+                    if (_formKey.currentState!.validate()) {
+                      await controller.postSignInApi();
+                    }
                   },
                   borderRadius: 24.r,
                   buttonHeight: 52.h,
