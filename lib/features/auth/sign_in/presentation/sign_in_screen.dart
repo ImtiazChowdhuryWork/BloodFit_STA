@@ -137,10 +137,10 @@ class SignInScreen extends StatelessWidget {
 
                 ///Section : -----------------///Button -> Login///----------------
                 CustomElevatedButton(
-                  onTap: () {
+                  onTap: () async {
                     log("Button Taped -> Login");
-                    // Get.toNamed(Routes.enterYourDetailsScreen);
-                    // controller.signIn();
+
+                    await controller.postSignInApi();
                   },
                   borderRadius: 24.r,
                   buttonHeight: 52.h,

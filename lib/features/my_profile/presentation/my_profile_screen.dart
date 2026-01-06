@@ -38,7 +38,6 @@ class MyProfileScreen extends StatelessWidget {
       Get.find<ProfileScreenController>();
 
   final EnumsController enumsController = Get.find<EnumsController>();
-  final SignOutController signOutController = Get.find<SignOutController>();
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +139,7 @@ class MyProfileScreen extends StatelessWidget {
       bottomNavigationBar: LogoutButton(
         onTap: () {
           log("Button -> Logout Button Taped!");
-          // signOutController.signOut();
+          controller.logOutHelper();
         },
         buttonTitle: "Logout",
       ),

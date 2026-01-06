@@ -36,7 +36,7 @@ class ControllerBindings extends Bindings {
   void dependencies() {
     Get.lazyPut(() => ReadMoreController());
     Get.lazyPut(() => OnboardingScreenController());
-    Get.lazyPut(() => SignInScreenController(), fenix: true);
+    // Get.lazyPut(() => SignInScreenController(), fenix: true);
     Get.lazyPut(() => SignUpScreenController());
     Get.lazyPut(() => VerifyOtpScreenController());
     // Get.lazyPut(() => ResetPasswordScreenController());
@@ -84,7 +84,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => WeightController(), tag: 'current_height');
     Get.lazyPut(() => SliderButtonController(), tag: 'current_height_unit');
     Get.lazyPut(() => SelectHeightScreenController(), fenix: true);
-    Get.lazyPut(() => SignOutController(), fenix: true);
+    // Get.lazyPut(() => SignOutController(), fenix: true);
 
     ///Repositiories
     // Get.lazyPut(() => AuthService(), fenix: true);
