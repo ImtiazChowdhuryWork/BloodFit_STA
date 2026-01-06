@@ -1,12 +1,16 @@
 import 'dart:developer';
 import 'package:bloodfit/constants/app_constant_text.dart';
+import 'package:bloodfit/features/auth/sign_in/data/controller/sign_in_screen_controller.dart';
+import 'package:bloodfit/features/auth/sign_in/data/repository/sign_in_repository.dart';
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:bloodfit/features/welcome/presentation/welcome_screen.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
 import 'package:bloodfit/helper/post_login.dart';
 import 'package:bloodfit/navigation_screen.dart';
+import 'package:bloodfit/networks/network_caller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'helper/di.dart';
 
@@ -56,7 +60,22 @@ class _LoadingState extends State<Loading> {
     log('isFirstTime: $isFirstTime');
     log('isLoggedIn: $isLoggedIn');
 
+    // Always register NetworkCaller regardless of login state
+    if (!Get.isRegistered<NetworkCaller>()) {
+      Get.put(NetworkCaller());
+    }
+
     if (!isLoggedIn) {
+      // Step 2: Register repository
+      if (!Get.isRegistered<SignInRepository>()) {
+        Get.put(SignInRepository(Get.find()));
+      }
+
+      // Step 3: Register controller
+      if (!Get.isRegistered<SignInScreenController>()) {
+        Get.put(SignInScreenController(Get.find()));
+      }
+
       return isFirstTime ? OnboardingScreen() : SignInScreen();
     }
 

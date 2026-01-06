@@ -1,5 +1,8 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/helper/di.dart';
+import 'package:bloodfit/helper/logger_util.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,4 +56,30 @@ class ProfileScreenController extends GetxController {
   }
 
   ///-------------------////End of Dummy Code///-------------------------------
+  ///
+  ///
+  ///
+
+  void logOutHelper() {
+    // final token = appData.read(kKeyAccessToken);
+    LoggerUtils.info(
+      "Before Removing Access Token : ${appData.read(kKeyAccessToken)}",
+    );
+
+    if (appData.read(kKeyAccessToken) != null) {
+      ///------>>> Removing The token
+      appData.remove(kKeyAccessToken);
+      LoggerUtils.info(
+        "After Removing Access Token : ${appData.read(kKeyAccessToken)}",
+      );
+
+      ///------>>> Checking the token if (appData.read(kKeyAccessToken) == null) {
+      LoggerUtils.info("Access token Not found!");
+      Get.offAllNamed(Routes.signInScreen);
+    } else {
+      LoggerUtils.error(
+        "Strange Access Token not found !: ${appData.read(kKeyAccessToken)}",
+      );
+    }
+  }
 }

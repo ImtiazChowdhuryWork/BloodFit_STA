@@ -18,9 +18,9 @@ final class Endpoints {
   Endpoints._();
   //backend_url
 
-  static String signUp() => "/api/auth/signup";
-  static String signIn() => "/auth/register";
-  static String signOut() => "/api/auth/logout";
+  static String signUp() => "$url/auth/register";
+  static String signIn() => "$url/auth/login";
+  static String signOut() => "$url/api/auth/logout";
 }
 
 
