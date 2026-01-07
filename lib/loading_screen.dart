@@ -6,6 +6,7 @@ import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart'
 import 'package:bloodfit/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:bloodfit/features/welcome/presentation/welcome_screen.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/post_login.dart';
 import 'package:bloodfit/navigation_screen.dart';
 import 'package:bloodfit/networks/network_caller.dart';
@@ -55,6 +56,9 @@ class _LoadingState extends State<Loading> {
   Widget _determineStartScreen() {
     // Use the same logic as _initializeApp() for consistency
     final bool isLoggedIn = appData.read(kKeyAccessToken) != null;
+    LoggerUtils.debug(
+      "Access Token 🧐🧐🧐🧐🧐🧐🧐: ${appData.read(kKeyAccessToken)}",
+    );
     final bool isFirstTime = appData.read(kKeyfirstTime) ?? false;
 
     log('isFirstTime: $isFirstTime');

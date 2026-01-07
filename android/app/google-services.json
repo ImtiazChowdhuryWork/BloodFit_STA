@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161567192464",
+    "project_id": "blood-fit",
+    "storage_bucket": "blood-fit.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161567192464:android:5afc3bbcbd36e2bd046f15",
+        "android_client_info": {
+          "package_name": "com.example.bloodfit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoHC2buvNAyGsFuKzElYPRLCQrgKbxPdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,10 +15,10 @@ class SignUpRepository {
   }) async {
     final Map<String, dynamic> body = {
       'firstName': firstName,
-      'lastName': firstName,
-      'email': firstName,
-      'contactNumber': firstName,
-      'password': firstName,
+      'lastName': lastName,
+      'email': email,
+      'contactNumber': phoneNumber,
+      'password': password,
     };
 
     return _networkCaller.postRequest(Endpoints.signUp(), body: body);

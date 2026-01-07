@@ -32,3 +32,4 @@ const String kKeyDeviceID = 'device_id';
 const String kKeyIsUserVerified = 'user-verified';
 const String kKeyEnglish = 'english';
 const String kKeyBangla = 'bangla';
+const String kKeySignUpToken = 'sign-up';

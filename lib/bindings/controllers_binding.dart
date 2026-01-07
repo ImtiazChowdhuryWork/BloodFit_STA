@@ -1,4 +1,3 @@
-import 'package:bloodfit/features/auth/sign_up/data/controller/sign_up_screen_controller.dart';
 import 'package:get/get.dart';
 
 import '../controllers/calendar_controller.dart';
@@ -21,15 +20,13 @@ import '../controllers/information_gather_work_out_controller.dart';
 import '../controllers/meal_plan_screen_controller.dart';
 import '../controllers/onboarding_age_picker_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
-import '../controllers/otp_validation_controller.dart';
 import '../controllers/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
-import '../controllers/sign_out_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
-import '../features/auth/sign_in/data/controller/sign_in_screen_controller.dart';
+import '../features/auth/verify_otp/data/controller/otp_validation_controller.dart';
 
 class ControllerBindings extends Bindings {
   @override
@@ -38,7 +35,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => OnboardingScreenController());
     // Get.lazyPut(() => SignInScreenController(), fenix: true);
     // Get.lazyPut(() => SignUpScreenController());
-    Get.lazyPut(() => VerifyOtpScreenController());
+    // Get.lazyPut(() => OtpValidationScreenController());
     // Get.lazyPut(() => ResetPasswordScreenController());
     Get.lazyPut(() => ProfileScreenController(), fenix: true);
     Get.lazyPut(() => EnumsController(), fenix: true);
