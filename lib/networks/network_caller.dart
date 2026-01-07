@@ -82,7 +82,7 @@ class NetworkCaller {
       debugPrint('Error: $e');
       return NetworkResponse(
         isSuccess: false,
-        errorMessage: 'An unexpected error occurred: ${e.toString()}',
+        errorMessage: e.toString(),
       );
     }
   }
@@ -159,8 +159,7 @@ class NetworkCaller {
           statusCode: response.statusCode,
           jsonResponse: jsonResponse,
           errorMessage:
-              jsonResponse?['message'] ??
-              'Access denied. You do not have permission.',
+              jsonResponse?['message'] ?? 'Access denied. You do not have permission.',
         );
       }
 
@@ -183,7 +182,9 @@ class NetworkCaller {
           isSuccess: false,
           statusCode: response.statusCode,
           jsonResponse: jsonResponse,
-          errorMessage: 'Server error. Please try again later.',
+          errorMessage:
+              jsonResponse?['message'] ??
+              'Server error. Please try again later.',
         );
       }
 
@@ -195,6 +196,7 @@ class NetworkCaller {
           statusCode: response.statusCode,
           jsonResponse: jsonResponse,
           errorMessage:
+              jsonResponse?['message'] ??
               'Service temporarily unavailable. Please try again later.',
         );
       }
@@ -212,7 +214,7 @@ class NetworkCaller {
       debugPrint('Error handling response: $e');
       return NetworkResponse(
         isSuccess: false,
-        errorMessage: 'Error processing response: ${e.toString()}',
+        errorMessage: e.toString(),
       );
     }
   }
@@ -427,7 +429,7 @@ class NetworkCaller {
       debugPrint('Multipart Error: $e');
       return NetworkResponse(
         isSuccess: false,
-        errorMessage: 'Upload failed: ${e.toString()}',
+        errorMessage: e.toString(),
       );
     }
   }

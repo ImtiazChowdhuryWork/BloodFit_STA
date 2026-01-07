@@ -149,12 +149,14 @@ class SignUpScreen extends StatelessWidget {
                 ),
 
                 Obx(() {
-                  return (!controller.isChecked.value && controller.isButtonPressed.value)
+                  return (!controller.isChecked.value &&
+                          controller.isButtonPressed.value)
                       ? UIHelper.verticalSpace(5.h)
                       : SizedBox.shrink();
                 }),
                 Obx(() {
-                  return (!controller.isChecked.value && controller.isButtonPressed.value)
+                  return (!controller.isChecked.value &&
+                          controller.isButtonPressed.value)
                       ? Text(
                           "Please agree to the Terms & Conditions to continue.",
                           style:

@@ -13,6 +13,7 @@ import '../gen/colors.gen.dart';
 
 Future<void> setInitValue() async {
   appData.writeIfNull(kKeyfirstTime, true);
+  appData.writeIfNull(kKeySignUpToken, '');
   // Only set isLoggedIn to false if no access token exists
   // This ensures logout state persists
   if (!appData.hasData(kKeyAccessToken)) {

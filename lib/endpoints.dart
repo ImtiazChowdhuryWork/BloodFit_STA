@@ -21,6 +21,8 @@ final class Endpoints {
   static String signUp() => "$url/auth/register";
   static String signIn() => "$url/auth/login";
   static String signOut() => "$url/api/auth/logout";
+  static String verifyOtp() => "$url/auth/verify-otp";
+  static String resendOtp() => "$url/auth/resend-otp";
 }
 
 

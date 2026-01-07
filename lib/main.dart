@@ -1,10 +1,12 @@
 import 'package:bloodfit/bindings/controllers_binding.dart';
 import 'package:bloodfit/constants/app_constant_text.dart';
+import 'package:bloodfit/firebase_options.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/helper_methods.dart';
 import 'package:bloodfit/loading_screen.dart';
 import 'package:bloodfit/localization/presentation/languages.dart';
 import 'package:bloodfit/routes/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GetStorage.init();
   await diSetup();
 

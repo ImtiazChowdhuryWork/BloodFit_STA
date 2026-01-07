@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/validator.dart';
 import 'package:bloodfit/features/auth/sign_up/data/model/sign_up_model.dart';
 import 'package:bloodfit/features/auth/sign_up/data/repository/sign_up_repository.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,8 @@ class SignUpScreenController extends GetxController {
   // Reactive States
   RxBool isChecked = false.obs;
   RxBool isLoading = false.obs;
-  RxBool isButtonPressed = false.obs; // Track if sign-up button has been pressed
+  RxBool isButtonPressed = false.obs;
+  RxString userEmail = ''.obs;
   var errorMessage = ''.obs;
   void clearErrorMessage() {
     errorMessage.value = '';
@@ -104,7 +107,17 @@ class SignUpScreenController extends GetxController {
         signUpModel.value = SignUpModel.fromJson(response.jsonResponse!);
         if (signUpModel.value!.success == true &&
             signUpModel.value!.data!.token!.isNotEmpty == true) {
+          final token = signUpModel.value!.data!.token;
+
+          if (token != null) {
+            appData.write(kKeySignUpToken, token);
+            LoggerUtils.info("Token Found : $token");
+          } else {
+            LoggerUtils.error("Token Not Found! Token : $token");
+          }
           LoggerUtils.info("Sign Up Successful!");
+
+          userEmail.value = emailController.text.trim();
 
           ///----------->>> Clear the controllers
           firstNameController.clear();
@@ -113,19 +126,23 @@ class SignUpScreenController extends GetxController {
           contactNumberController.clear();
           passwordController.clear();
           confirmPasswordController.clear();
-          isButtonPressed.value = false; // Reset button pressed state after successful signup
+          isButtonPressed.value =
+              false; // Reset button pressed state after successful signup
 
-          Get.toNamed(Routes.signInScreen);
+          Get.toNamed(
+            Routes.verifyOtpScreen,
+            arguments: {'userEmail': userEmail.value},
+          );
         } else {
           LoggerUtils.error("Failed to Sign-Up!");
         }
       } catch (e) {
         LoggerUtils.error("Error : Unexpect Response from Server!");
-        LoggerUtils.error("Error : $e");
+        LoggerUtils.error("Error🙁🙁🙁🙁🙁🙁🙁🙁🙁🙁🙁 : $e");
       }
     } else {
       errorMessage.value = response.errorMessage ?? 'Signup Failed. Try Again!';
-      LoggerUtils.error("Error : ${errorMessage.value}");
+      LoggerUtils.error("Error😔😔😔😔😔😔 : ${errorMessage.value}");
     }
   }
 

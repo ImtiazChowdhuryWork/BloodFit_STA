@@ -38,6 +38,7 @@ import '../features/auth/forgot_password/binding/forgot_password_binding.dart';
 import '../features/auth/reset_password/binding/reset_password_binding.dart';
 import '../features/auth/sign_in/binding/sign_in_binding.dart';
 import '../features/auth/sign_up/binding/sign_up_binding.dart';
+import '../features/auth/verify_otp/binding/verify_otp_binding.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
@@ -96,7 +97,7 @@ class Routes {
   static const String mealDetailscreen = '/meal_details_screen';
   static const String chooseExtraWorkoutScreen = '/choose_extra_workout_screen';
   static const String selectHeightScreenWidget = '/select_height_screen_widget';
-  static const String verifyUserScreen = '/verify_user_screen';
+  // static const String verifyUserScreen = '/verify_user_screen';
   static const String viewProfileSubscriptionTypeFreeScreen =
       '/view_profile_subscription_type_free_screen';
 
@@ -153,6 +154,7 @@ class Routes {
     GetPage(
       name: verifyOtpScreen,
       page: () => VerifyOtpScreen(),
+      binding: VerifyOtpBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -435,14 +437,14 @@ class Routes {
     ),
 
     ///verifyUserScreen
-    GetPage(
-      name: verifyUserScreen,
-      page: () => VerifyUserScreen(),
-      binding: VerifyUserBinding(),
-      transition: _transition(),
-      customTransition: _customTransition(),
-      transitionDuration: _duration(),
-    ),
+    // GetPage(
+    //   name: verifyUserScreen,
+    //   page: () => VerifyUserScreen(),
+    //   binding: VerifyUserBinding(),
+    //   transition: _transition(),
+    //   customTransition: _customTransition(),
+    //   transitionDuration: _duration(),
+    // ),
 
     ///viewProfileSubscriptionTypeFreeScreen
     GetPage(
@@ -485,7 +487,7 @@ Duration _duration() => Platform.isAndroid
 
 // /// All GetPages in your app
 // final List<GetPage> appRoutes = [
-  
+
 //   GetPage(
 //     name: AppRoutes.notificationsScreen,
 //     page: () => NotificationsScreen(),
@@ -516,5 +518,5 @@ Duration _duration() => Platform.isAndroid
 //     transitionDuration: _duration(),
 //   ),
 
-  
+
 // ];
