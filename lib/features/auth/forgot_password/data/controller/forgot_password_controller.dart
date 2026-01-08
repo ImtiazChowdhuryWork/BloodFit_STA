@@ -1,7 +1,12 @@
+import 'package:bloodfit/features/auth/forgot_password/data/repository/forgot_password_repository.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordController extends GetxController {
+  ///------->>> Importing The Repository
+  final ForgotPasswordRepository _forgotPasswordRepository;
+  ForgotPasswordController(this._forgotPasswordRepository);
+
   TextEditingController accountEmail = TextEditingController();
 
   // Reactive States
