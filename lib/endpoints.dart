@@ -18,11 +18,15 @@ final class Endpoints {
   Endpoints._();
   //backend_url
 
+  ///Signout Api Not Used
+  static String signOut() => "$url/api/auth/logout";
+
+  ///---->>Api Link Starts From Here
   static String signUp() => "$url/auth/register";
   static String signIn() => "$url/auth/login";
-  static String signOut() => "$url/api/auth/logout";
   static String verifyOtp() => "$url/auth/verify-otp";
   static String resendOtp() => "$url/auth/resend-otp";
+  static String forgotPassword() => "$url/auth/forget-password";
 }
 
 

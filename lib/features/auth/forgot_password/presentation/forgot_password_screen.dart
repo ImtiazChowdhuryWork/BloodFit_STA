@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/controllers/forgot_password_controller.dart';
+import 'package:bloodfit/features/auth/forgot_password/data/controller/forgot_password_controller.dart';
 import 'package:bloodfit/custom_widgets/app_logo_widget.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
