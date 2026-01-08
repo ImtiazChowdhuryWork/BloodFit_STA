@@ -51,6 +51,16 @@ String? passwordValidator(String? value) {
   return null;
 }
 
+String? newPasswordValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Enter Password';
+  }
+  if (value.length < 8) {
+    return 'Password must be at least 8 characters';
+  }
+  return null;
+}
+
 // Confirm Password Validator
 String? confirmPasswordValidator(String? value, String? originalPassword) {
   if (value == null || value.isEmpty) {

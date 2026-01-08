@@ -1,8 +1,10 @@
 import 'dart:developer';
 
-import 'package:bloodfit/controllers/reset_password_screen_controller.dart';
+import 'package:bloodfit/constants/validator.dart';
+import 'package:bloodfit/features/auth/reset_password/data/controller/reset_password_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -74,9 +76,7 @@ class ResetPasswordScreen extends StatelessWidget {
                             ),
                           ),
                           hintText: "Enter Your New Password",
-                          errorText: controller.validateNewPassword(
-                            controller.newPasswordController.text,
-                          ),
+                          validator: passwordValidator,
                         );
                       }),
                       UIHelper.verticalSpace(24.h),
@@ -99,8 +99,9 @@ class ResetPasswordScreen extends StatelessWidget {
                             ),
                           ),
                           hintText: "Confirm Your New Password",
-                          errorText: controller.validateConfirmPassword(
-                            controller.confirmPasswordController.text,
+                          validator: (value) => confirmPasswordValidator(
+                            value,
+                            controller.newPasswordController.text,
                           ),
                         );
                       }),
@@ -109,10 +110,61 @@ class ResetPasswordScreen extends StatelessWidget {
                 ),
                 UIHelper.verticalSpace(24.h),
 
-                ///Section : -----------------///Button ->Verify///----------------
+                ///Section : Show error message if token is missing
                 Obx(() {
+                  if (controller.errorMessage.value.isNotEmpty) {
+                    return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12.r),
+                      margin: EdgeInsets.only(bottom: 16.h),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        border: Border.all(color: Colors.red),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.error, color: Colors.red, size: 18.sp),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Text(
+                              controller.errorMessage.value,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return SizedBox.shrink(); // Return empty widget if no error
+                }),
+
+                ///Section : Show error message if token is missing
+                Obx(() {
+                  if (controller.errorMessage.value.isNotEmpty) {
+                    return CustomElevatedButton(
+                      onTap: () {
+                        // Navigate back to previous screen
+                        Get.back();
+                      },
+                      borderRadius: 24.r,
+                      buttonHeight: 52.h,
+                      buttonTitle: "Go Back",
+                      buttonColor: Colors.grey,
+                    );
+                  }
                   return CustomElevatedButton(
-                    onTap: () {},
+                    onTap: controller.isLoading.value
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              LoggerUtils.info("Reset Password Button Taped!");
+                              await controller.postResetPasswordApi();
+                            }
+                          },
                     borderRadius: 24.r,
                     buttonHeight: 52.h,
                     buttonTitle: controller.isLoading.value

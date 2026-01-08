@@ -53,18 +53,35 @@ class OtpValidationScreenController extends GetxController {
       otpModel.value = VerifyOtpModel.fromJson(response.jsonResponse!);
 
       LoggerUtils.info("OTP Response 😬😬😬😬😬😬😬😬😬😬: ${otpModel.value}");
-      if (appData.read(kKeySignUpToken) != null) {
+      String? forgotPasswordToken = appData.read(kKeyForgotPasswordToken);
+      String? signUpToken = appData.read(kKeySignUpToken);
+
+      if (forgotPasswordToken != null && forgotPasswordToken.isNotEmpty) {
+        // Forgot password flow: Verify OTP -> Reset Password
+        Get.offAllNamed(
+          Routes.resetPasswordScreen,
+          // arguments: {'token': forgotPasswordToken},
+        );
+      } else if (signUpToken != null && signUpToken.isNotEmpty) {
+        // Sign up flow: Verify OTP -> Sign In
+        Get.offAllNamed(Routes.signInScreen);
+
+        ///-------------->>> Removing Sign Up Token
         appData.remove(kKeySignUpToken);
         LoggerUtils.debug(
           "Access Token Removed! :😱😱😱😱😱😱😱: ${appData.read(kKeySignUpToken)}",
         );
+      } else {
+        // Fallback navigation if no specific token is found
+        Get.offAllNamed(Routes.signInScreen);
       }
-      Get.toNamed(Routes.signInScreen);
     } else {
-      errorMessage.value = response.errorMessage ?? 'Verification failed. Please try again.';
+      errorMessage.value =
+          response.errorMessage ?? 'Verification failed. Please try again.';
       LoggerUtils.error(
         "Otp Validation Error :🥴🥴🥴🥴🥴🥴🥴🥴🥴: ${errorMessage.value}",
       );
+      LoggerUtils.error("Response Code : ${response.statusCode}");
     }
   }
 

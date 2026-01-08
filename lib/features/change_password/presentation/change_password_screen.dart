@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bloodfit/constants/validator.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
-import '../../../controllers/change_password_screen_controller.dart';
+import '../data/controller/change_password_screen_controller.dart';
 import '../../../custom_widgets/custom_elevated_button.dart';
 import '../../../custom_widgets/custom_text_form_field.dart';
 import '../../../custom_widgets/go_back_widget.dart';
@@ -19,6 +20,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
   ChangePasswordScreenController controller =
       Get.find<ChangePasswordScreenController>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,84 +39,151 @@ class ChangePasswordScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
-          child: Column(
-            children: [
-              ///Section : -----------------///Form Field -> OLD Password///-----------------------
-              Obx(() {
-                return CustomFormField(
-                  controller: controller.oldPasswordController,
-                  isPass: true,
-                  isObsecure: controller.isOldPasswordVisible.value,
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      controller.setOldPasswordVisibility();
-                    },
-                    child: SvgPicture.asset(
-                      controller.isOldPasswordVisible.value
-                          ? Assets.icons.pwdNotObsecured
-                          : Assets.icons.pwdObsecured,
-                    ),
-                  ),
-                  hintText: "Enter Your Old Password",
-                );
-              }),
-              UIHelper.verticalSpace(24.h),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                ///Section : Show error message if there is any
+                Obx(() {
+                  if (controller.errorMessage.value.isNotEmpty) {
+                    return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12.r),
+                      margin: EdgeInsets.only(bottom: 16.h),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        border: Border.all(color: AppColors.cb20000),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.error,
+                            color: AppColors.cb20000,
+                            size: 18.sp,
+                          ),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Text(
+                              controller.errorMessage.value,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              controller.clearErrorMessage();
+                            },
 
-              ///Section : -----------------///Form Field -> New Password///-----------------------
-              Obx(() {
-                return CustomFormField(
-                  controller: controller.newPasswordController,
-                  isPass: true,
-                  isObsecure: controller.isNewPasswordVisible.value,
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      controller.setNewPasswordVisibility();
-                    },
-                    child: SvgPicture.asset(
-                      controller.isNewPasswordVisible.value
-                          ? Assets.icons.pwdNotObsecured
-                          : Assets.icons.pwdObsecured,
-                    ),
-                  ),
-                  hintText: "Enter Your New Password",
-                );
-              }),
-              UIHelper.verticalSpace(24.h),
+                            child: Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                              size: 18.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return SizedBox.shrink(); // Return empty widget if no error
+                }),
 
-              ///Section : -----------------///Form Field -> Confirm Password///-----------------------
-              Obx(() {
-                return CustomFormField(
-                  controller: controller.confirmPasswordController,
-                  isPass: true,
-                  isObsecure: controller.isConfirmNewPasswordVisible.value,
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      controller.setConfirmNewPasswordVisibility();
-                    },
-                    child: SvgPicture.asset(
-                      controller.isConfirmNewPasswordVisible.value
-                          ? Assets.icons.pwdNotObsecured
-                          : Assets.icons.pwdObsecured,
+                ///Section : -----------------///Form Field -> OLD Password///-----------------------
+                Obx(() {
+                  return CustomFormField(
+                    controller: controller.oldPasswordController,
+                    isPass: true,
+                    isObsecure: controller.isOldPasswordVisible.value,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        controller.setOldPasswordVisibility();
+                      },
+                      child: SvgPicture.asset(
+                        controller.isOldPasswordVisible.value
+                            ? Assets.icons.pwdNotObsecured
+                            : Assets.icons.pwdObsecured,
+                      ),
                     ),
-                  ),
-                  hintText: "Enter Your New Password",
-                );
-              }),
-              UIHelper.verticalSpace(24.h),
+                    hintText: "Enter Your Old Password",
+                    validator: passwordValidator,
+                  );
+                }),
+                UIHelper.verticalSpace(24.h),
 
-              ///Section : -----------///Button -> Weight///--------------
-              Spacer(),
-              CustomElevatedButton(
-                onTap: () {
-                  log("Button -> Save Changes Button Taped!");
-                  Get.back();
-                },
-                buttonHeight: 52.h,
-                borderRadius: 24.r,
-                buttonTitle: "Save Changes",
-              ),
-              UIHelper.verticalSpace(UIHelper.kDefaulutPadding()),
-            ],
+                ///Section : -----------------///Form Field -> New Password///-----------------------
+                Obx(() {
+                  return CustomFormField(
+                    controller: controller.newPasswordController,
+                    isPass: true,
+                    isObsecure: controller.isNewPasswordVisible.value,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        controller.setNewPasswordVisibility();
+                      },
+                      child: SvgPicture.asset(
+                        controller.isNewPasswordVisible.value
+                            ? Assets.icons.pwdNotObsecured
+                            : Assets.icons.pwdObsecured,
+                      ),
+                    ),
+                    hintText: "Enter Your New Password",
+                    validator: newPasswordValidator,
+                  );
+                }),
+                UIHelper.verticalSpace(24.h),
+
+                ///Section : -----------------///Form Field -> Confirm Password///-----------------------
+                Obx(() {
+                  return CustomFormField(
+                    controller: controller.confirmPasswordController,
+                    isPass: true,
+                    isObsecure: controller.isConfirmNewPasswordVisible.value,
+                    suffixIcon: InkWell(
+                      onTap: () {
+                        controller.setConfirmNewPasswordVisibility();
+                      },
+                      child: SvgPicture.asset(
+                        controller.isConfirmNewPasswordVisible.value
+                            ? Assets.icons.pwdNotObsecured
+                            : Assets.icons.pwdObsecured,
+                      ),
+                    ),
+                    hintText: "Enter Your Confirm Password",
+                    validator: (value) => confirmPasswordValidator(
+                      value,
+                      controller.newPasswordController.text,
+                    ),
+                  );
+                }),
+                UIHelper.verticalSpace(24.h),
+
+                ///Section : -----------///Button -> Weight///--------------
+                Spacer(),
+                Obx(() {
+                  return CustomElevatedButton(
+                    onTap: controller.isLoading.value
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              log("Button -> Save Changes Button Taped!");
+                              await controller.postChangePasswordApi();
+                            }
+                          },
+                    buttonHeight: 52.h,
+                    borderRadius: 24.r,
+                    buttonColor: controller.isLoading.value
+                        ? Colors.grey
+                        : AppColors.cb20000,
+                    buttonTitle: controller.isLoading.value
+                        ? "Changing Password..."
+                        : "Save Changes",
+                  );
+                }),
+                UIHelper.verticalSpace(UIHelper.kDefaulutPadding()),
+              ],
+            ),
           ),
         ),
       ),

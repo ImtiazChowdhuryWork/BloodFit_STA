@@ -110,6 +110,8 @@ class SignUpScreenController extends GetxController {
           final token = signUpModel.value!.data!.token;
 
           if (token != null) {
+            // Clear any existing forgot password token before setting sign-up token
+            appData.remove(kKeyForgotPasswordToken);
             appData.write(kKeySignUpToken, token);
             LoggerUtils.info("Token Found : $token");
           } else {

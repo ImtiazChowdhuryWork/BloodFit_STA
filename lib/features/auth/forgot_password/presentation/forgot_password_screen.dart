@@ -60,9 +60,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                   ),
                 ),
 
-                forgotPasswordController.errorMessage.isNotEmpty
-                    ? UIHelper.verticalSpace(10.h)
-                    : SizedBox.shrink(),
+                Obx(() {
+                  return forgotPasswordController.errorMessage.value.isNotEmpty
+                      ? UIHelper.verticalSpace(10.h)
+                      : SizedBox.shrink();
+                }),
 
                 Align(
                   alignment: Alignment.centerLeft,
@@ -83,11 +85,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                   return CustomElevatedButton(
                     onTap: forgotPasswordController.isLoading.value
                         ? null
-                        : () {
+                        : () async {
                             log("Button Taped -> Get OTP");
                             // Get.toNamed(Routes.verifyOtpScreen);
                             if (_formKey.currentState!.validate()) {
-                              // forgotPasswordController.getOTP();
+                              await forgotPasswordController
+                                  .postForgotPasswordApi();
                             }
                           },
                     borderRadius: 24.r,
