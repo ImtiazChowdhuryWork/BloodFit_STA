@@ -27,6 +27,8 @@ final class Endpoints {
   static String verifyOtp() => "$url/auth/verify-otp";
   static String resendOtp() => "$url/auth/resend-otp";
   static String forgotPassword() => "$url/auth/forget-password";
+  static String resetPassword() => "$url/auth/reset-password";
+  static String changePassword() => "$url/auth/change-password";
 }
 
 
