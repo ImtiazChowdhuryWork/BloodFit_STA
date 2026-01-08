@@ -1,4 +1,4 @@
-import 'package:bloodfit/controllers/forgot_password_controller.dart';
+import 'package:bloodfit/features/auth/forgot_password/data/controller/forgot_password_controller.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordBinding extends Bindings {
