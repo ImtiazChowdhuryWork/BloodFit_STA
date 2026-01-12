@@ -149,7 +149,7 @@
 //   }
 // }
 
-import 'dart:io';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -177,7 +177,7 @@ class MealScannerScreenController extends GetxController
     super.onInit();
     _initializeCamera();
     _initializeAnimations();
-    
+
     // Listen to nutrition data changes to handle animations
     ever(nutritionData, (_) => handleNutritionDataAnimation());
   }
@@ -213,7 +213,7 @@ class MealScannerScreenController extends GetxController
       await _cameraController.initialize();
       cameraInitialized.value = true;
     } catch (e) {
-      print('Camera error: $e');
+      LoggerUtils.error('Camera error: $e');
       scanStatus.value = 'Failed to initialize camera';
     }
   }
@@ -236,7 +236,7 @@ class MealScannerScreenController extends GetxController
       // 3. Simulate API response (Replace this with real API later)
       _simulateAPIResponse();
     } catch (e) {
-      print('Error: $e');
+      LoggerUtils.error('Error: $e');
       Get.snackbar(
         'Error',
         'Failed to analyze food: $e',
@@ -263,7 +263,7 @@ class MealScannerScreenController extends GetxController
   void handleNutritionDataAnimation() {
     if (nutritionData.isNotEmpty) {
       // If nutrition data is available and animation is not running, start it
-      if (animationController.status == AnimationStatus.dismissed || 
+      if (animationController.status == AnimationStatus.dismissed ||
           animationController.status == AnimationStatus.forward) {
         animationController.forward();
       }
@@ -334,7 +334,7 @@ class MealScannerScreenController extends GetxController
     apiResponse.value =
         '${nutritionData['foodName']} - ${nutritionData['calories']} kcal';
 
-    print('Simulated Nutrition Data: $nutritionData');
+    LoggerUtils.debug('Simulated Nutrition Data: $nutritionData');
   }
 
   // Getter for camera controller

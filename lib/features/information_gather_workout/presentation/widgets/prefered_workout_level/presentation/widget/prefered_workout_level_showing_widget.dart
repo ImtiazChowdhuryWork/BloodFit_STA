@@ -52,10 +52,9 @@ class PreferedWorkOutLevelShowingWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextFontStyle.headline22w500c111111StylePoppins
-                    ?.copyWith(
-                      color: isSelected ? AppColors.cfefefe : AppColors.c111111,
-                    ),
+                style: TextFontStyle.headline22w500c111111StylePoppins.copyWith(
+                  color: isSelected ? AppColors.cfefefe : AppColors.c111111,
+                ),
               ),
             ),
             Container(

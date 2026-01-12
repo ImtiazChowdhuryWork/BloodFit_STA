@@ -3,16 +3,12 @@ import 'dart:developer';
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
-import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/meal_plan_item_card.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
-import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/show_meal_plan_build_confirmation_bottom_sheet.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
-import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../custom_widgets/meal_plan_calendar_widget.dart';
@@ -22,7 +18,7 @@ import '../../../home/presentation/widgets/build_meal_plan_icon_widget.dart';
 class MealPlansWithCalendar extends StatelessWidget {
   MealPlansWithCalendar({super.key});
 
-  EnumsController enumsController = Get.find<EnumsController>();
+  final EnumsController enumsController = Get.find<EnumsController>();
 
   @override
   Widget build(BuildContext context) {

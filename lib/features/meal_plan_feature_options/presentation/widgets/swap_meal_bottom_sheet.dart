@@ -43,7 +43,8 @@ void showSwapMealBottomSheet() {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 10,
-                    separatorBuilder: (_, __) => UIHelper.verticalSpace(16.h),
+                    separatorBuilder: (context, index) =>
+                        UIHelper.verticalSpace(16.h),
                     itemBuilder: (context, index) {
                       return MealPlanItemCard(
                         leftButtonTitle: "Swap This Meal",

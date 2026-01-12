@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/constants/validator.dart';
 import 'package:bloodfit/features/auth/reset_password/data/controller/reset_password_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
@@ -15,7 +13,6 @@ import '../../../../custom_widgets/app_logo_widget.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
-import '../../../../routes/routes.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   ResetPasswordScreen({super.key});

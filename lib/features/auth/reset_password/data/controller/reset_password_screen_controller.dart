@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/auth/reset_password/data/model/reset_password_model.dart';
 import 'package:bloodfit/features/auth/reset_password/data/repository/reset_password_repository.dart';

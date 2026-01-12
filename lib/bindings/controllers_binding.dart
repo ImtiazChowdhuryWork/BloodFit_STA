@@ -26,7 +26,6 @@ import '../controllers/select_height_screen_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
-import '../features/auth/verify_otp/data/controller/otp_validation_controller.dart';
 
 class ControllerBindings extends Bindings {
   @override

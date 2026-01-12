@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/auth/verify_otp/data/model/verify_otp_model.dart';
 import 'package:bloodfit/features/auth/verify_otp/data/repository/resend_otp_repository.dart';
@@ -20,8 +18,8 @@ class OtpValidationScreenController extends GetxController {
   ///----------------->>> Gloabal Variables for Use End
 
   ///---------------->>> Otp Validation Api Start
-  VerifyOtpRepository _verifyOtpRepository;
-  ResendOtpRepository _resendOtpRepository;
+  final VerifyOtpRepository _verifyOtpRepository;
+  final ResendOtpRepository _resendOtpRepository;
   OtpValidationScreenController(
     this._verifyOtpRepository,
     this._resendOtpRepository,

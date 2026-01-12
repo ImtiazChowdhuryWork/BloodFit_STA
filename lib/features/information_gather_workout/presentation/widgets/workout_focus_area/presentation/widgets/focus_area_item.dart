@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../../constants/text_font_style.dart';
 import '../../../../../../../gen/colors.gen.dart';
@@ -49,13 +48,11 @@ class FocusAreaItem extends StatelessWidget {
             top: pointerTopPosition.h,
             child: Opacity(
               opacity: 0.9,
-              child: Container(
-                child: Image.asset(
-                  pointerImagPath,
-                  height: pointerImageHeight.h,
-                  width: pointerImageWidth.w,
-                  fit: BoxFit.cover,
-                ),
+              child: Image.asset(
+                pointerImagPath,
+                height: pointerImageHeight.h,
+                width: pointerImageWidth.w,
+                fit: BoxFit.cover,
               ),
             ),
           ),

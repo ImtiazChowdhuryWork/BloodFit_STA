@@ -29,7 +29,7 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
     imageController,
   );
 
-  ViewProfileSubscriptionTypeFreeScreenController
+  final ViewProfileSubscriptionTypeFreeScreenController
   viewProfileSubTypeFreeController =
       Get.find<ViewProfileSubscriptionTypeFreeScreenController>();
 

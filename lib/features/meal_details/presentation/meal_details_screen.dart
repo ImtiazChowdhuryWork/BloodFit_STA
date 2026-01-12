@@ -10,7 +10,6 @@ import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../custom_widgets/food_item_data_helper_widget.dart';

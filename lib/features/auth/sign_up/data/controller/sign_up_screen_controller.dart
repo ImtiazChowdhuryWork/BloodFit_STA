@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/validator.dart';
 import 'package:bloodfit/features/auth/sign_up/data/model/sign_up_model.dart';
 import 'package:bloodfit/features/auth/sign_up/data/repository/sign_up_repository.dart';
 import 'package:bloodfit/helper/di.dart';
-import 'package:bloodfit/networks/network_caller.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +10,7 @@ import 'package:get/get.dart';
 import '../../../../../helper/logger_util.dart';
 
 class SignUpScreenController extends GetxController {
-  SignUpRepository _signUpRepository;
+  final SignUpRepository _signUpRepository;
   SignUpScreenController(this._signUpRepository);
   Rxn<SignUpModel> signUpModel = Rxn<SignUpModel>();
 
@@ -74,8 +71,9 @@ class SignUpScreenController extends GetxController {
     );
     if (confirmPassword != null) return confirmPassword;
 
-    if (isChecked.value != true)
+    if (isChecked.value != true) {
       return 'Please agree to the Terms & Conditions to continue.';
+    }
 
     return null;
   }

@@ -4,14 +4,12 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/choose_extra_workout/presentation/widgets/extra_workout_done_bottom_sheet.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
-import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../../constants/app_list.dart';
-import '../../home/presentation/widgets/app_bar_section_widget.dart';
 import '../../../custom_widgets/workout_video_showing_widget.dart';
+import '../../home/presentation/widgets/app_bar_section_widget.dart';
 
 class ChooseExtraWorkoutScreen extends StatelessWidget {
   const ChooseExtraWorkoutScreen({super.key});

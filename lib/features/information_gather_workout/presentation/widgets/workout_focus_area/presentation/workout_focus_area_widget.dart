@@ -25,7 +25,7 @@ class WorkoutFocusAreaWidget extends StatelessWidget {
         ),
         UIHelper.verticalSpace(16.h),
 
-        Container(
+        SizedBox(
           width: 1.sw,
           height: 641.h,
           // decoration: BoxDecoration(color: Colors.purple),
