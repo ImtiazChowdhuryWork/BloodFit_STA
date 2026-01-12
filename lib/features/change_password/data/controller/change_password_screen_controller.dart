@@ -10,7 +10,7 @@ import '../model/change_password_model.dart';
 
 class ChangePasswordScreenController extends GetxController {
   ///------------>>> Importing Repository
-  ChangePasswordRepository _changePasswordRepository;
+  final ChangePasswordRepository _changePasswordRepository;
   ChangePasswordScreenController(this._changePasswordRepository);
   Rxn<ChangePasswordModel> changePasswordModel = Rxn<ChangePasswordModel>();
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/custom_widgets/food_item_data_helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

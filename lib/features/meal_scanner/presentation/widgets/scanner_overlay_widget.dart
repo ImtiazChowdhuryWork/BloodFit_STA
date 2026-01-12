@@ -14,7 +14,7 @@ class ScannerOverlayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: 300,
         height: 300,
         child: CustomPaint(

@@ -1,4 +1,3 @@
-import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';

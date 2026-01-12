@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/profile_mealplan/presentation/widgets/search_and_select_widget.dart';
 import 'package:bloodfit/features/profile_mealplan/presentation/widgets/selectable_wrap_box_widget.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,7 +77,7 @@ class ProfileMealplanScreen extends StatelessWidget {
               selectedItems: controller.selectedMealplanDays,
               maxSelectable: 3,
               onTap: (day) {
-                print("Tapped: $day");
+                LoggerUtils.debug("Tapped: $day");
               },
             ),
             UIHelper.verticalSpace(24.h),

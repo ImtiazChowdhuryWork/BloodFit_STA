@@ -1,6 +1,5 @@
 import 'package:bloodfit/controllers/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
-import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/meal_plan_selection_tracker.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,7 +25,8 @@ class MealPlanTypeWidget extends StatelessWidget {
     required this.personValue,
   });
 
-  ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController =
+  final ChooseFromOurSuggestedMealController
+  chooseFromOurSuggestedMealController =
       Get.find<ChooseFromOurSuggestedMealController>();
 
   @override

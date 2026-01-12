@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 
 import '../../../../controllers/home_screen_controller.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
-import '../../../../routes/routes.dart';
 
 void showWeekDayBottomSheet() {
   final HomeScreenController homeScreenController =

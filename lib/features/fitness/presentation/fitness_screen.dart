@@ -16,7 +16,8 @@ import '../../../custom_widgets/go_back_widget.dart';
 class FitnessScreen extends StatelessWidget {
   FitnessScreen({super.key});
 
-  FitnessScreenController controller = Get.find<FitnessScreenController>();
+  final FitnessScreenController controller =
+      Get.find<FitnessScreenController>();
 
   @override
   Widget build(BuildContext context) {

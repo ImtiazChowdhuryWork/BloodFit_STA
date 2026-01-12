@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plans_with_calendar.dart';
 import 'package:bloodfit/gen/colors.gen.dart';

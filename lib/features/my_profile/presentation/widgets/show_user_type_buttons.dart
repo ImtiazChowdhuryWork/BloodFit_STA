@@ -50,7 +50,8 @@ class ShowUserTypeButtons extends StatelessWidget {
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
                     buttonColor:
-                        controller.subscriptionType == UserSubscriptionType.free
+                        controller.subscriptionType.value ==
+                            UserSubscriptionType.free
                         ? Colors.deepPurpleAccent
                         : null,
                     buttonTitle: "Free User",
@@ -69,7 +70,7 @@ class ShowUserTypeButtons extends StatelessWidget {
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
                     buttonColor:
-                        controller.subscriptionType ==
+                        controller.subscriptionType.value ==
                             UserSubscriptionType.starter
                         ? Colors.deepPurpleAccent
                         : null,
@@ -96,7 +97,8 @@ class ShowUserTypeButtons extends StatelessWidget {
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
                     buttonColor:
-                        controller.subscriptionType == UserSubscriptionType.pro
+                        controller.subscriptionType.value ==
+                            UserSubscriptionType.pro
                         ? Colors.deepPurpleAccent
                         : null,
                     buttonTitle: "Pro User",
@@ -118,7 +120,7 @@ class ShowUserTypeButtons extends StatelessWidget {
                     buttonHeight: 40.h,
                     buttonWidth: 0.15.sh,
                     buttonColor:
-                        controller.subscriptionType ==
+                        controller.subscriptionType.value ==
                             UserSubscriptionType.elite
                         ? Colors.deepPurpleAccent
                         : null,

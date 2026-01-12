@@ -6,7 +6,7 @@ import 'package:bloodfit/networks/network_caller.dart';
 import 'package:bloodfit/networks/network_response.dart';
 
 class VerifyOtpRepository {
-  NetworkCaller _networkCaller;
+  final NetworkCaller _networkCaller;
   VerifyOtpRepository(this._networkCaller);
 
   Future<NetworkResponse> verifyOtpRepository({required String otp}) async {
