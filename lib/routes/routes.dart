@@ -45,6 +45,7 @@ import '../features/information_gather_meal_plan/presentation/widgets/select_hei
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
+import '../features/terms_and_conditions/binding/terms_and_conditions_binding.dart';
 import '../features/view_profile_sub_type_free/bindings/view_profile_sub_type_free_binding.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 
@@ -263,7 +264,7 @@ class Routes {
     GetPage(
       name: termsAndConditionsScreen,
       page: () => TermsAndConditionsScreen(),
-
+      binding: TermsAndConditionsBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

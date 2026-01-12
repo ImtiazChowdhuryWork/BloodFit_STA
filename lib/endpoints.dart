@@ -29,6 +29,7 @@ final class Endpoints {
   static String forgotPassword() => "$url/auth/forget-password";
   static String resetPassword() => "$url/auth/reset-password";
   static String changePassword() => "$url/auth/change-password";
+  static String termsAndConditions() => "$url/terms/";
 }
 
 
