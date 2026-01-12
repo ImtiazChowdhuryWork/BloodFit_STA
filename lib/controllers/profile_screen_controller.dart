@@ -69,9 +69,12 @@ class ProfileScreenController extends GetxController {
     if (appData.read(kKeyAccessToken) != null) {
       ///------>>> Removing The token
       appData.remove(kKeyAccessToken);
-      LoggerUtils.info(
-        "After Removing Access Token : ${appData.read(kKeyAccessToken)}",
-      );
+      appData.remove(kKeyUserName);
+      appData.remove(kKeyEmail);
+      LoggerUtils.info("After Removing Data : ");
+      LoggerUtils.info("Access Token : ${appData.read(kKeyAccessToken)}");
+      LoggerUtils.info("User Name : ${appData.read(kKeyUserName)}");
+      LoggerUtils.info("User Email : ${appData.read(kKeyEmail)}");
 
       ///------>>> Checking the token if (appData.read(kKeyAccessToken) == null) {
       LoggerUtils.info("Access token Not found!");
