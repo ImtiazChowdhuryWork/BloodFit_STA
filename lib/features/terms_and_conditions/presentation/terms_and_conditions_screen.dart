@@ -1,5 +1,5 @@
 import 'package:bloodfit/features/terms_and_conditions/data/controller/terms_and_conditions_screen_controller.dart';
-import 'package:bloodfit/features/terms_and_conditions/presentation/widgets/custom_loader.dart';
+import 'package:bloodfit/custom_widgets/custom_loader.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';

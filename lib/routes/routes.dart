@@ -43,6 +43,7 @@ import '../features/faq/presentation/faq_screen.dart';
 import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
+import '../features/privacy_policy/binding/privacy_policy_binding.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
 import '../features/terms_and_conditions/binding/terms_and_conditions_binding.dart';
@@ -274,7 +275,7 @@ class Routes {
     GetPage(
       name: privacyPolicyScreen,
       page: () => PrivacyPolicyScreen(),
-
+      binding: PrivacyPolicyBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

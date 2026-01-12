@@ -23,10 +23,6 @@ class TermsAndConditionsScreenController extends GetxController {
     final response = await _termsAndConditionsRepository
         .termsAndConditionsRepository();
 
-    LoggerUtils.debug("API Response Status: ${response.statusCode}");
-    LoggerUtils.debug("API Response Success: ${response.isSuccess}");
-    LoggerUtils.debug("API Response JSON: ${response.jsonResponse}");
-
     if (response.statusCode == 200 && response.isSuccess) {
       try {
         model.value = TermsAndConditionsScreenModel.fromJson(
