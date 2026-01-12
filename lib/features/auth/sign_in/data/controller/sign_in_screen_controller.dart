@@ -80,6 +80,8 @@ class SignInScreenController extends GetxController {
           passwordController.clear();
           LoggerUtils.info("Controllers Cleared!");
           appData.write(kKeyAccessToken, token);
+          appData.write(kKeyUserName, signInmodel.value?.data?.user?.name);
+          appData.write(kKeyEmail, signInmodel.value?.data?.user?.email);
           Get.toNamed(Routes.informationGatherMealScreen);
         }
       } catch (e) {

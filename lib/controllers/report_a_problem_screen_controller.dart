@@ -1,5 +1,5 @@
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 
-class ReportAProblemScreenController extends GetxController {
-  RxString selectedProblemType = ''.obs;
-}
+// class ReportAProblemScreenController extends GetxController {
+
+// }

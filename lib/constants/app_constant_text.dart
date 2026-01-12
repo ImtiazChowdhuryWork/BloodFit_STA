@@ -34,3 +34,5 @@ const String kKeyEnglish = 'english';
 const String kKeyBangla = 'bangla';
 const String kKeySignUpToken = 'sign-up';
 const String kKeyForgotPasswordToken = 'forgot_password_token';
+const String kKeyUserName = 'user_name';
+const String kKeyEmail = 'user_email';
