@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
+import '../../../custom_widgets/error_message.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 
 class ReportAProblemScreen extends StatelessWidget {
@@ -121,51 +122,10 @@ class ReportAProblemScreen extends StatelessWidget {
 
           UIHelper.verticalSpace(20.h),
 
-          ///------->>>Show Error Message if ther is any
-          ///Section : Show error message if token is missing
-          Obx(() {
-            if (controller.errorMessage.value.isNotEmpty) {
-              return Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12.r),
-                margin: EdgeInsets.only(bottom: 16.h),
-                decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
-                  border: Border.all(color: Colors.red),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.error, color: Colors.red, size: 18.sp),
-                    SizedBox(width: 8.w),
-                    Expanded(
-                      child: Text(
-                        controller.errorMessage.value,
-                        style: TextStyle(color: Colors.red, fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-            return SizedBox.shrink(); // Return empty widget if no error
-          }),
-
-          Text(
-            'User Name : ${appData.read(kKeyUserName)}',
-            style: TextFontStyle.headline20w500cfefefeStylePoppins,
-          ),
-          Text(
-            'User Email : ${appData.read(kKeyEmail)}',
-            style: TextFontStyle.headline20w500cfefefeStylePoppins,
-          ),
-          Text(
-            'User Selected Problem Type : ${controller.selectedProblemType.value}',
-            style: TextFontStyle.headline20w500cfefefeStylePoppins,
-          ),
-          Text(
-            'User Selected Problem Description : ${controller.describedProblemController.text}',
-            style: TextFontStyle.headline20w500cfefefeStylePoppins,
+          ///Section : Show error message if there is any
+          ErrorMessageWidget(
+            errorMessage: controller.errorMessage,
+            onClear: controller.clearErrorMessage,
           ),
         ],
       ),

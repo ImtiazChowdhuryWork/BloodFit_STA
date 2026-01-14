@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
+import '../../../custom_widgets/error_message.dart';
 import '../data/controller/change_password_screen_controller.dart';
 import '../../../custom_widgets/custom_elevated_button.dart';
 import '../../../custom_widgets/custom_text_form_field.dart';
@@ -158,6 +159,12 @@ class ChangePasswordScreen extends StatelessWidget {
                   );
                 }),
                 UIHelper.verticalSpace(24.h),
+
+                ///Section : Show error message if there is any
+                ErrorMessageWidget(
+                  errorMessage: controller.errorMessage,
+                  onClear: controller.clearErrorMessage,
+                ),
 
                 ///Section : -----------///Button -> Weight///--------------
                 Spacer(),
