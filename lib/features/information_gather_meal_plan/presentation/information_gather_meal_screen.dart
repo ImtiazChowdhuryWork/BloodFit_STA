@@ -37,16 +37,20 @@ class InformationGatherMealScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Top bar (Back button only)
-              CustomBackButton(
-                onTap: () {
-                  if (controller.currentIndex.value > 0) {
-                    controller.previousPage();
-                  } else {
-                    // Exit current flow (go back)
-                    Get.back();
-                  }
-                },
-              ),
+              Obx(() {
+                return controller.currentIndex.value <= 0
+                    ? SizedBox.shrink()
+                    : CustomBackButton(
+                        onTap: () {
+                          if (controller.currentIndex.value > 0) {
+                            controller.previousPage();
+                          } else {
+                            // Exit current flow (go back)
+                            Get.back();
+                          }
+                        },
+                      );
+              }),
               UIHelper.verticalSpace(26.h),
 
               /// Page Indicators

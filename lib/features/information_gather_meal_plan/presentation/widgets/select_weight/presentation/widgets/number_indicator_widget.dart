@@ -34,6 +34,10 @@ class NumberIndicator extends StatelessWidget {
             ? const SizedBox.shrink()
             : Text(
                 value.toStringAsFixed(1), // Format to 1 decimal place
+                style: TextStyle(
+                  color: value < 100 ? Colors.white : Colors.red,
+                  fontSize: value >= 100 ? 24.sp : 30.sp,
+                ),
                 textAlign: TextAlign.center,
               ),
       ),

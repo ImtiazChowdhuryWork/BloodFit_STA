@@ -111,6 +111,7 @@ class ReportAProblemScreen extends StatelessWidget {
             minLines: 8,
             maxLines: 8,
             controller: controller.describedProblemController,
+            style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
             decoration: InputDecoration(
               filled: true,
               fillColor: AppColors.c3c3c3c,
@@ -145,6 +146,7 @@ class ReportAProblemScreen extends StatelessWidget {
                 : () async {
                     await controller.postReportAProblemApi();
                   },
+            isLoading: controller.isLoading.value,
             buttonTitle: controller.isLoading.value
                 ? 'Submitting...'
                 : 'Submit',

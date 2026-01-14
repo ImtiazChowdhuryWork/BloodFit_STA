@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/custom_widgets/card_tile_option_widget.dart';
+import 'package:bloodfit/features/settings/data/controller/delete_account_controller.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +12,17 @@ import 'package:get/get.dart';
 import '../../../constants/app_enums.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
-import '../widgets/show_delete_bottom_sheet.dart';
+import 'widgets/show_delete_bottom_sheet.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DeleteAccountController controller = Get.find<DeleteAccountController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.postDeleteAccountApi();
+    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
 
@@ -70,9 +75,10 @@ class SettingsScreen extends StatelessWidget {
                       } else if (data.titleEnum ==
                           SettingsOptionTitle.deleteAccount) {
                         showDeleteBottomSheet(
-                          onDelete: () {
+                          isLoading: controller.isLoading,
+                          onDelete: () async {
                             log("Button -> Delete Button Taped!");
-                            Get.back();
+                            await controller.postDeleteAccountApi();
                           },
                           onCancel: () {
                             log("Button -> Cancel Button Taped!");

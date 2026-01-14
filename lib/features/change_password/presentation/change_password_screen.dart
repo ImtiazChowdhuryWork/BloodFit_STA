@@ -178,6 +178,7 @@ class ChangePasswordScreen extends StatelessWidget {
                               await controller.postChangePasswordApi();
                             }
                           },
+                    isLoading: controller.isLoading.value,
                     buttonHeight: 52.h,
                     borderRadius: 24.r,
                     buttonColor: controller.isLoading.value

@@ -69,7 +69,7 @@ class ControllerBindings extends Bindings {
     );
 
     // Add WeightController bindings with tags
-    Get.lazyPut(() => WeightController(), tag: 'current_weight');
+    Get.lazyPut(() => WeightController(), tag: 'current_weight', fenix: true);
     Get.lazyPut(() => WeightController(), tag: 'desired_weight');
 
     // Add SliderButtonController bindings with tags

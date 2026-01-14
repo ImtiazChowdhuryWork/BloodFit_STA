@@ -4,7 +4,7 @@ import 'package:bloodfit/features/meal_details/model/food_ingredients_details_mo
 import 'package:bloodfit/features/meal_details/model/food_menarel_model.dart';
 import 'package:bloodfit/features/my_profile/model/personal_data_model.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin_tile_extension.dart';
-import 'package:bloodfit/features/settings/widgets/settings_option_title_extension.dart';
+import 'package:bloodfit/features/settings/presentation/widgets/settings_option_title_extension.dart';
 import 'package:bloodfit/routes/routes.dart';
 
 import '../features/faq/model/faq_model.dart';

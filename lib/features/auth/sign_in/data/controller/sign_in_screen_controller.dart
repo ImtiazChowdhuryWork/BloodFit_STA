@@ -43,6 +43,14 @@ class SignInScreenController extends GetxController {
     return null;
   }
 
+  ///----------------->>>> Log The Saved Values
+  void logTheSavedValues() {
+    LoggerUtils.debug("🤥🤥Access Token : ${appData.read(kKeyAccessToken)}");
+    LoggerUtils.debug("🤥🤥User Name : ${appData.read(kKeyUserName)}");
+    LoggerUtils.debug("🤥🤥Uer Email : ${appData.read(kKeyEmail)}");
+    LoggerUtils.debug("🤥🤥User ID : ${appData.read(kKeyUserID)}");
+  }
+
   void clearError() {
     errorMessage.value = '';
   }
@@ -80,8 +88,14 @@ class SignInScreenController extends GetxController {
           passwordController.clear();
           LoggerUtils.info("Controllers Cleared!");
           appData.write(kKeyAccessToken, token);
-          appData.write(kKeyUserName, signInmodel.value?.data?.user?.name);
-          appData.write(kKeyEmail, signInmodel.value?.data?.user?.email);
+          appData.write(kKeyUserName, userName);
+          appData.write(kKeyEmail, userEmail);
+          appData.write(kKeyUserID, userID);
+
+          ///------>> On Success Logging the Saved values
+          logTheSavedValues();
+
+          ///--------->>> On Success Navigating to Information Gather Screen
           Get.toNamed(Routes.informationGatherMealScreen);
         }
       } catch (e) {
@@ -93,6 +107,11 @@ class SignInScreenController extends GetxController {
       LoggerUtils.error("Error : ${errorMessage.value}");
     }
   }
+
+  ///---------->>> Getter Values
+  String get userName => signInmodel.value?.data?.user?.name ?? '';
+  String get userEmail => signInmodel.value?.data?.user?.email ?? '';
+  String get userID => signInmodel.value?.data?.user?.id ?? '';
 
   @override
   void onClose() {
