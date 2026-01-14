@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import '../../../../constants/text_font_style.dart';
 import '../../../../custom_widgets/app_logo_widget.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
+import '../../../../custom_widgets/error_message.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
@@ -107,37 +108,11 @@ class ResetPasswordScreen extends StatelessWidget {
                 ),
                 UIHelper.verticalSpace(24.h),
 
-                ///Section : Show error message if token is missing
-                Obx(() {
-                  if (controller.errorMessage.value.isNotEmpty) {
-                    return Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(12.r),
-                      margin: EdgeInsets.only(bottom: 16.h),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
-                        border: Border.all(color: Colors.red),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.error, color: Colors.red, size: 18.sp),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: Text(
-                              controller.errorMessage.value,
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return SizedBox.shrink(); // Return empty widget if no error
-                }),
+                ///Section : Show error message if there is any
+                ErrorMessageWidget(
+                  errorMessage: controller.errorMessage,
+                  onClear: controller.clearErrorMessage,
+                ),
 
                 ///Section : Show error message if token is missing
                 Obx(() {

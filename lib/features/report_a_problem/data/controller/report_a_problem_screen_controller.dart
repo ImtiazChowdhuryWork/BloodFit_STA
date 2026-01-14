@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class ReportAProblemScreenController extends GetxController {
-  ReportAProblemRepository _reportAProblemRepository;
+  final ReportAProblemRepository _reportAProblemRepository;
   ReportAProblemScreenController(this._reportAProblemRepository);
   Rxn<ReportAProblemModel> model = Rxn<ReportAProblemModel>();
   TextEditingController describedProblemController = TextEditingController();

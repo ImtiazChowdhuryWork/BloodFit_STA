@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 
 import '../../../../constants/text_font_style.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
+import '../../../../custom_widgets/error_message.dart';
 import '../../../../custom_widgets/social_media_button_widget.dart';
 import '../../../../routes/routes.dart';
 
@@ -53,51 +54,10 @@ class SignUpScreen extends StatelessWidget {
                 UIHelper.verticalSpace(30.h),
 
                 ///Section : Show error message if there is any
-                Obx(() {
-                  if (controller.errorMessage.value.isNotEmpty) {
-                    return Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(12.r),
-                      margin: EdgeInsets.only(bottom: 16.h),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
-                        border: Border.all(color: AppColors.cb20000),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error,
-                            color: AppColors.cb20000,
-                            size: 18.sp,
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: Text(
-                              controller.errorMessage.value,
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              controller.clearErrorMessage();
-                            },
-
-                            child: Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                              size: 18.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  return SizedBox.shrink(); // Return empty widget if no error
-                }),
+                ErrorMessageWidget(
+                  errorMessage: controller.errorMessage,
+                  onClear: controller.clearErrorMessage,
+                ),
 
                 Form(
                   key: _formKey,

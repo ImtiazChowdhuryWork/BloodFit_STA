@@ -59,8 +59,8 @@ class UtilScreenMobile extends StatelessWidget {
             translations: Languages(),
             locale: (appData.read(kKeyEnglish) ?? false)
                 ? Locale('en', 'US')
-                : (appData.read(kKeyBangla) ?? false)
-                ? Locale('bn', 'BD')
+                : (appData.read(kKeySouthKorean) ?? false)
+                ? Locale('ko', 'KR')
                 : Locale('en', 'US'),
             builder: (context, widget) {
               return MediaQuery(data: MediaQuery.of(context), child: widget!);

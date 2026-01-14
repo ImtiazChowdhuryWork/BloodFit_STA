@@ -48,7 +48,7 @@ Future<void> setInitValue() async {
 
 void setInitialLanguagePreference() {
   appData.writeIfNull(kKeyEnglish, true);
-  appData.writeIfNull(kKeyBangla, false);
+  appData.writeIfNull(kKeySouthKorean, false);
 }
 
 void showMaterialDialog(BuildContext context) {
