@@ -35,7 +35,7 @@ class NumberIndicator extends StatelessWidget {
             : Text(
                 value.toStringAsFixed(1), // Format to 1 decimal place
                 style: TextStyle(
-                  color: value < 100 ? Colors.white : Colors.red,
+                  color: value < 100 ? AppColors.cFFFFFF : AppColors.cb20000,
                   fontSize: value >= 100 ? 24.sp : 30.sp,
                 ),
                 textAlign: TextAlign.center,

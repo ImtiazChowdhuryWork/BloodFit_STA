@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreenController extends GetxController {
+  String userName = appData.read(kKeyUserName) ?? '';
+
   ///Section : -------------///Profile Image Picker///--------------
   final ImagePicker _picker = ImagePicker();
   RxString pickedImagePath = ''.obs;

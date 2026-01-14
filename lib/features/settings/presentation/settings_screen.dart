@@ -76,6 +76,7 @@ class SettingsScreen extends StatelessWidget {
                           SettingsOptionTitle.deleteAccount) {
                         showDeleteBottomSheet(
                           isLoading: controller.isLoading,
+
                           onDelete: () async {
                             log("Button -> Delete Button Taped!");
                             await controller.postDeleteAccountApi();

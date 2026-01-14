@@ -75,7 +75,7 @@ class MyProfileScreen extends StatelessWidget {
 
               ///Section : ---------------------///Profile Image Picker Widget///-----------
               Text(
-                "Tasmia Hassan Shabonty",
+                controller.userName,
                 style: TextFontStyle.headline16w500cfefefeStylePoppins,
               ),
               UIHelper.verticalSpace(5.h),
