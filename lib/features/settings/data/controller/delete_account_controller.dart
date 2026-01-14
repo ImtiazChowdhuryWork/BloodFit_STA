@@ -12,6 +12,7 @@ class DeleteAccountController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxString errorMessage = ''.obs;
+
   void clearErrorMessage() {
     errorMessage.value = '';
   }
@@ -22,7 +23,7 @@ class DeleteAccountController extends GetxController {
 
     final response = await _deleteAccountRepository.deleteAccountRepository();
 
-    if (response.statusCode == 200 && response.isSuccess) {
+    if (response.statusCode == 201 && response.isSuccess) {
       try {
         ///------------->>> Pre Removal Data Check
         LoggerUtils.info("📋 Pre-removal data check:");

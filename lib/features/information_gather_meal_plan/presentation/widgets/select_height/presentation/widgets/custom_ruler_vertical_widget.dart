@@ -41,7 +41,7 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
 
   @override
   Widget build(BuildContext context) {
-    final double containerHeight = 0.8.sh - 200.h;
+    final double containerHeight = 0.7.sh - 200.h;
     final double centerPadding = containerHeight / 2; // Exact center
 
     return SingleChildScrollView(
@@ -93,7 +93,7 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
                 // Arrow pointing towards the ruler
                 Positioned(
                   left: -40.w,
-                  top: centerPadding - 30.sp,
+                  top: centerPadding - 18.sp,
                   child: RotatedBox(
                     quarterTurns: 3,
                     child: SvgPicture.asset(Assets.icons.upperArrowIcon),
@@ -104,7 +104,7 @@ class _CustomHeightRulerVerticalState extends State<CustomHeightRulerVertical> {
                 Obx(
                   () => Positioned(
                     left: -160.w,
-                    top: centerPadding - 30.sp,
+                    top: centerPadding - 18.sp,
                     child: _buildHeightDisplay(),
                   ),
                 ),
