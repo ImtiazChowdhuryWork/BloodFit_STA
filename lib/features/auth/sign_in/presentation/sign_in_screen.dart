@@ -143,18 +143,21 @@ class SignInScreen extends StatelessWidget {
                 UIHelper.verticalSpace(48.h),
 
                 ///Section : -----------------///Button -> Login///----------------
-                CustomElevatedButton(
-                  onTap: () async {
-                    log("Button Taped -> Login");
+                Obx(() {
+                  return CustomElevatedButton(
+                    onTap: () async {
+                      log("Button Taped -> Login");
 
-                    if (_formKey.currentState!.validate()) {
-                      await controller.postSignInApi();
-                    }
-                  },
-                  borderRadius: 24.r,
-                  buttonHeight: 52.h,
-                  buttonTitle: "Login",
-                ),
+                      if (_formKey.currentState!.validate()) {
+                        await controller.postSignInApi();
+                      }
+                    },
+                    isLoading: controller.isLoading.value,
+                    borderRadius: 24.r,
+                    buttonHeight: 52.h,
+                    buttonTitle: "Login",
+                  );
+                }),
                 UIHelper.verticalSpace(16.h),
 
                 ///Section : -----------------///Text -> New User?///----------------

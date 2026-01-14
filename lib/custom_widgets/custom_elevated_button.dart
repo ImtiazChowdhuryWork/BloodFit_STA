@@ -68,8 +68,11 @@
 //   }
 // }
 
+import 'package:bloodfit/gen/assets.gen.dart';
+import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import '../constants/text_font_style.dart';
 import '../gen/colors.gen.dart';
 
@@ -85,6 +88,7 @@ class CustomElevatedButton extends StatelessWidget {
   final TextStyle? textStyle;
   final double? buttonBorderWidth;
   final bool isDisabled; // ✅ New addition
+  final bool isLoading;
 
   final void Function()? onTap;
 
@@ -101,7 +105,8 @@ class CustomElevatedButton extends StatelessWidget {
     this.buttonColor,
     this.textStyle,
     this.buttonBorderWidth,
-    this.isDisabled = false, // ✅ Default false
+    this.isDisabled = false,
+    this.isLoading = false,
   });
 
   @override
@@ -130,19 +135,48 @@ class CustomElevatedButton extends StatelessWidget {
         child: Center(
           child:
               child ??
-              Text(
-                buttonTitle ?? "",
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    (textStyle ??
-                            TextFontStyle.headline16w500cFFFFFFStylePoppins)
-                        .copyWith(
-                          color: isDisabled
-                              ? AppColors.cFFFFFF.withOpacity(0.6)
-                              : AppColors.cFFFFFF,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  isLoading
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              buttonTitle ?? "",
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  (textStyle ??
+                                          TextFontStyle
+                                              .headline16w500cFFFFFFStylePoppins)
+                                      .copyWith(
+                                        color: isDisabled
+                                            ? AppColors.cFFFFFF.withOpacity(0.6)
+                                            : AppColors.cFFFFFF,
+                                      ),
+                            ),
+                            UIHelper.horizontalSpace(10.w),
+                            Lottie.asset(Assets.lottie.waiting),
+                          ],
+                        )
+                      : Text(
+                          buttonTitle ?? "",
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              (textStyle ??
+                                      TextFontStyle
+                                          .headline16w500cFFFFFFStylePoppins)
+                                  .copyWith(
+                                    color: isDisabled
+                                        ? AppColors.cFFFFFF.withOpacity(0.6)
+                                        : AppColors.cFFFFFF,
+                                  ),
                         ),
+                ],
               ),
         ),
       ),
