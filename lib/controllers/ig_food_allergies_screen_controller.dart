@@ -2,32 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class IgFoodAllergiesScreenController extends GetxController {
-  var addDislikeFoodController = TextEditingController().obs;
-  var isAddDislikeTextFieldNotEmpty = false.obs;
+  var allergiesFoodController = TextEditingController().obs;
+  var isAllegiesTextFieldNotEmpty = false.obs;
 
   ///-------->>> Food List
-  RxList<String> dislikedFoodList = [
-    'Gluten',
-    'Dairy',
-    'Eggs',
-    'Peanuts',
-    'Soy',
-    'Seafood',
-  ].obs;
+  RxList<String> alleriesFoodList = <String>[].obs;
 
-  ///------------>>> Add DisLiked Food Items to List
-  void addDisLikeFoodToList() {
-    final food = addDislikeFoodController.value.text.trim();
+  ///------------>>> Add Allergies Food Items to List
+  void addAllergiesFoodToList() {
+    final food = allergiesFoodController.value.text.trim();
 
-    if (food.isNotEmpty && !dislikedFoodList.contains(food)) {
-      dislikedFoodList.add(food);
-      addDislikeFoodController.value.clear();
+    if (food.isNotEmpty && !alleriesFoodList.contains(food)) {
+      alleriesFoodList.add(food);
+      allergiesFoodController.value.clear();
     }
   }
 
-  ///--------------->>> Remove Food Items from the Disliked Food List
+  ///--------------->>> Remove Food Items from the Allergies Food List
   void removeFoodAllergy({required String food}) {
-    dislikedFoodList.remove(food);
+    alleriesFoodList.remove(food);
   }
 
   @override
@@ -35,16 +28,16 @@ class IgFoodAllergiesScreenController extends GetxController {
     super.onInit();
 
     ///------------>>> Listen to text changes in the controller
-    addDislikeFoodController.value.addListener(() {
-      isAddDislikeTextFieldNotEmpty.value =
-          addDislikeFoodController.value.text.isNotEmpty;
+    allergiesFoodController.value.addListener(() {
+      isAllegiesTextFieldNotEmpty.value =
+          allergiesFoodController.value.text.isNotEmpty;
     });
   }
 
   @override
   void onClose() {
     // Dispose the controller to prevent memory leaks
-    addDislikeFoodController.value.dispose();
+    allergiesFoodController.value.dispose();
     super.onClose();
   }
 }

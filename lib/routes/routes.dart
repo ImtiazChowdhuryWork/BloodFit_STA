@@ -40,6 +40,7 @@ import '../features/auth/verify_otp/binding/verify_otp_binding.dart';
 import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/presentation/faq_screen.dart';
+import '../features/information_gather_meal_plan/binding/information_gather_meal_binding.dart';
 import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
@@ -325,6 +326,7 @@ class Routes {
     GetPage(
       name: informationGatherMealScreen,
       page: () => InformationGatherMealScreen(),
+      binding: InformationGatherMealBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

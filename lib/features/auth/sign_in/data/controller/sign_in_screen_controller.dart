@@ -96,7 +96,7 @@ class SignInScreenController extends GetxController {
           logTheSavedValues();
 
           ///--------->>> On Success Navigating to Information Gather Screen
-          Get.toNamed(Routes.informationGatherMealScreen);
+          Get.offAllNamed(Routes.informationGatherMealScreen);
         }
       } catch (e) {
         LoggerUtils.error("Error : Unexpect Response from Server!");

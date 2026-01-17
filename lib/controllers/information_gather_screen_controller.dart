@@ -47,6 +47,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../constants/app_constant_text.dart';
+import '../features/information_gather_meal_plan/data/repository/information_gather_meal_repository.dart';
+import '../helper/di.dart';
+import '../helper/logger_util.dart';
 import '../utils/page_indicator_interface.dart';
 
 class InformationGatherMealPlanController extends GetxController

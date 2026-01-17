@@ -25,39 +25,67 @@ class SelectGenderWidget extends StatelessWidget {
           "Select Your Gender",
           style: TextFontStyle.headline22w500cfefefeStylePoppins,
         ),
-        UIHelper.verticalSpace(120.h),
 
+        // Optional: Show selected gender
+        Obx(
+          () => Text(
+            'Selected Gender: ${selectGenderScreenController.selectedGender.value.isNotEmpty ? selectGenderScreenController.selectedGender.value : "Not selected"}',
+            style: TextFontStyle.headline10w500cfefefeStylePoppins,
+          ),
+        ),
+
+        UIHelper.verticalSpace(50.h), // Reduced space
         /// Use Column for static list
         Align(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(AppList.genderWithIconList.length, (index) {
-              var data = AppList.genderWithIconList[index];
-              return Padding(
-                padding: EdgeInsets.only(bottom: 64.h),
-                child: Obx(() {
-                  return GenderShowingWidget(
-                    onTap: () {
-                      log("Gender List Index : $index");
-                      log("Gender : ${data.title}");
-                      selectGenderScreenController.setSelectedGenderIndex(
-                        newValue: index,
-                      );
-                    },
-                    title: data.title,
-                    bgColor:
-                        selectGenderScreenController
+            children: List.generate(
+              selectGenderScreenController
+                  .genderWithIconList
+                  .length, // Use controller list
+              (index) {
+                var data =
+                    selectGenderScreenController.genderWithIconList[index];
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 64.h),
+                  child: Obx(() {
+                    return GenderShowingWidget(
+                      onTap: () {
+                        log("Gender List Index : $index");
+                        log("Gender : ${data.title}");
+
+                        // Check if already selected
+                        if (selectGenderScreenController
                                 .selectedGenderIndex
                                 .value ==
-                            index
-                        ? AppColors.c620000
-                        : AppColors.c111111,
-                    imagePath: data.iconPath,
-                  );
-                }),
-              );
-            }),
+                            index) {
+                          log("Same gender selected, no change needed");
+                          return;
+                        }
+
+                        // Update UI state
+                        selectGenderScreenController.setSelectedGenderIndex(
+                          newValue: index,
+                        );
+
+                        // Save to storage
+                        selectGenderScreenController.saveGender();
+                      },
+                      title: data.title,
+                      bgColor:
+                          selectGenderScreenController
+                                  .selectedGenderIndex
+                                  .value ==
+                              index
+                          ? AppColors.c620000
+                          : AppColors.c111111,
+                      imagePath: data.iconPath,
+                    );
+                  }),
+                );
+              },
+            ),
           ),
         ),
       ],
