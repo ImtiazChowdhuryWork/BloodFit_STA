@@ -37,3 +37,13 @@ const String kKeyForgotPasswordToken = 'forgot_password_token';
 const String kKeyUserName = 'user_name';
 const String kKeyEmail = 'user_email';
 const String kKeyUserID = 'user_id';
+
+///------->>> Information Gather Meal Plan Constants
+const String kKeyBloodGroup = 'blood_group';
+const String kKeyGender = 'gender';
+const String kKeyUserAge = 'user_age';
+const String kKeyUserWeight = 'user_weight';
+const String kKeyUserHeight = 'user_height';
+const String kKeyUserDietType = 'user_diet_type';
+const String kKeyUserFoodAlergisList = 'user_food_alergies_list';
+const String kKeyUserDislLikeFoodList = 'user_dislike_food_list';

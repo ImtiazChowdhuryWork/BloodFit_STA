@@ -33,17 +33,17 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: CustomFormField(
-                    controller: controller.addDislikeFoodController.value,
+                    controller: controller.allergiesFoodController.value,
                     hintText: "Type your food allergies!",
                     borderRadius: 16.r,
                   ),
                 ),
                 UIHelper.horizontalSpace(10.w),
-                controller.isAddDislikeTextFieldNotEmpty.value
+                controller.isAllegiesTextFieldNotEmpty.value
                     ? CustomElevatedButton(
                         onTap: () {
                           LoggerUtils.debug("Add Button Taped!");
-                          controller.addDisLikeFoodToList();
+                          controller.addAllergiesFoodToList();
                         },
                         buttonWidth: 0.2.sw,
                         buttonTitle: 'Add',
@@ -59,7 +59,7 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
             return Wrap(
               spacing: 8.w, // Horizontal space between items
               runSpacing: 8.h, // Vertical space between lines
-              children: controller.dislikedFoodList.map((item) {
+              children: controller.alleriesFoodList.map((item) {
                 return InkWell(
                   onTap: () {
                     LoggerUtils.debug("Remove Items By tapping on them");

@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/page_indicator.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/data/controller/information_gather_meal_screen_controller.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_age/presentation/select_age_screen_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_blood_group/presentation/select_blood_group_screen.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_country/presentation/select_country_widget.dart';
@@ -10,6 +12,8 @@ import 'package:bloodfit/features/information_gather_meal_plan/presentation/widg
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_gender/presentation/select_gender_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
+import 'package:bloodfit/helper/di.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +31,9 @@ class InformationGatherMealScreen extends StatelessWidget {
     final InformationGatherMealPlanController controller = Get.put(
       InformationGatherMealPlanController(),
     );
+
+    InformationGatherMealScreenController igController =
+        Get.find<InformationGatherMealScreenController>();
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
@@ -94,17 +101,25 @@ class InformationGatherMealScreen extends StatelessWidget {
           final isLastPage =
               controller.currentIndex.value == controller.totalPages - 1;
           return CustomElevatedButton(
-            onTap: () {
-              if (isLastPage) {
-                // Finish onboarding or navigate to next screen
-                log("Information Gathering Completed!");
-                // Example navigation:
-                Get.toNamed(Routes.dailyCaloriesIntakeScreen);
-              } else {
-                // Go to next page
-                controller.nextPage();
-              }
-            },
+            onTap: igController.isLoading.value
+                ? null
+                : () {
+                    if (isLastPage) {
+                      // Finish onboarding or navigate to next screen
+                      log("Information Gathering Completed!");
+                      // Example navigation:
+                      igController.postInformationGatherMealPlanApi();
+                    } else {
+                      LoggerUtils.debug(
+                        "Blood Group from Storage : ${appData.read(kKeyBloodGroup)}",
+                      );
+                      LoggerUtils.debug(
+                        "Gender Group from Storage : ${appData.read(kKeyGender)}",
+                      );
+                      // Go to next page
+                      controller.nextPage();
+                    }
+                  },
             buttonTitle: isLastPage ? "Finish" : "Continue",
             buttonHeight: 60.h,
           );

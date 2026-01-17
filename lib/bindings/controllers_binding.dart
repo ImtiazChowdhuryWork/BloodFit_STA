@@ -10,6 +10,7 @@ import '../controllers/home_screen_controller.dart';
 import '../controllers/ig_current_body_type_controller.dart';
 import '../controllers/ig_desired_weight_controller.dart';
 import '../controllers/ig_food_allergies_screen_controller.dart';
+import '../controllers/ig_food_dislikes_screen_controller.dart';
 import '../controllers/ig_prefered_activity_level_controller.dart';
 import '../controllers/ig_select_blood_grop_controller.dart';
 import '../controllers/ig_select_gender_screen_controller.dart';
@@ -62,6 +63,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => IgWhatsYourActivityLevelController(), fenix: true);
     Get.lazyPut(() => IgSelectYourCountryScreenController(), fenix: true);
     Get.lazyPut(() => IgFoodAllergiesScreenController(), fenix: true);
+    Get.lazyPut(() => IgFoodDislikesScreenController(), fenix: true);
     // Get.lazyPut(() => ForgotPasswordController(), fenix: true);
 
     Get.lazyPut(

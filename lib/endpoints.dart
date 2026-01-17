@@ -35,6 +35,8 @@ final class Endpoints {
   static String deleteAccount({required String userId}) {
     return "$url/auth/account-delete?id=$userId";
   }
+
+  static String informationGatherMealPlan() => "$url/health/add-health-details";
 }
 
 
