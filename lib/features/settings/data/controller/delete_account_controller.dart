@@ -23,7 +23,8 @@ class DeleteAccountController extends GetxController {
 
     final response = await _deleteAccountRepository.deleteAccountRepository();
 
-    if (response.statusCode == 201 && response.isSuccess) {
+    // Accept both 200 and 204 as successful delete responses
+    if (response.statusCode == 200 && response.isSuccess) {
       try {
         ///------------->>> Pre Removal Data Check
         LoggerUtils.info("📋 Pre-removal data check:");

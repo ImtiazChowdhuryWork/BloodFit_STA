@@ -20,9 +20,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DeleteAccountController controller = Get.find<DeleteAccountController>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.postDeleteAccountApi();
-    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
 

@@ -18,10 +18,10 @@ class DeleteAccountRepository {
     LoggerUtils.debug("User ID : $userId");
     LoggerUtils.debug("Access Token: $accessToken");
 
-    return _networkCaller.postRequest(
+    return _networkCaller.deleteRequest(
       Endpoints.deleteAccount(userId: userId),
       headers: accessToken.isNotEmpty
-          ? {'Authorization': 'Bearer : $accessToken'}
+          ? {'Authorization': 'Bearer $accessToken'}  // Fixed: Removed extra space and colon
           : null,
     );
   }

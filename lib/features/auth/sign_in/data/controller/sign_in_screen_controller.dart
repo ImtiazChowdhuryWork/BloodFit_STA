@@ -105,6 +105,7 @@ class SignInScreenController extends GetxController {
     } else {
       errorMessage.value = response.errorMessage ?? 'Login Failed. Try Again!';
       LoggerUtils.error("Error : ${errorMessage.value}");
+      LoggerUtils.error("Error Code : ${response.statusCode}");
     }
   }
 
