@@ -74,6 +74,29 @@ class SelectHeightScreenController extends GetxController {
     }
   }
 
+  // Method to get the display value based on current unit
+  String getDisplayValue() {
+    if (unit.value == "cm") {
+      return "${centerValue.value.toInt()}";
+    } else {
+      // For feet/inches, return the feet portion
+      double totalInches = centerValue.value / 2.54;
+      int feet = (totalInches / 12).floor();
+      return "${feet}";
+    }
+  }
+
+  // Method to get the secondary display value for inches when in ft mode
+  String getSecondaryDisplayValue() {
+    if (unit.value == "cm") {
+      return "cm";
+    } else {
+      double totalInches = centerValue.value / 2.54;
+      int inches = (totalInches % 12).round();
+      return "${inches}in";
+    }
+  }
+
   void toggleUnit() {
     if (unit.value == "cm") {
       unit.value = "ft";
