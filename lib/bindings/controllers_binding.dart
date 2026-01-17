@@ -73,13 +73,25 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => WeightController(), tag: 'desired_weight');
 
     // Add SliderButtonController bindings with tags
-    Get.lazyPut(() => SliderButtonController(), tag: 'current_weight_unit');
+    Get.lazyPut(
+      () => SliderButtonController(),
+      tag: 'current_weight_unit',
+      fenix: true,
+    );
     Get.lazyPut(() => SliderButtonController(), tag: 'desired_weight_unit');
 
     // Add tagged bindings for height controllers
     Get.lazyPut(() => WeightController(), tag: 'current_height');
-    Get.lazyPut(() => SliderButtonController(), tag: 'current_height_unit');
-    Get.lazyPut(() => SelectHeightScreenController(), fenix: true);
+    Get.lazyPut(
+      () => SliderButtonController(),
+      tag: 'current_height_unit',
+      fenix: true,
+    );
+    Get.lazyPut(
+      () => SelectHeightScreenController(),
+      tag: 'select_height_controller',
+      fenix: true,
+    );
     // Get.lazyPut(() => SignOutController(), fenix: true);
 
     ///Repositiories
