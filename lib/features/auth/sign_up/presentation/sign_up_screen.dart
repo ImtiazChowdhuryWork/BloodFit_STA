@@ -187,11 +187,13 @@ class SignUpScreen extends StatelessWidget {
                         controller.postSignUpApi();
                       }
                     },
+                    isLoading: controller.isLoading.value,
+                    buttonColor: controller.isLoading.value
+                        ? Colors.grey
+                        : AppColors.cb20000,
                     borderRadius: 24.r,
                     buttonHeight: 52.h,
-                    buttonTitle: controller.isLoading.value
-                        ? "Creating Account..."
-                        : "Signup",
+                    buttonTitle: "Signup",
                   ),
                 ),
                 UIHelper.verticalSpace(16.h),

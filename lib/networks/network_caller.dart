@@ -97,8 +97,11 @@ class NetworkCaller {
 
       // Try to parse JSON response
       try {
-        if (response.body.isNotEmpty) {
+        if (response.body.isNotEmpty && response.body.trim() != 'null') {
           jsonResponse = jsonDecode(response.body);
+        } else if (response.body.trim() == 'null') {
+          // Handle case where server returns literal "null" string
+          jsonResponse = null;
         }
       } catch (e) {
         debugPrint('Failed to parse JSON: $e');
@@ -106,7 +109,7 @@ class NetworkCaller {
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
-          errorMessage: 'Invalid JSON response from server',
+          errorMessage: 'Invalid JSON response from server: $e',
         );
       }
 

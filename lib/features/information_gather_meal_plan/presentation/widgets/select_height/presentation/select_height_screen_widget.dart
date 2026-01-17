@@ -58,7 +58,7 @@ class SelectHeightScreenWidget extends StatelessWidget {
             CustomHeightRulerVertical(
               controller: heightController,
               minValue: 0, // Adjusted for height range
-              maxValue: 250,
+              maxValue: 400,
               centerIndicatorColor: Colors.blue,
             ),
           ],

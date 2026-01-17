@@ -72,9 +72,11 @@ class VerifyOtpScreen extends StatelessWidget {
                     },
                     borderRadius: 24.r,
                     buttonHeight: 52.h,
-                    buttonTitle: controller.isLoading.value
-                        ? "Verifying..."
-                        : "Verify",
+                    isLoading: controller.isLoading.value,
+                    buttonColor: controller.isLoading.value
+                        ? Colors.grey
+                        : AppColors.cb20000,
+                    buttonTitle: "Verify",
                   ),
                 ),
                 UIHelper.verticalSpace(20.h),
