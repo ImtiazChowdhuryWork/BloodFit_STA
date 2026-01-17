@@ -116,6 +116,9 @@ class InformationGatherMealScreen extends StatelessWidget {
                       LoggerUtils.debug(
                         "Gender Group from Storage : ${appData.read(kKeyGender)}",
                       );
+                      LoggerUtils.debug(
+                        "User Age from Storage : ${appData.read(kKeyUserAge)}",
+                      );
                       // Go to next page
                       controller.nextPage();
                     }
