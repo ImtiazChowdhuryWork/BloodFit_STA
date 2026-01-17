@@ -23,6 +23,7 @@ import '../controllers/onboarding_screen_controller.dart';
 import '../controllers/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
+import '../controllers/select_your_country_screen_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
@@ -58,6 +59,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => IgSelectBloodGropController(), fenix: true);
     Get.lazyPut(() => IgSelectGenderScreenController(), fenix: true);
     Get.lazyPut(() => IgWhatsYourActivityLevelController(), fenix: true);
+    Get.lazyPut(() => IgSelectYourCountryScreenController(), fenix: true);
     // Get.lazyPut(() => ForgotPasswordController(), fenix: true);
 
     Get.lazyPut(

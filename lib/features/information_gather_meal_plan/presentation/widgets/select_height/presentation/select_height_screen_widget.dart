@@ -47,10 +47,8 @@ class SelectHeightScreenWidget extends StatelessWidget {
                 items: const ["cm", "ft"],
                 onValueChanged: (index, value) {
                   log("Selected unit: $value");
-                  // heightController.isLbSelected.value = (value == "ft");
-                  // heightController.changeUnit(
-                  //   value,
-                  // ); // Also update the unit in height controller
+                  heightController.unit.value = value;
+                  heightController.update(); // Force update to refresh the display
                 },
               ),
             ),
