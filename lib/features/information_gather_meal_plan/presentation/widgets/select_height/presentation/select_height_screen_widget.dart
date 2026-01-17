@@ -18,7 +18,9 @@ class SelectHeightScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// Controllers - use DIFFERENT tags for height screen
-    final heightController = Get.find<SelectHeightScreenController>();
+    final heightController = Get.find<SelectHeightScreenController>(
+      tag: 'select_height_controller',
+    );
     final heightTypeSliderButtonController = Get.find<SliderButtonController>(
       tag: 'current_height_unit',
     );
