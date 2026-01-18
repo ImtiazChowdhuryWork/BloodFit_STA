@@ -546,6 +546,9 @@ class SelectHeightScreenController extends GetxController {
     if (containerHeight == null || !_isInitialized) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Check if scroll controller is still attached before accessing
+      if (!scrollController.hasClients) return;
+
       final initialIndex = getIndexFromValue(initialValue);
       // Calculate offset considering the center padding (exact center)
       final double centerPadding = containerHeight! / 2;

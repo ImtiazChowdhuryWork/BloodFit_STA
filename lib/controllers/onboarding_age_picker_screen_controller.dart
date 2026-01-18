@@ -146,6 +146,9 @@ class IgAgePickerScreenController extends GetxController {
           if (index != -1) {
             // Scroll to saved age position
             WidgetsBinding.instance.addPostFrameCallback((_) {
+              // Check if scroll controller is still attached before accessing
+              if (!scrollController.hasClients) return;
+
               final scrollPosition = index * (itemWidth + itemSpacing);
               scrollController.jumpTo(scrollPosition);
               selectedAge.value = age;
