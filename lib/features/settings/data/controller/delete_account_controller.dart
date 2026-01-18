@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../../constants/app_constant_text.dart';
 import '../../../../helper/di.dart';
+import '../../../../helper/helper_methods.dart';
 import '../../../../helper/logger_util.dart';
 
 class DeleteAccountController extends GetxController {
@@ -42,6 +43,9 @@ class DeleteAccountController extends GetxController {
         appData.remove(kKeyUserName);
         appData.remove(kKeyEmail);
         appData.remove(kKeyUserID);
+
+        ///--------->>> Removed the Information Gather Meal Plan Flow Saved data from Local Storage
+        removeAllSavedDataToLocalStorageForInformationGatherMealPlan();
 
         ///------------->>> Data Check After Removal
         LoggerUtils.info("✅ User data removed successfully");

@@ -48,129 +48,138 @@ class _CustomWeightRulerState extends State<CustomWeightRuler> {
 
   @override
   Widget build(BuildContext context) {
-    final double containerWidth = 1.sw - 20.sp;
-    final double centerPadding = (containerWidth / 2) - 12.w;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double containerWidth = constraints.maxWidth;
+        final double centerPadding = (containerWidth / 2) - 12.w;
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
-      child: Column(
-        children: [
-          // Number indicators
-          Container(
-            width: 1.sw,
-            padding: EdgeInsets.symmetric(vertical: 12.h),
-            child: Obx(() {
-              double currentValue = weightController.centerValue.value;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  NumberIndicator(
-                    value: currentValue - 0.4, // Pass double directly
-                    isCenter: false,
-                  ),
-                  NumberIndicator(
-                    value: currentValue - 0.2, // Pass double directly
-                    isCenter: false,
-                  ),
-                  NumberIndicator(
-                    value: currentValue, // Pass double directly
-                    isCenter: true,
-                  ),
-                  NumberIndicator(
-                    value: currentValue + 0.2, // Pass double directly
-                    isCenter: false,
-                  ),
-                  NumberIndicator(
-                    value: currentValue + 0.4, // Pass double directly
-                    isCenter: false,
-                  ),
-                ],
-              );
-            }),
-          ),
+        // Pass container width to controller
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          weightController.setContainerWidth(containerWidth);
+        });
 
-          // Ruler
-          Container(
-            width: 1.sw,
-            height: 90.h,
-            margin: EdgeInsets.symmetric(vertical: 16.h),
-            decoration: BoxDecoration(color: AppColors.c363636),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Ruler content
-                Padding(
-                  padding: EdgeInsets.all(10.sp),
-                  child: ListView.builder(
-                    controller: weightController.scrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: weightController.totalItems + 1,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return SizedBox(width: centerPadding);
-                      }
-                      final int itemIndex = index - 1;
-                      return RulerDivider(
-                        itemIndex: itemIndex,
-                        controller: weightController,
-                      );
-                    },
-                  ),
-                ),
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
+          child: Column(
+            children: [
+              // Number indicators
+              Container(
+                width: containerWidth,
+                padding: EdgeInsets.symmetric(vertical: 12.h),
+                child: Obx(() {
+                  double currentValue = weightController.centerValue.value;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      NumberIndicator(
+                        value: currentValue - 0.4, // Pass double directly
+                        isCenter: false,
+                      ),
+                      NumberIndicator(
+                        value: currentValue - 0.2, // Pass double directly
+                        isCenter: false,
+                      ),
+                      NumberIndicator(
+                        value: currentValue, // Pass double directly
+                        isCenter: true,
+                      ),
+                      NumberIndicator(
+                        value: currentValue + 0.2, // Pass double directly
+                        isCenter: false,
+                      ),
+                      NumberIndicator(
+                        value: currentValue + 0.4, // Pass double directly
+                        isCenter: false,
+                      ),
+                    ],
+                  );
+                }),
+              ),
 
-                // Center indicator with glow effect
-                Positioned(
-                  left: (1.sw / 2) - 12.sp,
-                  top: 0,
-                  bottom: 0,
-                  child: Container(
-                    width: 3.sp,
-                    decoration: BoxDecoration(
-                      color: widget.centerIndicatorColor,
-                      borderRadius: BorderRadius.circular(2.r),
-                    ),
-                  ),
-                ),
-
-                ///Section : Arrow Up
-                Positioned(
-                  left: (1.sw / 2) - 30.sp,
-                  bottom: -40.h,
-                  child: SvgPicture.asset(Assets.icons.upperArrowIcon),
-                ),
-
-                ///Section : Selected Value - Make unit reactive
-                Obx(
-                  () => Positioned(
-                    left: (1.sw / 2) - 50.sp,
-                    bottom: -100.h,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: weightController.centerValue.value
-                                .toStringAsFixed(1),
-                            style: TextFontStyle
-                                .headline36w500cFFFFFFStylePoppins
-                                .copyWith(fontWeight: FontWeight.w700),
-                          ),
-                          TextSpan(
-                            text:
-                                " ${weightController.unit}", // Use reactive unit from controller
-                            style:
-                                TextFontStyle.headline22w500cfefefeStylePoppins,
-                          ),
-                        ],
+              // Ruler
+              Container(
+                width: containerWidth,
+                height: 90.h,
+                margin: EdgeInsets.symmetric(vertical: 16.h),
+                decoration: BoxDecoration(color: AppColors.c363636),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Ruler content
+                    Padding(
+                      padding: EdgeInsets.all(10.sp),
+                      child: ListView.builder(
+                        controller: weightController.scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: weightController.totalItems + 1,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return SizedBox(width: centerPadding);
+                          }
+                          final int itemIndex = index - 1;
+                          return RulerDivider(
+                            itemIndex: itemIndex,
+                            controller: weightController,
+                          );
+                        },
                       ),
                     ),
-                  ),
+
+                    // Center indicator with glow effect
+                    Positioned(
+                      left: (containerWidth / 2) - 12.sp,
+                      top: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: 3.sp,
+                        decoration: BoxDecoration(
+                          color: widget.centerIndicatorColor,
+                          borderRadius: BorderRadius.circular(2.r),
+                        ),
+                      ),
+                    ),
+
+                    ///Section : Arrow Up
+                    Positioned(
+                      left: (containerWidth / 2) - 30.sp,
+                      bottom: -40.h,
+                      child: SvgPicture.asset(Assets.icons.upperArrowIcon),
+                    ),
+
+                    ///Section : Selected Value - Make unit reactive
+                    Obx(
+                      () => Positioned(
+                        left: (containerWidth / 2) - 50.sp,
+                        bottom: -100.h,
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: weightController.centerValue.value
+                                    .toStringAsFixed(1),
+                                style: TextFontStyle
+                                    .headline36w500cFFFFFFStylePoppins
+                                    .copyWith(fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                text:
+                                    " ${weightController.unit}", // Use reactive unit from controller
+                                style: TextFontStyle
+                                    .headline22w500cfefefeStylePoppins,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

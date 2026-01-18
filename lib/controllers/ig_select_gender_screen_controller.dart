@@ -1,3 +1,4 @@
+import 'package:bloodfit/controllers/information_gather_screen_controller.dart';
 import 'package:get/get.dart';
 
 import '../constants/app_constant_text.dart';
@@ -48,6 +49,9 @@ class IgSelectGenderScreenController extends GetxController {
   void saveGender() {
     if (selectedGender.value.isNotEmpty) {
       appData.write(kKeyGender, selectedGender.value);
+
+      ///----------->>> Update the controller
+      Get.find<InformationGatherMealPlanController>().triggerButtonUpdate();
       LoggerUtils.debug("Saved gender: ${selectedGender.value}");
     }
   }

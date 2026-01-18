@@ -67,6 +67,7 @@
 //   }
 // }
 
+import 'package:bloodfit/controllers/information_gather_screen_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async'; // Add this import
@@ -112,12 +113,16 @@ class IgAgePickerScreenController extends GetxController {
   }
 
   void _onScroll() {
+    // Check if scroll controller is attached to any scroll views before accessing
+    if (!scrollController.hasClients) return;
+
     currentScroll.value = scrollController.offset;
 
     // Debounce saving - only save when scrolling stops
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-      if (_lastContainerWidth > 0) {
+      // Check again if controller is still valid when timer executes
+      if (_lastContainerWidth > 0 && Get.isRegistered<IgAgePickerScreenController>()) {
         final age = getCenteredAge(currentScroll.value, _lastContainerWidth);
         saveAge(age);
       }
@@ -158,6 +163,9 @@ class IgAgePickerScreenController extends GetxController {
   void saveAge(int age) {
     try {
       appData.write(kKeyUserAge, age);
+
+      ///----------->>> Update the controller
+      Get.find<InformationGatherMealPlanController>().triggerButtonUpdate();
       selectedAge.value = age;
       LoggerUtils.debug("Saved age: $age");
     } catch (e) {
@@ -186,6 +194,9 @@ class IgAgePickerScreenController extends GetxController {
 
   /// Get currently centered age
   int getCenteredAge(double scrollOffset, double containerWidth) {
+    // Check if scroll controller is attached to any scroll views before accessing
+    if (!scrollController.hasClients) return selectedAge.value;
+
     final index = getCenteredIndex(scrollOffset, containerWidth);
     return numbers[index];
   }
