@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../../../../../constants/app_constant_text.dart';
 import '../../../../../../constants/text_font_style.dart';
 import '../../../../../../controllers/ig_select_blood_grop_controller.dart';
+import '../../../../../../controllers/information_gather_screen_controller.dart';
 import '../../../../../../gen/colors.gen.dart';
 import '../../../../../../helper/di.dart';
 import '../../../../../../helper/logger_util.dart';
@@ -63,6 +64,10 @@ class SelectBloodGroupWidget extends StatelessWidget {
                         selectBloodGropController.getSelectedIndex(
                           newValue: newIndex,
                         );
+
+                        ///----------->>> Update the controller
+                        Get.find<InformationGatherMealPlanController>()
+                            .triggerButtonUpdate();
 
                         LoggerUtils.debug("Saved blood group: $newBloodGroup");
                       },

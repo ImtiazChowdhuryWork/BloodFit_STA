@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/select_your_country_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_text_form_field.dart';
@@ -108,6 +106,21 @@ class SelectCountryWidget extends StatelessWidget {
                       ),
                     ],
                   ),
+                )
+              : SizedBox.shrink();
+        }),
+
+        /// Optional: Show saved country info for debugging
+        Obx(() {
+          return controller.countryName.value.isEmpty
+              ? Column(
+                  children: [
+                    UIHelper.verticalSpace(20.h),
+                    Text(
+                      'No country selected',
+                      style: TextFontStyle.headline10w500cfefefeStylePoppins,
+                    ),
+                  ],
                 )
               : SizedBox.shrink();
         }),

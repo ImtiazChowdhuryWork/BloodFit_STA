@@ -11,9 +11,9 @@ class InformationGatherMealPlanRepository {
   Future<NetworkResponse> informationGatherMealPlanRepository({
     required String bloodGroup,
     required String gender,
-    required double age,
-    required double weight,
-    required double height,
+    required int age,
+    required int weight,
+    required int height,
     required String diet,
     required List foodAllergiesList,
     required List foodDislikesList,

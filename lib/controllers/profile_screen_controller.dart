@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../helper/helper_methods.dart';
+
 class ProfileScreenController extends GetxController {
   String userName = appData.read(kKeyUserName) ?? '';
 
@@ -80,8 +82,6 @@ class ProfileScreenController extends GetxController {
       LoggerUtils.info("User Email : ${appData.read(kKeyEmail)}");
       LoggerUtils.info("User ID : ${appData.read(kKeyUserID)}");
 
-      ///------>>> Checking the token if (appData.read(kKeyAccessToken) == null) {
-      LoggerUtils.info("Access token Not found!");
       Get.offAllNamed(Routes.signInScreen);
     } else {
       LoggerUtils.error(

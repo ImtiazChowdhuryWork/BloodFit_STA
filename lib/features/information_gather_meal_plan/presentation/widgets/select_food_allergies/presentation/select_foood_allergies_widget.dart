@@ -25,6 +25,15 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
             "Any food allergies?",
             style: TextFontStyle.headline22w500cfefefeStylePoppins,
           ),
+
+          // Optional: Show count of selected allergies
+          Obx(
+            () => Text(
+              'Selected ${controller.alleriesFoodList.length} item(s)',
+              style: TextFontStyle.headline10w500cfefefeStylePoppins,
+            ),
+          ),
+
           UIHelper.verticalSpace(24.h),
 
           ///Section : ----------///TextFormFiled -> For Searching Country Names///-------------------
@@ -52,42 +61,83 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
               ],
             );
           }),
+
+          // Optional: Clear all button
+          Obx(() {
+            return controller.alleriesFoodList.isNotEmpty
+                ? Column(
+                    children: [
+                      UIHelper.verticalSpace(10.h),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            controller.clearAllFoodAllergies();
+                          },
+                          child: Text(
+                            'Clear All',
+                            style:
+                                TextFontStyle.headline12w400cfefefeStylePoppins,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : SizedBox.shrink();
+          }),
+
           UIHelper.verticalSpace(50.h),
 
           ///Section : ----------///Selected Items///-------------
           Obx(() {
-            return Wrap(
-              spacing: 8.w, // Horizontal space between items
-              runSpacing: 8.h, // Vertical space between lines
-              children: controller.alleriesFoodList.map((item) {
-                return InkWell(
-                  onTap: () {
-                    LoggerUtils.debug("Remove Items By tapping on them");
-                    controller.removeFoodAllergy(food: item);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10.sp),
+            return controller.alleriesFoodList.isNotEmpty
+                ? Wrap(
+                    spacing: 8.w, // Horizontal space between items
+                    runSpacing: 8.h, // Vertical space between lines
+                    children: controller.alleriesFoodList.map((item) {
+                      return InkWell(
+                        onTap: () {
+                          LoggerUtils.debug("Remove Items By tapping on them");
+                          controller.removeFoodAllergy(food: item);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10.sp),
+                          decoration: BoxDecoration(
+                            color: AppColors.cb20000,
+                            border: Border.all(color: AppColors.cFFFFFF),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.food_bank_outlined, size: 16.sp),
+                              UIHelper.horizontalSpace(8.w),
+                              Text(
+                                item,
+                                style: TextFontStyle
+                                    .headline16w500cFFFFFFStylePoppins,
+                              ),
+                              UIHelper.horizontalSpace(8.w),
+                              Icon(Icons.close, size: 14.sp),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  )
+                : Container(
+                    padding: EdgeInsets.all(20.sp),
                     decoration: BoxDecoration(
-                      color: AppColors.cb20000,
-                      border: Border.all(color: AppColors.cFFFFFF),
+                      color: AppColors.c3c3c3c,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
-                    child: Column(
-                      children: [
-                        Icon(Icons.food_bank_outlined),
-                        UIHelper.verticalSpace(10.h),
-
-                        Text(
-                          item,
-                          style:
-                              TextFontStyle.headline16w500cFFFFFFStylePoppins,
-                        ),
-                      ],
+                    child: Center(
+                      child: Text(
+                        'No food allergies selected',
+                        style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            );
+                  );
           }),
         ],
       ),

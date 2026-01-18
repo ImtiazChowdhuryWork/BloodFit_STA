@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:bloodfit/helper/di.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../constants/app_constant_text.dart';
 import '../constants/text_font_style.dart';
+import '../controllers/select_height_screen_controller.dart';
+import '../controllers/weight_picker_widget_controller.dart';
 import '../custom_widgets/custom_button.dart';
 import '../gen/colors.gen.dart';
 
@@ -107,4 +111,91 @@ void rotation() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+}
+
+bool removeAllSavedDataToLocalStorageForInformationGatherMealPlan() {
+  try {
+    ///---------->>> Remove the saved data after api hit is successfull
+
+    ///--------->>> Remove Blood Group
+    appData.remove(kKeyBloodGroup);
+
+    ///--------->>> Remove Gender
+    appData.remove(kKeyGender);
+
+    ///--------->>> Remove User Age
+    appData.remove(kKeyUserAge);
+
+    ///--------->>> Remove User Weight (with unit)
+    appData.remove(kKeyUserWeight);
+
+    ///--------->>> Remove User Weight (without unit)
+    appData.remove(kKeyUserWeightWithoutUnit);
+
+    ///--------->>> Remove User Weight Unit
+    appData.remove('${kKeyUserWeight}_unit');
+
+    ///--------->>> Remove User Height (with unit)
+    appData.remove(kKeyUserHeight);
+
+    ///--------->>> Remove User Height (without unit)
+    appData.remove(kKeyUserHeightWithoutUnit);
+
+    ///--------->>> Remove User Height Unit
+    appData.remove('${kKeyUserHeight}_unit');
+
+    ///--------->>> Remove User Country Name
+    appData.remove(kKeyUserCountryName);
+
+    ///--------->>> Remove User Diet Type
+    appData.remove(kKeyUserDietType);
+
+    ///--------->>> Remove Food Allergies List
+    appData.remove(kKeyUserFoodAlergisList);
+
+    ///--------->>> Remove Food Dislike List
+    appData.remove(kKeyUserDislLikeFoodList);
+
+    // Reset interaction flags in controllers if they exist
+    try {
+      final weightController = Get.find<WeightController>(
+        tag: 'current_weight',
+      );
+      weightController.hasUserInteracted.value = false;
+    } catch (e) {
+      LoggerUtils.debug("Weight controller not found for reset: $e");
+    }
+
+    try {
+      final heightController = Get.find<SelectHeightScreenController>(
+        tag: 'select_height_controller',
+      );
+      heightController.hasUserInteracted.value = false;
+    } catch (e) {
+      LoggerUtils.debug("Height controller not found for reset: $e");
+    }
+
+    // Verify all data is removed
+    final isAllRemoved =
+        appData.read(kKeyBloodGroup) == null &&
+        appData.read(kKeyGender) == null &&
+        appData.read(kKeyUserAge) == null &&
+        appData.read(kKeyUserWeight) == null &&
+        appData.read(kKeyUserWeightWithoutUnit) == null &&
+        appData.read('${kKeyUserWeight}_unit') == null &&
+        appData.read(kKeyUserHeight) == null &&
+        appData.read(kKeyUserHeightWithoutUnit) == null &&
+        appData.read('${kKeyUserHeight}_unit') == null &&
+        appData.read(kKeyUserCountryName) == null &&
+        appData.read(kKeyUserDietType) == null &&
+        appData.read(kKeyUserFoodAlergisList) == null &&
+        appData.read(kKeyUserDislLikeFoodList) == null;
+
+    LoggerUtils.debug("All data removed successfully: $isAllRemoved");
+
+    return isAllRemoved;
+  } catch (e) {
+    LoggerUtils.error("Error removing data: $e");
+    return false;
+  }
 }
