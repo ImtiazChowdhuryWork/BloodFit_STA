@@ -490,6 +490,9 @@ class WeightController extends GetxController {
 
           // Scroll to saved weight position
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            // Check if scroll controller is still attached before accessing
+            if (!scrollController.hasClients) return;
+
             final index = getIndexFromValue(weightToDisplay);
             final scrollPosition =
                 index * (computedItemWidth + computedItemSpacing);
@@ -503,6 +506,9 @@ class WeightController extends GetxController {
       } else {
         // No valid saved weight - set default for display only
         WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Check if scroll controller is still attached before accessing
+          if (!scrollController.hasClients) return;
+
           // Set default weight for display only
           centerValue.value = weightToDisplay;
           currentWeight.value = weightToDisplay;
@@ -524,6 +530,9 @@ class WeightController extends GetxController {
 
       // Fallback to default on error
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Check if scroll controller is still attached before accessing
+        if (!scrollController.hasClients) return;
+
         centerValue.value = 60.0;
         currentWeight.value = 60.0;
         isLbSelected.value = false;
