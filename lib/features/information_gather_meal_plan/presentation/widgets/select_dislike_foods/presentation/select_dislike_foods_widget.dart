@@ -147,18 +147,9 @@ class SelectDislikeFoodsWidget extends StatelessWidget {
                       );
                     }).toList(),
                   )
-                : Container(
-                    padding: EdgeInsets.all(20.sp),
-                    decoration: BoxDecoration(
-                      color: AppColors.c3c3c3c,
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'No food dislikes selected',
-                        style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
-                      ),
-                    ),
+                : Text(
+                    'No food dislikes selected',
+                    style: TextFontStyle.headline14w500cfefefeStylePoppins,
                   );
           }),
         ],

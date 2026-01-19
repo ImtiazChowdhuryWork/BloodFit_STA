@@ -236,7 +236,12 @@ class InformationGatherMealScreenController extends GetxController {
         final isRemoved =
             removeAllSavedDataToLocalStorageForInformationGatherMealPlan();
 
-        if (isRemoved) {
+        ///-------->>> Update the Meal Plan Submission Status
+        appData.write(kKeyIsMealPlanSubmitted, true);
+
+        final mealPlanStatus = appData.read(kKeyIsMealPlanSubmitted);
+
+        if (isRemoved == true && mealPlanStatus == true) {
           LoggerUtils.debug(
             "Data posted successfully and local storage cleared",
           );

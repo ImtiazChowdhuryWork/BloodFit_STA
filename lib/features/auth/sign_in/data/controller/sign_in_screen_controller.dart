@@ -55,6 +55,37 @@ class SignInScreenController extends GetxController {
     errorMessage.value = '';
   }
 
+  RxBool mealPlanSubmissionStatus = false.obs;
+
+  ///-------------->>> Get Meal Plan Information Submition Status
+  void getMealPlanInformationSubmissionPlan({
+    required bool isMealPlanSubmitted,
+  }) {
+    mealPlanSubmissionStatus.value = isMealPlanSubmitted;
+  }
+
+  ///-------------->>> Decide Navigation Flow at Sign In Successfully
+  void getNavigationFlow() {
+    if (mealPlanSubmissionStatus.value == true) {
+      LoggerUtils.debug("Meal Plans Submission Status Found TRUE at Sign In!");
+      LoggerUtils.debug(
+        "Meal Plan Status : ${appData.read(kKeyIsMealPlanSubmitted)}",
+      );
+      Get.offAllNamed(Routes.navigationScreen);
+    } else if (mealPlanSubmissionStatus.value == false) {
+      LoggerUtils.error("Meal Plans Submission Status Found FALSE at Sign In!");
+      LoggerUtils.error(
+        "Meal Plan Status : ${appData.read(kKeyIsMealPlanSubmitted)}",
+      );
+      Get.offAllNamed(Routes.informationGatherMealScreen);
+    } else {
+      LoggerUtils.error("Meal Plans Submission Status Not Found at Sign In!");
+      LoggerUtils.error(
+        "Meal Plan Status : ${appData.read(kKeyIsMealPlanSubmitted)}",
+      );
+    }
+  }
+
   ///--------------->>> Sign In Api Method
   Future<void> postSignInApi() async {
     clearError();
@@ -95,8 +126,13 @@ class SignInScreenController extends GetxController {
           ///------>> On Success Logging the Saved values
           logTheSavedValues();
 
-          ///--------->>> On Success Navigating to Information Gather Screen
-          Get.offAllNamed(Routes.informationGatherMealScreen);
+          final mealPlanStatus = appData.read(kKeyIsMealPlanSubmitted);
+          getMealPlanInformationSubmissionPlan(
+            isMealPlanSubmitted: mealPlanStatus,
+          );
+
+          ///--------->>> On Success Navigating to Information Gather Screen Or Navigation Screen
+          getNavigationFlow();
         }
       } catch (e) {
         LoggerUtils.error("Error : Unexpect Response from Server!");
