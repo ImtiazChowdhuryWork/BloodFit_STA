@@ -118,7 +118,7 @@ class SelectCountryWidget extends StatelessWidget {
                     UIHelper.verticalSpace(20.h),
                     Text(
                       'No country selected',
-                      style: TextFontStyle.headline10w500cfefefeStylePoppins,
+                      style: TextFontStyle.headline14w500cfefefeStylePoppins,
                     ),
                   ],
                 )
