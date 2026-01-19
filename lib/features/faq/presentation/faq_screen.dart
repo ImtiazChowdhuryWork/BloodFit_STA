@@ -9,14 +9,14 @@ import 'package:get/get.dart';
 import '../../../../constants/text_font_style.dart';
 import '../../../../custom_widgets/go_back_widget.dart';
 import '../../../../gen/colors.gen.dart';
-import '../../../controllers/faq_screen_controller.dart';
+import '../data/controller/faq_screen_controller.dart';
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final FaqScreenController controller = Get.put(FaqScreenController());
+    final FaqScreenController controller = Get.find<FaqScreenController>();
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,

@@ -96,54 +96,83 @@ class SelectDislikeFoodsWidget extends StatelessWidget {
           Obx(() {
             return controller.dislikedFoodList.isNotEmpty
                 ? Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
+                    spacing: 12.w,
+                    runSpacing: 12.h,
                     children: controller.dislikedFoodList.map((item) {
-                      return InkWell(
-                        onTap: () {
-                          LoggerUtils.debug("Remove Item By tapping on it");
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            width: 100.w,
+                            padding: EdgeInsets.all(10.sp),
+                            decoration: BoxDecoration(
+                              color: AppColors.cb20000,
+                              border: Border.all(color: AppColors.cFFFFFF),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.food_bank_outlined,
+                                  color: Colors.white,
+                                ),
+                                UIHelper.verticalSpace(10.h),
+                                Text(
+                                  item,
+                                  textAlign: TextAlign.center,
+                                  style: TextFontStyle
+                                      .headline16w500cFFFFFFStylePoppins,
+                                ),
+                              ],
+                            ),
+                          ),
 
-                          controller.removeDislikeFoodFromList(food: item);
-                        },
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 100.w,
-                              padding: EdgeInsets.all(10.sp),
-                              decoration: BoxDecoration(
-                                color: AppColors.cb20000,
-                                border: Border.all(color: AppColors.cFFFFFF),
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.food_bank_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  UIHelper.verticalSpace(10.h),
-                                  Text(
-                                    item,
-                                    textAlign: TextAlign.center,
-                                    style: TextFontStyle
-                                        .headline16w500cFFFFFFStylePoppins,
-                                  ),
-                                ],
+                          /// Diagonal Line Painter Overlay
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: DiagonalLinePainter(
+                                color: Colors.white,
+                                strokeWidth: 2,
                               ),
                             ),
+                          ),
 
-                            /// Diagonal Line Painter Overlay
-                            Positioned.fill(
-                              child: CustomPaint(
-                                painter: DiagonalLinePainter(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
+                          Positioned(
+                            top: -8.h,
+                            right: -2.w,
+                            child: InkWell(
+                              onTap: () {
+                                LoggerUtils.debug(
+                                  "Remove Item By tapping on it",
+                                );
+
+                                controller.removeDislikeFoodFromList(
+                                  food: item,
+                                );
+                              },
+                              child: Container(
+                                width: 20.sp,
+                                height: 20.sp,
+                                decoration: BoxDecoration(
+                                  color: AppColors.cFFFFFF,
+                                  shape: BoxShape.circle,
+                                  border: Border(
+                                    top: BorderSide(
+                                      color: AppColors.cb20000,
+                                      width: 5.sp,
+                                    ),
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                  size: 14.sp,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       );
                     }).toList(),
                   )

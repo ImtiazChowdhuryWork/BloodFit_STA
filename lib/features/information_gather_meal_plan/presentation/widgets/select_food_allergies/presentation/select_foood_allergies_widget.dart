@@ -154,93 +154,89 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
           Obx(() {
             return controller.alleriesFoodList.isNotEmpty
                 ? Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
+                    spacing: 12.w,
+                    runSpacing: 12.h,
                     children: controller.alleriesFoodList.map((item) {
                       return Material(
                         color: Colors.transparent,
-                        child: GestureDetector(
-                          // This GestureDetector catches taps for the entire area
-                          onTap: () {}, // Empty handler to absorb taps
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              // IgnorePointer on the main container
-                              IgnorePointer(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: 10.sp,
-                                    right: 25.sp,
-                                    top: 8.sp,
-                                    bottom: 8.sp,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.cb20000,
-                                    border: Border.all(
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            // IgnorePointer on the main container
+                            IgnorePointer(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                  left: 10.sp,
+                                  right: 25.sp,
+                                  top: 8.sp,
+                                  bottom: 8.sp,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.cb20000,
+                                  border: Border.all(color: AppColors.cFFFFFF),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.food_bank_outlined,
+                                      size: 20.sp,
                                       color: AppColors.cFFFFFF,
                                     ),
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.food_bank_outlined,
-                                        size: 20.sp,
-                                        color: AppColors.cFFFFFF,
-                                      ),
-                                      UIHelper.horizontalSpace(8.w),
-                                      Text(
-                                        item,
-                                        style: TextFontStyle
-                                            .headline16w500cFFFFFFStylePoppins
-                                            .copyWith(fontSize: 20.sp),
-                                      ),
-                                    ],
-                                  ),
+                                    UIHelper.horizontalSpace(8.w),
+                                    Text(
+                                      item,
+                                      style: TextFontStyle
+                                          .headline16w500cFFFFFFStylePoppins
+                                          .copyWith(fontSize: 20.sp),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              // Positioned close icon at top-right corner
-                              Positioned(
-                                top: -12.sp,
-                                right: -8.sp,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    LoggerUtils.debug(
-                                      "Remove Items By tapping on them",
-                                    );
-                                    controller.removeFoodAllergy(food: item);
-                                  },
-                                  child: Container(
-                                    width: 30
-                                        .sp, // Make it larger for better touch area
-                                    height: 30.sp,
-                                    color: Colors
-                                        .transparent, // Make entire area tappable
-                                    child: Center(
-                                      child: Container(
-                                        width: 20.sp,
-                                        height: 20.sp,
-                                        decoration: BoxDecoration(
-                                          color: AppColors.cFFFFFF,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
+                            ),
+                            // Positioned close icon at top-right corner
+                            Positioned(
+                              top: -12.sp,
+                              right: -8.sp,
+                              child: GestureDetector(
+                                onTap: () {
+                                  LoggerUtils.debug(
+                                    "Remove Items By tapping on them",
+                                  );
+                                  controller.removeFoodAllergy(food: item);
+                                },
+                                child: Container(
+                                  width: 30
+                                      .sp, // Make it larger for better touch area
+                                  height: 30.sp,
+                                  color: Colors
+                                      .transparent, // Make entire area tappable
+                                  child: Center(
+                                    child: Container(
+                                      width: 20.sp,
+                                      height: 20.sp,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.cFFFFFF,
+                                        shape: BoxShape.circle,
+                                        border: Border(
+                                          top: BorderSide(
                                             color: AppColors.cb20000,
-                                            width: 1.5.sp,
+                                            width: 5.sp,
                                           ),
                                         ),
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 14.sp,
-                                          color: AppColors.cb20000,
-                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 14.sp,
+                                        color: AppColors.cb20000,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     }).toList(),
