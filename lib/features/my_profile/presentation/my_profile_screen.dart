@@ -178,15 +178,23 @@ class MyProfileScreen extends StatelessWidget {
   final CustomImagePickerController imageController =
       Get.find<CustomImagePickerController>();
 
+  final ProfileScreenController controller =
+      Get.find<ProfileScreenController>();
+
   late final ImagePickerHandler pickerHandler = ImagePickerHandler(
     imageController,
   );
 
-  final ProfileScreenController controller =
-      Get.find<ProfileScreenController>();
-
   @override
   Widget build(BuildContext context) {
+    // Set up the callback to upload image when it's picked
+    imageController.onImagePicked = () {
+      // Delay the upload to ensure the image is properly set in the controller
+      Future.delayed(Duration(milliseconds: 100), () {
+        controller.postUploadProfileImage();
+      });
+    };
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getMyProfileDataApi();
     });
