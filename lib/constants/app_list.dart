@@ -7,7 +7,7 @@ import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin
 import 'package:bloodfit/features/settings/presentation/widgets/settings_option_title_extension.dart';
 import 'package:bloodfit/routes/routes.dart';
 
-import '../features/faq/model/faq_model.dart';
+import '../features/faq/data/model/faq_model.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_gender/model/gender_model.dart';
 import '../features/information_gather_workout/presentation/widgets/current_body_shape/model/body_type_model.dart';
 import '../features/information_gather_workout/presentation/widgets/activity_level/model/activity_level_model.dart';

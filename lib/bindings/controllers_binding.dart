@@ -4,7 +4,7 @@ import '../controllers/calendar_controller.dart';
 import '../controllers/choose_from_our_suggested_meal_controller.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/enums_controller.dart';
-import '../controllers/faq_screen_controller.dart';
+import '../features/faq/data/controller/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
 import '../controllers/home_screen_controller.dart';
 import '../controllers/ig_current_body_type_controller.dart';
@@ -44,7 +44,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
     Get.lazyPut(() => CalandarController(), fenix: true);
     Get.lazyPut(() => ChooseFromOurSuggestedMealController(), fenix: true);
-    Get.lazyPut(() => FaqScreenController());
+    // Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
     Get.lazyPut(() => MealPlanScreenController());
     // Get.lazyPut(() => RulerController());
