@@ -38,6 +38,7 @@ final class Endpoints {
 
   static String informationGatherMealPlan() => "$url/health/add-health-details";
   static String faq() => "$url/faq/all-faqs";
+  static String myProfile() => "$url/auth/my-profile";
 }
 
 

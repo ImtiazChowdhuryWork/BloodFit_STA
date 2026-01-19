@@ -1,5 +1,3 @@
-// 📁 faq_screen.dart
-import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/features/faq/presentation/widgets/faq_expansaion_tile.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -39,12 +37,12 @@ class FaqScreen extends StatelessWidget {
           child: Obx(() {
             return controller.isLoading.value
                 ? ListView.separated(
-                    itemCount: 10,
+                    itemCount: 15,
                     separatorBuilder: (context, index) =>
-                        UIHelper.verticalSpace(10.h),
+                        UIHelper.verticalSpace(16.h),
 
                     itemBuilder: (context, index) {
-                      return CustomShimmerEffect(height: 20.h, width: 1.sw);
+                      return CustomShimmerEffect(height: 40.h, width: 1.sw);
                     },
                   )
                 : ListView.separated(

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../constants/text_font_style.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
-import '../../model/personal_data_model.dart';
+import '../../data/model/personal_data_model.dart';
 
 class ProfileDataShowingWidget extends StatelessWidget {
   final List<PersonalDataModel> myList;

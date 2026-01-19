@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/features/my_profile/data/repository/my_profile_repository.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
@@ -7,9 +8,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../helper/helper_methods.dart';
+import '../model/get_my_profile_data_model.dart';
 
 class ProfileScreenController extends GetxController {
+  ///---------->>> Importing My Profile Repository
+  final MyProfileRepository _myProfileRepository;
+  ProfileScreenController(this._myProfileRepository);
+
+  ///--------->>> Importing The My Profile Data Model
+  Rxn<GetMyProfileDataModel> model = Rxn<GetMyProfileDataModel>();
+
+  ///------>>> Gloabal Variables
+  RxBool isLoading = false.obs;
+  RxString errorMessage = ''.obs;
+  void clearErrorMessage() {
+    errorMessage.value = '';
+  }
+
   String userName = appData.read(kKeyUserName) ?? '';
 
   ///Section : -------------///Profile Image Picker///--------------
@@ -89,4 +104,39 @@ class ProfileScreenController extends GetxController {
       );
     }
   }
+
+  ///----------->>> Get My Profile Api Method Start  Here
+  Future<void> getMyProfileDataApi() async {
+    isLoading.value = true;
+    clearErrorMessage();
+
+    try {
+      final response = await _myProfileRepository.myProfileRepository();
+
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug("Success : Profile Dta Fetched Successfully!!");
+        model.value = GetMyProfileDataModel.fromJson(response.jsonResponse!);
+      } else {
+        errorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Something Went wrong!");
+        LoggerUtils.error("Error Message : ${errorMessage.value}");
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+      LoggerUtils.error("Error Message : ${errorMessage.value}");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  ///----------->>> Get My Profile Api Method Ends Here
+  ///
+  ///
+  ///-------------->>> Getters of My Profile Data Start Here
+  String? get firstName =>
+      model.value?.data?.firstName ?? 'First Name Not Found!';
+  String? get lastName => model.value?.data?.lastName ?? 'Last Name Not Found!';
+  String? get profileImageUrl => model.value?.data?.image;
+
+  ///------------->>> Getter of My Profile Data Ends Here
 }
