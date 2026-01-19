@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
-import 'package:bloodfit/controllers/profile_screen_controller.dart';
+import 'package:bloodfit/features/my_profile/data/controller/profile_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/log_out_button.dart';
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_data_showing_list.dart';
@@ -40,6 +40,9 @@ class MyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getMyProfileDataApi();
+    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -75,7 +78,9 @@ class MyProfileScreen extends StatelessWidget {
 
               ///Section : ---------------------///Profile Image Picker Widget///-----------
               Text(
-                controller.userName,
+                controller.userName.isEmpty
+                    ? "${controller.firstName} ${controller.lastName}"
+                    : controller.userName,
                 style: TextFontStyle.headline16w500cfefefeStylePoppins,
               ),
               UIHelper.verticalSpace(5.h),

@@ -45,6 +45,7 @@ import '../features/information_gather_meal_plan/binding/information_gather_meal
 import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
+import '../features/my_profile/bindings/my_profile_bindings.dart';
 import '../features/privacy_policy/binding/privacy_policy_binding.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
@@ -195,6 +196,7 @@ class Routes {
     GetPage(
       name: myProfileScreen,
       page: () => MyProfileScreen(),
+      binding: MyProfileBindings(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

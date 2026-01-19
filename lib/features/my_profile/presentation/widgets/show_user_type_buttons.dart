@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../constants/text_font_style.dart';
-import '../../../../controllers/profile_screen_controller.dart';
+import '../../data/controller/profile_screen_controller.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
 
 class ShowUserTypeButtons extends StatelessWidget {

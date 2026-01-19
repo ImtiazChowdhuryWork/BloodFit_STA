@@ -22,7 +22,7 @@ import '../controllers/information_gather_work_out_controller.dart';
 import '../controllers/meal_plan_screen_controller.dart';
 import '../controllers/onboarding_age_picker_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
-import '../controllers/profile_screen_controller.dart';
+import '../features/my_profile/data/controller/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
 import '../controllers/select_your_country_screen_controller.dart';
@@ -39,7 +39,9 @@ class ControllerBindings extends Bindings {
     // Get.lazyPut(() => SignUpScreenController());
     // Get.lazyPut(() => OtpValidationScreenController());
     // Get.lazyPut(() => ResetPasswordScreenController());
-    Get.lazyPut(() => ProfileScreenController(), fenix: true);
+
+    ///------>>> Profile Screen Controller
+    // Get.lazyPut(() => ProfileScreenController(Get.find()), fenix: true);
     Get.lazyPut(() => EnumsController(), fenix: true);
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
     Get.lazyPut(() => CalandarController(), fenix: true);
