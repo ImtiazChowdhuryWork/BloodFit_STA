@@ -4,11 +4,18 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../my_profile/data/model/get_my_profile_data_model.dart';
+import '../repository/update_profile_data_repository.dart';
 
 class ViewProfileSubscriptionTypeFreeScreenController extends GetxController {
   /// Importing the My profile repository
   MyProfileRepository _myProfileRepository;
-  ViewProfileSubscriptionTypeFreeScreenController(this._myProfileRepository);
+
+  ///-------->>> Importing Update Profile Data Repository
+  UpdateProfileDataRepository _updateProfileDataRepository;
+  ViewProfileSubscriptionTypeFreeScreenController(
+    this._myProfileRepository,
+    this._updateProfileDataRepository,
+  );
 
   ///Importing My Profile Model
   Rxn<GetMyProfileDataModel> model = Rxn<GetMyProfileDataModel>();
@@ -30,7 +37,7 @@ class ViewProfileSubscriptionTypeFreeScreenController extends GetxController {
     viewProfileErrorMessage.value = '';
   }
 
-  Future<void> getViewProfileApi() async {
+  Future<void> getViewProfileDataApi() async {
     try {
       isViewProfileDataLoading.value = true;
       clearViewProfileErrorMessage();
@@ -50,6 +57,55 @@ class ViewProfileSubscriptionTypeFreeScreenController extends GetxController {
       LoggerUtils.error("Catched Error : ${viewProfileErrorMessage.value}");
     } finally {
       isViewProfileDataLoading.value = false;
+    }
+  }
+
+  String? get userFirstName =>
+      model.value?.data?.firstName.toString() ?? 'First Name Not Found!';
+  String? get userLastName =>
+      model.value?.data?.lastName.toString() ?? 'Last Name Not Found!';
+  String? get userEmail =>
+      model.value?.data?.email.toString() ?? 'Email Not Found!';
+  String? get userMobileNumber =>
+      model.value?.data?.contactNumber.toString() ??
+      'Contact Number Not Found!';
+
+  ///------------>>> Get My Data Api Method Ends Here
+
+  ///------------>>> Upload My Profile Api Method Start Here
+  RxBool isProfileDataBeingUpload = false.obs;
+  RxString profileDataUpdateErrorMessage = ''.obs;
+  void clearProfileDataUpdateErroMessage() {
+    profileDataUpdateErrorMessage.value = '';
+  }
+
+  Future<void> patchProfileDataUpdateApi() async {
+    try {
+      isProfileDataBeingUpload.value = true;
+      clearProfileDataUpdateErroMessage();
+
+      final response = await _updateProfileDataRepository
+          .updateProfileDataRepository(
+            firstName: firstName.text.trim(),
+            lastName: lastName.text.trim(),
+            email: emailAddress.text.trim(),
+            contactNumber: contactNumber.text.trim(),
+          );
+
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug("Success : Updating profile data Success");
+      } else {
+        LoggerUtils.error("Error : Something Went Wrong");
+        LoggerUtils.error("Error Status Code : ${response.statusCode}");
+        LoggerUtils.error("Error Message : ${response.errorMessage}");
+      }
+    } catch (e) {
+      profileDataUpdateErrorMessage.value = e.toString();
+      LoggerUtils.error(
+        "Error Catched : ${profileDataUpdateErrorMessage.value}",
+      );
+    } finally {
+      isProfileDataBeingUpload.value = false;
     }
   }
 }

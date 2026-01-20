@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/view_profile_sub_type_free/data/repository/update_profile_data_repository.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/custom_image_picker_controller.dart';
@@ -10,12 +11,16 @@ class ViewProfileSubTypeFreeBinding extends Bindings {
   void dependencies() {
     ////------->>> Added this later
     Get.lazyPut(() => CustomImagePickerController());
+    Get.lazyPut(() => UpdateProfileDataRepository(Get.find()));
     Get.lazyPut(() => MyProfileRepository(Get.find()));
     Get.lazyPut(() => UploadProfileImageRepository(Get.find()));
     // Get.lazyPut(() => ProfileScreenController(Get.find(), Get.find()));
 
     Get.lazyPut<ViewProfileSubscriptionTypeFreeScreenController>(
-      () => ViewProfileSubscriptionTypeFreeScreenController(Get.find()),
+      () => ViewProfileSubscriptionTypeFreeScreenController(
+        Get.find(),
+        Get.find(),
+      ),
     );
   }
 }
