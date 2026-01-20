@@ -42,6 +42,7 @@ final class Endpoints {
   static String myProfile() => "$url/auth/my-profile";
   static String uploadProfileImage() => "$url/auth/upload-profile-picture";
   static String updateProfileData() => "$url/auth/profile-update";
+  static String getSubscriptionPlans() => "$url/plan/plans";
 }
 
 

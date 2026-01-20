@@ -4,24 +4,15 @@ import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:bloodfit/networks/network_response.dart';
 
-class UpdateProfileDataRepository {
+class SubscriptionScreenRepository {
   final NetworkCaller _networkCaller;
-  UpdateProfileDataRepository(this._networkCaller);
+  SubscriptionScreenRepository(this._networkCaller);
 
-  Future<NetworkResponse> updateProfileDataRepository({
-    String? firstName,
-    String? lastName,
-    String? contactNumber,
-  }) async {
+  Future<NetworkResponse> subscriptionScreenRepository() async {
     String? authToken = appData.read(kKeyAccessToken) ?? '';
-    Map<String, dynamic> data = {
-      'firstName': firstName,
-      'lastName': lastName,
-      'contactNumber': contactNumber,
-    };
-    return _networkCaller.patchRequest(
-      Endpoints.updateProfileData(),
-      body: data,
+
+    return _networkCaller.getRequest(
+      Endpoints.getSubscriptionPlans(),
       headers: authToken.isNotEmpty
           ? {'Authorization': 'Bearer $authToken'}
           : null,

@@ -42,6 +42,9 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LoggerUtils.debug('Image URl : ${imageController.imageFromApi}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewProfileSubTypeFreeController.getViewProfileDataApi();
+    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -143,14 +146,43 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
               UIHelper.verticalSpace(10.h),
 
               ///Section : ---------------------///Profile Image Picker Widget///-----------
-              Text(
-                "Tasmia Hassan Shabonty",
-                style: TextFontStyle.headline16w500cfefefeStylePoppins,
-              ),
+              Obx(() {
+                String fullName = '';
+                if (viewProfileSubTypeFreeController.model.value != null) {
+                  String firstName =
+                      viewProfileSubTypeFreeController.userFirstName ?? '';
+                  String lastName =
+                      viewProfileSubTypeFreeController.userLastName ?? '';
+
+                  if (firstName != 'First Name Not Found!' ||
+                      lastName != 'Last Name Not Found!') {
+                    fullName = '$firstName $lastName'.trim();
+                  } else {
+                    fullName = 'User Name';
+                  }
+                } else {
+                  fullName = 'Loading...';
+                }
+
+                return Text(
+                  fullName,
+                  style: TextFontStyle.headline16w500cfefefeStylePoppins,
+                );
+              }),
               UIHelper.verticalSpace(5.h),
 
               ///Section : -----------///Form Field -> First Name///--------------
               Obx(() {
+                // Set the initial value from the API response when available and not in edit mode
+                if (viewProfileSubTypeFreeController.model.value != null &&
+                    !viewProfileSubTypeFreeController.isEditModeOn.value &&
+                    viewProfileSubTypeFreeController.firstName.text !=
+                        (viewProfileSubTypeFreeController.userFirstName ??
+                            '')) {
+                  viewProfileSubTypeFreeController.firstName.text =
+                      viewProfileSubTypeFreeController.userFirstName ?? '';
+                }
+
                 return CustomFormField(
                   controller: viewProfileSubTypeFreeController.firstName,
                   isEnabled:
@@ -163,6 +195,15 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
 
               ///Section : -----------///Form Field -> Last Name///--------------
               Obx(() {
+                // Set the initial value from the API response when available and not in edit mode
+                if (viewProfileSubTypeFreeController.model.value != null &&
+                    !viewProfileSubTypeFreeController.isEditModeOn.value &&
+                    viewProfileSubTypeFreeController.lastName.text !=
+                        (viewProfileSubTypeFreeController.userLastName ?? '')) {
+                  viewProfileSubTypeFreeController.lastName.text =
+                      viewProfileSubTypeFreeController.userLastName ?? '';
+                }
+
                 return CustomFormField(
                   controller: viewProfileSubTypeFreeController.lastName,
                   isEnabled:
@@ -175,10 +216,18 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
 
               ///Section : -----------///Form Field -> Email Address///--------------
               Obx(() {
+                // Set the initial value from the API response when available and not in edit mode
+                if (viewProfileSubTypeFreeController.model.value != null &&
+                    !viewProfileSubTypeFreeController.isEditModeOn.value &&
+                    viewProfileSubTypeFreeController.emailAddress.text !=
+                        (viewProfileSubTypeFreeController.userEmail ?? '')) {
+                  viewProfileSubTypeFreeController.emailAddress.text =
+                      viewProfileSubTypeFreeController.userEmail ?? '';
+                }
+
                 return CustomFormField(
                   controller: viewProfileSubTypeFreeController.emailAddress,
-                  isEnabled:
-                      viewProfileSubTypeFreeController.isEditModeOn.value,
+                  isEnabled: false, // Email field is not editable
                   labelText: "Email Address",
                   hintText: "Enter Your Email",
                 );
@@ -187,6 +236,16 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
 
               ///Section : -----------///Form Field -> Contact Number///--------------
               Obx(() {
+                // Set the initial value from the API response when available and not in edit mode
+                if (viewProfileSubTypeFreeController.model.value != null &&
+                    !viewProfileSubTypeFreeController.isEditModeOn.value &&
+                    viewProfileSubTypeFreeController.contactNumber.text !=
+                        (viewProfileSubTypeFreeController.userMobileNumber ??
+                            '')) {
+                  viewProfileSubTypeFreeController.contactNumber.text =
+                      viewProfileSubTypeFreeController.userMobileNumber ?? '';
+                }
+
                 return CustomFormField(
                   controller: viewProfileSubTypeFreeController.contactNumber,
                   isEnabled:
@@ -211,13 +270,33 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
                   bottom: 70.h,
                 ),
                 child: CustomElevatedButton(
-                  onTap: () {
-                    log("Button -> Save Changes Button Taped!");
-                    viewProfileSubTypeFreeController.setEditMode();
-                    // Get.back();
-                  },
+                  onTap:
+                      viewProfileSubTypeFreeController
+                          .isProfileDataBeingUpload
+                          .value
+                      ? null
+                      : () async {
+                          log("Button -> Save Changes Button Taped!");
+                          // Call the API to update profile data (excluding email)
+                          await viewProfileSubTypeFreeController
+                              .patchProfileDataUpdateApiExcludingEmail();
+                          // Turn off edit mode after saving
+                          viewProfileSubTypeFreeController.setEditMode();
+                          // Optionally refresh the profile data after update
+                          await viewProfileSubTypeFreeController
+                              .getViewProfileDataApi();
+                        },
                   buttonHeight: 52.h,
                   borderRadius: 24.r,
+                  isLoading: viewProfileSubTypeFreeController
+                      .isProfileDataBeingUpload
+                      .value,
+                  buttonColor:
+                      viewProfileSubTypeFreeController
+                          .isProfileDataBeingUpload
+                          .value
+                      ? Colors.grey
+                      : AppColors.cb20000,
                   buttonTitle: "Save Changes",
                 ),
               )
