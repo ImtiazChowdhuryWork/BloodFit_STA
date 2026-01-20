@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/app_list.dart';
+import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -115,53 +115,128 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                 controller: _tabController,
                 children: [
                   /// Monthly Tab
-                  /// subscriptionPackagesList
-                  ListView.separated(
-                    itemCount: AppList.subscriptionPackagesList.length,
-                    separatorBuilder: (context, index) =>
-                        UIHelper.verticalSpace(24.h),
-                    itemBuilder: (context, index) {
-                      var data = AppList.subscriptionPackagesList[index];
-                      return SubscriptionPackageShowingWidget(
-                        packagePrice: data.packagePrice,
-                        packageOffersList: data.packageOffersList,
-                        packageType: data.packageType,
-                        packageDuration: data.packageDuration,
-                        isPackageActive: data.isActive,
-                        isDiscountOfferAvailable: data.isDiscountOfferAvailable,
-                        discountOffer: data.discountOffer,
-                        onTap: () {
-                          // handle selection
-                          Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
-                          log("${data.packageType} selected");
-                        },
+                  Obx(() {
+                    if (controller.isSubscriptionBeingLoad.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.cb20000,
+                        ),
                       );
-                    },
-                  ),
+                    }
+                    if (controller
+                        .subscriptionsLoadingErrorMessage
+                        .value
+                        .isNotEmpty) {
+                      return Center(
+                        child: Text(
+                          'Error: ${controller.subscriptionsLoadingErrorMessage.value}',
+                        ),
+                      );
+                    }
+
+                    // Filter monthly plans
+                    final monthlyPlans = controller.subscriptionList.where((
+                      plan,
+                    ) {
+                      return plan.pricing?.monthly != null;
+                    }).toList();
+
+                    if (monthlyPlans.isEmpty) {
+                      return const Center(
+                        child: Text('No monthly plans available'),
+                      );
+                    }
+
+                    return ListView.separated(
+                      itemCount: monthlyPlans.length,
+                      separatorBuilder: (context, index) =>
+                          UIHelper.verticalSpace(24.h),
+                      itemBuilder: (context, index) {
+                        var plan = monthlyPlans[index];
+                        return SubscriptionPackageShowingWidget(
+                          packagePrice: plan.pricing?.monthly?.price ?? 0.0,
+                          packageOffersList:
+                              plan.features
+                                  ?.map((feature) => feature.label ?? '')
+                                  .toList() ??
+                              [],
+                          packageType: plan.name ?? 'Unknown',
+                          packageDuration: 'Monthly',
+                          isPackageActive: plan.isActive ?? false,
+                          isDiscountOfferAvailable: plan.isPopular ?? false,
+                          discountOffer: plan
+                              .name, // Using plan name as discount offer placeholder
+                          onTap: () {
+                            // handle selection
+                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
+                            log("${plan.name} selected");
+                          },
+                        );
+                      },
+                    );
+                  }),
 
                   /// Yearly Tab
-                  ListView.separated(
-                    itemCount: AppList.subscriptionPackagesList.length,
-                    separatorBuilder: (context, index) =>
-                        UIHelper.verticalSpace(24.h),
-                    itemBuilder: (context, index) {
-                      var data = AppList.subscriptionPackagesList[index];
-                      return SubscriptionPackageShowingWidget(
-                        packagePrice: data.packagePrice,
-                        packageOffersList: data.packageOffersList,
-                        packageType: data.packageType,
-                        packageDuration: data.packageDuration,
-                        isPackageActive: data.isActive,
-                        isDiscountOfferAvailable: data.isDiscountOfferAvailable,
-                        discountOffer: data.discountOffer,
-                        onTap: () {
-                          // handle selection
-                          Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
-                          log("${data.packageType} selected");
-                        },
+                  Obx(() {
+                    if (controller.isSubscriptionBeingLoad.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.cb20000,
+                        ),
                       );
-                    },
-                  ),
+                    }
+                    if (controller
+                        .subscriptionsLoadingErrorMessage
+                        .value
+                        .isNotEmpty) {
+                      return Center(
+                        child: Text(
+                          'Error: ${controller.subscriptionsLoadingErrorMessage.value}',
+                        ),
+                      );
+                    }
+
+                    // Filter yearly plans
+                    final yearlyPlans = controller.subscriptionList.where((
+                      plan,
+                    ) {
+                      return plan.pricing?.yearly != null;
+                    }).toList();
+
+                    if (yearlyPlans.isEmpty) {
+                      return const Center(
+                        child: Text('No yearly plans available'),
+                      );
+                    }
+
+                    return ListView.separated(
+                      itemCount: yearlyPlans.length,
+                      separatorBuilder: (context, index) =>
+                          UIHelper.verticalSpace(24.h),
+                      itemBuilder: (context, index) {
+                        var plan = yearlyPlans[index];
+                        return SubscriptionPackageShowingWidget(
+                          packagePrice: plan.pricing?.yearly?.price ?? 0.0,
+                          packageOffersList:
+                              plan.features
+                                  ?.map((feature) => feature.label ?? '')
+                                  .toList() ??
+                              [],
+                          packageType: plan.name ?? 'Unknown',
+                          packageDuration: 'Yearly',
+                          isPackageActive: plan.isActive ?? false,
+                          isDiscountOfferAvailable: plan.isPopular ?? false,
+                          discountOffer: plan
+                              .name, // Using plan name as discount offer placeholder
+                          onTap: () {
+                            // handle selection
+                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
+                            log("${plan.name} selected");
+                          },
+                        );
+                      },
+                    );
+                  }),
                 ],
               ),
             ),
