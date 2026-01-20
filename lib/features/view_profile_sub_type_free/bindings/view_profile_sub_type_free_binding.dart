@@ -1,12 +1,21 @@
 import 'package:get/get.dart';
 
-import '../../../controllers/view_profile_subscription_type_free_screen_controller.dart';
+import '../../../controllers/custom_image_picker_controller.dart';
+import '../data/controller/view_profile_subscription_type_free_screen_controller.dart';
+import '../../my_profile/data/repository/my_profile_repository.dart';
+import '../../my_profile/data/repository/upload_profile_image_repository.dart';
 
 class ViewProfileSubTypeFreeBinding extends Bindings {
   @override
   void dependencies() {
+    ////------->>> Added this later
+    Get.lazyPut(() => CustomImagePickerController());
+    Get.lazyPut(() => MyProfileRepository(Get.find()));
+    Get.lazyPut(() => UploadProfileImageRepository(Get.find()));
+    // Get.lazyPut(() => ProfileScreenController(Get.find(), Get.find()));
+
     Get.lazyPut<ViewProfileSubscriptionTypeFreeScreenController>(
-      () => ViewProfileSubscriptionTypeFreeScreenController(),
+      () => ViewProfileSubscriptionTypeFreeScreenController(Get.find()),
     );
   }
 }

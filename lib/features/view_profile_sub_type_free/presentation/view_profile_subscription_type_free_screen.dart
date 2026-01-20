@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:bloodfit/endpoints.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +12,7 @@ import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
 import '../../../controllers/custom_image_picker_controller.dart';
-import '../../../controllers/view_profile_subscription_type_free_screen_controller.dart';
+import '../data/controller/view_profile_subscription_type_free_screen_controller.dart';
 import '../../../custom_widgets/custom_elevated_button.dart';
 import '../../../custom_widgets/custom_image_picker_widget.dart';
 import '../../../custom_widgets/custom_text_form_field.dart';
@@ -20,9 +23,12 @@ import '../../../utils/image_picker_handler.dart';
 class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
   ViewProfileSubscriptionTypeFreeScreen({super.key});
 
+  // final CustomImagePickerController imageController = Get.put(
+  //   CustomImagePickerController(),
+  //   tag: 'profileScreen',
+  // );
   final CustomImagePickerController imageController = Get.put(
     CustomImagePickerController(),
-    tag: 'profileScreen',
   );
 
   late final ImagePickerHandler pickerHandler = ImagePickerHandler(
@@ -35,6 +41,7 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoggerUtils.debug('Image URl : ${imageController.imageFromApi}');
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -58,36 +65,78 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox.shrink(),
-                  CustomImagePickerWidget(
-                    controller: imageController,
-                    handler: pickerHandler,
-                    defaultImagePath:
-                        Assets.images.profileAvatarDefaultImage.path,
-                    editIconPath: Assets.icons.cameraIcon,
-                    shapeHeight: 120.h,
-                    shapeWidth: 120.w,
-                  ),
 
-                  ///Section : ---------------------///Button : Edit///-----------
+                  ///------------>>> Show the Current Available Profile Picture
                   Obx(() {
                     return viewProfileSubTypeFreeController.isEditModeOn.value
-                        ? SizedBox.shrink()
-                        : InkWell(
-                            onTap: () {
-                              log("Button : Pen Icon Edit Button Taped!");
-                              viewProfileSubTypeFreeController.setEditMode();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8.sp),
-                              decoration: BoxDecoration(
-                                color: AppColors.cb20000,
-                                borderRadius: BorderRadius.circular(6.r),
+                        ? CustomImagePickerWidget(
+                            controller: imageController,
+                            handler: pickerHandler,
+                            defaultImagePath:
+                                Assets.images.profileAvatarDefaultImage.path,
+                            editIconPath: Assets.icons.cameraIcon,
+                            shapeHeight: 120.h,
+                            shapeWidth: 120.w,
+                          )
+                        : imageController.isImageAvailable.value
+                        ? Container(
+                            padding: EdgeInsets.all(2.sp),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.cFFFFFF,
+                            ),
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                height: 120.h,
+                                width: 120.w,
+                                fit: BoxFit.cover,
+                                imageUrl:
+                                    '$imageBaseUrl${imageController.imageFromApi}',
                               ),
-                              child: SvgPicture.asset(
-                                Assets.icons.penIconWhiteBold,
+                            ),
+                          )
+                        : Container(
+                            width: 120.w,
+                            height: 120.h,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.cb20000,
+                                width: 2.sp,
+                              ),
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                  Assets.images.profileAvatarDefaultImage.path,
+                                ),
                               ),
                             ),
                           );
+                  }),
+
+                  ///Section : ---------------------///Button : Edit///-----------
+                  Obx(() {
+                    return InkWell(
+                      onTap: viewProfileSubTypeFreeController.isEditModeOn.value
+                          ? null
+                          : () {
+                              log("Button : Pen Icon Edit Button Taped!");
+                              viewProfileSubTypeFreeController.setEditMode();
+                            },
+                      child: Container(
+                        padding: EdgeInsets.all(8.sp),
+                        decoration: BoxDecoration(
+                          color:
+                              viewProfileSubTypeFreeController
+                                  .isEditModeOn
+                                  .value
+                              ? Colors.grey
+                              : AppColors.cb20000,
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: SvgPicture.asset(Assets.icons.penIconWhiteBold),
+                      ),
+                    );
                   }),
                 ],
               ),
@@ -165,7 +214,7 @@ class ViewProfileSubscriptionTypeFreeScreen extends StatelessWidget {
                   onTap: () {
                     log("Button -> Save Changes Button Taped!");
                     viewProfileSubTypeFreeController.setEditMode();
-                    Get.back();
+                    // Get.back();
                   },
                   buttonHeight: 52.h,
                   borderRadius: 24.r,
