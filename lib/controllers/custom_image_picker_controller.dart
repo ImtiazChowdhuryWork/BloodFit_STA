@@ -1,31 +1,3 @@
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:get/get.dart';
-// import 'package:image_picker/image_picker.dart';
-
-// class CustomImagePickerController extends GetxController {
-//   final ImagePicker _picker = ImagePicker();
-//   RxString pickedImagePath = ''.obs;
-
-//   Future<void> pickImage(ImageSource source) async {
-//     try {
-//       final XFile? image = await _picker.pickImage(
-//         source: source,
-//         maxWidth: 1024.w,
-//         maxHeight: 1024.h,
-//         imageQuality: 85,
-//       );
-
-//       if (image != null) {
-//         pickedImagePath.value = image.path;
-//       } else {
-//         Get.snackbar("Canceled", "No image selected.");
-//       }
-//     } catch (e) {
-//       Get.snackbar("Error", "Failed to pick image: $e");
-//     }
-//   }
-// }
-
 import 'dart:io';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +37,9 @@ class CustomImagePickerController extends GetxController {
 
   /// Clear both picked image and API image
   void clearImage() {
-    LoggerUtils.debug('Clearing images - picked: ${_pickedImage.value?.path}, api: ${_imageFromApi.value}');
+    LoggerUtils.debug(
+      'Clearing images - picked: ${_pickedImage.value?.path}, api: ${_imageFromApi.value}',
+    );
     _pickedImage.value = null;
     _imageFromApi.value = '';
   }
@@ -108,13 +82,17 @@ class CustomImagePickerController extends GetxController {
   /// Check if we should show picked image or API image
   bool get shouldShowPickedImage {
     bool result = pickedImage != null;
-    LoggerUtils.debug('shouldShowPickedImage: $result (pickedImage: ${pickedImage?.path})');
+    LoggerUtils.debug(
+      'shouldShowPickedImage: $result (pickedImage: ${pickedImage?.path})',
+    );
     return result;
   }
 
   bool get shouldShowApiImage {
     bool result = imageFromApi.isNotEmpty;
-    LoggerUtils.debug('shouldShowApiImage: $result (imageFromApi: $imageFromApi)');
+    LoggerUtils.debug(
+      'shouldShowApiImage: $result (imageFromApi: $imageFromApi)',
+    );
     return result;
   }
 
@@ -136,10 +114,14 @@ class CustomImagePickerController extends GetxController {
 
   /// Get widget for displaying the image
   Widget get imageWidget {
-    LoggerUtils.debug('Building imageWidget - shouldShowPickedImage: $shouldShowPickedImage, shouldShowApiImage: $shouldShowApiImage');
+    LoggerUtils.debug(
+      'Building imageWidget - shouldShowPickedImage: $shouldShowPickedImage, shouldShowApiImage: $shouldShowApiImage',
+    );
 
     if (shouldShowPickedImage) {
-      LoggerUtils.debug('imageWidget: Building Image.file for picked image: $pickedImagePath');
+      LoggerUtils.debug(
+        'imageWidget: Building Image.file for picked image: $pickedImagePath',
+      );
       return Image.file(
         File(pickedImagePath),
         fit: BoxFit.cover,
@@ -149,7 +131,9 @@ class CustomImagePickerController extends GetxController {
         },
       );
     } else if (shouldShowApiImage) {
-      LoggerUtils.debug('imageWidget: Building Image.network for API image: $imageFromApi');
+      LoggerUtils.debug(
+        'imageWidget: Building Image.network for API image: $imageFromApi',
+      );
       return Image.network(
         imageFromApi,
         fit: BoxFit.cover,
