@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 class CustomImagePickerController extends GetxController {
   final Rx<XFile?> _pickedImage = Rx<XFile?>(null);
   final RxString _imageFromApi = RxString('');
+  final RxBool isImageAvailable = false.obs;
 
   // Callback for when an image is picked
   Function()? onImagePicked;
@@ -33,6 +34,8 @@ class CustomImagePickerController extends GetxController {
   void setImageFromApi(String imageUrl) {
     LoggerUtils.debug('Setting API image: $imageUrl');
     _imageFromApi.value = imageUrl;
+
+    _imageFromApi.value.isNotEmpty ? isImageAvailable.value = true : false;
   }
 
   /// Clear both picked image and API image
