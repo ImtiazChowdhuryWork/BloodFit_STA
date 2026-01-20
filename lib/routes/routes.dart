@@ -50,6 +50,7 @@ import '../features/privacy_policy/binding/privacy_policy_binding.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
 import '../features/settings/binding/delete_account_binding.dart';
+import '../features/subscription/binding/subscription_plans_binding.dart';
 import '../features/terms_and_conditions/binding/terms_and_conditions_binding.dart';
 import '../features/view_profile_sub_type_free/bindings/view_profile_sub_type_free_binding.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
@@ -243,6 +244,7 @@ class Routes {
     GetPage(
       name: subscriptionScreen,
       page: () => SubscriptionScreen(),
+      binding: SubscriptionPlansBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

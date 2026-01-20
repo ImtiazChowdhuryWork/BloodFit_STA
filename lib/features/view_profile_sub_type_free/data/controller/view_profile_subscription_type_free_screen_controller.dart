@@ -88,12 +88,44 @@ class ViewProfileSubscriptionTypeFreeScreenController extends GetxController {
           .updateProfileDataRepository(
             firstName: firstName.text.trim(),
             lastName: lastName.text.trim(),
-            email: emailAddress.text.trim(),
             contactNumber: contactNumber.text.trim(),
           );
 
       if (response.statusCode == 200 && response.isSuccess) {
         LoggerUtils.debug("Success : Updating profile data Success");
+      } else {
+        LoggerUtils.error("Error : Something Went Wrong");
+        LoggerUtils.error("Error Status Code : ${response.statusCode}");
+        LoggerUtils.error("Error Message : ${response.errorMessage}");
+      }
+    } catch (e) {
+      profileDataUpdateErrorMessage.value = e.toString();
+      LoggerUtils.error(
+        "Error Catched : ${profileDataUpdateErrorMessage.value}",
+      );
+    } finally {
+      isProfileDataBeingUpload.value = false;
+    }
+  }
+
+  ///------------>>> Upload My Profile Api Method Excluding Email Start Here
+  Future<void> patchProfileDataUpdateApiExcludingEmail() async {
+    try {
+      isProfileDataBeingUpload.value = true;
+      clearProfileDataUpdateErroMessage();
+
+      final response = await _updateProfileDataRepository
+          .updateProfileDataRepository(
+            firstName: firstName.text.trim(),
+            lastName: lastName.text.trim(),
+            // Email is excluded from update
+            contactNumber: contactNumber.text.trim(),
+          );
+
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug(
+          "Success : Updating profile data (excluding email) Success",
+        );
       } else {
         LoggerUtils.error("Error : Something Went Wrong");
         LoggerUtils.error("Error Status Code : ${response.statusCode}");

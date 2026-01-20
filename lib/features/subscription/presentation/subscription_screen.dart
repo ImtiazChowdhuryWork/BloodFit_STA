@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../helper/ui_helpers.dart';
+import '../data/controller/subscription_plans_screen_controller.dart';
 import '../widgets/subscription_package_showing_widget.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -37,6 +38,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
 
   @override
   Widget build(BuildContext context) {
+    SubscriptionPlansScreenController controller =
+        Get.find<SubscriptionPlansScreenController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getSubscriptionPlansApi();
+    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(

@@ -15,7 +15,7 @@ import '../features/information_gather_workout/presentation/widgets/prefered_wor
 import '../features/information_gather_workout/presentation/widgets/workout_main_goal/model/workout_main_goal_model.dart';
 import '../features/onboarding/model/onboarding_model.dart';
 import '../features/review_your_choosen_meals/model/selected_meal_model.dart';
-import '../features/subscription/model/subscription_package_model.dart';
+import '../features/subscription/data/model/subscription_package_model.dart';
 import '../features/work_out/model/video_details_model.dart';
 import '../gen/assets.gen.dart';
 import '../utils/card_tile_option_model.dart';
