@@ -171,10 +171,18 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                               [],
                           packageType: plan.name ?? 'Unknown',
                           packageDuration: 'Monthly',
-                          isPackageActive: plan.isActive ?? false,
-                          isDiscountOfferAvailable: plan.isPopular ?? false,
-                          discountOffer: plan
-                              .name, // Using plan name as discount offer placeholder
+                          isPackageActive: false,
+
+                          ///------------>>>
+                          /*
+                          -------->>> IF User Is a Free User Only then And will Buy any package for first time,
+                          -------->>> isDiscountOfferAvailable: true
+
+                          --------->>> If User Is a Paid User Then,
+                          --------->>> isDiscountOfferAvailable: false  
+                          */
+                          isDiscountOfferAvailable: true,
+                          discountOffer: 50,
                           onTap: () {
                             // handle selection
                             Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
@@ -242,10 +250,20 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                               [],
                           packageType: plan.name ?? 'Unknown',
                           packageDuration: 'Yearly',
-                          isPackageActive: plan.isActive ?? false,
-                          isDiscountOfferAvailable: plan.isPopular ?? false,
-                          discountOffer: plan
-                              .name, // Using plan name as discount offer placeholder
+
+                          ///---------->>> Based On User Subscription Type
+                          isPackageActive: index == 0 ? true : false,
+
+                          ///------------>>>
+                          /*
+                          -------->>> IF User Is a Free User Only then And will Buy any package for first time,
+                          -------->>> isDiscountOfferAvailable: true
+
+                          --------->>> If User Is a Paid User Then,
+                          --------->>> isDiscountOfferAvailable: false  
+                          */
+                          isDiscountOfferAvailable: index == 0 ? false : true,
+                          discountOffer: 50,
                           onTap: () {
                             // handle selection
                             Get.toNamed(Routes.costDetailsForUpgradePlanScreen);

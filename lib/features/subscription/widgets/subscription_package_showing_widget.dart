@@ -17,7 +17,7 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
   final List<bool> isIncludedList;
   final String packageType;
   final bool isPackageActive;
-  final String? discountOffer;
+  final int? discountOffer;
   final String? packageDuration;
   final void Function()? onTap;
   final bool isDiscountOfferAvailable;
@@ -107,7 +107,7 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
 
                       UIHelper.horizontalSpace(6.w),
                       Text(
-                        discountOffer ?? "",
+                        "Get $discountOffer% Discount On The First Purchase",
                         style: TextFontStyle.headline16w500cfefefeStylePoppins,
                       ),
                     ],
