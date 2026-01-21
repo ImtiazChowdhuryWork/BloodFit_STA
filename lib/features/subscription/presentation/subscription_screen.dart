@@ -160,6 +160,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                                   ?.map((feature) => feature.label ?? '')
                                   .toList() ??
                               [],
+
+                          isIncludedList:
+                              plan.features
+                                  ?.map(
+                                    (isIncludedStatus) =>
+                                        isIncludedStatus.included ?? false,
+                                  )
+                                  .toList() ??
+                              [],
                           packageType: plan.name ?? 'Unknown',
                           packageDuration: 'Monthly',
                           isPackageActive: plan.isActive ?? false,
@@ -220,6 +229,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                           packageOffersList:
                               plan.features
                                   ?.map((feature) => feature.label ?? '')
+                                  .toList() ??
+                              [],
+
+                          isIncludedList:
+                              plan.features
+                                  ?.map(
+                                    (isIncludedStatus) =>
+                                        isIncludedStatus.included ?? false,
+                                  )
                                   .toList() ??
                               [],
                           packageType: plan.name ?? 'Unknown',

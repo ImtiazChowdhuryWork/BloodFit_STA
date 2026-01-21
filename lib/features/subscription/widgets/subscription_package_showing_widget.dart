@@ -14,6 +14,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SubscriptionPackageShowingWidget extends StatelessWidget {
   final double packagePrice;
   final List<String> packageOffersList;
+  final List<bool> isIncludedList;
   final String packageType;
   final bool isPackageActive;
   final String? discountOffer;
@@ -30,6 +31,7 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
     this.discountOffer,
     this.isDiscountOfferAvailable = true,
     this.packageDuration,
+    required this.isIncludedList,
   });
 
   @override
@@ -72,14 +74,23 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
                   UIHelper.verticalSpace(16.h),
               itemBuilder: (context, index) {
                 var data = packageOffersList[index];
+                var isIncluded = isIncludedList[index];
                 return Row(
                   children: [
-                    Icon(Icons.done, color: AppColors.cfefefe),
+                    Icon(
+                      Icons.done,
+                      color: isIncluded == true
+                          ? AppColors.cfefefe
+                          : AppColors.c363636,
+                    ),
                     UIHelper.horizontalSpace(8.w),
                     Expanded(
                       child: Text(
                         data,
-                        style: TextFontStyle.headline16w400cc6c6c6StylePoppins,
+                        style: isIncluded == true
+                            ? TextFontStyle.headline16w400cc6c6c6StylePoppins
+                            : TextFontStyle.headline16w400cc6c6c6StylePoppins
+                                  .copyWith(color: AppColors.c363636),
                       ),
                     ),
                   ],
