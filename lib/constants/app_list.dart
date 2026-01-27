@@ -468,7 +468,7 @@ class AppList {
     PickeYourDietModel(dietName: "Vegan", dietType: "Plant Based"),
     PickeYourDietModel(dietName: "Pescatarian", dietType: "Seafood-Based"),
     PickeYourDietModel(dietName: "Carnivore", dietType: "Meat-Focused"),
-    PickeYourDietModel(dietName: "Vegetarian", dietType: "Meat-Focused"),
+    PickeYourDietModel(dietName: "Vegetarian", dietType: "Plant based"),
   ];
 
   static final List<SelectedMealModel> reviewMealList = [

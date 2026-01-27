@@ -500,6 +500,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/remove_from_cart.json
   String get removeFromCart => 'assets/lottie/remove_from_cart.json';
 
+  /// File path: assets/lottie/sandy_loading.json
+  String get sandyLoading => 'assets/lottie/sandy_loading.json';
+
   /// File path: assets/lottie/success.json
   String get success => 'assets/lottie/success.json';
 
@@ -514,6 +517,7 @@ class $AssetsLottieGen {
     imageShimmer,
     notFound,
     removeFromCart,
+    sandyLoading,
     success,
     waiting,
   ];

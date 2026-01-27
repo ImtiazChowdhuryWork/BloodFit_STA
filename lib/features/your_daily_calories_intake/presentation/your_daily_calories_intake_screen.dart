@@ -3,18 +3,39 @@ import 'dart:developer';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
-class YourDailyCaloriesIntakeScreen extends StatelessWidget {
+import '../data/controller/your_daily_calories_intake_screen_controller.dart';
+
+class YourDailyCaloriesIntakeScreen extends StatefulWidget {
   const YourDailyCaloriesIntakeScreen({super.key});
 
   @override
+  State<YourDailyCaloriesIntakeScreen> createState() =>
+      _YourDailyCaloriesIntakeScreenState();
+}
+
+class _YourDailyCaloriesIntakeScreenState
+    extends State<YourDailyCaloriesIntakeScreen> {
+  @override
   Widget build(BuildContext context) {
+    YourDailyCaloriesIntakeScreenController controller =
+        Get.find<YourDailyCaloriesIntakeScreenController>();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   controller.setUserEmailValue(email: email);
+    // });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getYourDailyCaloriesIntakeApi();
+    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
 
@@ -58,28 +79,62 @@ class YourDailyCaloriesIntakeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "1500",
-                        style: TextFontStyle.headline24w700cfefefeStylePoppins,
-                      ),
+                      Obx(() {
+                        return controller.isLoading.value
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Lottie.asset(
+                                    Assets.lottie.sandyLoading,
+                                    width: 50.w,
+                                    height: 50.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Text(
+                                    'Calculating...',
+                                    textAlign: TextAlign.center,
+                                    style: TextFontStyle
+                                        .headline14w400cFFFFFFStylePoppins,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                controller.dailyConsumableCalories,
+                                style: TextFontStyle
+                                    .headline24w700cfefefeStylePoppins,
+                              );
+                      }),
                       UIHelper.verticalSpace(2.h),
-                      Text(
-                        "Cal Per Day",
-                        style: TextFontStyle.headline14w500cfefefeStylePoppins,
-                      ),
+                      Obx(() {
+                        return controller.isLoading.value
+                            ? SizedBox.shrink()
+                            : Text(
+                                "Cal Per Day",
+                                style: TextFontStyle
+                                    .headline14w500cfefefeStylePoppins,
+                              );
+                      }),
                     ],
                   ),
                 ),
               ),
               Spacer(),
 
-              CustomElevatedButton(
-                onTap: () {
-                  log("Continue Button Taped");
-                  Get.toNamed(Routes.youAreAllSetScreen);
-                },
-                buttonTitle: "Continue",
-              ),
+              Obx(() {
+                return CustomElevatedButton(
+                  onTap: controller.isLoading.value
+                      ? null
+                      : () {
+                          log("Continue Button Taped");
+                          Get.toNamed(Routes.youAreAllSetScreen);
+                        },
+                  buttonTitle: "Continue",
+                  isLoading: controller.isLoading.value,
+                  buttonColor: controller.isLoading.value
+                      ? Colors.grey
+                      : AppColors.cb20000,
+                );
+              }),
               UIHelper.verticalSpace(UIHelper.kDefaulutPadding()),
             ],
           ),
