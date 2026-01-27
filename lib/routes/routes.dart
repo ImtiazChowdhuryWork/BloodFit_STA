@@ -54,6 +54,7 @@ import '../features/subscription/binding/subscription_plans_binding.dart';
 import '../features/terms_and_conditions/binding/terms_and_conditions_binding.dart';
 import '../features/view_profile_sub_type_free/bindings/view_profile_sub_type_free_binding.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
+import '../features/your_daily_calories_intake/bindings/your_daily_calories_intake_bindings.dart';
 
 class Routes {
   ///Section : Common Screens Routing
@@ -350,6 +351,7 @@ class Routes {
     GetPage(
       name: dailyCaloriesIntakeScreen,
       page: () => YourDailyCaloriesIntakeScreen(),
+      binding: YourDailyCaloriesIntakeBindings(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
