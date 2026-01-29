@@ -6,6 +6,8 @@ import 'package:bloodfit/features/information_gather_meal_plan/data/controller/i
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_age/presentation/select_age_screen_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_blood_group/presentation/select_blood_group_screen.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_country/presentation/select_country_widget.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_desired_weight/data/controller/ig_select_desired_weight_widget_controller.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_desired_weight/presentation/select_desired_weight_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_diet/presentation/select_diet_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_dislike_foods/presentation/select_dislike_foods_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_food_allergies/presentation/select_foood_allergies_widget.dart';
@@ -77,6 +79,7 @@ class InformationGatherMealScreen extends StatelessWidget {
                     SelectWeightScreen(),
                     SelectHeightScreenWidget(),
                     SelectCountryWidget(),
+                    SelectDesiredWeightWidget(),
                     SelectDietWidget(),
                     SelectFooodAllergiesWidget(),
                     SelectDislikeFoodsWidget(),
@@ -202,11 +205,58 @@ class InformationGatherMealScreen extends StatelessWidget {
                 LoggerUtils.debug("Country validation: $country");
                 return country != null && country is String;
               case 6:
+
+                ///-------->>> Desired Weight Widget
+                final desiredWeight = appData.read(
+                  kKeyDesiredWeightWithoutUnit,
+                );
+                LoggerUtils.debug("Desired Weight validation: $desiredWeight");
+
+                // Check if desired weight exists and is a valid number > 0
+                if (desiredWeight == null) {
+                  LoggerUtils.debug(
+                    "Desired Weight is null - validation failed",
+                  );
+                  return false;
+                }
+                if (desiredWeight is num) {
+                  final isValid = desiredWeight > 0;
+                  LoggerUtils.debug("Desired Weight is num > 0: $isValid");
+
+                  // Get the desired weight controller to check if user has interacted
+                  try {
+                    final desiredWeightController =
+                        Get.find<IgSelectDesiredWeightWidgetController>();
+                    final hasInteracted =
+                        desiredWeightController.hasUserInteracted.value;
+                    LoggerUtils.debug(
+                      "User has interacted with Desired weight picker: $hasInteracted",
+                    );
+
+                    // Button enabled only if weight is valid AND user has interacted
+                    final finalResult = isValid && hasInteracted;
+                    LoggerUtils.debug(
+                      "Final Desired weight validation result: $finalResult",
+                    );
+                    return finalResult;
+                  } catch (e) {
+                    LoggerUtils.error(
+                      "Error getting Desired weight controller: $e",
+                    );
+                    return isValid; // Fallback to just checking if desired weight is valid
+                  }
+                }
+                LoggerUtils.debug(
+                  "Desired Weight is not a number - validation failed",
+                );
+                return false;
+
+              case 7:
                 final diet = appData.read(kKeyUserDietType);
                 LoggerUtils.debug("Diet validation: $diet");
                 return diet != null && diet is String;
-              case 7:
               case 8:
+              case 9:
                 // For food allergies and dislikes, they might be optional
                 LoggerUtils.debug("Food allergies/dislikes - optional");
                 return true;

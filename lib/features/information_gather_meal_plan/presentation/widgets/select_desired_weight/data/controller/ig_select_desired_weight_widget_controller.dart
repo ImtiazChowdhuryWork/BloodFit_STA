@@ -1,14 +1,16 @@
-import 'package:bloodfit/controllers/information_gather_screen_controller.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'dart:async';
 
-import '../constants/app_constant_text.dart';
-import '../helper/di.dart';
-import '../helper/logger_util.dart';
+import '../../../../../../../constants/app_constant_text.dart';
+import '../../../../../../../controllers/information_gather_screen_controller.dart';
+import '../../../../../../../controllers/weight_picker_widget_controller.dart';
+import '../../../../../../../helper/di.dart';
+import '../../../../../../../helper/logger_util.dart';
 
-class WeightController extends GetxController {
+class IgSelectDesiredWeightWidgetController extends GetxController {
   // current selected weight value
   RxDouble currentWeight = 60.0.obs;
 
@@ -131,7 +133,8 @@ class WeightController extends GetxController {
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 300), () {
       // Check again if controller is still valid when timer executes
-      if (_lastContainerWidth > 0 && Get.isRegistered<WeightController>()) {
+      if (_lastContainerWidth > 0 &&
+          Get.isRegistered<IgSelectDesiredWeightWidgetController>()) {
         saveWeightAndUnit();
       }
     });
@@ -145,9 +148,12 @@ class WeightController extends GetxController {
   /// Load saved weight from storage
   void loadSavedWeight() {
     try {
-      final savedWeightWithUnit = appData.read(kKeyUserWeight);
-      final savedWeightWithoutUnit = appData.read(kKeyUserWeightWithoutUnit);
-      final savedUnit = appData.read('${kKeyUserWeight}_unit');
+      // final savedWeightWithUnit = appData.read(kKeyUserWeight);
+      final savedWeightWithUnit = appData.read(kKeyDesiredWeight);
+      // final savedWeightWithoutUnit = appData.read(kKeyUserWeightWithoutUnit);
+      final savedWeightWithoutUnit = appData.read(kKeyDesiredWeightWithoutUnit);
+      // final savedUnit = appData.read('${kKeyUserWeight}_unit');
+      final savedUnit = appData.read('${kKeyDesiredWeight}_unit');
 
       bool hasValidSavedData = false;
       double weightToDisplay = 60.0; // Default for display only
@@ -209,7 +215,7 @@ class WeightController extends GetxController {
           });
 
           LoggerUtils.debug(
-            "Loaded saved weight: $weightToDisplay ${isLbSelected.value ? 'lb' : 'kg'} (User has interacted: ${hasUserInteracted.value})",
+            "Loaded saved desired weight: $weightToDisplay ${isLbSelected.value ? 'lb' : 'kg'} (User has interacted: ${hasUserInteracted.value})",
           );
         }
       } else {
@@ -230,7 +236,7 @@ class WeightController extends GetxController {
           scrollController.jumpTo(scrollPosition);
 
           LoggerUtils.debug(
-            "No saved weight found. Set display default: $weightToDisplay kg (User has NOT interacted)",
+            "No saved desired weight found. Set display default: $weightToDisplay kg (User has NOT interacted)",
           );
         });
       }
@@ -272,13 +278,16 @@ class WeightController extends GetxController {
       // Save TWO values to local storage:
 
       // 1. WITH UNIT: The exact value user sees (e.g., 150 lb or 70 kg)
-      appData.write(kKeyUserWeight, weightToSaveWithUnit);
+      // appData.write(kKeyUserWeight, weightToSaveWithUnit);
+      appData.write(kKeyDesiredWeight, weightToSaveWithUnit);
 
       // 2. WITHOUT UNIT: Always in kg (converted if needed)
-      appData.write(kKeyUserWeightWithoutUnit, weightToSaveInKg);
+      // appData.write(kKeyUserWeightWithoutUnit, weightToSaveInKg);
+      appData.write(kKeyDesiredWeightWithoutUnit, weightToSaveInKg);
 
       // Also save the unit user selected (for UI display when loading)
-      appData.write('${kKeyUserWeight}_unit', selectedUnit);
+      // appData.write('${kKeyUserWeight}_unit', selectedUnit);
+      appData.write('${kKeyDesiredWeight}_unit', selectedUnit);
 
       currentWeight.value = selectedValue; // Keep UI value as is
 
@@ -286,10 +295,10 @@ class WeightController extends GetxController {
       Get.find<InformationGatherMealPlanController>().triggerButtonUpdate();
 
       LoggerUtils.debug(
-        "Saved weight - WithUnit: $weightToSaveWithUnit $selectedUnit, WithoutUnit: $weightToSaveInKg kg (User interaction recorded)",
+        "Saved desired weight - WithUnit: $weightToSaveWithUnit $selectedUnit, WithoutUnit: $weightToSaveInKg kg (User interaction recorded)",
       );
     } catch (e) {
-      LoggerUtils.error("Error saving weight: $e");
+      LoggerUtils.error("Error saving desired weight: $e");
     }
   }
 
