@@ -1,9 +1,21 @@
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../your_daily_calories_intake/data/model/your_daily_calories_intak_model.dart';
+import '../repository/daily_calories_api_repository.dart';
+
 class HomeScreenController extends GetxController {
+  ///--------->>> Section : Importing the Repositories
+  DailyCaloriesApiRepository _dailyCaloriesApiRepository;
+
+  ///----------->>> Section : Importing the Model
+  Rxn<YourDailyCaloriesIntakeModel> model = Rxn<YourDailyCaloriesIntakeModel>();
+
+  HomeScreenController(this._dailyCaloriesApiRepository);
+
   ///Section : ----------------////Selectable Meal Calendar for Meal Plan///----------------------
   RxInt mealCalanderSelectableDays = 3.obs;
   List<WeekDayEnum> weekDayList = WeekDayEnum.values;
@@ -79,4 +91,47 @@ class HomeScreenController extends GetxController {
   void setIsWeightAvailableValue({required bool newValue}) {
     isWeightAvailable.value = newValue;
   }
+
+  ///----------------->>> Is Your Daily Calories Api Section
+  RxBool isDailyCaloriesLoading = false.obs;
+  RxString errorMessage = ''.obs;
+  void clearErrorMessage() async {
+    errorMessage.value = '';
+  }
+
+  Future<void> getDailyCaloriesApi() async {
+    isDailyCaloriesLoading.value = true;
+    clearErrorMessage();
+
+    try {
+      final response = await _dailyCaloriesApiRepository
+          .dailyCaloriesApiRepository();
+
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug("Daily Calories Data Fetched Successfully!");
+        var data = YourDailyCaloriesIntakeModel.fromJson(
+          response.jsonResponse!,
+        );
+
+        model.value = data;
+      } else {
+        errorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Something Went Wrong!");
+        LoggerUtils.error("Error Found : ${errorMessage.value}");
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+      LoggerUtils.error("Error Found : ${errorMessage.value}");
+    } finally {
+      isDailyCaloriesLoading.value = false;
+    }
+  }
+
+  String get totalCalories =>
+      model.value?.data?.totalDailyCalories.toString() ?? '';
+  int get consumedCarbs =>
+      model.value?.data?.totalDailyMacronutrients?.carbohydrates ?? 0;
+  int get consumedProtein =>
+      model.value?.data?.totalDailyMacronutrients?.protein ?? 0;
+  int get consumedFat => model.value?.data?.totalDailyMacronutrients?.fat ?? 0;
 }

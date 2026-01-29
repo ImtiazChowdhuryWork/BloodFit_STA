@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
+import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/consistancy_stake_preview.dart';
@@ -18,8 +19,6 @@ import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-
 import 'widgets/custom_calender_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -29,6 +28,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomeScreenController controller = Get.find<HomeScreenController>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getDailyCaloriesApi();
+    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
@@ -75,44 +78,64 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ///Section : ------------///Total Calories///---------------
-                      TotalKCalWidget(
-                        size: 120.w,
-                        progress: 0.75,
-                        strokeWidth: 8,
-                        capColor: AppColors.cFFFFFF,
-                        capSizeMultiplier: 0.3,
-                        capPadding: 0,
-                        capRadialOffset: 0,
-                        progressColor: AppColors.cb20000,
-                        progressBoldColor: AppColors.c7e0101,
-                      ),
+                      Obx(() {
+                        return TotalKCalWidget(
+                          size: 120.w,
+                          progress: 0.75,
+                          strokeWidth: 8,
+                          capColor: AppColors.cFFFFFF,
+                          capSizeMultiplier: 0.3,
+                          capPadding: 0,
+                          capRadialOffset: 0,
+                          progressColor: AppColors.cb20000,
+                          progressBoldColor: AppColors.c7e0101,
+                          isLoading: controller.isDailyCaloriesLoading.value,
+                          totalCalories: controller.isDailyCaloriesLoading.value
+                              ? 'Loading...'
+                              : controller.totalCalories,
+                        );
+                      }),
                       UIHelper.horizontalSpace(16.w),
 
                       ///Section : ------------///Total Carbs///---------------
                       Row(
                         children: [
                           ///Section : ------------///Total Carbs///---------------
-                          SingleElementShowingWidget(
-                            elementIconPath: Assets.icons.glutenIcon,
-                            elementTitle: "Carbs",
-                            elementAmount: 30,
-                          ),
+                          Obx(() {
+                            return SingleElementShowingWidget(
+                              elementIconPath: Assets.icons.glutenIcon,
+                              elementTitle: "Carbs",
+                              isLoading:
+                                  controller.isDailyCaloriesLoading.value,
+                              elementAmount: controller.consumedCarbs
+                                  .toDouble(),
+                            );
+                          }),
                           UIHelper.horizontalSpace(8.w),
 
                           ///Section : ------------///Total protein///---------------
-                          SingleElementShowingWidget(
-                            elementIconPath: Assets.icons.meatIcon,
-                            elementTitle: "Protein",
-                            elementAmount: 30,
-                          ),
+                          Obx(() {
+                            return SingleElementShowingWidget(
+                              elementIconPath: Assets.icons.meatIcon,
+                              elementTitle: "Protein",
+                              isLoading:
+                                  controller.isDailyCaloriesLoading.value,
+                              elementAmount: controller.consumedProtein
+                                  .toDouble(),
+                            );
+                          }),
                           UIHelper.horizontalSpace(8.w),
 
                           ///Section : ------------///Total Carbs///---------------
-                          SingleElementShowingWidget(
-                            elementIconPath: Assets.icons.fatIcon,
-                            elementTitle: "Fat",
-                            elementAmount: 30,
-                          ),
+                          Obx(() {
+                            return SingleElementShowingWidget(
+                              elementIconPath: Assets.icons.fatIcon,
+                              elementTitle: "Fat",
+                              isLoading:
+                                  controller.isDailyCaloriesLoading.value,
+                              elementAmount: controller.consumedFat.toDouble(),
+                            );
+                          }),
                         ],
                       ),
                     ],

@@ -1,5 +1,5 @@
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/controllers/home_screen_controller.dart';
+import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/extensions/week_days_extension.dart';
 import 'package:bloodfit/features/home/presentation/widgets/home_screen_selectable_days_showing_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/week_day_bottom_sheet.dart';

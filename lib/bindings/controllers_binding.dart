@@ -6,7 +6,7 @@ import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/enums_controller.dart';
 import '../features/faq/data/controller/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
-import '../controllers/home_screen_controller.dart';
+import '../features/home/data/controller/home_screen_controller.dart';
 import '../controllers/ig_current_body_type_controller.dart';
 import '../controllers/ig_desired_weight_controller.dart';
 import '../controllers/ig_food_allergies_screen_controller.dart';
@@ -52,7 +52,7 @@ class ControllerBindings extends Bindings {
     // Get.lazyPut(() => RulerController());
     // Get.lazyPut(() => SliderButtonController());
     Get.lazyPut(() => InformationGatherMealPlanController());
-    Get.lazyPut(() => HomeScreenController(), fenix: true);
+    // Get.lazyPut(() => HomeScreenController(), fenix: true);
     Get.lazyPut(() => WorkOutScreenController(), fenix: true);
     Get.lazyPut(() => IgCurrentBodyTypeController(), fenix: true);
     Get.lazyPut(() => InformationGatherWorkOutController(), fenix: true);

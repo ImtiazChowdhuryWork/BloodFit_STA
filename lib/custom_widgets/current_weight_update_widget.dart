@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:bloodfit/controllers/home_screen_controller.dart';
+import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

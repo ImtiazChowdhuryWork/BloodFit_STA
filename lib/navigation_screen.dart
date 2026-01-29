@@ -301,6 +301,8 @@
 //   }
 // }
 
+import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
+import 'package:bloodfit/features/home/data/repository/daily_calories_api_repository.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/meal_plan_feature_options.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/meal_scanner_screen.dart';
@@ -311,6 +313,7 @@ import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../../gen/colors.gen.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -323,6 +326,17 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
   late PageController _pageController;
+
+  void _initializeControllers() {
+    // Check if HomeScreenController is registered, if not, register it
+    if (!Get.isRegistered<HomeScreenController>()) {
+      // Make sure dependencies are ready
+      if (!Get.isRegistered<DailyCaloriesApiRepository>()) {
+        Get.lazyPut(() => DailyCaloriesApiRepository(Get.find()));
+      }
+      Get.lazyPut(() => HomeScreenController(Get.find()), fenix: true);
+    }
+  }
 
   // Remove MealScannerScreen from pages - it will be a separate screen
   final List<Widget> _pages = [
@@ -337,6 +351,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    _initializeControllers();
   }
 
   @override

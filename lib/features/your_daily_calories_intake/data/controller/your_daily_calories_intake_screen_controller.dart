@@ -1,7 +1,6 @@
 import 'package:bloodfit/features/your_daily_calories_intake/data/repository/your_daily_calories_intake_screen_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 import '../model/your_daily_calories_intak_model.dart';
 
@@ -34,7 +33,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
           response.jsonResponse!,
         );
         model.value = data;
-        LoggerUtils.debug("Success : Daily Calories Consumable Data Found! ");
+        LoggerUtils.debug("Success : Daily Calories Consumable Data Found!");
       } else {
         errorMessage.value = response.errorMessage.toString();
         LoggerUtils.error("Something Went Wrong!");
