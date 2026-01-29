@@ -64,8 +64,8 @@ class PageIndicator<T extends PageIndicatorInterface> extends StatelessWidget {
   const PageIndicator({
     super.key,
     required this.controller,
-    this.activeWidth = 38,
-    this.inactiveWidth = 38,
+    this.activeWidth = 36,
+    this.inactiveWidth = 30,
     this.height = 3,
     this.spacing = 3,
   });
@@ -77,16 +77,18 @@ class PageIndicator<T extends PageIndicatorInterface> extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(controller.totalPages, (index) {
           final isActive = controller.currentIndex.value == index;
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            margin: EdgeInsets.symmetric(horizontal: spacing.w),
-            width: isActive ? activeWidth.w : inactiveWidth.w,
-            height: height.h,
-            decoration: BoxDecoration(
-              color: isActive
-                  ? AppColors.cb20000
-                  : AppColors.cFFFFFF.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(height / 2),
+          return Expanded(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              margin: EdgeInsets.symmetric(horizontal: spacing.w),
+              width: isActive ? activeWidth.w : inactiveWidth.w,
+              height: height.h,
+              decoration: BoxDecoration(
+                color: isActive
+                    ? AppColors.cb20000
+                    : AppColors.cFFFFFF.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(height / 2),
+              ),
             ),
           );
         }),

@@ -22,6 +22,7 @@ import '../controllers/information_gather_work_out_controller.dart';
 import '../controllers/meal_plan_screen_controller.dart';
 import '../controllers/onboarding_age_picker_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
+import '../features/information_gather_meal_plan/presentation/widgets/select_desired_weight/data/controller/ig_select_desired_weight_widget_controller.dart';
 import '../features/my_profile/data/controller/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
@@ -66,6 +67,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => IgSelectYourCountryScreenController(), fenix: true);
     Get.lazyPut(() => IgFoodAllergiesScreenController(), fenix: true);
     Get.lazyPut(() => IgFoodDislikesScreenController(), fenix: true);
+    Get.lazyPut(() => IgSelectDesiredWeightWidgetController(), fenix: true);
     // Get.lazyPut(() => ForgotPasswordController(), fenix: true);
 
     Get.lazyPut(
@@ -86,7 +88,12 @@ class ControllerBindings extends Bindings {
       tag: 'current_weight_unit',
       fenix: true,
     );
-    Get.lazyPut(() => SliderButtonController(), tag: 'desired_weight_unit');
+    Get.lazyPut(
+      () => SliderButtonController(),
+      tag: 'desired_weight_unit',
+      fenix: true,
+    );
+    // Get.lazyPut(() => SliderButtonController(), tag: 'desired_weight_unit');
 
     // Add tagged bindings for height controllers
     Get.lazyPut(() => WeightController(), tag: 'current_height');
