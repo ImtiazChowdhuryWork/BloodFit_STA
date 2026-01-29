@@ -1,6 +1,8 @@
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../constants/text_font_style.dart';
 import '../../../../gen/colors.gen.dart';
@@ -10,11 +12,13 @@ class SingleElementShowingWidget extends StatelessWidget {
   final String elementIconPath;
   final String elementTitle;
   final double elementAmount;
+  final bool isLoading;
   const SingleElementShowingWidget({
     super.key,
     required this.elementIconPath,
     required this.elementTitle,
     required this.elementAmount,
+    required this.isLoading,
   });
 
   @override
@@ -54,12 +58,32 @@ class SingleElementShowingWidget extends StatelessWidget {
           RichText(
             text: TextSpan(
               children: <InlineSpan>[
-                TextSpan(
-                  text: elementAmount % 1 == 0
-                      ? elementAmount.toInt().toString()
-                      : elementAmount.toString(),
-                  style: TextFontStyle.headline16w500cfefefeStylePoppins,
+                WidgetSpan(
+                  child: Column(
+                    children: [
+                      isLoading
+                          ? SizedBox(
+                              height: 20.h,
+                              width: 20.w,
+                              child: Lottie.asset(Assets.lottie.sandyLoading),
+                            )
+                          : Text(
+                              elementAmount % 1 == 0
+                                  ? elementAmount.toInt().toString()
+                                  : elementAmount.toString(),
+                              style: TextFontStyle
+                                  .headline16w500cfefefeStylePoppins,
+                            ),
+                    ],
+                  ),
                 ),
+
+                // TextSpan(
+                //   text: elementAmount % 1 == 0
+                //       ? elementAmount.toInt().toString()
+                //       : elementAmount.toString(),
+                //   style: TextFontStyle.headline16w500cfefefeStylePoppins,
+                // ),
                 WidgetSpan(child: UIHelper.horizontalSpace(6.w)),
                 TextSpan(
                   text: "gm",

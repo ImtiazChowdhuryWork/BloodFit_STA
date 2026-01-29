@@ -17,6 +17,8 @@ class TotalKCalWidget extends StatelessWidget {
   final Color capColor;
   final Color progressColor; // main progress color
   final Color progressBoldColor; // start/end bold color
+  final String totalCalories;
+  final bool isLoading;
 
   const TotalKCalWidget({
     super.key,
@@ -29,6 +31,8 @@ class TotalKCalWidget extends StatelessWidget {
     this.capColor = AppColors.cb20000,
     this.progressColor = AppColors.cb20000,
     this.progressBoldColor = AppColors.c7e0101,
+    required this.totalCalories,
+    required this.isLoading,
   });
 
   @override
@@ -58,8 +62,11 @@ class TotalKCalWidget extends StatelessWidget {
                       SvgPicture.asset(Assets.icons.fireIconYellow),
                       UIHelper.verticalSpace(10.h),
                       Text(
-                        "1500",
-                        style: TextFontStyle.headline20w500cfefefeStylePoppins,
+                        totalCalories,
+                        style: isLoading
+                            ? TextFontStyle.headline20w500cfefefeStylePoppins
+                                  .copyWith(fontSize: 14.sp)
+                            : TextFontStyle.headline20w500cfefefeStylePoppins,
                       ),
                     ],
                   ),

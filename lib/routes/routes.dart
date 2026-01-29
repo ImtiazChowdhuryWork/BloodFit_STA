@@ -41,6 +41,7 @@ import '../features/change_password/bindings/change_password_bindings.dart';
 import '../features/choose_from_our_suggested_meals/presentation/choose_from_our_suggested_meals_screen.dart';
 import '../features/faq/bindings/faq_screen_binding.dart';
 import '../features/faq/presentation/faq_screen.dart';
+import '../features/home/bindings/home_screen_bindings.dart';
 import '../features/information_gather_meal_plan/binding/information_gather_meal_binding.dart';
 import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
@@ -370,6 +371,7 @@ class Routes {
     GetPage(
       name: navigationScreen,
       page: () => NavigationScreen(),
+      binding: HomeScreenBindings(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
