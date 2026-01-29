@@ -157,6 +157,12 @@ bool removeAllSavedDataToLocalStorageForInformationGatherMealPlan() {
     ///--------->>> Remove Food Dislike List
     appData.remove(kKeyUserDislLikeFoodList);
 
+    ///---------->>> Remove Desired Weight (With Unit)
+    appData.remove(kKeyDesiredWeight);
+
+    ///--------->>> Remove Desired Weight (Withhout Unit)
+    appData.remove(kKeyDesiredWeightWithoutUnit);
+
     // Reset interaction flags in controllers if they exist
     try {
       final weightController = Get.find<WeightController>(
@@ -190,7 +196,9 @@ bool removeAllSavedDataToLocalStorageForInformationGatherMealPlan() {
         appData.read(kKeyUserCountryName) == null &&
         appData.read(kKeyUserDietType) == null &&
         appData.read(kKeyUserFoodAlergisList) == null &&
-        appData.read(kKeyUserDislLikeFoodList) == null;
+        appData.read(kKeyUserDislLikeFoodList) == null &&
+        appData.read(kKeyDesiredWeight) == null &&
+        appData.read('${kKeyDesiredWeightWithoutUnit}_unit') == null;
 
     LoggerUtils.debug("All data removed successfully: $isAllRemoved");
 
