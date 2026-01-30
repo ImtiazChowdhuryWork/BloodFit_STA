@@ -54,3 +54,4 @@ const String kKeyUserDietType = 'user_diet_type';
 const String kKeyUserFoodAlergisList = 'user_food_alergies_list';
 const String kKeyUserDislLikeFoodList = 'user_dislike_food_list';
 const String kKeyIsMealPlanSubmitted = 'is_meal_plan_submitted';
+const String kKeyExpectedBodyShape = 'expected_body_shape';

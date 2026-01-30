@@ -100,6 +100,7 @@ class _YourDailyCaloriesIntakeScreenState
                               )
                             : Text(
                                 controller.dailyConsumableCalories,
+                                textAlign: TextAlign.center,
                                 style: TextFontStyle
                                     .headline24w700cfefefeStylePoppins,
                               );
@@ -125,10 +126,16 @@ class _YourDailyCaloriesIntakeScreenState
                   onTap: controller.isLoading.value
                       ? null
                       : () {
-                          log("Continue Button Taped");
-                          Get.toNamed(Routes.youAreAllSetScreen);
+                          if (controller.isSuccess.value) {
+                            log("Continue Button Taped");
+                            Get.toNamed(Routes.youAreAllSetScreen);
+                          } else {
+                            controller.getYourDailyCaloriesIntakeApi();
+                          }
                         },
-                  buttonTitle: "Continue",
+                  buttonTitle: controller.isSuccess.value
+                      ? "Continue"
+                      : "Retry",
                   isLoading: controller.isLoading.value,
                   buttonColor: controller.isLoading.value
                       ? Colors.grey

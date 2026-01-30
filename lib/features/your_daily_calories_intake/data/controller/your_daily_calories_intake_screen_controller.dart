@@ -15,6 +15,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
   );
 
   RxBool isLoading = false.obs;
+  RxBool isSuccess = false.obs;
   RxString errorMessage = ''.obs;
   void clearErrorMessage() {
     errorMessage.value = '';
@@ -29,6 +30,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
           .yourDailyCaloriesIntakeRepository();
 
       if (response.statusCode == 200 && response.isSuccess) {
+        isSuccess.value = true;
         final data = YourDailyCaloriesIntakeModel.fromJson(
           response.jsonResponse!,
         );

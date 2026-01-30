@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_main_goal/presentation/widget/workout_main_goal_tile.dart';
+import 'package:bloodfit/custom_widgets/workout_main_goal_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
