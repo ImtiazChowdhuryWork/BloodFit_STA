@@ -101,13 +101,17 @@ class _YourDailyCaloriesIntakeScreenState
                             : Text(
                                 controller.dailyConsumableCalories,
                                 textAlign: TextAlign.center,
-                                style: TextFontStyle
-                                    .headline24w700cfefefeStylePoppins,
+                                style: controller.isSuccess.value
+                                    ? TextFontStyle
+                                          .headline24w700cfefefeStylePoppins
+                                    : TextFontStyle
+                                          .headline8w700cfefefeStylePoppins,
                               );
                       }),
                       UIHelper.verticalSpace(2.h),
                       Obx(() {
-                        return controller.isLoading.value
+                        return controller.isLoading.value ||
+                                controller.isSuccess.value == false
                             ? SizedBox.shrink()
                             : Text(
                                 "Cal Per Day",

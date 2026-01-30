@@ -19,6 +19,8 @@ class TotalKCalWidget extends StatelessWidget {
   final Color progressBoldColor; // start/end bold color
   final String totalCalories;
   final bool isLoading;
+  final bool isSuccess;
+  final void Function()? onTap;
 
   const TotalKCalWidget({
     super.key,
@@ -33,6 +35,8 @@ class TotalKCalWidget extends StatelessWidget {
     this.progressBoldColor = AppColors.c7e0101,
     required this.totalCalories,
     required this.isLoading,
+    required this.isSuccess,
+    this.onTap,
   });
 
   @override
@@ -60,14 +64,26 @@ class TotalKCalWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(Assets.icons.fireIconYellow),
+
                       UIHelper.verticalSpace(10.h),
-                      Text(
-                        totalCalories,
-                        style: isLoading
-                            ? TextFontStyle.headline20w500cfefefeStylePoppins
-                                  .copyWith(fontSize: 14.sp)
-                            : TextFontStyle.headline20w500cfefefeStylePoppins,
-                      ),
+
+                      isSuccess || isLoading
+                          ? Text(
+                              totalCalories,
+                              style: isLoading
+                                  ? TextFontStyle
+                                        .headline20w500cfefefeStylePoppins
+                                        .copyWith(fontSize: 14.sp)
+                                  : TextFontStyle
+                                        .headline20w500cfefefeStylePoppins,
+                            )
+                          : GestureDetector(
+                              onTap: onTap,
+                              child: Icon(
+                                Icons.replay_rounded,
+                                color: AppColors.cb20000,
+                              ),
+                            ),
                     ],
                   ),
                 ),

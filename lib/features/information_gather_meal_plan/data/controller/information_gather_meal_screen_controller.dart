@@ -129,32 +129,32 @@ class InformationGatherMealScreenController extends GetxController {
   }
 
   ///-------->>> Check Selected Food Allergies List
-  // String? userFoodAllergesListValidation() {
-  //   List<dynamic>? value = appData.read(kKeyUserFoodAlergisList);
-  //   if (value == null || value.isEmpty) {
-  //     return '🥴🥴🥴User Food Allergies List Not Found!';
-  //   }
+  String? userFoodAllergesListValidation() {
+    List<dynamic>? value = appData.read(kKeyUserFoodAlergisList);
+    if (value == null) {
+      value = []; // Initialize as empty list if null
+    }
 
-  //   foodAlergiesList.value = value;
-  //   LoggerUtils.debug(
-  //     "✍️✍️✍️User Food Allergies List : ${foodAlergiesList.value.toString()}",
-  //   );
-  //   return null;
-  // }
+    foodAlergiesList.value = value.cast<String>();
+    LoggerUtils.debug(
+      "✍️✍️✍️User Food Allergies List : ${foodAlergiesList.value.toString()}",
+    );
+    return null;
+  }
 
-  ///-------->>> Check Selected Food Allergies List
-  // String? userDisLikeFoodListValidation() {
-  //   List<dynamic>? value = appData.read(kKeyUserDislLikeFoodList);
-  //   if (value == null || value.isEmpty) {
-  //     return '🥴🥴🥴User Dis Like Food List Not Found!';
-  //   }
+  ///-------->>> Check Selected Food Dislike List
+  String? userDisLikeFoodListValidation() {
+    List<dynamic>? value = appData.read(kKeyUserDislLikeFoodList);
+    if (value == null) {
+      value = []; // Initialize as empty list if null
+    }
 
-  //   foodAlergiesList.value = value;
-  //   LoggerUtils.debug(
-  //     "✍️✍️✍️User Dis Like List : ${foodAlergiesList.value.toString()}",
-  //   );
-  //   return null;
-  // }
+    foodDislikeList.value = value.cast<String>();
+    LoggerUtils.debug(
+      "✍️✍️✍️User Dis Like List : ${foodDislikeList.value.toString()}",
+    );
+    return null;
+  }
 
   ///---------->>> Validate Information Gather Meal Plan
   String? validateInformationGatherMealPlan() {
@@ -187,12 +187,12 @@ class InformationGatherMealScreenController extends GetxController {
     if (userDietTypeError != null) return userDietTypeError;
 
     ///----------->>> User Food Allergies List Error Message
-    // final userFoodAllergiesListError = userFoodAllergesListValidation();
-    // if (userFoodAllergiesListError != null) return userFoodAllergiesListError;
+    final userFoodAllergiesListError = userFoodAllergesListValidation();
+    // Note: Food allergies are optional, so we don't return an error if the list is empty
 
     ///----------->>> User Food Dislike List Error Message
-    // final userFoodDislikeListError = userDisLikeFoodListValidation();
-    // if (userFoodDislikeListError != null) return userFoodDislikeListError;
+    final userFoodDislikeListError = userDisLikeFoodListValidation();
+    // Note: Food dislikes are optional, so we don't return an error if the list is empty
 
     return null;
   }

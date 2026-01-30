@@ -14,6 +14,7 @@ import 'package:bloodfit/features/home/presentation/widgets/single_element_showi
 import 'package:bloodfit/features/home/presentation/widgets/total_k_cal_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,13 @@ class HomeScreen extends StatelessWidget {
                       ///Section : ------------///Total Calories///---------------
                       Obx(() {
                         return TotalKCalWidget(
+                          isSuccess: controller.isSuccess.value,
+                          onTap: () {
+                            LoggerUtils.debug(
+                              "Home Calories Datra Reload Taped!",
+                            );
+                            controller.getDailyCaloriesApi();
+                          },
                           size: 120.w,
                           progress: 0.75,
                           strokeWidth: 8,
