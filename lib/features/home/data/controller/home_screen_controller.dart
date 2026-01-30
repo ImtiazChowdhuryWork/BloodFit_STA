@@ -94,6 +94,7 @@ class HomeScreenController extends GetxController {
 
   ///----------------->>> Is Your Daily Calories Api Section
   RxBool isDailyCaloriesLoading = false.obs;
+  RxBool isSuccess = false.obs;
   RxString errorMessage = ''.obs;
   void clearErrorMessage() async {
     errorMessage.value = '';
@@ -114,6 +115,7 @@ class HomeScreenController extends GetxController {
         );
 
         model.value = data;
+        isSuccess.value = true;
       } else {
         errorMessage.value = response.errorMessage.toString();
         LoggerUtils.error("Something Went Wrong!");

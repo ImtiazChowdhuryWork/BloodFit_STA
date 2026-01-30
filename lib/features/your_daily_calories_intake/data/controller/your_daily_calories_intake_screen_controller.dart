@@ -43,7 +43,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
     } catch (e) {
       errorMessage.value = e.toString();
       LoggerUtils.error("Status Code : ");
-      LoggerUtils.error("Error Found : ${errorMessage.value}");
+      LoggerUtils.error("Error Found💩💩💩💩💩 : ${errorMessage.value}");
     } finally {
       isLoading.value = false;
     }
@@ -51,5 +51,5 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
 
   String get dailyConsumableCalories =>
       model.value?.data?.totalDailyCalories.toString() ??
-      'Failed to Get Total Daily Consumable Calories!';
+      'Failed to Get Daily Total \nConsumable Calories!';
 }
