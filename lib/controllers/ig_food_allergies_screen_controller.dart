@@ -12,7 +12,7 @@ class IgFoodAllergiesScreenController extends GetxController {
   var isAllegiesTextFieldNotEmpty = false.obs;
 
   ///-------->>> Food List
-  RxList<String> alleriesFoodList = <String>[].obs;
+  RxList<String> allergiesFoodList = <String>[].obs;
 
   Timer? _debounceTimer; // For debouncing save operations
 
@@ -42,7 +42,7 @@ class IgFoodAllergiesScreenController extends GetxController {
             .toList();
 
         if (loadedAllergies.isNotEmpty) {
-          alleriesFoodList.assignAll(loadedAllergies);
+          allergiesFoodList.assignAll(loadedAllergies);
           LoggerUtils.debug("Loaded saved food allergies: $loadedAllergies");
         }
       }
@@ -54,12 +54,12 @@ class IgFoodAllergiesScreenController extends GetxController {
   /// Save food allergies to storage
   void saveFoodAllergies() {
     try {
-      if (alleriesFoodList.isNotEmpty) {
-        appData.write(kKeyUserFoodAlergisList, alleriesFoodList.toList());
+      if (allergiesFoodList.isNotEmpty) {
+        appData.write(kKeyUserFoodAlergisList, allergiesFoodList.toList());
 
         ///----------->>> Update the controller
         Get.find<InformationGatherMealPlanController>().update();
-        LoggerUtils.debug("Saved food allergies: ${alleriesFoodList.toList()}");
+        LoggerUtils.debug("Saved food allergies: ${allergiesFoodList.toList()}");
       } else {
         // If list is empty, remove from storage
         appData.remove(kKeyUserFoodAlergisList);
@@ -84,8 +84,8 @@ class IgFoodAllergiesScreenController extends GetxController {
   void addAllergiesFoodToList() {
     final food = allergiesFoodController.value.text.trim();
 
-    if (food.isNotEmpty && !alleriesFoodList.contains(food)) {
-      alleriesFoodList.add(food);
+    if (food.isNotEmpty && !allergiesFoodList.contains(food)) {
+      allergiesFoodList.add(food);
       allergiesFoodController.value.clear();
 
       // Save to storage after adding
@@ -95,7 +95,7 @@ class IgFoodAllergiesScreenController extends GetxController {
 
   ///--------------->>> Remove Food Items from the Allergies Food List
   void removeFoodAllergy({required String food}) {
-    alleriesFoodList.remove(food);
+    allergiesFoodList.remove(food);
 
     // Save to storage after removing
     _saveWithDebounce();
@@ -103,7 +103,7 @@ class IgFoodAllergiesScreenController extends GetxController {
 
   /// Clear all food allergies
   void clearAllFoodAllergies() {
-    alleriesFoodList.clear();
+    allergiesFoodList.clear();
     removeFoodAllergiesFromStorage();
   }
 

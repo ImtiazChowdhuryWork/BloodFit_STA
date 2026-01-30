@@ -3,6 +3,7 @@ import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/page_indicator.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/data/controller/information_gather_meal_screen_controller.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/main_goal/presentation/body_shape_main_goal_screen.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_age/presentation/select_age_screen_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_blood_group/presentation/select_blood_group_screen.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_country/presentation/select_country_widget.dart';
@@ -80,6 +81,7 @@ class InformationGatherMealScreen extends StatelessWidget {
                     SelectHeightScreenWidget(),
                     SelectCountryWidget(),
                     SelectDesiredWeightWidget(),
+                    BodySapeMainGoalScreen(),
                     SelectDietWidget(),
                     SelectFooodAllergiesWidget(),
                     SelectDislikeFoodsWidget(),
@@ -252,11 +254,21 @@ class InformationGatherMealScreen extends StatelessWidget {
                 return false;
 
               case 7:
+
+                ///---------->>> Expected Body Shape
+                final expectedBodyShape = appData.read(kKeyExpectedBodyShape);
+                LoggerUtils.debug(
+                  "Expected BodyShape Validatiion : $expectedBodyShape",
+                );
+
+                return expectedBodyShape != null && expectedBodyShape is String;
+
+              case 8:
                 final diet = appData.read(kKeyUserDietType);
                 LoggerUtils.debug("Diet validation: $diet");
                 return diet != null && diet is String;
-              case 8:
               case 9:
+              case 10:
                 // For food allergies and dislikes, they might be optional
                 LoggerUtils.debug("Food allergies/dislikes - optional");
                 return true;
@@ -320,6 +332,16 @@ class InformationGatherMealScreen extends StatelessWidget {
     );
     LoggerUtils.debug(
       "User Country Name: ${appData.read(kKeyUserCountryName)}",
+    );
+    LoggerUtils.debug(
+      "User Desired Weight With Unit : ${appData.read(kKeyDesiredWeight)}",
+    );
+    LoggerUtils.debug(
+      "User Desired Weight without Unit : ${appData.read(kKeyDesiredWeightWithoutUnit)}",
+    );
+
+    LoggerUtils.debug(
+      "User Expected Body Shape : ${appData.read(kKeyExpectedBodyShape)}",
     );
     LoggerUtils.debug(
       "User DietType from Storage: ${appData.read(kKeyUserDietType)}",

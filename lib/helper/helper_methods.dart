@@ -160,6 +160,9 @@ bool removeAllSavedDataToLocalStorageForInformationGatherMealPlan() {
     ///---------->>> Remove Desired Weight (With Unit)
     appData.remove(kKeyDesiredWeight);
 
+    ///--------->>> Remove Expected Body Shape
+    appData.remove(kKeyExpectedBodyShape);
+
     ///--------->>> Remove Desired Weight (Withhout Unit)
     appData.remove(kKeyDesiredWeightWithoutUnit);
 
@@ -198,6 +201,7 @@ bool removeAllSavedDataToLocalStorageForInformationGatherMealPlan() {
         appData.read(kKeyUserFoodAlergisList) == null &&
         appData.read(kKeyUserDislLikeFoodList) == null &&
         appData.read(kKeyDesiredWeight) == null &&
+        appData.read(kKeyExpectedBodyShape) == null &&
         appData.read('${kKeyDesiredWeightWithoutUnit}_unit') == null;
 
     LoggerUtils.debug("All data removed successfully: $isAllRemoved");

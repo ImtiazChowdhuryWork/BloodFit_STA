@@ -11,7 +11,7 @@ class InformationGatherMealPlanController extends GetxController
   final RxInt currentIndex = 0.obs;
 
   @override
-  final int totalPages = 10;
+  final int totalPages = 11;
 
   // Reactive variable to trigger button rebuild when data changes
   final RxBool _dataUpdated = false.obs;

@@ -29,7 +29,7 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
           // Optional: Show count of selected allergies
           Obx(
             () => Text(
-              'Selected ${controller.alleriesFoodList.length} item(s)',
+              'Selected ${controller.allergiesFoodList.length} item(s)',
               style: TextFontStyle.headline10w500cfefefeStylePoppins,
             ),
           ),
@@ -64,7 +64,7 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
 
           // Optional: Clear all button
           Obx(() {
-            return controller.alleriesFoodList.isNotEmpty
+            return controller.allergiesFoodList.isNotEmpty
                 ? Column(
                     children: [
                       UIHelper.verticalSpace(10.h),
@@ -87,7 +87,7 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
           }),
 
           Obx(() {
-            return controller.alleriesFoodList.isEmpty
+            return controller.allergiesFoodList.isEmpty
                 ? UIHelper.verticalSpace(40.h)
                 : UIHelper.verticalSpace(20.h);
           }),
@@ -152,11 +152,11 @@ class SelectFooodAllergiesWidget extends StatelessWidget {
           //         );
           // }),
           Obx(() {
-            return controller.alleriesFoodList.isNotEmpty
+            return controller.allergiesFoodList.isNotEmpty
                 ? Wrap(
                     spacing: 12.w,
                     runSpacing: 12.h,
-                    children: controller.alleriesFoodList.map((item) {
+                    children: controller.allergiesFoodList.map((item) {
                       return Material(
                         color: Colors.transparent,
                         child: Stack(
