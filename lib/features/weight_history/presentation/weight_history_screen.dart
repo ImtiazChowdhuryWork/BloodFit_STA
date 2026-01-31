@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/weight_history/presentation/widgets/transformation_timline_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -30,7 +31,14 @@ class WeightHistoryScreen extends StatelessWidget {
             CurrentWeightUpdateWidget(),
             UIHelper.verticalSpace(24.h),
 
-            Image.asset(Assets.images.timelineImage.path),
+            WeightTimelineWidget(
+              entries: [
+                WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
+                WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
+                WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
+                WeightEntry(weight: 65, date: DateTime(2025, 9, 10)),
+              ],
+            ),
             UIHelper.spacerFromBottomNav,
           ],
         ),
