@@ -50,7 +50,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => ChooseFromOurSuggestedMealController(), fenix: true);
     // Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
-    Get.lazyPut(() => MealPlanScreenController());
+    // Get.lazyPut(() => MealPlanScreenController());
     // Get.lazyPut(() => RulerController());
     // Get.lazyPut(() => SliderButtonController());
     Get.lazyPut(() => InformationGatherMealPlanController());

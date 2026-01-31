@@ -62,6 +62,12 @@ class AppList {
       labelMapper: (e) => e.label,
     ),
     CardTileOptionModel(
+      imagePath: Assets.icons.mealIcon,
+      titleEnum: ProfileOptionsTitle.mealPlan,
+      route: Routes.mealPlanScreen,
+      labelMapper: (e) => e.label,
+    ),
+    CardTileOptionModel(
       imagePath: Assets.icons.crownIcon,
       titleEnum: ProfileOptionsTitle.subscriptoinType,
       route: Routes.subscriptionScreen,

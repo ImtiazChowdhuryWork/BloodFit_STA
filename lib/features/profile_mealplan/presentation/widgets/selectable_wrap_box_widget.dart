@@ -78,7 +78,7 @@ class SelectableWrapBoxWidget extends StatelessWidget {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          item,
+                          item.substring(0, 3),
                           style: TextFontStyle.headline14w400cfefefeStylePoppins
                               .copyWith(
                                 fontSize: 13.sp,

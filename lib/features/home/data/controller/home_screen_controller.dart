@@ -123,6 +123,7 @@ class HomeScreenController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = e.toString();
+      isSuccess.value = false;
       LoggerUtils.error("Error Found : ${errorMessage.value}");
     } finally {
       isDailyCaloriesLoading.value = false;

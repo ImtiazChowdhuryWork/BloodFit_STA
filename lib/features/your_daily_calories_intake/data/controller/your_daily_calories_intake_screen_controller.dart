@@ -41,6 +41,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
         LoggerUtils.error("Something Went Wrong!");
       }
     } catch (e) {
+      isSuccess.value = true;
       errorMessage.value = e.toString();
       LoggerUtils.error("Status Code : ");
       LoggerUtils.error("Error Found💩💩💩💩💩 : ${errorMessage.value}");

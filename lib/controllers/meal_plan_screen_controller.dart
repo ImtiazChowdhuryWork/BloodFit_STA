@@ -1,6 +1,18 @@
 import 'package:get/get.dart';
 
 class MealPlanScreenController extends GetxController {
+  ///User WorkOut Goal
+  final selectedWorkOutGoal = RxnString();
+  void setUserWorkOutGoal(String? value) {
+    selectedWorkOutGoal.value = value;
+  }
+
+  ///User Desired Weight
+  final selectedDesiredWeight = RxnString();
+  void setUserDesiredWeight(String? value) {
+    selectedDesiredWeight.value = value;
+  }
+
   ///Section : ----------///Select your desired diet type///-----------------
   final selectedDietType = RxnString();
   void setSelectedDietType(String? value) {
