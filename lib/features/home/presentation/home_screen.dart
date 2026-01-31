@@ -82,12 +82,14 @@ class HomeScreen extends StatelessWidget {
                       Obx(() {
                         return TotalKCalWidget(
                           isSuccess: controller.isSuccess.value,
-                          onTap: () {
-                            LoggerUtils.debug(
-                              "Home Calories Datra Reload Taped!",
-                            );
-                            controller.getDailyCaloriesApi();
-                          },
+                          onTap: controller.isSuccess.value || controller.isDailyCaloriesLoading.value
+                              ? null
+                              : () {
+                                  LoggerUtils.debug(
+                                    "Home Calories Datra Reload Taped!",
+                                  );
+                                  controller.getDailyCaloriesApi();
+                                },
                           size: 120.w,
                           progress: 0.75,
                           strokeWidth: 8,

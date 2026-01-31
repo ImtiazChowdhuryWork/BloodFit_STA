@@ -15,6 +15,7 @@ import '../../../controllers/meal_plan_screen_controller.dart';
 import '../../../custom_widgets/custom_drop_down_field_widget.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/colors.gen.dart';
+import '../../fitness/presentation/widgets/fitness_options_drop_down_widget.dart';
 
 class ProfileMealplanScreen extends StatelessWidget {
   ProfileMealplanScreen({super.key});
@@ -67,6 +68,26 @@ class ProfileMealplanScreen extends StatelessWidget {
                     )
                     .toList(),
               ),
+            ),
+            UIHelper.verticalSpace(24.h),
+
+            ///Section : ----------------///Drop Down -> Workout Goal///------------------
+            FitnessOptionsDropDownWidget<String>(
+              selectedValue: controller.selectedWorkOutGoal,
+              dropDownOptionsList: AppList.workoutMainGoalList
+                  .map((data) => data.title)
+                  .toList(),
+              labelText: "What's Your Main Goal?",
+              hintText: "Select your main goal",
+            ),
+            UIHelper.verticalSpace(24.h),
+
+            ///Section : ----------------///Drop Down -> Desired Weight///------------------
+            FitnessOptionsDropDownWidget<String>(
+              selectedValue: controller.selectedDesiredWeight,
+              dropDownOptionsList: AppList.humanWeightsList,
+              labelText: "What's Your Desired Weight?",
+              hintText: "Select your desired weight",
             ),
             UIHelper.verticalSpace(24.h),
 

@@ -46,75 +46,76 @@ class TotalKCalWidget extends StatelessWidget {
       duration: const Duration(milliseconds: 800),
       curve: Curves.easeOutCubic,
       builder: (context, animatedValue, child) {
-        return Column(
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                /// Background circle
-                Container(
-                  width: size - 5,
-                  height: size - 5,
-                  decoration: BoxDecoration(
-                    color: AppColors.c262626,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.cc6c6c6, width: 2.sp),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(Assets.icons.fireIconYellow),
+        return GestureDetector(
+          onTap: onTap,
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  /// Background circle
+                  Container(
+                    width: size - 5,
+                    height: size - 5,
+                    decoration: BoxDecoration(
+                      color: AppColors.c262626,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.cc6c6c6, width: 2.sp),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(Assets.icons.fireIconYellow),
 
-                      UIHelper.verticalSpace(10.h),
+                        UIHelper.verticalSpace(10.h),
 
-                      isSuccess || isLoading
-                          ? Text(
-                              totalCalories,
-                              style: isLoading
-                                  ? TextFontStyle
-                                        .headline20w500cfefefeStylePoppins
-                                        .copyWith(fontSize: 14.sp)
-                                  : TextFontStyle
-                                        .headline20w500cfefefeStylePoppins,
-                            )
-                          : GestureDetector(
-                              onTap: onTap,
-                              child: Icon(
+                        // Show retry icon only when API has failed (not loading and not successful)
+                        !isSuccess && !isLoading
+                            ? Icon(
                                 Icons.replay_rounded,
                                 color: AppColors.cb20000,
+                              )
+                            : Text(
+                                totalCalories,
+                                style: isLoading
+                                    ? TextFontStyle
+                                          .headline20w500cfefefeStylePoppins
+                                          .copyWith(fontSize: 14.sp)
+                                    : TextFontStyle
+                                          .headline20w500cfefefeStylePoppins,
                               ),
-                            ),
-                    ],
-                  ),
-                ),
-
-                /// Custom progress arc with gradient start/end + moving cap
-                SizedBox(
-                  width: size,
-                  height: size,
-                  child: CustomPaint(
-                    painter: _RoundedProgressPainter(
-                      progress: animatedValue,
-                      color: progressColor,
-                      startEndBoldColor: progressBoldColor,
-                      backgroundColor: Colors.transparent,
-                      strokeWidth: strokeWidth.sp,
-                      capSizeMultiplier: capSizeMultiplier,
-                      capColor: capColor,
-                      capPadding: capPadding,
-                      capRadialOffset: capRadialOffset,
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
-            UIHelper.verticalSpace(10.h),
 
-            Text(
-              "Kcal Total",
-              style: TextFontStyle.headline16w500cc6c6c6StylePoppins,
-            ),
-          ],
+                  /// Custom progress arc with gradient start/end + moving cap
+                  SizedBox(
+                    width: size,
+                    height: size,
+                    child: CustomPaint(
+                      painter: _RoundedProgressPainter(
+                        progress: animatedValue,
+                        color: progressColor,
+                        startEndBoldColor: progressBoldColor,
+                        backgroundColor: Colors.transparent,
+                        strokeWidth: strokeWidth.sp,
+                        capSizeMultiplier: capSizeMultiplier,
+                        capColor: capColor,
+                        capPadding: capPadding,
+                        capRadialOffset: capRadialOffset,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              UIHelper.verticalSpace(10.h),
+
+              Text(
+                "Kcal Total",
+                style: TextFontStyle.headline16w500cc6c6c6StylePoppins,
+              ),
+            ],
+          ),
         );
       },
     );

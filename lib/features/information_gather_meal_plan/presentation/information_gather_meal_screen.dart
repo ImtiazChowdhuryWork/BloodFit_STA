@@ -79,9 +79,9 @@ class InformationGatherMealScreen extends StatelessWidget {
                     SelectAgeScreenWidgt(),
                     SelectWeightScreen(),
                     SelectHeightScreenWidget(),
-                    SelectCountryWidget(),
-                    SelectDesiredWeightWidget(),
                     BodySapeMainGoalScreen(),
+                    SelectDesiredWeightWidget(),
+                    SelectCountryWidget(),
                     SelectDietWidget(),
                     SelectFooodAllergiesWidget(),
                     SelectDislikeFoodsWidget(),
@@ -203,9 +203,18 @@ class InformationGatherMealScreen extends StatelessWidget {
                 LoggerUtils.debug("Height is not a number - validation failed");
                 return false;
               case 5:
-                final country = appData.read(kKeyUserCountryName);
-                LoggerUtils.debug("Country validation: $country");
-                return country != null && country is String;
+
+                ///---------->>> Expected Body Shape
+                final expectedBodyShape = appData.read(kKeyExpectedBodyShape);
+                LoggerUtils.debug(
+                  "Expected BodyShape Validatiion : $expectedBodyShape",
+                );
+
+                return expectedBodyShape != null && expectedBodyShape is String;
+              // case 5:
+              // final country = appData.read(kKeyUserCountryName);
+              // LoggerUtils.debug("Country validation: $country");
+              // return country != null && country is String;
               case 6:
 
                 ///-------->>> Desired Weight Widget
@@ -252,16 +261,67 @@ class InformationGatherMealScreen extends StatelessWidget {
                   "Desired Weight is not a number - validation failed",
                 );
                 return false;
+              // case 6:
+
+              //   ///-------->>> Desired Weight Widget
+              //   final desiredWeight = appData.read(
+              //     kKeyDesiredWeightWithoutUnit,
+              //   );
+              //   LoggerUtils.debug("Desired Weight validation: $desiredWeight");
+
+              //   // Check if desired weight exists and is a valid number > 0
+              //   if (desiredWeight == null) {
+              //     LoggerUtils.debug(
+              //       "Desired Weight is null - validation failed",
+              //     );
+              //     return false;
+              //   }
+              //   if (desiredWeight is num) {
+              //     final isValid = desiredWeight > 0;
+              //     LoggerUtils.debug("Desired Weight is num > 0: $isValid");
+
+              //     // Get the desired weight controller to check if user has interacted
+              //     try {
+              //       final desiredWeightController =
+              //           Get.find<IgSelectDesiredWeightWidgetController>();
+              //       final hasInteracted =
+              //           desiredWeightController.hasUserInteracted.value;
+              //       LoggerUtils.debug(
+              //         "User has interacted with Desired weight picker: $hasInteracted",
+              //       );
+
+              //       // Button enabled only if weight is valid AND user has interacted
+              //       final finalResult = isValid && hasInteracted;
+              //       LoggerUtils.debug(
+              //         "Final Desired weight validation result: $finalResult",
+              //       );
+              //       return finalResult;
+              //     } catch (e) {
+              //       LoggerUtils.error(
+              //         "Error getting Desired weight controller: $e",
+              //       );
+              //       return isValid; // Fallback to just checking if desired weight is valid
+              //     }
+              //   }
+              //   LoggerUtils.debug(
+              //     "Desired Weight is not a number - validation failed",
+              //   );
+              //   return false;
 
               case 7:
+                final country = appData.read(kKeyUserCountryName);
+                LoggerUtils.debug("Country validation: $country");
+                return country != null && country is String;
 
-                ///---------->>> Expected Body Shape
-                final expectedBodyShape = appData.read(kKeyExpectedBodyShape);
-                LoggerUtils.debug(
-                  "Expected BodyShape Validatiion : $expectedBodyShape",
-                );
+              // case 7:
 
-                return expectedBodyShape != null && expectedBodyShape is String;
+              //   ///---------->>> Expected Body Shape
+              //   final expectedBodyShape = appData.read(kKeyExpectedBodyShape);
+              //   LoggerUtils.debug(
+              //     "Expected BodyShape Validatiion : $expectedBodyShape",
+              //   );
+
+              //   return expectedBodyShape != null && expectedBodyShape is String;
 
               case 8:
                 final diet = appData.read(kKeyUserDietType);
