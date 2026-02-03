@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/change_password/data/repository/change_password_repository.dart';
+import 'package:bloodfit/helper/custom_toast.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +91,10 @@ class ChangePasswordScreenController extends GetxController {
         "Current Access Token : ${appData.read(kKeyAccessToken)}",
       );
 
+      resetForm();
+
+      CustomToastMessage("Success", "Password Updated Successfully!");
+
       isLoading.value = false;
       return;
     } else {
@@ -100,6 +105,17 @@ class ChangePasswordScreenController extends GetxController {
       );
       isLoading.value = false;
     }
+  }
+
+  /// Add this method
+  void resetForm() {
+    // Clear all text controllers
+    oldPasswordController.clear();
+    newPasswordController.clear();
+    confirmPasswordController.clear();
+
+    // Clear any validation errors
+    errorMessage.value = '';
   }
 
   ///Dispose all controllers when controller is removed from the stack

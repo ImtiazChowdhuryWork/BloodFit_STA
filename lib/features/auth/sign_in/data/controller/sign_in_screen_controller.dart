@@ -69,19 +69,19 @@ class SignInScreenController extends GetxController {
     if (mealPlanSubmissionStatus.value == true) {
       LoggerUtils.debug("Meal Plans Submission Status Found TRUE at Sign In!");
       LoggerUtils.debug(
-        "Meal Plan Status : ${appData.read(kKeyIsMealPlanSubmitted)}",
+        "Meal Plan Submission Status : ${signInmodel.value?.data?.user?.healthDetails}",
       );
       Get.offAllNamed(Routes.navigationScreen);
     } else if (mealPlanSubmissionStatus.value == false) {
       LoggerUtils.error("Meal Plans Submission Status Found FALSE at Sign In!");
       LoggerUtils.error(
-        "Meal Plan Status : ${appData.read(kKeyIsMealPlanSubmitted)}",
+        "Meal Plan Submission Status : ${signInmodel.value?.data?.user?.healthDetails}",
       );
       Get.offAllNamed(Routes.informationGatherMealScreen);
     } else {
       LoggerUtils.error("Meal Plans Submission Status Not Found at Sign In!");
       LoggerUtils.error(
-        "Meal Plan Status : ${appData.read(kKeyIsMealPlanSubmitted)}",
+        "Meal Plan Submission Status : ${signInmodel.value?.data?.user?.healthDetails}",
       );
     }
   }
@@ -126,7 +126,10 @@ class SignInScreenController extends GetxController {
           ///------>> On Success Logging the Saved values
           logTheSavedValues();
 
-          final mealPlanStatus = appData.read(kKeyIsMealPlanSubmitted);
+          // final mealPlanStatus = appData.read(kKeyIsMealPlanSubmitted);
+          final mealPlanInfoSubmissionStatus =
+              signInmodel.value?.data?.user?.healthDetails ?? false;
+          final mealPlanStatus = mealPlanInfoSubmissionStatus;
           getMealPlanInformationSubmissionPlan(
             isMealPlanSubmitted: mealPlanStatus,
           );

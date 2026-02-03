@@ -176,6 +176,7 @@ class ChangePasswordScreen extends StatelessWidget {
                             if (_formKey.currentState!.validate()) {
                               log("Button -> Save Changes Button Taped!");
                               await controller.postChangePasswordApi();
+                              _formKey.currentState?.reset();
                             }
                           },
                     isLoading: controller.isLoading.value,

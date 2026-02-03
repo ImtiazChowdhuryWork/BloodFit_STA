@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../helper/logger_util.dart';
 import '../../../../routes/routes.dart';
+import '../model/generate_meal_plan_model.dart';
 import '../repository/information_gather_meal_repository.dart';
 
 class InformationGatherMealScreenController extends GetxController {
@@ -14,6 +15,9 @@ class InformationGatherMealScreenController extends GetxController {
   InformationGatherMealScreenController(
     this._informationGatherMealPlanRepository,
   );
+
+  ///--------->>> Import Generate Meal Plan Model
+  Rxn<GenerateMealPlanModel> model = Rxn<GenerateMealPlanModel>();
 
   ///---------->>> Global Variables
   RxBool isLoading = false.obs;
@@ -273,10 +277,14 @@ class InformationGatherMealScreenController extends GetxController {
         final isRemoved =
             removeAllSavedDataToLocalStorageForInformationGatherMealPlan();
 
-        ///-------->>> Update the Meal Plan Submission Status
-        appData.write(kKeyIsMealPlanSubmitted, true);
+        model.value = GenerateMealPlanModel.fromJson(response.jsonResponse!);
 
-        final mealPlanStatus = appData.read(kKeyIsMealPlanSubmitted);
+        var data = model.value?.data;
+
+        ///-------->>> Update the Meal Plan Submission Status
+        // appData.write(kKeyIsMealPlanSubmitted, true);
+
+        final mealPlanStatus = data?.healthDetails;
 
         if (isRemoved == true && mealPlanStatus == true) {
           LoggerUtils.debug(
