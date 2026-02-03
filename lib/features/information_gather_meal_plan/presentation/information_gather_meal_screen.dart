@@ -3,7 +3,7 @@ import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/page_indicator.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/data/controller/information_gather_meal_screen_controller.dart';
-import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/main_goal/presentation/body_shape_main_goal_screen.dart';
+import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_desired_body_shape/presentation/select_desired_body_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_age/presentation/select_age_screen_widget.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_blood_group/presentation/select_blood_group_screen.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_country/presentation/select_country_widget.dart';
@@ -79,7 +79,7 @@ class InformationGatherMealScreen extends StatelessWidget {
                     SelectAgeScreenWidgt(),
                     SelectWeightScreen(),
                     SelectHeightScreenWidget(),
-                    BodySapeMainGoalScreen(),
+                    DesiredBodySapeMainGoalScreen(),
                     SelectDesiredWeightWidget(),
                     SelectCountryWidget(),
                     SelectDietWidget(),

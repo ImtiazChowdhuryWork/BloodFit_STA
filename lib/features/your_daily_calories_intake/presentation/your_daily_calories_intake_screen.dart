@@ -105,7 +105,7 @@ class _YourDailyCaloriesIntakeScreenState
                                     ? TextFontStyle
                                           .headline24w700cfefefeStylePoppins
                                     : TextFontStyle
-                                          .headline8w700cfefefeStylePoppins,
+                                          .headline12w500cfefefeStylePoppins,
                               );
                       }),
                       UIHelper.verticalSpace(2.h),

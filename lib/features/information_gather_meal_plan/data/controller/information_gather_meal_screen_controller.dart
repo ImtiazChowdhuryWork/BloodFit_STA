@@ -2,8 +2,6 @@ import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:get/get.dart';
 
-import '../../../../controllers/select_height_screen_controller.dart';
-import '../../../../controllers/weight_picker_widget_controller.dart';
 import '../../../../helper/helper_methods.dart';
 import '../../../../helper/logger_util.dart';
 import '../../../../routes/routes.dart';
@@ -32,11 +30,15 @@ class InformationGatherMealScreenController extends GetxController {
   // RxDouble age = 0.0.obs;
   RxInt ageAtIntValue = 0.obs;
 
-  RxDouble weightAtDoubleValue = 0.0.obs;
+  // RxDouble weightAtDoubleValue = 0.0.obs;
   RxInt weightAtIntValue = 0.obs;
 
-  RxDouble heightAtDoubleValue = 0.0.obs;
+  // RxDouble heightAtDoubleValue = 0.0.obs;
   RxInt heightAtIntValue = 0.obs;
+
+  RxString desiredBodyShape = ''.obs;
+  // RxDouble desiredWeightAtDoubleValue = 0.0.obs;
+  RxInt desiredWeightAtIntValue = 0.obs;
 
   RxString diet = ''.obs;
 
@@ -106,11 +108,38 @@ class InformationGatherMealScreenController extends GetxController {
     return null;
   }
 
+  ///---------->>> Check Selected Desired Body Shape
+  String? userDesiredBodyShapeValidation() {
+    String? value = appData.read(kKeyExpectedBodyShape);
+    if (value == null || value.isEmpty) {
+      LoggerUtils.error("Desired Weight Value from Storage : $value");
+      return '🫥🫥🫥 User Desired Body Shape Not Found!';
+    }
+
+    desiredBodyShape.value = value;
+    LoggerUtils.debug(
+      "✍️✍️✍️✍️ User Desired Body Shape : ${desiredBodyShape.value}",
+    );
+    return null;
+  }
+
+  ///---------->>> Check Selected Desired Body Weight
+  String? userDesiredBodyWeightValidation() {
+    double? value = appData.read(kKeyDesiredWeightWithoutUnit);
+    if (value == null || value <= 0) {
+      return '🥴🥴🥴 Desired Body Weight Not Found!';
+    }
+    desiredWeightAtIntValue.value = value.toInt();
+    LoggerUtils.debug(
+      "✍️✍️✍️✍️ User Desired Body Weight : ${desiredWeightAtIntValue.value}",
+    );
+  }
+
   ///-------->>> Check Selected Country
   String? userCountryValidation() {
     String? value = appData.read(kKeyUserCountryName);
     if (value == null || value.isEmpty) {
-      return '🥴🥴🥴User Country Name Not Found!';
+      return '🥴🥴🥴  User Country Name Not Found!';
     }
     country.value = value;
     LoggerUtils.debug("✍️✍️✍️User Height : ${country.value}");
@@ -131,9 +160,7 @@ class InformationGatherMealScreenController extends GetxController {
   ///-------->>> Check Selected Food Allergies List
   String? userFoodAllergesListValidation() {
     List<dynamic>? value = appData.read(kKeyUserFoodAlergisList);
-    if (value == null) {
-      value = []; // Initialize as empty list if null
-    }
+    value ??= [];
 
     foodAlergiesList.value = value.cast<String>();
     LoggerUtils.debug(
@@ -145,9 +172,7 @@ class InformationGatherMealScreenController extends GetxController {
   ///-------->>> Check Selected Food Dislike List
   String? userDisLikeFoodListValidation() {
     List<dynamic>? value = appData.read(kKeyUserDislLikeFoodList);
-    if (value == null) {
-      value = []; // Initialize as empty list if null
-    }
+    value ??= [];
 
     foodDislikeList.value = value.cast<String>();
     LoggerUtils.debug(
@@ -177,6 +202,16 @@ class InformationGatherMealScreenController extends GetxController {
     ///------->>> User Height Error Message
     final userHeightError = userHeightValidation();
     if (userHeightError != null) return userHeightError;
+
+    ///--------->>> User Desired Body Shape Validation
+    final userDesiredBodyShapeValidationError =
+        userDesiredBodyShapeValidation();
+    if (userDesiredBodyShapeValidationError != null)
+      return userDesiredBodyShapeValidationError;
+
+    ///----------->>> User Desired Weight Error Message
+    final userDesiredWeightError = userDesiredBodyWeightValidation();
+    if (userDesiredWeightError != null) return userDesiredWeightError;
 
     ///-------->>> User Country Name Error Message
     final userCountryNameError = userCountryValidation();
@@ -221,6 +256,8 @@ class InformationGatherMealScreenController extends GetxController {
           age: ageAtIntValue.value,
           weight: weightAtIntValue.value,
           height: heightAtIntValue.value,
+          goal: desiredBodyShape.value,
+          desiredWeight: desiredWeightAtIntValue.value,
           diet: diet.value,
           foodAllergiesList: foodAlergiesList.value,
           foodDislikesList: foodDislikeList.value,
