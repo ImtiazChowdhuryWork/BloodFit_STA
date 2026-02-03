@@ -46,3 +46,5 @@ class WeightHistoryScreen extends StatelessWidget {
     );
   }
 }
+
+

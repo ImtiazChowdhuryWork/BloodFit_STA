@@ -23,8 +23,8 @@ class InformationGatherBodyShapeMainGoalController extends GetxController {
     try {
       final savedBodyShape = appData.read(kKeyExpectedBodyShape);
       if (savedBodyShape != null) {
-        final index = AppList.bodyTypeList.indexWhere(
-          (element) => element.bodyType == savedBodyShape,
+        final index = AppList.workoutMainGoalList.indexWhere(
+          (element) => element.enumValue == savedBodyShape,
         );
         if (index != -1) {
           selectedBodyTypeIndex.value = index;
@@ -46,9 +46,9 @@ class InformationGatherBodyShapeMainGoalController extends GetxController {
     } else {
       // Select the new item
       selectedBodyTypeIndex.value = index;
-      if (index >= 0 && index < AppList.bodyTypeList.length) {
+      if (index >= 0 && index < AppList.workoutMainGoalList.length) {
         selectedBodyTypeTobeSaved.value =
-            AppList.bodyTypeList[selectedBodyTypeIndex.value].bodyType;
+            AppList.workoutMainGoalList[selectedBodyTypeIndex.value].enumValue;
       } else {
         selectedBodyTypeTobeSaved.value = '';
       }
@@ -63,8 +63,8 @@ class InformationGatherBodyShapeMainGoalController extends GetxController {
   // Get the selected body type (optional)
   String? get selectedBodyType {
     if (selectedBodyTypeIndex.value >= 0 &&
-        selectedBodyTypeIndex.value < AppList.bodyTypeList.length) {
-      return AppList.bodyTypeList[selectedBodyTypeIndex.value].bodyType;
+        selectedBodyTypeIndex.value < AppList.workoutMainGoalList.length) {
+      return AppList.workoutMainGoalList[selectedBodyTypeIndex.value].enumValue;
     }
     return null;
   }

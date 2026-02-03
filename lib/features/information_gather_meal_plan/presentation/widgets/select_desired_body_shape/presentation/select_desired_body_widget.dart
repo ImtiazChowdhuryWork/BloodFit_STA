@@ -12,8 +12,8 @@ import '../../../../../../custom_widgets/workout_main_goal_tile.dart';
 import '../../../../../../helper/ui_helpers.dart';
 import '../data/controller/information_gather_body_shape_main_goal_controller.dart';
 
-class BodySapeMainGoalScreen extends StatelessWidget {
-  const BodySapeMainGoalScreen({super.key});
+class DesiredBodySapeMainGoalScreen extends StatelessWidget {
+  const DesiredBodySapeMainGoalScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +32,15 @@ class BodySapeMainGoalScreen extends StatelessWidget {
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: AppList.bodyTypeList.length,
+          itemCount: AppList.workoutMainGoalList.length,
           separatorBuilder: (context, index) => UIHelper.verticalSpace(10.h),
           itemBuilder: (context, index) {
-            var data = AppList.bodyTypeList[index];
+            var data = AppList.workoutMainGoalList[index];
             return Obx(() {
               return WorkoutMainGoalTile(
                 onTap: () {
                   int newIndex = index;
-                  LoggerUtils.debug("Tapped: On bodyType: ${data.bodyType}");
+                  LoggerUtils.debug("Tapped: On bodyType: ${data.title}");
 
                   int previousIndex = controller.selectedBodyTypeIndex.value;
                   controller.selectBodyType(index);
@@ -73,8 +73,8 @@ class BodySapeMainGoalScreen extends StatelessWidget {
                         .triggerButtonUpdate();
                   }
                 },
-                boydType: data.bodyType,
-                bodyImage: data.bodyImage,
+                boydType: data.title,
+                bodyImage: data.imagePath,
                 imageWidth: index == 0 ? 200.w : null,
                 isSelected: controller.isSelected(index),
               );
