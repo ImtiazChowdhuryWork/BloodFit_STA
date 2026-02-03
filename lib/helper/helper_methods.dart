@@ -19,7 +19,7 @@ Future<void> setInitValue() async {
   appData.writeIfNull(kKeyfirstTime, true);
   appData.writeIfNull(kKeySignUpToken, '');
   appData.writeIfNull(kKeyForgotPasswordToken, '');
-  appData.writeIfNull(kKeyIsMealPlanSubmitted, false);
+  // appData.writeIfNull(kKeyIsMealPlanSubmitted, false);
   // Only set isLoggedIn to false if no access token exists
   // This ensures logout state persists
   if (!appData.hasData(kKeyAccessToken)) {

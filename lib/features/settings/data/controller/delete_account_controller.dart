@@ -43,7 +43,7 @@ class DeleteAccountController extends GetxController {
         appData.remove(kKeyUserName);
         appData.remove(kKeyEmail);
         appData.remove(kKeyUserID);
-        appData.remove(kKeyIsMealPlanSubmitted);
+        // appData.remove(kKeyIsMealPlanSubmitted);
 
         ///--------->>> Removed the Information Gather Meal Plan Flow Saved data from Local Storage
         removeAllSavedDataToLocalStorageForInformationGatherMealPlan();

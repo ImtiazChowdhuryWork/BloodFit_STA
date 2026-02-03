@@ -51,8 +51,9 @@ class User {
   String? name;
   String? email;
   String? role;
+  bool? healthDetails;
 
-  User({this.id, this.name, this.email, this.role});
+  User({this.id, this.name, this.email, this.role, this.healthDetails});
 
   factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
 
@@ -63,6 +64,7 @@ class User {
     name: json["name"],
     email: json["email"],
     role: json["role"],
+    healthDetails: json["healthDetails"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -70,5 +72,6 @@ class User {
     "name": name,
     "email": email,
     "role": role,
+    "healthDetails": healthDetails,
   };
 }
