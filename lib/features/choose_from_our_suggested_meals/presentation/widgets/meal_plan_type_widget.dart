@@ -1,4 +1,4 @@
-import 'package:bloodfit/controllers/choose_from_our_suggested_meal_controller.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../controllers/calendar_controller.dart';
-import '../controllers/choose_from_our_suggested_meal_controller.dart';
+import '../features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/enums_controller.dart';
 import '../features/faq/data/controller/faq_screen_controller.dart';

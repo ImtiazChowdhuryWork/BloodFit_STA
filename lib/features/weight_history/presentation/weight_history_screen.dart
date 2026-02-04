@@ -1,3 +1,4 @@
+import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/weight_history/presentation/widgets/transformation_timline_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -15,36 +16,42 @@ class WeightHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ///Section : ---------------------///AppLogo///-----------
-            ///Section : ---------------------///Notification///-----------
-            ///Section : ---------------------///Profile///-----------
-            AppBarSectionWidget(),
-            UIHelper.verticalSpace(20.h),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ///Section : ---------------------///AppLogo///-----------
+              ///Section : ---------------------///Notification///-----------
+              ///Section : ---------------------///Profile///-----------
+              AppBarSectionWidget(),
+              UIHelper.verticalSpace(20.h),
 
-            ///Section : ----------------///Text -> update your current weight///------------
-            ///Section : --------------///Weight Drop Down///----------
-            CurrentWeightUpdateWidget(),
-            UIHelper.verticalSpace(24.h),
+              ///Section : ----------------///Text -> update your current weight///------------
+              ///Section : --------------///Weight Drop Down///----------
+              CurrentWeightUpdateWidget(),
+              UIHelper.verticalSpace(24.h),
 
-            WeightTimelineWidget(
-              entries: [
-                WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
-                WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
-                WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
-                WeightEntry(weight: 65, date: DateTime(2025, 9, 10)),
-              ],
-            ),
-            UIHelper.spacerFromBottomNav,
-          ],
+              Text(
+                "Your Transformation Timeline",
+                style: TextFontStyle.headline20w500cfefefeStylePoppins,
+              ),
+              UIHelper.verticalSpace(16.h),
+
+              WeightTimelineWidget(
+                entries: [
+                  WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
+                  WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
+                  WeightEntry(weight: 62, date: DateTime(2025, 9, 20)),
+                  WeightEntry(weight: 65, date: DateTime(2025, 9, 10)),
+                ],
+              ),
+              UIHelper.spacerFromBottomNav,
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-

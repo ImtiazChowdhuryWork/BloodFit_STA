@@ -17,7 +17,7 @@ class InformationGatherMealScreenController extends GetxController {
   );
 
   ///--------->>> Import Generate Meal Plan Model
-  Rxn<GenerateMealPlanModel> model = Rxn<GenerateMealPlanModel>();
+  Rxn<SubmittedMealPlanDataModel> model = Rxn<SubmittedMealPlanDataModel>();
 
   ///---------->>> Global Variables
   RxBool isLoading = false.obs;
@@ -277,7 +277,9 @@ class InformationGatherMealScreenController extends GetxController {
         final isRemoved =
             removeAllSavedDataToLocalStorageForInformationGatherMealPlan();
 
-        model.value = GenerateMealPlanModel.fromJson(response.jsonResponse!);
+        model.value = SubmittedMealPlanDataModel.fromJson(
+          response.jsonResponse!,
+        );
 
         var data = model.value?.data;
 
