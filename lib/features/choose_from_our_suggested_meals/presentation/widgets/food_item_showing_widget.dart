@@ -72,27 +72,38 @@ class FoodItemShowingWidget extends StatelessWidget {
           ),
           UIHelper.verticalSpace(8.h),
 
-          Row(
-            mainAxisSize: MainAxisSize.min, // ✅ Row doesn’t stretch
-            children: [
-              /// Food Total Kcal & Serving
-              FoodItemDataHelperWidget(
-                iconPath: Assets.icons.fireRed,
-                title: "Kcal",
-                value: kcalValue,
-              ),
-              UIHelper.horizontalSpace(6.w),
+          SizedBox(
+            width: 1.sw,
 
-              /// Divider
-              Container(width: 2.sp, height: 20.h, color: AppColors.cFFFFFF),
-              UIHelper.horizontalSpace(6.w),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min, // ✅ Row doesn’t stretch
+                children: [
+                  /// Food Total Kcal & Serving
+                  FoodItemDataHelperWidget(
+                    iconPath: Assets.icons.fireRed,
+                    title: "Kcal",
+                    value: kcalValue,
+                  ),
+                  UIHelper.horizontalSpace(6.w),
 
-              FoodItemDataHelperWidget(
-                title: "Person",
-                iconPath: Assets.icons.personIcon,
-                value: personValue,
+                  /// Divider
+                  Container(
+                    width: 2.sp,
+                    height: 20.h,
+                    color: AppColors.cFFFFFF,
+                  ),
+                  UIHelper.horizontalSpace(6.w),
+
+                  FoodItemDataHelperWidget(
+                    title: "Person",
+                    iconPath: Assets.icons.personIcon,
+                    value: personValue,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
