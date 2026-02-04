@@ -1,9 +1,9 @@
+import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../constants/text_font_style.dart';
 import '../../../../custom_widgets/custom_elevated_button.dart';
-import '../../../../custom_widgets/go_back_widget.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
@@ -13,6 +13,8 @@ class CurrentWeightUpdateSuccessAlertBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: AppColors.scaffoldBackgroundColor,
+
       content: Container(
         width: 0.6.sw,
         height: 0.2.sh,
@@ -24,6 +26,14 @@ class CurrentWeightUpdateSuccessAlertBox extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Image.asset(
+              height: 30.h,
+              width: 0.3.sw,
+              fit: BoxFit.contain,
+              Assets.images.appLogo.path,
+            ),
+            UIHelper.verticalSpace(10.h),
+
             /// -------->>> Section : Alert Box Texts
             Text(
               'SUCCESS',
@@ -31,8 +41,9 @@ class CurrentWeightUpdateSuccessAlertBox extends StatelessWidget {
               style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
             ),
             UIHelper.verticalSpace(10.h),
+
             Text(
-              "Congratulations! You have updated your weigght Successfully",
+              "Congratulations! You have updated your weight Successfully",
               textAlign: TextAlign.center,
               style: TextFontStyle.headline18w500cfefefeStylePoppins,
             ),
@@ -44,7 +55,7 @@ class CurrentWeightUpdateSuccessAlertBox extends StatelessWidget {
         CustomElevatedButton(
           buttonTitle: 'Close',
           onTap: () {
-            CustomBackButton();
+            Navigator.of(context).pop(); // This will close the dialog
           },
         ),
       ],
