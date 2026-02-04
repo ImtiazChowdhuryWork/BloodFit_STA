@@ -47,7 +47,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => EnumsController(), fenix: true);
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
     Get.lazyPut(() => CalandarController(), fenix: true);
-    Get.lazyPut(() => ChooseFromOurSuggestedMealController(), fenix: true);
+    // Get.lazyPut(() => ChooseFromOurSuggestedMealController(), fenix: true);
     // Get.lazyPut(() => FaqScreenController());
     Get.lazyPut(() => FitnessScreenController());
     // Get.lazyPut(() => MealPlanScreenController());
