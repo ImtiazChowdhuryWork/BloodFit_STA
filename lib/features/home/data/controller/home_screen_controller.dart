@@ -58,40 +58,6 @@ class HomeScreenController extends GetxController {
     return selectedDaysList.contains(day);
   }
 
-  ///Section : ---------------------///Update Your Current Weight drop down///-------------------
-  var selectedWeightUnit = 'Kg'.obs;
-  TextEditingController weightController = TextEditingController();
-
-  ///Feat : -> Set Value of Weight UnitType
-  void setSelectedWeightUnit({required String unit}) {
-    selectedWeightUnit.value = unit;
-  }
-
-  ///Feat : -> Close the weight controller
-  @override
-  void onClose() {
-    weightController.dispose();
-    super.onClose();
-  }
-
-  ///Feat : -> Show and Hide Submit Button
-  RxBool isWeightAvailable = false.obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    // Initialize based on current text field value
-    isWeightAvailable.value = weightController.text.trim().isNotEmpty;
-  }
-
-  void updateWeightAvailability() {
-    isWeightAvailable.value = weightController.text.trim().isNotEmpty;
-  }
-
-  void setIsWeightAvailableValue({required bool newValue}) {
-    isWeightAvailable.value = newValue;
-  }
-
   ///----------------->>> Is Your Daily Calories Api Section
   RxBool isDailyCaloriesLoading = false.obs;
   RxBool isSuccess = false.obs;

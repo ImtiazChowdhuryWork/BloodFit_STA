@@ -26,6 +26,7 @@ import 'package:bloodfit/features/settings/presentation/settings_screen.dart';
 import 'package:bloodfit/features/subscription/presentation/subscription_screen.dart';
 import 'package:bloodfit/features/terms_and_conditions/presentation/terms_and_conditions_screen.dart';
 import 'package:bloodfit/features/view_profile_sub_type_free/presentation/view_profile_subscription_type_free_screen.dart';
+import 'package:bloodfit/features/weight_history/bindings/weight_history_screen_bindings.dart';
 import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
 import 'package:bloodfit/navigation_screen.dart';
@@ -55,6 +56,7 @@ import '../features/settings/binding/delete_account_binding.dart';
 import '../features/subscription/binding/subscription_plans_binding.dart';
 import '../features/terms_and_conditions/binding/terms_and_conditions_binding.dart';
 import '../features/view_profile_sub_type_free/bindings/view_profile_sub_type_free_binding.dart';
+import '../features/weight_history/presentation/weight_history_screen.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 import '../features/your_daily_calories_intake/bindings/your_daily_calories_intake_bindings.dart';
 
@@ -108,6 +110,7 @@ class Routes {
   // static const String verifyUserScreen = '/verify_user_screen';
   static const String viewProfileSubscriptionTypeFreeScreen =
       '/view_profile_subscription_type_free_screen';
+  static const String weightHistoryScreen = '/weight_history_screen';
 
   static final appRoutes = [
     ///Splash Screen
@@ -451,21 +454,21 @@ class Routes {
       transitionDuration: _duration(),
     ),
 
-    ///verifyUserScreen
-    // GetPage(
-    //   name: verifyUserScreen,
-    //   page: () => VerifyUserScreen(),
-    //   binding: VerifyUserBinding(),
-    //   transition: _transition(),
-    //   customTransition: _customTransition(),
-    //   transitionDuration: _duration(),
-    // ),
-
     ///viewProfileSubscriptionTypeFreeScreen
     GetPage(
       name: viewProfileSubscriptionTypeFreeScreen,
       page: () => ViewProfileSubscriptionTypeFreeScreen(),
       binding: ViewProfileSubTypeFreeBinding(),
+      transition: _transition(),
+      customTransition: _customTransition(),
+      transitionDuration: _duration(),
+    ),
+
+    ///viewProfileSubscriptionTypeFreeScreen
+    GetPage(
+      name: weightHistoryScreen,
+      page: () => WeightHistoryScreen(),
+      binding: WeightHistoryScreenBindings(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

@@ -9,7 +9,7 @@ class EnumsController extends GetxController {
 
   ///Checking -> is MealPlan Not Available
   bool get isMealPlanAvailable =>
-      mealPlanAvailability.value == MealPlanAvailability.mealPlanAvailable;
+      mealPlanAvailability.value == MealPlanAvailability.mealPlanNotAvilable;
 
   void setMealPlanAvailable() {
     mealPlanAvailability.value = MealPlanAvailability.mealPlanAvailable;

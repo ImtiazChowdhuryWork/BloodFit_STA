@@ -38,6 +38,8 @@ final class Endpoints {
     return "$url/auth/account-delete?id=$userId";
   }
 
+  static String updateCurrentWeight() => "$url/health/update-weight";
+
   static String informationGatherMealPlan() => "$url/health/add-health-details";
   static String faq() => "$url/faq/all-faqs";
   static String myProfile() => "$url/auth/my-profile";

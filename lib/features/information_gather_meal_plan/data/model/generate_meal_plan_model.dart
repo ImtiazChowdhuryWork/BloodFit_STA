@@ -1,20 +1,25 @@
 import 'dart:convert';
 
-class GenerateMealPlanModel {
+class SubmittedMealPlanDataModel {
   bool? success;
   int? status;
   String? message;
   Data? data;
 
-  GenerateMealPlanModel({this.success, this.status, this.message, this.data});
+  SubmittedMealPlanDataModel({
+    this.success,
+    this.status,
+    this.message,
+    this.data,
+  });
 
-  factory GenerateMealPlanModel.fromRawJson(String str) =>
-      GenerateMealPlanModel.fromJson(json.decode(str));
+  factory SubmittedMealPlanDataModel.fromRawJson(String str) =>
+      SubmittedMealPlanDataModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory GenerateMealPlanModel.fromJson(Map<String, dynamic> json) =>
-      GenerateMealPlanModel(
+  factory SubmittedMealPlanDataModel.fromJson(Map<String, dynamic> json) =>
+      SubmittedMealPlanDataModel(
         success: json["success"],
         status: json["status"],
         message: json["message"],

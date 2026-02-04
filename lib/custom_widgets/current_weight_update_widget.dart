@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
+import 'package:bloodfit/features/weight_history/data/controller/weight_history_screen_controller.dart';
+import 'package:bloodfit/features/weight_history/presentation/widgets/current_weight_update_success_alertbox.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -15,6 +18,8 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
 
   final HomeScreenController homeScreenController =
       Get.find<HomeScreenController>();
+  final WeightHistoryScreenController weightHistoryScreenController =
+      Get.find<WeightHistoryScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +41,12 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
             children: [
               ///Section : -----------///Text Form Field -> Current Weight Update Widget///--------------
               TextFormField(
-                controller: homeScreenController.weightController,
+                controller: weightHistoryScreenController.weightController,
                 style: TextFontStyle.headline14w700cfefefeStylePoppins,
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   // Update the reactive variable when text changes
-                  homeScreenController.setIsWeightAvailableValue(
+                  weightHistoryScreenController.setIsWeightAvailableValue(
                     newValue: value.trim().isNotEmpty,
                   );
                 },
@@ -88,7 +93,7 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
 
                           isDense: true,
                           dropdownColor: AppColors.c262626,
-                          value: homeScreenController
+                          value: weightHistoryScreenController
                               .selectedWeightUnit
                               .value, // default value
                           icon: Icon(
@@ -106,7 +111,7 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
                             );
                           }).toList(),
                           onChanged: (value) {
-                            homeScreenController.setSelectedWeightUnit(
+                            weightHistoryScreenController.setSelectedWeightUnit(
                               unit: value ?? "",
                             );
                           },
@@ -119,14 +124,33 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
 
               /// Only show the button and spacing when weight is available
               Obx(() {
-                return homeScreenController.isWeightAvailable.value
+                return weightHistoryScreenController.isWeightAvailable.value
                     ? Column(
                         children: [
                           UIHelper.verticalSpace(14.h),
                           CustomElevatedButton(
-                            onTap: () {
-                              log("Button Taped : Submit Button!");
-                            },
+                            onTap:
+                                weightHistoryScreenController
+                                    .isUpdateCurrentWeightLoading
+                                    .value
+                                ? null
+                                : () async {
+                                    LoggerUtils.debug(
+                                      "Button Taped : Submit Button!",
+                                    );
+                                    final success =
+                                        await weightHistoryScreenController
+                                            .postUpdateCurrentWeightApi();
+
+                                    if (success) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CurrentWeightUpdateSuccessAlertBox();
+                                        },
+                                      );
+                                    }
+                                  },
                             buttonHeight: 32.h,
                             buttonColor: AppColors.c111111,
                             isButtonBorderUsed: true,
