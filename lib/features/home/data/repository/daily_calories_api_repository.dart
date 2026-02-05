@@ -11,7 +11,7 @@ class DailyCaloriesApiRepository {
   Future<NetworkResponse> dailyCaloriesApiRepository() async {
     String? authToken = appData.read(kKeyAccessToken) ?? '';
     return _networkCaller.getRequest(
-      Endpoints.dailyCaloriesIntake(),
+      Endpoints.getCalorieRequirements(),
       headers: authToken.isNotEmpty
           ? {'Authorization': 'Bearer $authToken'}
           : null,

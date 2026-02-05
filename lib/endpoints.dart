@@ -33,7 +33,7 @@ final class Endpoints {
   static String termsAndConditions() => "$url/terms/";
   static String privacyPolicy() => "$url/privacy/";
   static String reportAProblem() => "$url/report/create-report";
-  static String dailyCaloriesIntake() => "$url/ai-meal/daily-calorie-intake";
+  static String getCalorieRequirements() => "$url/calorie/calorie-requirement";
   static String deleteAccount({required String userId}) {
     return "$url/auth/account-delete?id=$userId";
   }
