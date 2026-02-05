@@ -2,14 +2,14 @@ import 'package:bloodfit/features/your_daily_calories_intake/data/repository/you
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
-import '../model/your_daily_calories_intak_model.dart';
+import '../model/get_calorie_requirements_model.dart';
 
 class YourDailyCaloriesIntakeScreenController extends GetxController {
   ///---------->>> Section : Importing the repository
   final YourDailyCaloriesIntakeScreenRepository
   _yourDailyCaloriesIntakeScreenRepository;
-  final Rxn<YourDailyCaloriesIntakeModel> model =
-      Rxn<YourDailyCaloriesIntakeModel>();
+  final Rxn<GetCalorieRequirementsModel> model =
+      Rxn<GetCalorieRequirementsModel>();
   YourDailyCaloriesIntakeScreenController(
     this._yourDailyCaloriesIntakeScreenRepository,
   );
@@ -31,7 +31,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
 
       if (response.statusCode == 200 && response.isSuccess) {
         isSuccess.value = true;
-        final data = YourDailyCaloriesIntakeModel.fromJson(
+        final data = GetCalorieRequirementsModel.fromJson(
           response.jsonResponse!,
         );
         model.value = data;
@@ -51,6 +51,6 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
   }
 
   String get dailyConsumableCalories =>
-      model.value?.data?.totalDailyCalories.toString() ??
+      model.value?.data?.calorieRequirement?.totalCalorie.toString() ??
       'Failed to Get Daily Total \nConsumable Calories!';
 }

@@ -12,7 +12,7 @@ class YourDailyCaloriesIntakeScreenRepository {
     String? authToken = appData.read(kKeyAccessToken) ?? '';
 
     return await _networkCaller.getRequest(
-      Endpoints.dailyCaloriesIntake(),
+      Endpoints.getCalorieRequirements(),
       headers: authToken.isNotEmpty
           ? {'Authorization': 'Bearer $authToken'}
           : null,

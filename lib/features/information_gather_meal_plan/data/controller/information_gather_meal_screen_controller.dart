@@ -137,6 +137,7 @@ class InformationGatherMealScreenController extends GetxController {
     LoggerUtils.debug(
       "✍️✍️✍️✍️ User Desired Body Weight : ${desiredWeightAtIntValue.value}",
     );
+    return null;
   }
 
   ///-------->>> Check Selected Country

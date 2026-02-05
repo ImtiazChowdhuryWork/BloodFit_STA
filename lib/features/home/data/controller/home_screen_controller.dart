@@ -4,7 +4,7 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../your_daily_calories_intake/data/model/your_daily_calories_intak_model.dart';
+import '../../../your_daily_calories_intake/data/model/get_calorie_requirements_model.dart';
 import '../repository/daily_calories_api_repository.dart';
 
 class HomeScreenController extends GetxController {
@@ -12,7 +12,7 @@ class HomeScreenController extends GetxController {
   DailyCaloriesApiRepository _dailyCaloriesApiRepository;
 
   ///----------->>> Section : Importing the Model
-  Rxn<YourDailyCaloriesIntakeModel> model = Rxn<YourDailyCaloriesIntakeModel>();
+  Rxn<GetCalorieRequirementsModel> model = Rxn<GetCalorieRequirementsModel>();
 
   HomeScreenController(this._dailyCaloriesApiRepository);
 
@@ -76,9 +76,7 @@ class HomeScreenController extends GetxController {
 
       if (response.statusCode == 200 && response.isSuccess) {
         LoggerUtils.debug("Daily Calories Data Fetched Successfully!");
-        var data = YourDailyCaloriesIntakeModel.fromJson(
-          response.jsonResponse!,
-        );
+        var data = GetCalorieRequirementsModel.fromJson(response.jsonResponse!);
 
         model.value = data;
         isSuccess.value = true;
@@ -97,10 +95,9 @@ class HomeScreenController extends GetxController {
   }
 
   String get totalCalories =>
-      model.value?.data?.totalDailyCalories.toString() ?? '';
-  int get consumedCarbs =>
-      model.value?.data?.totalDailyMacronutrients?.carbohydrates ?? 0;
+      model.value?.data?.calorieRequirement?.totalCalorie.toString() ?? '0';
+  int get consumedCarbs => model.value?.data?.calorieRequirement?.carbs ?? 0;
   int get consumedProtein =>
-      model.value?.data?.totalDailyMacronutrients?.protein ?? 0;
-  int get consumedFat => model.value?.data?.totalDailyMacronutrients?.fat ?? 0;
+      model.value?.data?.calorieRequirement?.protein ?? 0;
+  int get consumedFat => model.value?.data?.calorieRequirement?.fat ?? 0;
 }
