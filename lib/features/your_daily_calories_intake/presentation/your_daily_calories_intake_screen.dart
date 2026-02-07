@@ -24,18 +24,28 @@ class YourDailyCaloriesIntakeScreen extends StatefulWidget {
 
 class _YourDailyCaloriesIntakeScreenState
     extends State<YourDailyCaloriesIntakeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    YourDailyCaloriesIntakeScreenController controller =
-        Get.find<YourDailyCaloriesIntakeScreenController>();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   controller.setUserEmailValue(email: email);
-    // });
+
+      late YourDailyCaloriesIntakeScreenController controller;
+      @override
+  void initState() {
+    controller = Get.find<YourDailyCaloriesIntakeScreenController>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getYourDailyCaloriesIntakeApi();
     });
+    super.initState();
+  }
+
+      
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
 
@@ -58,7 +68,7 @@ class _YourDailyCaloriesIntakeScreenState
 
               ///Section : ---------///Text-> to achieve your goal you should consume 1500 calories everyday///-------
               Text(
-                "To Achieve Your Goal You Should Consume 1500 Calories Everyday",
+                "To Achieve Your Goal You Should Consume ${controller.dailyConsumableCalories} Calories Everyday",
                 textAlign: TextAlign.center,
                 style: TextFontStyle.headline18w500c999999StylePoppins,
               ),
@@ -123,8 +133,12 @@ class _YourDailyCaloriesIntakeScreenState
                   ),
                 ),
               ),
+              UIHelper.verticalSpace(10.h),
               Spacer(),
 
+
+
+              ///------->>> Section : Navigation Button to Home Screen
               Obx(() {
                 return CustomElevatedButton(
                   onTap: controller.isLoading.value
