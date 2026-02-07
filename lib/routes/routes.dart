@@ -59,6 +59,7 @@ import '../features/view_profile_sub_type_free/bindings/view_profile_sub_type_fr
 import '../features/weight_history/presentation/weight_history_screen.dart';
 import '../features/welcome/presentation/welcome_screen.dart';
 import '../features/your_daily_calories_intake/bindings/your_daily_calories_intake_bindings.dart';
+import '../navigation_screen_binding.dart';
 
 class Routes {
   ///Section : Common Screens Routing
@@ -376,7 +377,7 @@ class Routes {
     GetPage(
       name: navigationScreen,
       page: () => NavigationScreen(),
-      binding: HomeScreenBindings(),
+      binding: NavigationBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -395,6 +396,7 @@ class Routes {
     GetPage(
       name: chooseFromOurSuggestedMealsScreen,
       page: () => ChooseFromOurSuggestedMealsScreen(),
+      binding: HomeScreenBindings(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

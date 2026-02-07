@@ -12,7 +12,7 @@ class MealPlanItemCard extends StatelessWidget {
   final String mealImagePath;
   final String mealTitle;
   final String mealType;
-  final double kcalValue;
+  final int kcalValue;
   final bool showSectionTitle;
   final String leftButtonTitle;
   final Color? leftButtonColor;
@@ -78,7 +78,7 @@ class MealPlanItemCard extends StatelessWidget {
                       Positioned(
                         left: -50.w, // half of the image width
                         top: -16.h, // optional vertical adjustment
-                        child: Image.asset(
+                        child: Image.network(
                           mealImagePath,
                           width: 143.w, // increase image width
                           height: 140.h, // increase image height

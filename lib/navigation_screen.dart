@@ -27,25 +27,25 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
   late PageController _pageController;
 
-  void _initializeControllers() {
-    ///------------>>> Section : Check if HomeScreenController is registered, if not, register it
-    if (!Get.isRegistered<HomeScreenController>()) {
-      // Make sure dependencies are ready
-      if (!Get.isRegistered<DailyCaloriesApiRepository>()) {
-        Get.lazyPut(() => DailyCaloriesApiRepository(Get.find()));
-      }
-      Get.lazyPut(() => HomeScreenController(Get.find()), fenix: true);
-    }
+  // void _initializeControllers() {
+  //   ///------------>>> Section : Check if HomeScreenController is registered, if not, register it
+  //   if (!Get.isRegistered<HomeScreenController>()) {
+  //     // Make sure dependencies are ready
+  //     if (!Get.isRegistered<DailyCaloriesApiRepository>()) {
+  //       Get.lazyPut(() => DailyCaloriesApiRepository(Get.find()));
+  //     }
+  //     Get.lazyPut(() => HomeScreenController(Get.find(),Get.find()), fenix: true);
+  //   }
 
-    ///---------->>> Section : Check if CurrentWeightUpdateController is registered, if not, register it
-    if (!Get.isRegistered<WeightHistoryScreenController>()) {
-      // Make sure dependencies are ready
-      if (!Get.isRegistered<UpdateCurrentWeightRepository>()) {
-        Get.lazyPut(() => UpdateCurrentWeightRepository(Get.find()));
-      }
-      Get.lazyPut(() => WeightHistoryScreenController(Get.find()), fenix: true);
-    }
-  }
+  //   ///---------->>> Section : Check if CurrentWeightUpdateController is registered, if not, register it
+  //   if (!Get.isRegistered<WeightHistoryScreenController>()) {
+  //     // Make sure dependencies are ready
+  //     if (!Get.isRegistered<UpdateCurrentWeightRepository>()) {
+  //       Get.lazyPut(() => UpdateCurrentWeightRepository(Get.find()));
+  //     }
+  //     Get.lazyPut(() => WeightHistoryScreenController(Get.find()), fenix: true);
+  //   }
+  // }
 
   // Remove MealScannerScreen from pages - it will be a separate screen
   final List<Widget> _pages = [
@@ -61,7 +61,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
-    _initializeControllers();
+    // _initializeControllers();
   }
 
   @override

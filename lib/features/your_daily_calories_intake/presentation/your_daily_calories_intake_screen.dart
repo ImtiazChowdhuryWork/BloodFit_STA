@@ -67,11 +67,15 @@ class _YourDailyCaloriesIntakeScreenState
               UIHelper.verticalSpace(16.h),
 
               ///Section : ---------///Text-> to achieve your goal you should consume 1500 calories everyday///-------
-              Text(
-                "To Achieve Your Goal You Should Consume ${controller.dailyConsumableCalories} Calories Everyday",
+              Obx((){
+                return Text(
+                "To Achieve Your Goal You Should Consume ${
+                  controller.isLoading.value ? "Loading..." :
+                  controller.dailyCaloriesText.value} Calories Everyday",
                 textAlign: TextAlign.center,
                 style: TextFontStyle.headline18w500c999999StylePoppins,
-              ),
+              );
+              }),
               UIHelper.verticalSpace(188.h),
 
               ///Section : -------------///Calories Circle///----------
@@ -109,7 +113,7 @@ class _YourDailyCaloriesIntakeScreenState
                                 ],
                               )
                             : Text(
-                                controller.dailyConsumableCalories,
+                                controller.dailyCaloriesText.value,
                                 textAlign: TextAlign.center,
                                 style: controller.isSuccess.value
                                     ? TextFontStyle

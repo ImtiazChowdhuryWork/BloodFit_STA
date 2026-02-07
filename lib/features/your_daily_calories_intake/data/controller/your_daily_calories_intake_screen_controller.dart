@@ -21,6 +21,9 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
     errorMessage.value = '';
   }
 
+
+  RxString dailyCaloriesText = ''.obs;
+
   
 
 
@@ -53,6 +56,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
           response.jsonResponse!,
         );
         model.value = data;
+        dailyCaloriesText.value = model.value?.data?.calorieRequirement?.totalCalorie.toString() ?? 'Failed to Get Daily Total Consumable Calories!';
         
         // Debug the parsed data
         LoggerUtils.debug("=== PARSED DATA ===");
@@ -62,7 +66,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
         LoggerUtils.debug("TotalCalorie: ${model.value?.data?.calorieRequirement?.totalCalorie}");
         
         // Test the getter
-        LoggerUtils.debug("dailyConsumableCalories getter returns: $dailyConsumableCalories");
+        LoggerUtils.debug("dailyConsumableCalories getter returns: $dailyCaloriesText");
         
         LoggerUtils.debug("Success : Daily Calories Consumable Data Found!");
       } catch (parseError) {
@@ -90,7 +94,7 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
   }
 }
 
-  String get dailyConsumableCalories =>
-      model.value?.data?.calorieRequirement?.totalCalorie.toString() ??
-      'Failed to Get Daily Total \nConsumable Calories!';
+  // String get dailyConsumableCalories =>
+  //     model.value?.data?.calorieRequirement?.totalCalorie.toString() ??
+  //     'Failed to Get Daily Total \nConsumable Calories!';
 }
