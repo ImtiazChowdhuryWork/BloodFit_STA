@@ -24,18 +24,28 @@ class YourDailyCaloriesIntakeScreen extends StatefulWidget {
 
 class _YourDailyCaloriesIntakeScreenState
     extends State<YourDailyCaloriesIntakeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    YourDailyCaloriesIntakeScreenController controller =
-        Get.find<YourDailyCaloriesIntakeScreenController>();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   controller.setUserEmailValue(email: email);
-    // });
+
+      late YourDailyCaloriesIntakeScreenController controller;
+      @override
+  void initState() {
+    controller = Get.find<YourDailyCaloriesIntakeScreenController>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getYourDailyCaloriesIntakeApi();
     });
+    super.initState();
+  }
+
+      
+
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
 
@@ -57,11 +67,15 @@ class _YourDailyCaloriesIntakeScreenState
               UIHelper.verticalSpace(16.h),
 
               ///Section : ---------///Text-> to achieve your goal you should consume 1500 calories everyday///-------
-              Text(
-                "To Achieve Your Goal You Should Consume 1500 Calories Everyday",
+              Obx((){
+                return Text(
+                "To Achieve Your Goal You Should Consume ${
+                  controller.isLoading.value ? "Loading..." :
+                  controller.dailyCaloriesText.value} Calories Everyday",
                 textAlign: TextAlign.center,
                 style: TextFontStyle.headline18w500c999999StylePoppins,
-              ),
+              );
+              }),
               UIHelper.verticalSpace(188.h),
 
               ///Section : -------------///Calories Circle///----------
@@ -99,7 +113,7 @@ class _YourDailyCaloriesIntakeScreenState
                                 ],
                               )
                             : Text(
-                                controller.dailyConsumableCalories,
+                                controller.dailyCaloriesText.value,
                                 textAlign: TextAlign.center,
                                 style: controller.isSuccess.value
                                     ? TextFontStyle
@@ -123,8 +137,12 @@ class _YourDailyCaloriesIntakeScreenState
                   ),
                 ),
               ),
+              UIHelper.verticalSpace(10.h),
               Spacer(),
 
+
+
+              ///------->>> Section : Navigation Button to Home Screen
               Obx(() {
                 return CustomElevatedButton(
                   onTap: controller.isLoading.value

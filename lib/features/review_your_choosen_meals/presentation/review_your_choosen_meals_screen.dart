@@ -93,7 +93,7 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                         log("Button Taped : Remove");
                         showSwapMealBottomSheet();
                       },
-                      kcalValue: data.kcalValue,
+                      kcalValue: data.kcalValue.toInt(),
                       mealType: data.mealType,
                       mealTitle: data.mealTitle,
 

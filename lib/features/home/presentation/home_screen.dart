@@ -30,9 +30,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeScreenController controller = Get.find<HomeScreenController>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getDailyCaloriesApi();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   controller.getDailyCaloriesApi();
+    //   controller.getTodaysSelectedMealsApi();
+    // });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(

@@ -11,8 +11,9 @@ class EnumsController extends GetxController {
   bool get isMealPlanAvailable =>
       mealPlanAvailability.value == MealPlanAvailability.mealPlanNotAvilable;
 
-  void setMealPlanAvailable() {
+  bool setMealPlanAvailable() {
     mealPlanAvailability.value = MealPlanAvailability.mealPlanAvailable;
+    return true;
   }
 
   void setMealPlanNotAvailable() {

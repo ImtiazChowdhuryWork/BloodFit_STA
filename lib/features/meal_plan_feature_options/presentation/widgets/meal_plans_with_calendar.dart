@@ -55,7 +55,7 @@ class MealPlansWithCalendar extends StatelessWidget {
               },
               mealType: data.mealType,
               mealTitle: data.mealTitle,
-              kcalValue: data.kcalValue,
+              kcalValue: data.kcalValue.toInt(),
               mealImagePath: data.imagePath,
             );
           },

@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-class PreviouslySelectedMealsModel {
+class GetTodaysMealModel {
     bool? success;
     int? status;
     String? message;
     Data? data;
 
-    PreviouslySelectedMealsModel({
+    GetTodaysMealModel({
         this.success,
         this.status,
         this.message,
         this.data,
     });
 
-    factory PreviouslySelectedMealsModel.fromRawJson(String str) => PreviouslySelectedMealsModel.fromJson(json.decode(str));
+    factory GetTodaysMealModel.fromRawJson(String str) => GetTodaysMealModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory PreviouslySelectedMealsModel.fromJson(Map<String, dynamic> json) => PreviouslySelectedMealsModel(
+    factory GetTodaysMealModel.fromJson(Map<String, dynamic> json) => GetTodaysMealModel(
         success: json["success"],
         status: json["status"],
         message: json["message"],
@@ -33,9 +33,9 @@ class PreviouslySelectedMealsModel {
 }
 
 class Data {
-    Breakfast? breakfast;
-    Breakfast? lunch;
-    Breakfast? dinner;
+    MealsDataModel? breakfast;
+    MealsDataModel? lunch;
+    MealsDataModel? dinner;
 
     Data({
         this.breakfast,
@@ -48,9 +48,9 @@ class Data {
     String toRawJson() => json.encode(toJson());
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        breakfast: json["breakfast"] == null ? null : Breakfast.fromJson(json["breakfast"]),
-        lunch: json["lunch"] == null ? null : Breakfast.fromJson(json["lunch"]),
-        dinner: json["dinner"] == null ? null : Breakfast.fromJson(json["dinner"]),
+        breakfast: json["breakfast"] == null ? null : MealsDataModel.fromJson(json["breakfast"]),
+        lunch: json["lunch"] == null ? null : MealsDataModel.fromJson(json["lunch"]),
+        dinner: json["dinner"] == null ? null : MealsDataModel.fromJson(json["dinner"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -60,7 +60,7 @@ class Data {
     };
 }
 
-class Breakfast {
+class MealsDataModel {
     String? id;
     String? userId;
     String? mealType;
@@ -74,7 +74,7 @@ class Breakfast {
     String? status;
     int? v;
 
-    Breakfast({
+    MealsDataModel({
         this.id,
         this.userId,
         this.mealType,
@@ -89,11 +89,11 @@ class Breakfast {
         this.v,
     });
 
-    factory Breakfast.fromRawJson(String str) => Breakfast.fromJson(json.decode(str));
+    factory MealsDataModel.fromRawJson(String str) => MealsDataModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory Breakfast.fromJson(Map<String, dynamic> json) => Breakfast(
+    factory MealsDataModel.fromJson(Map<String, dynamic> json) => MealsDataModel(
         id: json["_id"],
         userId: json["userId"],
         mealType: json["mealType"],

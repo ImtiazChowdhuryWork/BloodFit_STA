@@ -1,20 +1,25 @@
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/features/home/data/repository/get_todays_meal_repository.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../controllers/enums_controller.dart';
 import '../../../your_daily_calories_intake/data/model/get_calorie_requirements_model.dart';
+
+import '../model/get_todays_meal_model.dart';
 import '../repository/daily_calories_api_repository.dart';
 
 class HomeScreenController extends GetxController {
   ///--------->>> Section : Importing the Repositories
   DailyCaloriesApiRepository _dailyCaloriesApiRepository;
+  GetTodaysMealRepository _getTodaysMealRepository;
 
   ///----------->>> Section : Importing the Model
   Rxn<GetCalorieRequirementsModel> model = Rxn<GetCalorieRequirementsModel>();
 
-  HomeScreenController(this._dailyCaloriesApiRepository);
+  HomeScreenController(this._dailyCaloriesApiRepository,this._getTodaysMealRepository);
 
   ///Section : ----------------////Selectable Meal Calendar for Meal Plan///----------------------
   RxInt mealCalanderSelectableDays = 3.obs;
@@ -58,7 +63,7 @@ class HomeScreenController extends GetxController {
     return selectedDaysList.contains(day);
   }
 
-  ///----------------->>> Is Your Daily Calories Api Section
+  ///----------------->>> Is Your Daily Calories Api Section Start Here
   RxBool isDailyCaloriesLoading = false.obs;
   RxBool isSuccess = false.obs;
   RxString errorMessage = ''.obs;
@@ -100,4 +105,90 @@ class HomeScreenController extends GetxController {
   int get consumedProtein =>
       model.value?.data?.calorieRequirement?.protein ?? 0;
   int get consumedFat => model.value?.data?.calorieRequirement?.fat ?? 0;
+
+///----------------->>> Is Your Daily Calories Api Section Ends Here
+
+
+
+
+
+  ///-------->>> Section : Todays Selected Meals Api Starts Here
+  final EnumsController enumsController = Get.find<EnumsController>();
+  RxBool isTodaysSelectedMealsLoading = false.obs;
+  RxBool selectedMealPlanAvailable = false.obs;
+  RxString todaysSelectedMealsErrorMessage = ''.obs;
+  void clearTodaysSelectedErrorMessage(){
+    todaysSelectedMealsErrorMessage.value = '';
+  }
+
+  void setSelectedMealPlanAvailableStatusToTrue(){
+    selectedMealPlanAvailable.value = true;
+  }
+
+  Rxn<GetTodaysMealModel> todaysMealModel = Rxn<GetTodaysMealModel>();
+
+  Future<void> getTodaysSelectedMealsApi()async{
+    isTodaysSelectedMealsLoading.value = true;
+    clearTodaysSelectedErrorMessage();
+    final response = await _getTodaysMealRepository.getTodaysMealRepository();
+
+    LoggerUtils.debug("API --->>> Todays Selected Meals Api <<<----- Response ----->>> ${response.jsonResponse}");
+
+    LoggerUtils.debug("😇😇....Get Todays Meas Api Started!");
+    try{
+
+      
+
+      if(response.statusCode == 200 && response.isSuccess){
+        setSelectedMealPlanAvailableStatusToTrue();
+        LoggerUtils.debug("Meals Plan Status : ${enumsController.setMealPlanAvailable()}");
+        LoggerUtils.debug("🤓🤓....Todays Selected Meals Fetched From Server Successfully!");
+        todaysMealModel.value = GetTodaysMealModel.fromJson(response.jsonResponse!);
+
+
+        var data = todaysMealModel.value?.data;
+
+        itemBreakFast.value = data?.breakfast ;
+        itemLunch.value = data?.lunch;
+        itemDinner.value = data?.dinner;
+      }else{
+        todaysSelectedMealsErrorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Something Went Wrong While Fetching the ---->>> Todays Selected Meals <<<-----API!");
+        LoggerUtils.error("Status Code : ${response.statusCode}");
+        
+        LoggerUtils.error("Status Code : $todaysSelectedMealsErrorMessage");
+      }
+
+    }catch(error){
+      todaysSelectedMealsErrorMessage.value = response.errorMessage.toString();
+      LoggerUtils.error("Error Catched On ---->>> Todays Selected Meals Api <<<-----: ");
+      LoggerUtils.debug("Error Found! Status Code : ${response.statusCode}");
+      LoggerUtils.debug("Catched Error : $todaysSelectedMealsErrorMessage");
+      
+    }finally{
+      isTodaysSelectedMealsLoading.value = false;
+    }
+  }
+
+
+  Rxn<MealsDataModel> itemBreakFast = Rxn<MealsDataModel>();
+  Rxn<MealsDataModel> itemLunch = Rxn<MealsDataModel>();
+  Rxn<MealsDataModel> itemDinner = Rxn<MealsDataModel>();
+
+
+  
+  
+  ///-------->>> Section : Todays Selected Meals Api Ends Here
+  
+
+
+
+
+
+  @override
+  void onInit() {
+    getDailyCaloriesApi();
+    getTodaysSelectedMealsApi();
+    super.onInit();
+  }
 }
