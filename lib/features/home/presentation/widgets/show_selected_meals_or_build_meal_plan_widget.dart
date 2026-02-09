@@ -2,16 +2,17 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/endpoints.dart';
-import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../../constants/app_list.dart';
 import '../../../../controllers/enums_controller.dart';
+import '../../../../custom_widgets/meal_network_image_showing_widget.dart';
 import '../../../../custom_widgets/meal_plan_item_card.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -30,15 +31,14 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
     return Obx(() {
       // API Loading State
       if (homeScreenController.isTodaysSelectedMealsLoading.value) {
-        return Center(
-          child: CircularProgressIndicator(
-            color: Colors.red,
-          ),
-        );
+        return Center(child: CircularProgressIndicator(color: Colors.red));
       }
 
       // API Error State
-      if (homeScreenController.todaysSelectedMealsErrorMessage.value.isNotEmpty) {
+      if (homeScreenController
+          .todaysSelectedMealsErrorMessage
+          .value
+          .isNotEmpty) {
         return Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -46,11 +46,14 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               Text(
                 homeScreenController.todaysSelectedMealsErrorMessage.value,
                 textAlign: TextAlign.center,
-              style: TextFontStyle.headline14w500cFFFFFFStylePoppins.copyWith(color: AppColors.cb20000),
+                style: TextFontStyle.headline14w500cFFFFFFStylePoppins.copyWith(
+                  color: AppColors.cb20000,
+                ),
               ),
               UIHelper.verticalSpace(16.h),
               ElevatedButton(
-                onPressed: () => homeScreenController.getTodaysSelectedMealsApi(),
+                onPressed: () =>
+                    homeScreenController.getTodaysSelectedMealsApi(),
                 child: const Text("Retry"),
               ),
             ],
@@ -58,39 +61,100 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
         );
       }
 
-      // If meal plan is available
+      ///------->>> Section : Todays Meal Plan For ("Breakfast", "Lunch", "Dinner")
       if (homeScreenController.selectedMealPlanAvailable.value) {
-        final meals = [
-          homeScreenController.itemBreakFast.value,
-          homeScreenController.itemLunch.value,
-          homeScreenController.itemDinner.value,
-        ];
 
-        return ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: meals.length,
-          separatorBuilder: (context, index) => UIHelper.verticalSpace(24.h),
-          itemBuilder: (context, index) {
-            final meal = meals[index];
-            if (meal == null) return const SizedBox.shrink();
 
-            return MealPlanItemCard(
+        LoggerUtils.debug("Image URL : $imageBaseUrl${homeScreenController.breakFastImage}");
+        
+        ///------->>> Section : Breakfast
+        return Column(
+          children: [
+
+
+            ///------->>> Section : Breakfast
+            MealPlanItemCard(
               leftButtonTitle: "I Ate This",
               leftButtonOnTap: () {
-                log("Button Tapped: I Ate This - ${meal.mealType}");
+                LoggerUtils.debug(
+                  "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                );
               },
               rightButtonTitle: "Swap Meal",
               rightButtonOnTap: () {
-                log("Button Tapped: Swap Meal - ${meal.mealType}");
+                LoggerUtils.debug(
+                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                );
                 showSwapMealBottomSheet();
               },
-              mealType: meal.mealType ?? '',
-              mealTitle: meal.mealType ?? '',
-              kcalValue: meal.caloryCount?[index].kcal ?? 0,
-              mealImagePath: "$imageBaseUrl${meal.image}",
-            );
-          },
+              mealType:
+                  homeScreenController.itemBreakFast.value?.mealType ??
+                  "Failed to Get Meal Type..",
+              mealTitle: homeScreenController.breakfastName ?? '',
+              kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
+              mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
+            ),
+
+
+            ///------->>> Section : Lunch
+            MealPlanItemCard(
+              leftButtonTitle: "I Ate This",
+              leftButtonOnTap: () {
+                LoggerUtils.debug(
+                  "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                );
+              },
+              rightButtonTitle: "Swap Meal",
+              rightButtonOnTap: () {
+                LoggerUtils.debug(
+                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                );
+                showSwapMealBottomSheet();
+              },
+              mealType:
+                  homeScreenController.itemBreakFast.value?.mealType ??
+                  "Failed to Get Meal Type..",
+              mealTitle: homeScreenController.breakfastName ?? '',
+              kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
+              mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
+            ),
+
+
+
+            ///------->>> Section : Dinner
+            MealPlanItemCard(
+              leftButtonTitle: "I Ate This",
+              leftButtonOnTap: () {
+                LoggerUtils.debug(
+                  "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                );
+              },
+              rightButtonTitle: "Swap Meal",
+              rightButtonOnTap: () {
+                LoggerUtils.debug(
+                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                );
+                showSwapMealBottomSheet();
+              },
+              mealType:
+                  homeScreenController.itemBreakFast.value?.mealType ??
+                  "Failed to Get Meal Type..",
+              mealTitle: homeScreenController.breakfastName ?? '',
+              kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
+              mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
+            ),
+
+
+
+            ///------->>> Section : Image Debuger
+            MealNetworkImage(
+  imageUrl: '$imageBaseUrl${homeScreenController.lunchImage}',
+  width: 140.w,
+  height: 140.h,
+  fit: BoxFit.contain,
+)
+
+          ],
         );
       }
 
