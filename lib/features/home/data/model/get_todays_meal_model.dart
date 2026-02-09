@@ -33,9 +33,9 @@ class GetTodaysMealModel {
 }
 
 class Data {
-    MealsDataModel? breakfast;
-    MealsDataModel? lunch;
-    MealsDataModel? dinner;
+    TodaysMealDataModel? breakfast;
+    TodaysMealDataModel? lunch;
+    TodaysMealDataModel? dinner;
 
     Data({
         this.breakfast,
@@ -48,9 +48,9 @@ class Data {
     String toRawJson() => json.encode(toJson());
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        breakfast: json["breakfast"] == null ? null : MealsDataModel.fromJson(json["breakfast"]),
-        lunch: json["lunch"] == null ? null : MealsDataModel.fromJson(json["lunch"]),
-        dinner: json["dinner"] == null ? null : MealsDataModel.fromJson(json["dinner"]),
+        breakfast: json["breakfast"] == null ? null : TodaysMealDataModel.fromJson(json["breakfast"]),
+        lunch: json["lunch"] == null ? null : TodaysMealDataModel.fromJson(json["lunch"]),
+        dinner: json["dinner"] == null ? null : TodaysMealDataModel.fromJson(json["dinner"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -60,9 +60,10 @@ class Data {
     };
 }
 
-class MealsDataModel {
+class TodaysMealDataModel {
     String? id;
     String? userId;
+    String? mealName;
     String? mealType;
     int? kcal;
     String? description;
@@ -74,9 +75,10 @@ class MealsDataModel {
     String? status;
     int? v;
 
-    MealsDataModel({
+    TodaysMealDataModel({
         this.id,
         this.userId,
+        this.mealName,
         this.mealType,
         this.kcal,
         this.description,
@@ -89,13 +91,14 @@ class MealsDataModel {
         this.v,
     });
 
-    factory MealsDataModel.fromRawJson(String str) => MealsDataModel.fromJson(json.decode(str));
+    factory TodaysMealDataModel.fromRawJson(String str) => TodaysMealDataModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory MealsDataModel.fromJson(Map<String, dynamic> json) => MealsDataModel(
+    factory TodaysMealDataModel.fromJson(Map<String, dynamic> json) => TodaysMealDataModel(
         id: json["_id"],
         userId: json["userId"],
+        mealName: json["mealName"],
         mealType: json["mealType"],
         kcal: json["kcal"],
         description: json["description"],
@@ -111,6 +114,7 @@ class MealsDataModel {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "userId": userId,
+        "mealName": mealName,
         "mealType": mealType,
         "kcal": kcal,
         "description": description,

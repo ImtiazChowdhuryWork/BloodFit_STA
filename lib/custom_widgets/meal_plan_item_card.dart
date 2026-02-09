@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -78,8 +79,8 @@ class MealPlanItemCard extends StatelessWidget {
                       Positioned(
                         left: -50.w, // half of the image width
                         top: -16.h, // optional vertical adjustment
-                        child: Image.network(
-                          mealImagePath,
+                        child: CachedNetworkImage(
+                          imageUrl: mealImagePath,
                           width: 143.w, // increase image width
                           height: 140.h, // increase image height
                           fit: BoxFit.contain,

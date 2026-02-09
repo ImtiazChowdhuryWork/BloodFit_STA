@@ -121,8 +121,8 @@ class HomeScreenController extends GetxController {
     todaysSelectedMealsErrorMessage.value = '';
   }
 
-  void setSelectedMealPlanAvailableStatusToTrue(){
-    selectedMealPlanAvailable.value = true;
+  void setSelectedMealPlanAvailableStatus({required bool status}){
+    selectedMealPlanAvailable.value = status;
   }
 
   Rxn<GetTodaysMealModel> todaysMealModel = Rxn<GetTodaysMealModel>();
@@ -130,27 +130,61 @@ class HomeScreenController extends GetxController {
   Future<void> getTodaysSelectedMealsApi()async{
     isTodaysSelectedMealsLoading.value = true;
     clearTodaysSelectedErrorMessage();
-    final response = await _getTodaysMealRepository.getTodaysMealRepository();
+    setSelectedMealPlanAvailableStatus(status: false);
+    
 
-    LoggerUtils.debug("API --->>> Todays Selected Meals Api <<<----- Response ----->>> ${response.jsonResponse}");
+    
 
     LoggerUtils.debug("😇😇....Get Todays Meas Api Started!");
     try{
+      final response = await _getTodaysMealRepository.getTodaysMealRepository();
+      LoggerUtils.debug("API --->>> Todays Selected Meals Api <<<----- Response ----->>> ${response.jsonResponse}");
 
-      
+
+
+      LoggerUtils.debug("Status Code : ${response.statusCode}");
+      LoggerUtils.debug("👁👁👁 IS Success Value : ${response.isSuccess}");
 
       if(response.statusCode == 200 && response.isSuccess){
-        setSelectedMealPlanAvailableStatusToTrue();
-        LoggerUtils.debug("Meals Plan Status : ${enumsController.setMealPlanAvailable()}");
+        
+        
         LoggerUtils.debug("🤓🤓....Todays Selected Meals Fetched From Server Successfully!");
         todaysMealModel.value = GetTodaysMealModel.fromJson(response.jsonResponse!);
 
 
+
+        ///Section : Assigning The Items Values to Specific Models
         var data = todaysMealModel.value?.data;
 
+
         itemBreakFast.value = data?.breakfast ;
+        LoggerUtils.debug("BreakFast Model Data: ${itemBreakFast.value}");
         itemLunch.value = data?.lunch;
+
+        LoggerUtils.debug("Lunch Model Data: ${itemLunch.value}");
         itemDinner.value = data?.dinner;
+
+        LoggerUtils.debug("Dinner Model Data : ${itemDinner.value}");
+
+
+        final isMealNamesFound = 
+          itemBreakFast.value?.mealName?.isNotEmpty == true 
+          && itemLunch.value?.mealName?.isNotEmpty  == true 
+          && itemDinner.value?.mealName?.isNotEmpty == true ;
+
+        if(isMealNamesFound == true){
+          
+        LoggerUtils.debug("👅👅👅Meal Name Found For All Time Of Meals For Today! :: $isMealNamesFound");
+          setSelectedMealPlanAvailableStatus(status: true);
+
+        }else{
+          setSelectedMealPlanAvailableStatus(status: false);
+          LoggerUtils.error("Meals Name Not Found For Todays Meal! SelectedMealPlanAvailable.value ::: ${selectedMealPlanAvailable.value}");
+        }
+
+
+
+
       }else{
         todaysSelectedMealsErrorMessage.value = response.errorMessage.toString();
         LoggerUtils.error("Something Went Wrong While Fetching the ---->>> Todays Selected Meals <<<-----API!");
@@ -160,9 +194,9 @@ class HomeScreenController extends GetxController {
       }
 
     }catch(error){
-      todaysSelectedMealsErrorMessage.value = response.errorMessage.toString();
+      todaysSelectedMealsErrorMessage.value = error.toString();
       LoggerUtils.error("Error Catched On ---->>> Todays Selected Meals Api <<<-----: ");
-      LoggerUtils.debug("Error Found! Status Code : ${response.statusCode}");
+      // LoggerUtils.debug("Error Found! Status Code : ${error}");
       LoggerUtils.debug("Catched Error : $todaysSelectedMealsErrorMessage");
       
     }finally{
@@ -171,9 +205,25 @@ class HomeScreenController extends GetxController {
   }
 
 
-  Rxn<MealsDataModel> itemBreakFast = Rxn<MealsDataModel>();
-  Rxn<MealsDataModel> itemLunch = Rxn<MealsDataModel>();
-  Rxn<MealsDataModel> itemDinner = Rxn<MealsDataModel>();
+  Rxn<TodaysMealDataModel> itemBreakFast = Rxn<TodaysMealDataModel>();
+  Rxn<TodaysMealDataModel> itemLunch = Rxn<TodaysMealDataModel>();
+  Rxn<TodaysMealDataModel> itemDinner = Rxn<TodaysMealDataModel>();
+
+
+  ///----->>> BreakFast Getters
+  String? get breakfastName => itemBreakFast.value?.mealName ?? 'Meal name not found!';
+  int? get breakfastTotalKcal => itemBreakFast.value?.kcal ?? 0;
+  String? get breakFastImage => itemBreakFast.value?.image ?? '';
+
+  ///----->>> Lunch Getters
+  String? get lunchName => itemLunch.value?.mealName ?? 'Meal name not found!';
+  int? get lunchTotalKcal => itemLunch.value?.kcal ?? 0;
+  String? get lunchImage => itemLunch.value?.image ?? '';
+
+  ///----->>> Diner Getters
+  String? get dinerName => itemDinner.value?.mealName ?? 'Meal name not found!';
+  int? get dinerKcal => itemDinner.value?.kcal ?? 0;
+  String? get dinerImage => itemDinner.value?.image ?? '';
 
 
   
