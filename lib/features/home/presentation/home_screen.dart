@@ -20,6 +20,7 @@ import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../custom_widgets/custom_shimmer_effect.dart';
 import 'widgets/custom_calender_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -159,6 +160,13 @@ class HomeScreen extends StatelessWidget {
               /// Not Available only for Free Subscription Type of User///----------
               SelectYourDaysForMealPlanWidget(),
               UIHelper.verticalSpace(32.h),
+
+
+              
+
+
+
+           
 
               ///Section : ----------------///Text -> update your current weight///------------
               ///Section : --------------///Weight Drop Down///----------

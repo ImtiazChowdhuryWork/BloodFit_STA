@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/endpoints.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
+import 'package:bloodfit/features/home/presentation/widgets/meal_showing_widget_shimmer_effect.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -31,7 +33,15 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
     return Obx(() {
       // API Loading State
       if (homeScreenController.isTodaysSelectedMealsLoading.value) {
-        return Center(child: CircularProgressIndicator(color: Colors.red));
+        return ListView.separated(
+          
+          itemCount: 3,
+          separatorBuilder: (context,index)=> UIHelper.verticalSpace(20.h), 
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context,index){
+          return MealShowingWidgetShimmerEffect();
+        }, );
       }
 
       // API Error State
@@ -88,7 +98,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                 showSwapMealBottomSheet();
               },
               mealType:
-                  homeScreenController.itemBreakFast.value?.mealType ??
+                  homeScreenController.itemBreakFast.value?.mealType?.capitalizeFirst ??
                   "Failed to Get Meal Type..",
               mealTitle: homeScreenController.breakfastName ?? '',
               kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
@@ -112,11 +122,11 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                 showSwapMealBottomSheet();
               },
               mealType:
-                  homeScreenController.itemBreakFast.value?.mealType ??
+                  homeScreenController.itemLunch.value?.mealType?.capitalizeFirst ??
                   "Failed to Get Meal Type..",
-              mealTitle: homeScreenController.breakfastName ?? '',
-              kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
-              mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
+              mealTitle: homeScreenController.lunchName ?? '',
+              kcalValue: homeScreenController.lunchTotalKcal ?? 0,
+              mealImagePath: "$imageBaseUrl${homeScreenController.lunchImage}",
             ),
 
 
@@ -126,33 +136,40 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               leftButtonTitle: "I Ate This",
               leftButtonOnTap: () {
                 LoggerUtils.debug(
-                  "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                  "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemDinner.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
               },
               rightButtonTitle: "Swap Meal",
               rightButtonOnTap: () {
                 LoggerUtils.debug(
-                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemDinner.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
                 showSwapMealBottomSheet();
               },
               mealType:
-                  homeScreenController.itemBreakFast.value?.mealType ??
+                  homeScreenController.itemDinner.value?.mealType?.capitalizeFirst ??
                   "Failed to Get Meal Type..",
-              mealTitle: homeScreenController.breakfastName ?? '',
-              kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
-              mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
+              mealTitle: homeScreenController.dinerName ?? '',
+              kcalValue: homeScreenController.dinerKcal ?? 0,
+              mealImagePath: "$imageBaseUrl${homeScreenController.dinerImage}",
             ),
+
+
+            
 
 
 
             ///------->>> Section : Image Debuger
             MealNetworkImage(
-  imageUrl: '$imageBaseUrl${homeScreenController.lunchImage}',
-  width: 140.w,
-  height: 140.h,
-  fit: BoxFit.contain,
-)
+              imageUrl: homeScreenController.lunchImage,
+              width: 140.w,
+              height: 140.h,
+              fit: BoxFit.contain,
+              )
+
+
+
+
 
           ],
         );
