@@ -81,8 +81,8 @@ class MealPlanItemCard extends StatelessWidget {
                         top: -16.h, // optional vertical adjustment
                         child: CachedNetworkImage(
                           imageUrl: mealImagePath,
-                          width: 143.w, // increase image width
-                          height: 140.h, // increase image height
+                          width: 80.w, // increase image width
+                          height: 80.h, // increase image height
                           fit: BoxFit.contain,
                         ),
                       ),
