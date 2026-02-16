@@ -1,3 +1,4 @@
+import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,10 +80,10 @@ class MealPlanItemCard extends StatelessWidget {
                       Positioned(
                         left: -50.w, // half of the image width
                         top: -16.h, // optional vertical adjustment
-                        child: CachedNetworkImage(
+                        child: MealNetworkImage(
                           imageUrl: mealImagePath,
-                          width: 80.w, // increase image width
-                          height: 80.h, // increase image height
+                          width: 140.w,
+                          height: 140.h,
                           fit: BoxFit.contain,
                         ),
                       ),

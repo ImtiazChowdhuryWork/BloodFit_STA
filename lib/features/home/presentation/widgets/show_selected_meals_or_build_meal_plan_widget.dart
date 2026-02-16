@@ -160,12 +160,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
 
             ///------->>> Section : Image Debuger
-            MealNetworkImage(
-              imageUrl: homeScreenController.lunchImage,
-              width: 140.w,
-              height: 140.h,
-              fit: BoxFit.contain,
-              )
+            
 
 
 

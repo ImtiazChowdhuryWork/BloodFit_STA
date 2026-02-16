@@ -17,6 +17,7 @@ import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -43,7 +44,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ///Section : ---------------------///AppLogo///-----------
+              /// Section : ---------------------///AppLogo///-----------
               ///Section : ---------------------///Notification///-----------
               ///Section : ---------------------///Profile///-----------
               AppBarSectionWidget(),
