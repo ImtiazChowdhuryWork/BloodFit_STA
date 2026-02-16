@@ -14,8 +14,8 @@ class ProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String imageUrl1 = "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg";
-    String imageUrl = "https://faisal5000.merinasib.shop/images/Screenshot_2026-02-05_at_3.53.29_PM.png";
+    // String imageUrl1 = "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg";
+    String imageUrl = "https://images.macrumors.com/t/qZDdMwXMtkbMV4OAonirIWNcn3A=/2500x/article-new/2025/12/Apple-26-Feature.jpg";
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
@@ -32,7 +32,16 @@ class ProgressScreen extends StatelessWidget {
                 child: AppBarSectionWidget(),
               ),
               UIHelper.verticalSpace(20.h),
-              Image.network(imageUrl,height: 100,width: 100,fit: BoxFit.contain,),
+              Container(
+
+                  height: 200.h,
+                  width: 200.w,
+                  padding: EdgeInsets.all(20.sp),
+                  decoration: BoxDecoration(
+                    color: Colors.teal,
+
+                  ),
+                  child: Image.network(imageUrl,height: 180,width: 180,fit: BoxFit.contain,)),
 
               Image.asset(Assets.images.appLogo.path),
               InkWell(

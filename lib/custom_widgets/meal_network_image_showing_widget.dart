@@ -32,8 +32,8 @@ class MealNetworkImage extends StatelessWidget {
 
     // Ensure no double slash
     // ✅ Replace with this
-final base = imageBaseUrl.endsWith('/') 
-    ? imageBaseUrl.substring(0, imageBaseUrl.length - 1) 
+final base = imageBaseUrl.endsWith('/')
+    ? imageBaseUrl.substring(0, imageBaseUrl.length - 1)
     : imageBaseUrl;
     final path = imageUrl!.startsWith('/') ? imageUrl! : '/$imageUrl';
     final resolved = '$base$path';
@@ -120,3 +120,7 @@ final base = imageBaseUrl.endsWith('/')
     );
   }
 }
+
+
+
+
