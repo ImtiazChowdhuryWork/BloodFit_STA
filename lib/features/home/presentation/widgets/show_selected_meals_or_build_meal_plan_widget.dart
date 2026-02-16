@@ -10,8 +10,6 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../../controllers/enums_controller.dart';
 import '../../../../custom_widgets/meal_plan_item_card.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -21,7 +19,7 @@ import '../../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom
 class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
   ShowSelectedMealsOrBuildMealPlanWidget({super.key});
 
-  final EnumsController enumsController = Get.find<EnumsController>();
+  
   final HomeScreenController homeScreenController =
       Get.find<HomeScreenController>();
 
@@ -81,9 +79,12 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
             ///------->>> Section : Breakfast
             MealPlanItemCard(
+              isMealEaten: homeScreenController.breakFastMealEatenStatus == 'not_yet_done' ? false : homeScreenController.breakFastMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
               leftButtonOnTap: () {
+                homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.breakfastMealID ?? '');
                 LoggerUtils.debug(
+                  
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
               },
@@ -106,8 +107,12 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
             ///------->>> Section : Lunch
             MealPlanItemCard(
+              isMealEaten: homeScreenController.lunchMealEatenStatus == 'not_yet_done' ? false : homeScreenController.lunchMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
-              leftButtonOnTap: () {
+              
+              leftButtonOnTap: () async {
+                LoggerUtils.debug("BreakFast Meal ID : ${homeScreenController.lunchMealID} ");
+                await homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.lunchMealID ?? '');
                 LoggerUtils.debug(
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
@@ -132,8 +137,10 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
             ///------->>> Section : Dinner
             MealPlanItemCard(
+              isMealEaten: homeScreenController.dinerMealEatenStatus == 'not_yet_done' ? false : homeScreenController.dinerMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
               leftButtonOnTap: () {
+                homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.dinerMealID ?? '');
                 LoggerUtils.debug(
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemDinner.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );

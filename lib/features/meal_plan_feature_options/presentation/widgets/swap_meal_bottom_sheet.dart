@@ -47,6 +47,7 @@ void showSwapMealBottomSheet() {
                         UIHelper.verticalSpace(16.h),
                     itemBuilder: (context, index) {
                       return MealPlanItemCard(
+                        isMealEaten: false,
                         leftButtonTitle: "Swap This Meal",
                         leftButtonOnTap: () {
                           log("Button Tapped : Swap This Meal");

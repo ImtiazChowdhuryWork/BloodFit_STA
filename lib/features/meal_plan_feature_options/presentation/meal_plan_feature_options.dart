@@ -1,18 +1,12 @@
-import 'dart:developer';
-
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
-import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plans_with_calendar.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../gen/assets.gen.dart';
-import '../../../routes/routes.dart';
 import '../../home/presentation/widgets/app_bar_section_widget.dart';
-import '../../home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import '../../home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
 
 class MealPlanFeatureOptions extends StatelessWidget {

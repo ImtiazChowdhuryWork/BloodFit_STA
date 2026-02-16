@@ -209,16 +209,22 @@ class HomeScreenController extends GetxController {
   String? get breakfastName => itemBreakFast.value?.mealName ?? 'Meal name not found!';
   int? get breakfastTotalKcal => itemBreakFast.value?.kcal ?? 0;
   String? get breakFastImage => itemBreakFast.value?.image ?? '';
+  String? get breakFastMealEatenStatus => itemBreakFast.value?.status ?? '';
+  String? get breakfastMealID => itemBreakFast.value?.id ?? 'Breakfast Meal ID Not Found!';
 
   ///----->>> Lunch Getters
   String? get lunchName => itemLunch.value?.mealName ?? 'Meal name not found!';
   int? get lunchTotalKcal => itemLunch.value?.kcal ?? 0;
   String? get lunchImage => itemLunch.value?.image ?? '';
+  String? get lunchMealEatenStatus => itemLunch.value?.status ?? '';
+  String? get lunchMealID => itemLunch.value?.id ?? 'Lunch Meal ID Not Found!';
 
   ///----->>> Diner Getters
   String? get dinerName => itemDinner.value?.mealName ?? 'Meal name not found!';
   int? get dinerKcal => itemDinner.value?.kcal ?? 0;
   String? get dinerImage => itemDinner.value?.image ?? '';
+  String? get dinerMealEatenStatus => itemDinner.value?.status ?? '';
+  String? get dinerMealID => itemDinner.value?.id ?? 'Diner Meal ID Not Found!';
 
 
   
@@ -258,9 +264,12 @@ class HomeScreenController extends GetxController {
     clearTodaysMealEatenError();
     setTodaysMealEatenStatus(status: false);
 
+
     
 
     try{
+
+      LoggerUtils.debug("Meal ID Received : $mealID");
 
       final response = await _mealConsumptionRepository.updateMealConsumptionRepository(mealID: mealID);
 
@@ -269,6 +278,8 @@ class HomeScreenController extends GetxController {
         setTodaysMealEatenStatus(status: true);
         LoggerUtils.debug("Meals Eaten Status Updated Successfully for Meal ID : $mealID");
 
+        // Refresh the meals data to reflect the updated status
+        await getTodaysSelectedMealsApi();
       }else{
         isTodaysMealEatenHasError.value = response.errorMessage.toString();
         LoggerUtils.error("Something Went Wrong. While UPdating the meal status!");

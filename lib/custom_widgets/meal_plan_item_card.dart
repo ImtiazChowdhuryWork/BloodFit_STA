@@ -1,14 +1,13 @@
 import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../constants/text_font_style.dart';
-import 'custom_elevated_button.dart';
 import '../gen/assets.gen.dart';
 import '../gen/colors.gen.dart';
 import '../helper/ui_helpers.dart';
+import 'custom_elevated_button.dart';
 
 class MealPlanItemCard extends StatelessWidget {
   final String mealImagePath;
@@ -25,6 +24,7 @@ class MealPlanItemCard extends StatelessWidget {
   final Color? rightButtonBorderColor;
   final Color? leftButtonBorderColor;
   final bool isLeftButtonBorderUsed;
+  final bool isMealEaten;
   const MealPlanItemCard({
     super.key,
     required this.mealImagePath,
@@ -40,7 +40,7 @@ class MealPlanItemCard extends StatelessWidget {
     this.leftButtonBorderColor,
     this.isLeftButtonBorderUsed = false,
     this.leftButtonColor,
-    this.leftButtonBorderWidth,
+    this.leftButtonBorderWidth, required this.isMealEaten,
   });
 
   @override
@@ -123,13 +123,24 @@ class MealPlanItemCard extends StatelessWidget {
 
                       /// Section : -----------///Left Button////------------
                       /// Section : ----------///Right Button///-------------
+                      
+                      isMealEaten ? 
+                      CustomElevatedButton(
+                        onTap: null,
+                        // buttonWidth: 100.w,
+                        isDisabled: true,
+                        buttonHeight: 30.h,
+                        buttonColor: AppColors.cc6c6c6,
+                        buttonTitle: 'Meal Consumed',
+                        textStyle: TextFontStyle
+                            .headline12w500c000000StylePoppins,
+                      ) :
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Expanded(
                             child: CustomElevatedButton(
                               onTap: leftButtonOnTap,
-                              // buttonWidth: 100.w,
                               buttonHeight: 34.h,
                               buttonColor: leftButtonColor,
                               isButtonBorderUsed: isLeftButtonBorderUsed,

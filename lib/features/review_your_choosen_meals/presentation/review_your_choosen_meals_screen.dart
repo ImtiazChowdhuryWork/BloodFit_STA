@@ -84,6 +84,7 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var data = AppList.reviewMealList[index];
                     return MealPlanItemCard(
+                      isMealEaten: false,
                       leftButtonTitle: "Details",
                       leftButtonOnTap: () {
                         log("Button Taped : Details");

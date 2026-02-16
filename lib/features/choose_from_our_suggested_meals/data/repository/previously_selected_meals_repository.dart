@@ -8,13 +8,13 @@ class PreviouslySelectedMealsRepository {
   final NetworkCaller _networkCaller;
   PreviouslySelectedMealsRepository(this._networkCaller);
 
-  Future<NetworkResponse> previouslySelectedMealsRepository() async {
+  Future<NetworkResponse> previouslySelectedMealsRepository({required String mealType}) async {
     String? tokenValue = appData.read(kKeyAccessToken) ?? '';
 
     return _networkCaller.getRequest(
-      Endpoints.getPreviouslySelectedMeals(),
+      Endpoints.getPreviouslySelectedMeals(mealType: mealType),
       headers: tokenValue.isNotEmpty
-          ? {'Authorization': 'Bearer $appData'}
+          ? {'Authorization': 'Bearer $tokenValue'}
           : null,
     );
   }

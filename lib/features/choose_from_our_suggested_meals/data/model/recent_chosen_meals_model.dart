@@ -1,68 +1,41 @@
 import 'dart:convert';
 
-class PreviouslySelectedMealsModel {
+class RecentChosenMealsModel {
     bool? success;
     int? status;
     String? message;
-    Data? data;
+    List<Datum>? data;
 
-    PreviouslySelectedMealsModel({
+    RecentChosenMealsModel({
         this.success,
         this.status,
         this.message,
         this.data,
     });
 
-    factory PreviouslySelectedMealsModel.fromRawJson(String str) => PreviouslySelectedMealsModel.fromJson(json.decode(str));
+    factory RecentChosenMealsModel.fromRawJson(String str) => RecentChosenMealsModel.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory PreviouslySelectedMealsModel.fromJson(Map<String, dynamic> json) => PreviouslySelectedMealsModel(
+    factory RecentChosenMealsModel.fromJson(Map<String, dynamic> json) => RecentChosenMealsModel(
         success: json["success"],
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
         "success": success,
         "status": status,
         "message": message,
-        "data": data?.toJson(),
+        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
     };
 }
 
-class Data {
-    Breakfast? breakfast;
-    Breakfast? lunch;
-    Breakfast? dinner;
-
-    Data({
-        this.breakfast,
-        this.lunch,
-        this.dinner,
-    });
-
-    factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
-        breakfast: json["breakfast"] == null ? null : Breakfast.fromJson(json["breakfast"]),
-        lunch: json["lunch"] == null ? null : Breakfast.fromJson(json["lunch"]),
-        dinner: json["dinner"] == null ? null : Breakfast.fromJson(json["dinner"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "breakfast": breakfast?.toJson(),
-        "lunch": lunch?.toJson(),
-        "dinner": dinner?.toJson(),
-    };
-}
-
-class Breakfast {
+class Datum {
     String? id;
     String? userId;
+    String? mealName;
     String? mealType;
     int? kcal;
     String? description;
@@ -74,9 +47,10 @@ class Breakfast {
     String? status;
     int? v;
 
-    Breakfast({
+    Datum({
         this.id,
         this.userId,
+        this.mealName,
         this.mealType,
         this.kcal,
         this.description,
@@ -89,13 +63,14 @@ class Breakfast {
         this.v,
     });
 
-    factory Breakfast.fromRawJson(String str) => Breakfast.fromJson(json.decode(str));
+    factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory Breakfast.fromJson(Map<String, dynamic> json) => Breakfast(
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["_id"],
         userId: json["userId"],
+        mealName: json["mealName"],
         mealType: json["mealType"],
         kcal: json["kcal"],
         description: json["description"],
@@ -111,6 +86,7 @@ class Breakfast {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "userId": userId,
+        "mealName": mealName,
         "mealType": mealType,
         "kcal": kcal,
         "description": description,

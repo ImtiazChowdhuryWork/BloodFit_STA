@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -24,8 +25,33 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   ///---------->>> Section : Boiler Code End
 
   ///--------->>> Section : Previously Selected Meals Api Method Start
+  
 
-  // RxnList<
+  ///--------->>> Section : Recently Selected Items List
+  RxList<Datum> breakfastRecentChosenMeals = <Datum>[].obs;
+RxList<Datum> lunchRecentChosenMeals = <Datum>[].obs;
+RxList<Datum> dinnerRecentChosenMeals = <Datum>[].obs;
+
+
+  ///-------->>> Section : Tab Name
+  RxString selectedTabName = ''.obs;
+  String setSelectedTabName({required int index}) {
+  if (index == 0) {
+    selectedTabName.value = 'breakfast';
+    return selectedTabName.value;
+  } else if (index == 1) {
+    selectedTabName.value = 'lunch';
+    return selectedTabName.value;
+  } else if (index == 2) {
+    selectedTabName.value = 'dinner'; // Fixed typo
+    return selectedTabName.value;
+  } else {
+    LoggerUtils.error(
+      "Given Input is unexpected, Because the index $index has exceeded the tab total index"
+    );
+    return ''; // Return empty string for invalid index
+  }
+}
 
   RxBool isPreviouslySelectedMealsLoading = false.obs;
   RxString errorMessage = ''.obs;
@@ -34,32 +60,43 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   }
 
   Future<void> getPreviouslySelectedMeals() async {
-    clearErrorMessage();
-    isPreviouslySelectedMealsLoading.value = true;
+  clearErrorMessage();
+  isPreviouslySelectedMealsLoading.value = true;
 
-    final responses = await _previouslySelectedMealsRepository
-        .previouslySelectedMealsRepository();
+  try {
+    final responses =
+        await _previouslySelectedMealsRepository.previouslySelectedMealsRepository(
+      mealType: selectedTabName.value,
+    );
 
-    try {
-      if (responses.statusCode == 200 && responses.isSuccess) {
-      } else {
-        errorMessage.value = responses.errorMessage.toString();
-        LoggerUtils.error(
-          "Error Found while Fetching the Previously Selected Items!",
-        );
-        LoggerUtils.error("Status Code : ${responses.statusCode}");
-        LoggerUtils.error("Error Message : ${errorMessage.value}");
+    if (responses.statusCode == 200 && responses.isSuccess) {
+      final model =
+          RecentChosenMealsModel.fromJson(responses.jsonResponse!);
+
+      final List<Datum> meals = model.data ?? [];
+
+      if (selectedTabName.value == 'breakfast') {
+        breakfastRecentChosenMeals.assignAll(meals);
+      } else if (selectedTabName.value == 'lunch') {
+        lunchRecentChosenMeals.assignAll(meals);
+      } else if (selectedTabName.value == 'dinner') {
+        dinnerRecentChosenMeals.assignAll(meals);
       }
-    } catch (error) {
-      errorMessage.value = error.toString();
-      LoggerUtils.error("Catched Error : ${errorMessage.value}");
-    } finally {
-      isPreviouslySelectedMealsLoading.value = false;
+    } else {
+      errorMessage.value = responses.errorMessage.toString();
+      LoggerUtils.error("API Error");
+      LoggerUtils.error("Status Code : ${responses.statusCode}");
+      LoggerUtils.error("Error Message : ${errorMessage.value}");
     }
+  } catch (error) {
+    errorMessage.value = error.toString();
+    LoggerUtils.error("Caught Error : $error");
+  } finally {
+    isPreviouslySelectedMealsLoading.value = false;
   }
+}
 
-  ///--------->>> Section : Previously Selected Meals Api Method End
-  ///
-  ///
+
+  
   
 }
