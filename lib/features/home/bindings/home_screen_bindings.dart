@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
 import 'package:get/get.dart';
 
 import '../../choose_from_our_suggested_meals/bindings/generate_meal_plan_bindings.dart';
@@ -23,6 +24,7 @@ class HomeScreenBindings extends Bindings {
       () => HomeScreenController(
         Get.find<DailyCaloriesApiRepository>(),
         Get.find<GetTodaysMealRepository>(),
+        Get.find<MealConsumptionRepository>(),
       ),
       fenix: true,
     );

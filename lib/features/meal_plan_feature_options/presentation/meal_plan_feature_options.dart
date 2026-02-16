@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/controllers/enums_controller.dart';
+import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plans_with_calendar.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -12,11 +13,13 @@ import '../../../gen/assets.gen.dart';
 import '../../../routes/routes.dart';
 import '../../home/presentation/widgets/app_bar_section_widget.dart';
 import '../../home/presentation/widgets/build_meal_plan_icon_widget.dart';
+import '../../home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
 
 class MealPlanFeatureOptions extends StatelessWidget {
   MealPlanFeatureOptions({super.key});
 
   final EnumsController enumsController = Get.find<EnumsController>();
+  final HomeScreenController homeScreenController = Get.find<HomeScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +38,7 @@ class MealPlanFeatureOptions extends StatelessWidget {
               AppBarSectionWidget(),
               UIHelper.verticalSpace(20.h),
 
-              Obx(() {
-                return enumsController.isMealPlanAvailable
-                    ? MealPlansWithCalendar()
-                    : BuildMealPlanWidget(
-                        onTap: () {
-                          log("Button Taped : Get Started !");
-                          log(
-                            "Is Meal Plan Available : ${enumsController.isMealPlanAvailable}",
-                          );
-                          Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
-                        },
-                        showSectionTitle: true,
-                        sectionTitle: "Meal Plan",
-                        buttonTitle: "Get Started",
-                        positionTop: -37.h,
-                        positionRight: -20.w,
-                        imageIconPath: Assets.icons.disIcon,
-                        title: "Build Your Daily Meals",
-                        subTitle:
-                            "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
-                      );
-              }),
+              ShowSelectedMealsOrBuildMealPlanWidget(),
               UIHelper.verticalSpace(24.h),
             ],
           ),

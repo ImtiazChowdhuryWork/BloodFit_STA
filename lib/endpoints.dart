@@ -48,6 +48,9 @@ final class Endpoints {
   static String getSubscriptionPlans() => "$url/plan/plans";
   static String getPreviouslySelectedMeals() => "$url/meal/recent-meals";
   static String getTodaysSelectedMeals() => "$url/meal/get-meals?lang=en";
+  static String updateMealEatenStatus({required String mealID}){
+    return "$url/meal/update-meal-status/$mealID";
+  }
 }
 
 
