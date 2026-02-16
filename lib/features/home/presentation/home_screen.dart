@@ -162,13 +162,6 @@ class HomeScreen extends StatelessWidget {
               SelectYourDaysForMealPlanWidget(),
               UIHelper.verticalSpace(32.h),
 
-
-              
-
-
-
-           
-
               ///Section : ----------------///Text -> update your current weight///------------
               ///Section : --------------///Weight Drop Down///----------
               CurrentWeightUpdateWidget(),

@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:get/get.dart';
 
@@ -19,12 +20,14 @@ class NavigationBinding extends Bindings {
     Get.lazyPut(() => DailyCaloriesApiRepository(Get.find()));
     Get.lazyPut(() => GetTodaysMealRepository(Get.find()));
     Get.lazyPut(() => UpdateCurrentWeightRepository(Get.find()));
+    Get.lazyPut(() => MealConsumptionRepository(Get.find()));
 
     // ✅ Controllers
     Get.lazyPut(
       () => HomeScreenController(
         Get.find<DailyCaloriesApiRepository>(),
         Get.find<GetTodaysMealRepository>(),
+        Get.find<MealConsumptionRepository>(),
       ),
       fenix: true,
     );

@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/features/home/data/repository/get_todays_meal_repository.dart';
+import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,12 @@ class HomeScreenController extends GetxController {
   ///--------->>> Section : Importing the Repositories
   DailyCaloriesApiRepository _dailyCaloriesApiRepository;
   GetTodaysMealRepository _getTodaysMealRepository;
+  MealConsumptionRepository _mealConsumptionRepository;
 
   ///----------->>> Section : Importing the Model
   Rxn<GetCalorieRequirementsModel> model = Rxn<GetCalorieRequirementsModel>();
 
-  HomeScreenController(this._dailyCaloriesApiRepository,this._getTodaysMealRepository);
+  HomeScreenController(this._dailyCaloriesApiRepository,this._getTodaysMealRepository,this._mealConsumptionRepository);
 
   ///Section : ----------------////Selectable Meal Calendar for Meal Plan///----------------------
   RxInt mealCalanderSelectableDays = 3.obs;
@@ -132,9 +134,6 @@ class HomeScreenController extends GetxController {
     clearTodaysSelectedErrorMessage();
     setSelectedMealPlanAvailableStatus(status: false);
     
-
-    
-
     LoggerUtils.debug("😇😇....Get Todays Meas Api Started!");
     try{
       final response = await _getTodaysMealRepository.getTodaysMealRepository();
@@ -181,10 +180,6 @@ class HomeScreenController extends GetxController {
           setSelectedMealPlanAvailableStatus(status: false);
           LoggerUtils.error("Meals Name Not Found For Todays Meal! SelectedMealPlanAvailable.value ::: ${selectedMealPlanAvailable.value}");
         }
-
-
-
-
       }else{
         todaysSelectedMealsErrorMessage.value = response.errorMessage.toString();
         LoggerUtils.error("Something Went Wrong While Fetching the ---->>> Todays Selected Meals <<<-----API!");
@@ -229,6 +224,71 @@ class HomeScreenController extends GetxController {
   
   
   ///-------->>> Section : Todays Selected Meals Api Ends Here
+  
+
+
+
+  ///-------->>> Section : Todyas Meals Eaten Api Starts Here
+  
+
+
+  ///------>>> Loader
+  RxBool isTodaysMealEatenValueLoading = false.obs;
+
+  ///------>>> Section : Error Message
+  RxString isTodaysMealEatenHasError = ''.obs;
+  void clearTodaysMealEatenError(){
+    isTodaysMealEatenHasError.value = '';
+  }
+  ///------>>> Section : Meals Eaten Status
+  RxBool isTodaysMealEaten = false.obs;
+  void setTodaysMealEatenStatus({required bool status}){
+    isTodaysMealEaten.value = status;
+  }
+
+  ///--------->>> Section : Meal ID
+  RxString selectedMealID = ''.obs;
+  void setSelectedMealID({required String mealID}){
+    selectedMealID.value = mealID;
+  }
+
+
+  Future<void> patchUpdateMealConsumptionApi({required String mealID})async{
+    isTodaysMealEatenValueLoading.value = true;
+    clearTodaysMealEatenError();
+    setTodaysMealEatenStatus(status: false);
+
+    
+
+    try{
+
+      final response = await _mealConsumptionRepository.updateMealConsumptionRepository(mealID: mealID);
+
+      if(response.statusCode == 200 && response.isSuccess){
+
+        setTodaysMealEatenStatus(status: true);
+        LoggerUtils.debug("Meals Eaten Status Updated Successfully for Meal ID : $mealID");
+
+      }else{
+        isTodaysMealEatenHasError.value = response.errorMessage.toString();
+        LoggerUtils.error("Something Went Wrong. While UPdating the meal status!");
+        LoggerUtils.error("Error Message : ${isTodaysMealEatenHasError.value}");
+      }
+
+    }catch(error){
+      isTodaysMealEatenHasError.value = error.toString();
+      LoggerUtils.error("Error Catced : While Updating Meals Eaten Status!");
+      LoggerUtils.error("Error : $error");
+    }finally{
+      isTodaysMealEatenValueLoading.value = false;
+    }
+  }
+
+
+
+
+
+  ///-------->>> Section : Todyas Meals Eaten Api Ends Here
   
 
 
