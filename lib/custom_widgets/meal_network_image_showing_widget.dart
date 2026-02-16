@@ -62,28 +62,30 @@ final base = imageBaseUrl.endsWith('/')
     }
 
     return _buildContainer(
-      CachedNetworkImage(
-        imageUrl: _resolvedUrl,
-        httpHeaders: _headers, // ✅ Pass headers
-        fit: fit,
-        width: width,
-        height: height,
-        placeholder: (_, __) {
-          LoggerUtils.debug('MealNetworkImage → ⏳ Loading...');
-          return const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
-          );
-        },
-        errorWidget: (_, error, stackTrace) {
-          // 🔥 This will now show the actual error (403, 404, etc.)
-          LoggerUtils.error(
-            'MealNetworkImage → ❌ FAILED\n'
-            '  URL: $_resolvedUrl\n'
-            '  Error: $error\n'
-            '  Stack: $stackTrace',
-          );
-          return _errorWidget(error: error.toString());
-        },
+      ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: _resolvedUrl,
+          httpHeaders: _headers, // ✅ Pass headers
+          fit: fit,
+          width: width,
+          height: height,
+          placeholder: (_, __) {
+            LoggerUtils.debug('MealNetworkImage → ⏳ Loading...');
+            return const Center(
+              child: CircularProgressIndicator(strokeWidth: 2),
+            );
+          },
+          errorWidget: (_, error, stackTrace) {
+            // 🔥 This will now show the actual error (403, 404, etc.)
+            LoggerUtils.error(
+              'MealNetworkImage → ❌ FAILED\n'
+              '  URL: $_resolvedUrl\n'
+              '  Error: $error\n'
+              '  Stack: $stackTrace',
+            );
+            return _errorWidget(error: error.toString());
+          },
+        ),
       ),
     );
   }

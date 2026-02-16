@@ -1,20 +1,17 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/endpoints.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/meal_showing_widget_shimmer_effect.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/enums_controller.dart';
-import '../../../../custom_widgets/meal_network_image_showing_widget.dart';
 import '../../../../custom_widgets/meal_plan_item_card.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -104,6 +101,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
               mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
             ),
+            UIHelper.verticalSpace(24.h),
 
 
             ///------->>> Section : Lunch
@@ -128,6 +126,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               kcalValue: homeScreenController.lunchTotalKcal ?? 0,
               mealImagePath: "$imageBaseUrl${homeScreenController.lunchImage}",
             ),
+            UIHelper.verticalSpace(24.h),
 
 
 
@@ -153,17 +152,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               kcalValue: homeScreenController.dinerKcal ?? 0,
               mealImagePath: "$imageBaseUrl${homeScreenController.dinerImage}",
             ),
-
-
             
-
-
-
-            ///------->>> Section : Image Debuger
-            
-
-
-
 
 
           ],
