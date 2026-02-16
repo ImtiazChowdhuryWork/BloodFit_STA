@@ -84,7 +84,6 @@ class MealPlanItemCard extends StatelessWidget {
                           imageUrl: mealImagePath,
                           width: 140.w,
                           height: 140.h,
-                          fit: BoxFit.contain,
                         ),
                       ),
                     ],
