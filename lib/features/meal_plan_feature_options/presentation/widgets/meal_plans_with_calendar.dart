@@ -44,6 +44,7 @@ class MealPlansWithCalendar extends StatelessWidget {
           itemBuilder: (context, index) {
             var data = AppList.reviewMealList[index];
             return MealPlanItemCard(
+              isMealEaten: false,
               leftButtonTitle: data.leftButtonTitle,
               leftButtonOnTap: () {
                 log("Button Taped : I Ate This");

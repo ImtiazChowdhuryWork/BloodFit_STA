@@ -46,7 +46,10 @@ final class Endpoints {
   static String uploadProfileImage() => "$url/auth/upload-profile-picture";
   static String updateProfileData() => "$url/auth/profile-update";
   static String getSubscriptionPlans() => "$url/plan/plans";
-  static String getPreviouslySelectedMeals() => "$url/meal/recent-meals";
+  static String getPreviouslySelectedMeals({required String mealType}){
+    return "$url/meal/recent-meals/$mealType?lang=en";
+  }
+  
   static String getTodaysSelectedMeals() => "$url/meal/get-meals?lang=en";
   static String updateMealEatenStatus({required String mealID}){
     return "$url/meal/update-meal-status/$mealID";

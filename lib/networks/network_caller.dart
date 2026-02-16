@@ -97,11 +97,14 @@ class NetworkCaller {
 
       // Try to parse JSON response
       try {
-        if (response.body.isNotEmpty && response.body.trim() != 'null') {
-          jsonResponse = jsonDecode(response.body);
-        } else if (response.body.trim() == 'null') {
-          // Handle case where server returns literal "null" string
-          jsonResponse = null;
+        if (response.body.isNotEmpty) {
+          String trimmedBody = response.body.trim();
+          if (trimmedBody == 'null' || trimmedBody == '"null"') {
+            LoggerUtils.debug("API Response Body is null!. It's not an  error");
+            jsonResponse = null;
+          } else {
+            jsonResponse = jsonDecode(response.body);
+          }
         }
       } catch (e) {
         debugPrint('Failed to parse JSON: $e');

@@ -153,7 +153,7 @@ class CustomElevatedButton extends StatelessWidget {
                                               .headline16w500cFFFFFFStylePoppins)
                                       .copyWith(
                                         color: isDisabled
-                                            ? AppColors.cFFFFFF.withOpacity(0.6)
+                                            ? Colors.blueGrey
                                             : AppColors.cFFFFFF,
                                       ),
                             ),
