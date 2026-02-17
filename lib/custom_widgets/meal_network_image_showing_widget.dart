@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/endpoints.dart';
 
-class MealNetworkImage extends StatelessWidget {
+class CustomNetworkImageWidget extends StatelessWidget {
   final String? imageUrl;
   final double width;
   final double height;
   final BoxFit fit;
   final BorderRadius? borderRadius;
 
-  const MealNetworkImage({
+  const CustomNetworkImageWidget({
     super.key,
     required this.imageUrl,
     this.width = 120,

@@ -85,7 +85,9 @@ class HomeScreen extends StatelessWidget {
                       Obx(() {
                         return TotalKCalWidget(
                           isSuccess: controller.isSuccess.value,
-                          onTap: controller.isSuccess.value || controller.isDailyCaloriesLoading.value
+                          onTap:
+                              controller.isSuccess.value ||
+                                  controller.isDailyCaloriesLoading.value
                               ? null
                               : () {
                                   LoggerUtils.debug(
@@ -175,6 +177,24 @@ class HomeScreen extends StatelessWidget {
               ///Section : -------------///Show Selected Meals////------------
               ShowSelectedMealsOrBuildMealPlanWidget(),
               UIHelper.verticalSpace(24.h),
+
+              ///Section : -------------///FOR TEST PURPOSE OF Recently Selected Meals////------------
+              ///Section : -------------///Will be removed after test is done////------------
+              BuildMealPlanWidget(
+                onTap: () {
+                  log("Button Tapped : Get Started !");
+                  Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                },
+                showSectionTitle: true,
+                sectionTitle: "Choose From Our Suggested Meals",
+                buttonTitle: "Get Started",
+                positionTop: -36.h,
+                positionRight: -20.w,
+                imageIconPath: Assets.icons.chickeMealIcon,
+                title: "Build Your Daily Meals",
+                subTitle:
+                    "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+              ),
 
               ///Section : -------------///Build Your Meal Plan////------------
               BuildMealPlanWidget(

@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/sub_presentation/dinner/presentation/dinner_tab.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -26,11 +27,32 @@ class _ChooseFromOurSuggestedMealsScreenState
     extends State<ChooseFromOurSuggestedMealsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController = Get.find<ChooseFromOurSuggestedMealController>();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+
+
+    ///------------->>> Section : Initial tab setup (Breakfast)
+    chooseFromOurSuggestedMealController
+        .setSelectedTabName(index: 0);
+
+    ///------------->>> Section : Initial API call
+    chooseFromOurSuggestedMealController
+        .getPreviouslySelectedMeals();
+
+
+    _tabController.addListener(() {
+      ///------------->>> Section : Fires when tab changes
+      debugPrint('Current Tab Index: ${_tabController.index}');
+      chooseFromOurSuggestedMealController.setSelectedTabName(index: _tabController.index);
+      ///------------->>> Section : Calling the api for fetching dedicated tabs data
+  chooseFromOurSuggestedMealController
+      .getPreviouslySelectedMeals();
+
+    });
   }
 
   @override
@@ -40,7 +62,7 @@ class _ChooseFromOurSuggestedMealsScreenState
   }
 
   void _onMealSelected() {
-    // Call the overlay whenever a meal is selected in any tab
+    ///------------->>> Section : Call the overlay whenever a meal is selected in any tab
     showMealPlanTracker();
   }
 
