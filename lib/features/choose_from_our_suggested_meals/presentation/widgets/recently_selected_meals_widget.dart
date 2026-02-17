@@ -219,10 +219,11 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
                 return FoodItemShowingWidget(
                   isSelected: true,
                   onChanged: (_) {},
-                  itemImagePath: meal.image ?? '',
+                  
+                  itemImagePath: meal.description ?? '',
                   itemTitle: meal.mealName ?? 'N/A',
                   kcalValue: meal.kcal ?? 0,
-                  personValue: meal.v ?? 1,
+                  personValue: meal.kcal ?? 1,
                 );
               },
             ),

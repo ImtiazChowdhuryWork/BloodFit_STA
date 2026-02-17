@@ -54,6 +54,9 @@ final class Endpoints {
   static String updateMealEatenStatus({required String mealID}){
     return "$url/meal/update-meal-status/$mealID";
   }
+
+
+  static String aiSuggestedMeals() => "$url/ai-meal/get-meals-plans";
 }
 
 
