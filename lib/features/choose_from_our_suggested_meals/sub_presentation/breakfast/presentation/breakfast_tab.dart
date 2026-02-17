@@ -21,7 +21,10 @@ class BreakfastTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ///Section : ------------///Previously Selected Meals///----------------
-          RecentlySelectedMealsWidget(),
+          RecentlySelectedMealsWidget(
+            isLoading: chooseFromOurSuggestedMealController.isPreviouslySelectedMealsLoading,
+            meals: chooseFromOurSuggestedMealController.breakfastRecentChosenMeals,
+          ),
           UIHelper.verticalSpace(32.h),
 
           

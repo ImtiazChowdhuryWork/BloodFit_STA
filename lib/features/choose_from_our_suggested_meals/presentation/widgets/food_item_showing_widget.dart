@@ -50,7 +50,7 @@ class FoodItemShowingWidget extends StatelessWidget {
                 imageUrl: itemImagePath,
                 height: 130.h,
                 width: 130.w,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ),
 
               ///Section : -----------///Check Box///--------------
