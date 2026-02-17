@@ -1,14 +1,19 @@
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repository/ai_suggested_meals_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
+import '../model/ai_suggested_meals_model.dart';
 import '../repository/previously_selected_meals_repository.dart';
 
 class ChooseFromOurSuggestedMealController extends GetxController {
   ///------->>> Section : Importing the Preselected Repository
   final PreviouslySelectedMealsRepository _previouslySelectedMealsRepository;
 
-  ChooseFromOurSuggestedMealController(this._previouslySelectedMealsRepository);
+  ///-------<>>>> Section : Importing the AI Suggested Meals Repository
+  final AiSuggestedMealsRepository _aiSuggestedMealsRepository;
+
+  ChooseFromOurSuggestedMealController(this._previouslySelectedMealsRepository,this._aiSuggestedMealsRepository);
 
   ///---------->>> Section : Boiler Code Start
   // // Each tab/item has a checkbox
@@ -23,13 +28,13 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   ///---------->>> Section : Boiler Code End
 
-  ///--------->>> Section : Previously Selected Meals Api Method Start
+  ///--------->>> Section : Previously Selected Meals Api Method Start Here
   
 
   ///--------->>> Section : Recently Selected Items List
   RxList<Datum> breakfastRecentChosenMeals = <Datum>[].obs;
-RxList<Datum> lunchRecentChosenMeals = <Datum>[].obs;
-RxList<Datum> dinnerRecentChosenMeals = <Datum>[].obs;
+  RxList<Datum> lunchRecentChosenMeals = <Datum>[].obs;
+  RxList<Datum> dinnerRecentChosenMeals = <Datum>[].obs;
 
 
   ///-------->>> Section : Tab Name
@@ -94,6 +99,94 @@ RxList<Datum> dinnerRecentChosenMeals = <Datum>[].obs;
     isPreviouslySelectedMealsLoading.value = false;
   }
 }
+
+
+
+///--------->>> Section : Previously Selected Meals Api Method Ends Here
+
+
+
+///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
+
+RxBool isAiSuggestedMealsLoading = false.obs;
+RxString aiSuggestedMealsErrorMessage = ''.obs;
+Rxn<AiSuggestedMealsData> aiSuggestedMealsData = Rxn<AiSuggestedMealsData>();
+
+void clearAiSuggestedErrorMessage() {
+  aiSuggestedMealsErrorMessage.value = '';
+}
+
+Future<void> getAiSuggestedMealsApi() async {
+  isAiSuggestedMealsLoading.value = true;
+  clearAiSuggestedErrorMessage();
+
+  try {
+    final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository();
+
+    if (response.statusCode == 200 && response.isSuccess) {
+      /// ✅ SUCCESS CASE
+      final model = AiSuggestedMealsModel.fromJson(response.jsonResponse!);
+
+      if (model.data != null) {
+        aiSuggestedMealsData.value = model.data;
+
+        /// Optionally, you can prefill breakfast/lunch/dinner lists
+        breakfastRecentChosenMeals.assignAll(_extractMeals(model.data!.breakfastOptions));
+        lunchRecentChosenMeals.assignAll(_extractMeals(model.data!.lunchOptions));
+        dinnerRecentChosenMeals.assignAll(_extractMeals(model.data!.dinnerOptions));
+      }
+    } else {
+      aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
+      LoggerUtils.error("Failed to Get AI Suggested Meals : Error Code :: ${response.statusCode}");
+      LoggerUtils.error("Error Message : ${aiSuggestedMealsErrorMessage.value}");
+    }
+  } catch (error) {
+    aiSuggestedMealsErrorMessage.value = error.toString();
+    LoggerUtils.error("Error Caught While Getting the AI Suggested Meals!");
+    LoggerUtils.error("Caught Error : ${aiSuggestedMealsErrorMessage.value}");
+  } finally {
+    isAiSuggestedMealsLoading.value = false;
+  }
+}
+
+/// Helper method to flatten Options into a list of HealthyComforting
+List<Datum> _extractMeals(Options? options) {
+  if (options == null) return [];
+
+  final meals = <Datum>[];
+
+  // Protein Packed
+  if (options.proteinPacked != null && options.proteinPacked!.isNotEmpty) {
+    for (var meal in options.proteinPacked!) {
+      meals.add(Datum.fromHealthyComforting(meal));
+    }
+  }
+
+  // Light Fresh
+  if (options.lightFresh != null && options.lightFresh!.isNotEmpty) {
+    for (var meal in options.lightFresh!) {
+      meals.add(Datum.fromHealthyComforting(meal));
+    }
+  }
+
+  // Healthy & Comforting
+  if (options.healthyComforting != null && options.healthyComforting!.isNotEmpty) {
+    for (var meal in options.healthyComforting!) {
+      meals.add(Datum.fromHealthyComforting(meal));
+    }
+  }
+
+  return meals;
+}
+
+
+
+
+
+
+///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
+
+
 
 
   
