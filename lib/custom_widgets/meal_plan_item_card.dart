@@ -80,7 +80,7 @@ class MealPlanItemCard extends StatelessWidget {
                       Positioned(
                         left: -50.w, // half of the image width
                         top: -16.h, // optional vertical adjustment
-                        child: MealNetworkImage(
+                        child: CustomNetworkImageWidget(
                           imageUrl: mealImagePath,
                           width: 140.w,
                           height: 140.h,

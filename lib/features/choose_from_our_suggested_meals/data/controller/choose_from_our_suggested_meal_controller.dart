@@ -1,7 +1,6 @@
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 import '../repository/previously_selected_meals_repository.dart';
 

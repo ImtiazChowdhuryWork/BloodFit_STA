@@ -1,4 +1,5 @@
 import 'package:bloodfit/custom_widgets/food_item_data_helper_widget.dart';
+import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,8 +12,8 @@ class FoodItemShowingWidget extends StatelessWidget {
   final bool isSelected;
   final String itemImagePath;
   final String itemTitle;
-  final double kcalValue;
-  final double personValue;
+  final int kcalValue;
+  final int personValue;
   final void Function(bool?)? onChanged;
   const FoodItemShowingWidget({
     super.key,
@@ -45,8 +46,8 @@ class FoodItemShowingWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min, // ✅ Row shrink-wraps horizontally
             children: [
               ///Section : ------------///Item Image///-----------------
-              Image.asset(
-                itemImagePath,
+              CustomNetworkImageWidget(
+                imageUrl: itemImagePath,
                 height: 130.h,
                 width: 130.w,
                 fit: BoxFit.contain,

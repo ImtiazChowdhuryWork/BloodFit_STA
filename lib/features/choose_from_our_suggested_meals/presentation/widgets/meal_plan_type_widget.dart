@@ -13,8 +13,8 @@ class MealPlanTypeWidget extends StatelessWidget {
   final bool isSelected;
   final String itemImagePath;
   final String itemTitle;
-  final double kcalValue;
-  final double personValue;
+  final int kcalValue;
+  final int personValue;
   MealPlanTypeWidget({
     super.key,
     required this.mealPlanType,

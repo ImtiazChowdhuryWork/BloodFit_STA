@@ -7,7 +7,7 @@ import '../helper/ui_helpers.dart';
 
 class FoodItemDataHelperWidget extends StatelessWidget {
   final String iconPath;
-  final double value;
+  final int value;
   final bool isValueVisible;
   final String title;
   final Color? iconColor;
