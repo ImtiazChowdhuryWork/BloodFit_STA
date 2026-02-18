@@ -7,6 +7,7 @@ import '../../weight_history/data/repository/update_current_weight_repository.da
 import '../data/controller/home_screen_controller.dart';
 import '../data/repository/daily_calories_api_repository.dart';
 import '../data/repository/get_todays_meal_repository.dart';
+import '../data/repository/swap_meal_repository.dart';
 
 class HomeScreenBindings extends Bindings {
   @override
@@ -25,6 +26,7 @@ class HomeScreenBindings extends Bindings {
         Get.find<DailyCaloriesApiRepository>(),
         Get.find<GetTodaysMealRepository>(),
         Get.find<MealConsumptionRepository>(),
+        Get.find<SwapMealRepository>(),
       ),
       fenix: true,
     );

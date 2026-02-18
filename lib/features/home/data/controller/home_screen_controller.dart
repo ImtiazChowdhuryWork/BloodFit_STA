@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/features/home/data/repository/get_todays_meal_repository.dart';
+import 'package:bloodfit/features/home/data/repository/swap_meal_repository.dart';
 import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
@@ -17,11 +18,12 @@ class HomeScreenController extends GetxController {
   DailyCaloriesApiRepository _dailyCaloriesApiRepository;
   GetTodaysMealRepository _getTodaysMealRepository;
   MealConsumptionRepository _mealConsumptionRepository;
+  SwapMealRepository _swapMealRepository;
 
   ///----------->>> Section : Importing the Model
   Rxn<GetCalorieRequirementsModel> model = Rxn<GetCalorieRequirementsModel>();
 
-  HomeScreenController(this._dailyCaloriesApiRepository,this._getTodaysMealRepository,this._mealConsumptionRepository);
+  HomeScreenController(this._dailyCaloriesApiRepository,this._getTodaysMealRepository,this._mealConsumptionRepository, this._swapMealRepository);
 
   ///Section : ----------------////Selectable Meal Calendar for Meal Plan///----------------------
   RxInt mealCalanderSelectableDays = 3.obs;
@@ -107,6 +109,7 @@ class HomeScreenController extends GetxController {
   int get consumedProtein =>
       model.value?.data?.calorieRequirement?.protein ?? 0;
   int get consumedFat => model.value?.data?.calorieRequirement?.fat ?? 0;
+  int get completationPercentage => model.value?.data?.completionPercentage ?? 0;
 
 ///----------------->>> Is Your Daily Calories Api Section Ends Here
 

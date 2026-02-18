@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
+import 'package:bloodfit/custom_widgets/current_weight_update_widget.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/consistancy_stake_preview.dart';
-import 'package:bloodfit/custom_widgets/current_weight_update_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/received_three_meal_plan_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/select_your_days_for_meal_plan_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
@@ -17,11 +17,10 @@ import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:bloodfit/routes/routes.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../custom_widgets/custom_shimmer_effect.dart';
+
 import 'widgets/custom_calender_widget.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -96,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                                   controller.getDailyCaloriesApi();
                                 },
                           size: 120.w,
-                          progress: 0.75,
+                          progress: controller.completationPercentage.toDouble(),
                           strokeWidth: 8,
                           capColor: AppColors.cFFFFFF,
                           capSizeMultiplier: 0.3,
