@@ -22,3 +22,21 @@ enum ProfileOptionsTitle {
 enum MealPlanAvailability { mealPlanAvailable, mealPlanNotAvilable }
 
 enum WeekDayEnum { sat, sun, mon, tue, wed, thu, fri }
+
+
+///--------<>>>>>> Section : Custom Snack Bar Starts Here
+
+enum AppSnackBarType {
+  success,
+  error,
+  warning,
+  info,
+}
+
+enum AppSnackBarPosition {
+  top,
+  bottom,
+}
+
+
+///--------<>>>>>> Section : Custom Snack Bar Ends Here

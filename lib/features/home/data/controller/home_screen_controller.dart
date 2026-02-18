@@ -7,6 +7,7 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../controllers/app_snackbar_controller.dart';
 import '../../../../controllers/enums_controller.dart';
 import '../../../your_daily_calories_intake/data/model/get_calorie_requirements_model.dart';
 
@@ -23,7 +24,12 @@ class HomeScreenController extends GetxController {
   ///----------->>> Section : Importing the Model
   Rxn<GetCalorieRequirementsModel> model = Rxn<GetCalorieRequirementsModel>();
 
-  HomeScreenController(this._dailyCaloriesApiRepository,this._getTodaysMealRepository,this._mealConsumptionRepository, this._swapMealRepository);
+  HomeScreenController(
+    this._dailyCaloriesApiRepository,
+    this._getTodaysMealRepository,
+    this._mealConsumptionRepository,
+    this._swapMealRepository,
+  );
 
   ///Section : ----------------////Selectable Meal Calendar for Meal Plan///----------------------
   RxInt mealCalanderSelectableDays = 3.obs;
@@ -109,57 +115,53 @@ class HomeScreenController extends GetxController {
   int get consumedProtein =>
       model.value?.data?.calorieRequirement?.protein ?? 0;
   int get consumedFat => model.value?.data?.calorieRequirement?.fat ?? 0;
-  int get completationPercentage => model.value?.data?.completionPercentage ?? 0;
+  int get completationPercentage =>
+      model.value?.data?.completionPercentage ?? 0;
 
-///----------------->>> Is Your Daily Calories Api Section Ends Here
-
-
-
-
+  ///----------------->>> Is Your Daily Calories Api Section Ends Here
 
   ///-------->>> Section : Todays Selected Meals Api Starts Here
   final EnumsController enumsController = Get.find<EnumsController>();
   RxBool isTodaysSelectedMealsLoading = false.obs;
   RxBool selectedMealPlanAvailable = false.obs;
   RxString todaysSelectedMealsErrorMessage = ''.obs;
-  void clearTodaysSelectedErrorMessage(){
+  void clearTodaysSelectedErrorMessage() {
     todaysSelectedMealsErrorMessage.value = '';
   }
 
-  void setSelectedMealPlanAvailableStatus({required bool status}){
+  void setSelectedMealPlanAvailableStatus({required bool status}) {
     selectedMealPlanAvailable.value = status;
   }
 
   Rxn<GetTodaysMealModel> todaysMealModel = Rxn<GetTodaysMealModel>();
 
-  Future<void> getTodaysSelectedMealsApi()async{
+  Future<void> getTodaysSelectedMealsApi() async {
     isTodaysSelectedMealsLoading.value = true;
     clearTodaysSelectedErrorMessage();
     setSelectedMealPlanAvailableStatus(status: false);
-    
+
     LoggerUtils.debug("😇😇....Get Todays Meas Api Started!");
-    try{
+    try {
       final response = await _getTodaysMealRepository.getTodaysMealRepository();
-      LoggerUtils.debug("API --->>> Todays Selected Meals Api <<<----- Response ----->>> ${response.jsonResponse}");
-
-
+      LoggerUtils.debug(
+        "API --->>> Todays Selected Meals Api <<<----- Response ----->>> ${response.jsonResponse}",
+      );
 
       LoggerUtils.debug("Status Code : ${response.statusCode}");
       LoggerUtils.debug("👁👁👁 IS Success Value : ${response.isSuccess}");
 
-      if(response.statusCode == 200 && response.isSuccess){
-        
-        
-        LoggerUtils.debug("🤓🤓....Todays Selected Meals Fetched From Server Successfully!");
-        todaysMealModel.value = GetTodaysMealModel.fromJson(response.jsonResponse!);
-
-
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug(
+          "🤓🤓....Todays Selected Meals Fetched From Server Successfully!",
+        );
+        todaysMealModel.value = GetTodaysMealModel.fromJson(
+          response.jsonResponse!,
+        );
 
         ///Section : Assigning The Items Values to Specific Models
         var data = todaysMealModel.value?.data;
 
-
-        itemBreakFast.value = data?.breakfast ;
+        itemBreakFast.value = data?.breakfast;
         LoggerUtils.debug("BreakFast Model Data: ${itemBreakFast.value}");
         itemLunch.value = data?.lunch;
 
@@ -168,52 +170,56 @@ class HomeScreenController extends GetxController {
 
         LoggerUtils.debug("Dinner Model Data : ${itemDinner.value}");
 
+        final isMealNamesFound =
+            itemBreakFast.value?.mealName?.isNotEmpty == true &&
+            itemLunch.value?.mealName?.isNotEmpty == true &&
+            itemDinner.value?.mealName?.isNotEmpty == true;
 
-        final isMealNamesFound = 
-          itemBreakFast.value?.mealName?.isNotEmpty == true 
-          && itemLunch.value?.mealName?.isNotEmpty  == true 
-          && itemDinner.value?.mealName?.isNotEmpty == true ;
-
-        if(isMealNamesFound == true){
-          
-        LoggerUtils.debug("👅👅👅Meal Name Found For All Time Of Meals For Today! :: $isMealNamesFound");
+        if (isMealNamesFound == true) {
+          LoggerUtils.debug(
+            "👅👅👅Meal Name Found For All Time Of Meals For Today! :: $isMealNamesFound",
+          );
           setSelectedMealPlanAvailableStatus(status: true);
-
-        }else{
+        } else {
           setSelectedMealPlanAvailableStatus(status: false);
-          LoggerUtils.error("Meals Name Not Found For Todays Meal! SelectedMealPlanAvailable.value ::: ${selectedMealPlanAvailable.value}");
+          LoggerUtils.error(
+            "Meals Name Not Found For Todays Meal! SelectedMealPlanAvailable.value ::: ${selectedMealPlanAvailable.value}",
+          );
         }
-      }else{
-        todaysSelectedMealsErrorMessage.value = response.errorMessage.toString();
-        LoggerUtils.error("Something Went Wrong While Fetching the ---->>> Todays Selected Meals <<<-----API!");
+      } else {
+        todaysSelectedMealsErrorMessage.value = response.errorMessage
+            .toString();
+        LoggerUtils.error(
+          "Something Went Wrong While Fetching the ---->>> Todays Selected Meals <<<-----API!",
+        );
         LoggerUtils.error("Status Code : ${response.statusCode}");
-        
+
         LoggerUtils.error("Status Code : $todaysSelectedMealsErrorMessage");
       }
-
-    }catch(error){
+    } catch (error) {
       todaysSelectedMealsErrorMessage.value = error.toString();
-      LoggerUtils.error("Error Catched On ---->>> Todays Selected Meals Api <<<-----: ");
+      LoggerUtils.error(
+        "Error Catched On ---->>> Todays Selected Meals Api <<<-----: ",
+      );
       // LoggerUtils.debug("Error Found! Status Code : ${error}");
       LoggerUtils.debug("Catched Error : $todaysSelectedMealsErrorMessage");
-      
-    }finally{
+    } finally {
       isTodaysSelectedMealsLoading.value = false;
     }
   }
-
 
   Rxn<TodaysMealDataModel> itemBreakFast = Rxn<TodaysMealDataModel>();
   Rxn<TodaysMealDataModel> itemLunch = Rxn<TodaysMealDataModel>();
   Rxn<TodaysMealDataModel> itemDinner = Rxn<TodaysMealDataModel>();
 
-
   ///----->>> BreakFast Getters
-  String? get breakfastName => itemBreakFast.value?.mealName ?? 'Meal name not found!';
+  String? get breakfastName =>
+      itemBreakFast.value?.mealName ?? 'Meal name not found!';
   int? get breakfastTotalKcal => itemBreakFast.value?.kcal ?? 0;
   String? get breakFastImage => itemBreakFast.value?.image ?? '';
   String? get breakFastMealEatenStatus => itemBreakFast.value?.status ?? '';
-  String? get breakfastMealID => itemBreakFast.value?.id ?? 'Breakfast Meal ID Not Found!';
+  String? get breakfastMealID =>
+      itemBreakFast.value?.id ?? 'Breakfast Meal ID Not Found!';
 
   ///----->>> Lunch Getters
   String? get lunchName => itemLunch.value?.mealName ?? 'Meal name not found!';
@@ -229,85 +235,112 @@ class HomeScreenController extends GetxController {
   String? get dinerMealEatenStatus => itemDinner.value?.status ?? '';
   String? get dinerMealID => itemDinner.value?.id ?? 'Diner Meal ID Not Found!';
 
-
-  
-  
   ///-------->>> Section : Todays Selected Meals Api Ends Here
-  
-
-
 
   ///-------->>> Section : Todyas Meals Eaten Api Starts Here
-  
-
 
   ///------>>> Loader
   RxBool isTodaysMealEatenValueLoading = false.obs;
 
   ///------>>> Section : Error Message
   RxString isTodaysMealEatenHasError = ''.obs;
-  void clearTodaysMealEatenError(){
+  void clearTodaysMealEatenError() {
     isTodaysMealEatenHasError.value = '';
   }
+
   ///------>>> Section : Meals Eaten Status
   RxBool isTodaysMealEaten = false.obs;
-  void setTodaysMealEatenStatus({required bool status}){
+  void setTodaysMealEatenStatus({required bool status}) {
     isTodaysMealEaten.value = status;
   }
 
   ///--------->>> Section : Meal ID
   RxString selectedMealID = ''.obs;
-  void setSelectedMealID({required String mealID}){
+  void setSelectedMealID({required String mealID}) {
     selectedMealID.value = mealID;
   }
 
-
-  Future<void> patchUpdateMealConsumptionApi({required String mealID})async{
+  Future<void> patchUpdateMealConsumptionApi({required String mealID}) async {
     isTodaysMealEatenValueLoading.value = true;
     clearTodaysMealEatenError();
     setTodaysMealEatenStatus(status: false);
 
-
-    
-
-    try{
-
+    try {
       LoggerUtils.debug("Meal ID Received : $mealID");
 
-      final response = await _mealConsumptionRepository.updateMealConsumptionRepository(mealID: mealID);
+      final response = await _mealConsumptionRepository
+          .updateMealConsumptionRepository(mealID: mealID);
 
-      if(response.statusCode == 200 && response.isSuccess){
-
+      if (response.statusCode == 200 && response.isSuccess) {
         setTodaysMealEatenStatus(status: true);
-        LoggerUtils.debug("Meals Eaten Status Updated Successfully for Meal ID : $mealID");
+        LoggerUtils.debug(
+          "Meals Eaten Status Updated Successfully for Meal ID : $mealID",
+        );
 
         // Refresh the meals data to reflect the updated status
         await getTodaysSelectedMealsApi();
-      }else{
+      } else {
         isTodaysMealEatenHasError.value = response.errorMessage.toString();
-        LoggerUtils.error("Something Went Wrong. While UPdating the meal status!");
+        LoggerUtils.error(
+          "Something Went Wrong. While UPdating the meal status!",
+        );
         LoggerUtils.error("Error Message : ${isTodaysMealEatenHasError.value}");
       }
-
-    }catch(error){
+    } catch (error) {
       isTodaysMealEatenHasError.value = error.toString();
       LoggerUtils.error("Error Catced : While Updating Meals Eaten Status!");
       LoggerUtils.error("Error : $error");
-    }finally{
+    } finally {
       isTodaysMealEatenValueLoading.value = false;
     }
   }
 
-
-
-
-
   ///-------->>> Section : Todyas Meals Eaten Api Ends Here
-  
 
+  ///--------->>> Section : Swap Meal Api Starts Here
 
+  RxBool isSwapMealValueLoading = false.obs;
+  RxString swapMealErrorMessage = ''.obs;
+  void clearSwapMealError() {
+    swapMealErrorMessage.value = '';
+  }
 
+  Future<void> pathchSwapMealApi({required String mealID, required String description, required List<String> ingredientList, required String imageUrl, required List<Map<String, dynamic>> caloriesCount}) async {
+    try {
+      isSwapMealValueLoading.value = true;
+      clearSwapMealError();
 
+      final response = await _swapMealRepository.swapMealRepository(
+        mealID: mealID,
+        description: description,
+        ingredientList: ingredientList,
+        imageUrl: imageUrl,
+        caloriesCount: caloriesCount,
+      );
+
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug("🤪🤪🤪🤪Meals Swaped Successfully!");
+        AppSnackBarController.show(
+          message: 'Meal swaped successfully!',
+          type: AppSnackBarType.success,
+          position: AppSnackBarPosition.top,
+          duration: const Duration(seconds: 4),
+        );
+      }
+    } catch (error) {
+      swapMealErrorMessage.value = error.toString();
+      LoggerUtils.error(
+        "☠️☠️☠️☠️☠️Error Catched While Swaping Meals From Home Screen!",
+      );
+      LoggerUtils.error(
+        "☠️☠️☠️☠️☠️Swap Meal Catched Error : ${swapMealErrorMessage.value}",
+      );
+    } finally {
+      isSwapMealValueLoading.value = false;
+    }
+  }
+
+  ///--------->>> Section : Swap Meal Api Ends Here
 
   @override
   void onInit() {
