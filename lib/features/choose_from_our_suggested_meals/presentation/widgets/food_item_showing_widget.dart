@@ -13,7 +13,7 @@ class FoodItemShowingWidget extends StatelessWidget {
   final String itemImagePath;
   final String itemTitle;
   final int kcalValue;
-  final int personValue;
+  final int servingValue;
   final void Function(bool?)? onChanged;
   const FoodItemShowingWidget({
     super.key,
@@ -21,7 +21,7 @@ class FoodItemShowingWidget extends StatelessWidget {
     required this.itemImagePath,
     required this.itemTitle,
     required this.kcalValue,
-    required this.personValue,
+    required this.servingValue,
     this.onChanged,
   });
 
@@ -100,7 +100,7 @@ class FoodItemShowingWidget extends StatelessWidget {
                   FoodItemDataHelperWidget(
                     title: "Person",
                     iconPath: Assets.icons.personIcon,
-                    value: personValue,
+                    value: servingValue,
                   ),
                 ],
               ),

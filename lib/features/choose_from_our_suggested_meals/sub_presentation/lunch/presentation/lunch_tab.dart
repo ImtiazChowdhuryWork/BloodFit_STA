@@ -32,33 +32,33 @@ class LunchTab extends StatelessWidget {
           ///Section : ------------///Protein-Packed ///----------------
           MealPlanTypeWidget(
             mealPlanType: "Protein-Packed",
-            isSelected: true,
+            // isSelected: true,
             itemImagePath: Assets.images.omletEgg.path,
-            itemTitle: "Avocado Toast and Poached Eggs",
-            kcalValue: 302,
-            personValue: 1,
+            // itemTitle: "Avocado Toast and Poached Eggs",
+            // kcalValue: 302,
+            // servingValue: 1,
           ),
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Light & Fresh ///----------------
           MealPlanTypeWidget(
             mealPlanType: "Light & Fresh",
-            isSelected: true,
+            // isSelected: true,
             itemImagePath: Assets.images.omletEgg.path,
-            itemTitle: "Avocado Toast and Poached Eggs",
-            kcalValue: 302,
-            personValue: 1,
+            // itemTitle: "Avocado Toast and Poached Eggs",
+            // kcalValue: 302,
+            // servingValue: 1,
           ),
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Hearty & Comforting///----------------
           MealPlanTypeWidget(
             mealPlanType: "Hearty & Comforting",
-            isSelected: true,
+            // isSelected: true,
             itemImagePath: Assets.images.omletEgg.path,
-            itemTitle: "Avocado Toast and Poached Eggs",
-            kcalValue: 302,
-            personValue: 1,
+            // itemTitle: "Avocado Toast and Poached Eggs",
+            // kcalValue: 302,
+            // servingValue: 1,
           ),
           UIHelper.verticalSpace(32.h),
         ],

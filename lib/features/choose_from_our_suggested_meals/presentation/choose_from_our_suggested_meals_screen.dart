@@ -42,6 +42,7 @@ class _ChooseFromOurSuggestedMealsScreenState
     ///------------->>> Section : Initial API call
     chooseFromOurSuggestedMealController
         .getPreviouslySelectedMeals();
+    chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
 
 
     _tabController.addListener(() {
@@ -51,6 +52,7 @@ class _ChooseFromOurSuggestedMealsScreenState
       ///------------->>> Section : Calling the api for fetching dedicated tabs data
   chooseFromOurSuggestedMealController
       .getPreviouslySelectedMeals();
+  chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
 
     });
   }
