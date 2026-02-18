@@ -57,6 +57,9 @@ final class Endpoints {
 
 
   static String aiSuggestedMeals() => "$url/ai-meal/get-meals-plans";
+  static String swapMealUrl({required String mealID}){
+    return "$url/meal/swap-meal/$mealID";
+  }
 }
 
 

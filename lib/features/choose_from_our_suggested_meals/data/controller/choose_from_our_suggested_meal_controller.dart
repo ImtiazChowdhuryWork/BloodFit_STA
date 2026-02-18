@@ -3,7 +3,6 @@ import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repositor
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
-import '../model/ai_suggested_meals_model.dart';
 import '../repository/previously_selected_meals_repository.dart';
 
 class ChooseFromOurSuggestedMealController extends GetxController {
@@ -108,77 +107,39 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
 ///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
 
-RxBool isAiSuggestedMealsLoading = false.obs;
-RxString aiSuggestedMealsErrorMessage = ''.obs;
-Rxn<AiSuggestedMealsData> aiSuggestedMealsData = Rxn<AiSuggestedMealsData>();
 
-void clearAiSuggestedErrorMessage() {
+RxBool isAiSuggestedMealsLoading = false.obs;
+
+RxString aiSuggestedMealsErrorMessage = ''.obs;
+void clearAiSuggestedErrorMessage (){
   aiSuggestedMealsErrorMessage.value = '';
 }
 
-Future<void> getAiSuggestedMealsApi() async {
+
+Future<void> getAiSuggestedMealsApi()async{
   isAiSuggestedMealsLoading.value = true;
   clearAiSuggestedErrorMessage();
+  try{
 
-  try {
     final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository();
 
-    if (response.statusCode == 200 && response.isSuccess) {
-      /// ✅ SUCCESS CASE
-      final model = AiSuggestedMealsModel.fromJson(response.jsonResponse!);
 
-      if (model.data != null) {
-        aiSuggestedMealsData.value = model.data;
+    if(response.statusCode == 200 && response.isSuccess){
 
-        /// Optionally, you can prefill breakfast/lunch/dinner lists
-        breakfastRecentChosenMeals.assignAll(_extractMeals(model.data!.breakfastOptions));
-        lunchRecentChosenMeals.assignAll(_extractMeals(model.data!.lunchOptions));
-        dinnerRecentChosenMeals.assignAll(_extractMeals(model.data!.dinnerOptions));
-      }
-    } else {
+    }else{
       aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
-      LoggerUtils.error("Failed to Get AI Suggested Meals : Error Code :: ${response.statusCode}");
+      LoggerUtils.error("Failed to Get AI Suggested Mealse : Error Code :: ${response.statusCode}");
       LoggerUtils.error("Error Message : ${aiSuggestedMealsErrorMessage.value}");
     }
-  } catch (error) {
+
+  }catch(error){
     aiSuggestedMealsErrorMessage.value = error.toString();
-    LoggerUtils.error("Error Caught While Getting the AI Suggested Meals!");
-    LoggerUtils.error("Caught Error : ${aiSuggestedMealsErrorMessage.value}");
-  } finally {
+    LoggerUtils.error("Error Catched While Getting the Ai Suggested Meals!");
+    LoggerUtils.error("Catched Error : ${aiSuggestedMealsErrorMessage.value}");
+  }finally{
     isAiSuggestedMealsLoading.value = false;
   }
 }
-
-/// Helper method to flatten Options into a list of HealthyComforting
-List<Datum> _extractMeals(Options? options) {
-  if (options == null) return [];
-
-  final meals = <Datum>[];
-
-  // Protein Packed
-  if (options.proteinPacked != null && options.proteinPacked!.isNotEmpty) {
-    for (var meal in options.proteinPacked!) {
-      meals.add(Datum.fromHealthyComforting(meal));
-    }
-  }
-
-  // Light Fresh
-  if (options.lightFresh != null && options.lightFresh!.isNotEmpty) {
-    for (var meal in options.lightFresh!) {
-      meals.add(Datum.fromHealthyComforting(meal));
-    }
-  }
-
-  // Healthy & Comforting
-  if (options.healthyComforting != null && options.healthyComforting!.isNotEmpty) {
-    for (var meal in options.healthyComforting!) {
-      meals.add(Datum.fromHealthyComforting(meal));
-    }
-  }
-
-  return meals;
-}
-
 
 
 
