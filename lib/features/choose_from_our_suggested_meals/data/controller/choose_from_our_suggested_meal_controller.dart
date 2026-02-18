@@ -1,5 +1,7 @@
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repository/ai_suggested_meals_repository.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +14,10 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   ///-------<>>>> Section : Importing the AI Suggested Meals Repository
   final AiSuggestedMealsRepository _aiSuggestedMealsRepository;
 
-  ChooseFromOurSuggestedMealController(this._previouslySelectedMealsRepository,this._aiSuggestedMealsRepository);
+  ChooseFromOurSuggestedMealController(
+    this._previouslySelectedMealsRepository,
+    this._aiSuggestedMealsRepository,
+  );
 
   ///---------->>> Section : Boiler Code Start
   // // Each tab/item has a checkbox
@@ -28,33 +33,31 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   ///---------->>> Section : Boiler Code End
 
   ///--------->>> Section : Previously Selected Meals Api Method Start Here
-  
 
   ///--------->>> Section : Recently Selected Items List
   RxList<Datum> breakfastRecentChosenMeals = <Datum>[].obs;
   RxList<Datum> lunchRecentChosenMeals = <Datum>[].obs;
   RxList<Datum> dinnerRecentChosenMeals = <Datum>[].obs;
 
-
   ///-------->>> Section : Tab Name
   RxString selectedTabName = ''.obs;
   String setSelectedTabName({required int index}) {
-  if (index == 0) {
-    selectedTabName.value = 'breakfast';
-    return selectedTabName.value;
-  } else if (index == 1) {
-    selectedTabName.value = 'lunch';
-    return selectedTabName.value;
-  } else if (index == 2) {
-    selectedTabName.value = 'dinner'; // Fixed typo
-    return selectedTabName.value;
-  } else {
-    LoggerUtils.error(
-      "Given Input is unexpected, Because the index $index has exceeded the tab total index"
-    );
-    return ''; // Return empty string for invalid index
+    if (index == 0) {
+      selectedTabName.value = 'breakfast';
+      return selectedTabName.value;
+    } else if (index == 1) {
+      selectedTabName.value = 'lunch';
+      return selectedTabName.value;
+    } else if (index == 2) {
+      selectedTabName.value = 'dinner'; // Fixed typo
+      return selectedTabName.value;
+    } else {
+      LoggerUtils.error(
+        "Given Input is unexpected, Because the index $index has exceeded the tab total index",
+      );
+      return ''; // Return empty string for invalid index
+    }
   }
-}
 
   RxBool isPreviouslySelectedMealsLoading = false.obs;
   RxString errorMessage = ''.obs;
@@ -63,93 +66,88 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   }
 
   Future<void> getPreviouslySelectedMeals() async {
-  clearErrorMessage();
-  isPreviouslySelectedMealsLoading.value = true;
+    clearErrorMessage();
+    isPreviouslySelectedMealsLoading.value = true;
 
-  try {
-    final responses =
-        await _previouslySelectedMealsRepository.previouslySelectedMealsRepository(
-      mealType: selectedTabName.value,
-    );
+    try {
+      final responses = await _previouslySelectedMealsRepository
+          .previouslySelectedMealsRepository(mealType: selectedTabName.value);
 
-    if (responses.statusCode == 200 && responses.isSuccess) {
-      final model =
-          RecentChosenMealsModel.fromJson(responses.jsonResponse!);
+      if (responses.statusCode == 200 && responses.isSuccess) {
+        LoggerUtils.debug("Recently Selected Meals are fatched successfully!");
+        LoggerUtils.debug("Access Token : ${appData.read(kKeyAccessToken)}");
+        final model = RecentChosenMealsModel.fromJson(responses.jsonResponse!);
 
-      final List<Datum> meals = model.data ?? [];
+        final List<Datum> meals = model.data ?? [];
 
-      if (selectedTabName.value == 'breakfast') {
-        breakfastRecentChosenMeals.assignAll(meals);
-      } else if (selectedTabName.value == 'lunch') {
-        lunchRecentChosenMeals.assignAll(meals);
-      } else if (selectedTabName.value == 'dinner') {
-        dinnerRecentChosenMeals.assignAll(meals);
+        if (selectedTabName.value == 'breakfast') {
+          breakfastRecentChosenMeals.assignAll(meals);
+        } else if (selectedTabName.value == 'lunch') {
+          lunchRecentChosenMeals.assignAll(meals);
+        } else if (selectedTabName.value == 'dinner') {
+          dinnerRecentChosenMeals.assignAll(meals);
+        }
+      } else {
+        errorMessage.value = responses.errorMessage.toString();
+        if (selectedTabName.value == 'breakfast') {
+          breakfastRecentChosenMeals.clear();
+        } else if (selectedTabName.value == 'lunch') {
+          lunchRecentChosenMeals.clear();
+        } else if (selectedTabName.value == 'dinner') {
+          dinnerRecentChosenMeals.clear();
+        } else {
+          LoggerUtils.error('Unexpected tab state: ${selectedTabName.value}');
+        }
+        LoggerUtils.error("API Error");
+        LoggerUtils.error("Status Code : ${responses.statusCode}");
+        LoggerUtils.error("Error Message : ${errorMessage.value}");
       }
-    } else {
-      errorMessage.value = responses.errorMessage.toString();
-      LoggerUtils.error("API Error");
-      LoggerUtils.error("Status Code : ${responses.statusCode}");
-      LoggerUtils.error("Error Message : ${errorMessage.value}");
+    } catch (error) {
+      errorMessage.value = error.toString();
+      LoggerUtils.error("Caught Error : $error");
+    } finally {
+      isPreviouslySelectedMealsLoading.value = false;
     }
-  } catch (error) {
-    errorMessage.value = error.toString();
-    LoggerUtils.error("Caught Error : $error");
-  } finally {
-    isPreviouslySelectedMealsLoading.value = false;
   }
-}
 
+  ///--------->>> Section : Previously Selected Meals Api Method Ends Here
 
+  ///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
 
-///--------->>> Section : Previously Selected Meals Api Method Ends Here
+  RxBool isAiSuggestedMealsLoading = false.obs;
 
+  RxString aiSuggestedMealsErrorMessage = ''.obs;
+  void clearAiSuggestedErrorMessage() {
+    aiSuggestedMealsErrorMessage.value = '';
+  }
 
+  Future<void> getAiSuggestedMealsApi() async {
+    isAiSuggestedMealsLoading.value = true;
+    clearAiSuggestedErrorMessage();
+    try {
+      final response = await _aiSuggestedMealsRepository
+          .aiSuggestedMealsRepository();
 
-///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
-
-
-RxBool isAiSuggestedMealsLoading = false.obs;
-
-RxString aiSuggestedMealsErrorMessage = ''.obs;
-void clearAiSuggestedErrorMessage (){
-  aiSuggestedMealsErrorMessage.value = '';
-}
-
-
-Future<void> getAiSuggestedMealsApi()async{
-  isAiSuggestedMealsLoading.value = true;
-  clearAiSuggestedErrorMessage();
-  try{
-
-    final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository();
-
-
-    if(response.statusCode == 200 && response.isSuccess){
-
-    }else{
-      aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
-      LoggerUtils.error("Failed to Get AI Suggested Mealse : Error Code :: ${response.statusCode}");
-      LoggerUtils.error("Error Message : ${aiSuggestedMealsErrorMessage.value}");
+      if (response.statusCode == 200 && response.isSuccess) {
+      } else {
+        aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error(
+          "Failed to Get AI Suggested Mealse : Error Code :: ${response.statusCode}",
+        );
+        LoggerUtils.error(
+          "Error Message : ${aiSuggestedMealsErrorMessage.value}",
+        );
+      }
+    } catch (error) {
+      aiSuggestedMealsErrorMessage.value = error.toString();
+      LoggerUtils.error("Error Catched While Getting the Ai Suggested Meals!");
+      LoggerUtils.error(
+        "Catched Error : ${aiSuggestedMealsErrorMessage.value}",
+      );
+    } finally {
+      isAiSuggestedMealsLoading.value = false;
     }
-
-  }catch(error){
-    aiSuggestedMealsErrorMessage.value = error.toString();
-    LoggerUtils.error("Error Catched While Getting the Ai Suggested Meals!");
-    LoggerUtils.error("Catched Error : ${aiSuggestedMealsErrorMessage.value}");
-  }finally{
-    isAiSuggestedMealsLoading.value = false;
   }
-}
 
-
-
-
-
-///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
-
-
-
-
-  
-  
+  ///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
 }
