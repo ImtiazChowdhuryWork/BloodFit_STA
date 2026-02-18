@@ -1,219 +1,129 @@
 import 'dart:convert';
-import 'ai_suggested_meals_model.dart';
-
-class AiSuggestedMealsModel {
-  bool? success;
-  int? status;
-  String? message;
-  Data? data;
-
-  AiSuggestedMealsModel({
-    this.success,
-    this.status,
-    this.message,
-    this.data,
-  });
-
-  factory AiSuggestedMealsModel.fromJson(Map<String, dynamic> json) =>
-      AiSuggestedMealsModel(
-        success: json["success"],
-        status: json["status"],
-        message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
-      );
-}
-
-class Data {
-  Options? breakfastOptions;
-  Options? lunchOptions;
-  Options? dinnerOptions;
-
-  Data({
-    this.breakfastOptions,
-    this.lunchOptions,
-    this.dinnerOptions,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        breakfastOptions: json["breakfast_options"] == null
-            ? null
-            : Options.fromJson(json["breakfast_options"]),
-        lunchOptions: json["lunch_options"] == null
-            ? null
-            : Options.fromJson(json["lunch_options"]),
-        dinnerOptions: json["dinner_options"] == null
-            ? null
-            : Options.fromJson(json["dinner_options"]),
-      );
-}
-
-class Options {
-  List<HealthyComforting>? proteinPacked;
-  List<HealthyComforting>? lightFresh;
-  List<HealthyComforting>? healthyComforting;
-
-  Options({
-    this.proteinPacked,
-    this.lightFresh,
-    this.healthyComforting,
-  });
-
-  factory Options.fromJson(Map<String, dynamic> json) => Options(
-        proteinPacked: json["protein_packed"] == null
-            ? []
-            : List<HealthyComforting>.from(
-                json["protein_packed"].map(
-                  (x) => HealthyComforting.fromJson(x),
-                ),
-              ),
-        lightFresh: json["light_fresh"] == null
-            ? []
-            : List<HealthyComforting>.from(
-                json["light_fresh"].map(
-                  (x) => HealthyComforting.fromJson(x),
-                ),
-              ),
-        healthyComforting: json["healthy_comforting"] == null
-            ? []
-            : List<HealthyComforting>.from(
-                json["healthy_comforting"].map(
-                  (x) => HealthyComforting.fromJson(x),
-                ),
-              ),
-      );
-}
-
-class HealthyComforting {
-  String? mealName;
-  int? totalCalories;
-  Macronutrients? macronutrients;
-  String? description;
-  List<Ingredient>? ingredients;
-
-  HealthyComforting({
-    this.mealName,
-    this.totalCalories,
-    this.macronutrients,
-    this.description,
-    this.ingredients,
-  });
-
-  factory HealthyComforting.fromJson(Map<String, dynamic> json) =>
-      HealthyComforting(
-        mealName: json["meal_name"],
-        totalCalories: json["total_calories"],
-        macronutrients: json["macronutrients"] == null
-            ? null
-            : Macronutrients.fromJson(json["macronutrients"]),
-        description: json["description"],
-        ingredients: json["ingredients"] == null
-            ? []
-            : List<Ingredient>.from(
-                json["ingredients"].map(
-                  (x) => Ingredient.fromJson(x),
-                ),
-              ),
-      );
-}
-
-class Ingredient {
-  String? name;
-
-  Ingredient({this.name});
-
-  factory Ingredient.fromJson(Map<String, dynamic> json) =>
-      Ingredient(name: json["name"]);
-}
-
-class Macronutrients {
-  int? carbohydrates;
-  int? protein;
-  int? fat;
-
-  Macronutrients({
-    this.carbohydrates,
-    this.protein,
-    this.fat,
-  });
-
-  factory Macronutrients.fromJson(Map<String, dynamic> json) =>
-      Macronutrients(
-        carbohydrates: json["carbohydrates"],
-        protein: json["protein"],
-        fat: json["fat"],
-      );
-}
-
-
-
 
 class RecentChosenMealsModel {
-  bool? success;
-  int? status;
-  String? message;
-  List<Datum>? data;
+    bool? success;
+    int? status;
+    String? message;
+    List<Datum>? data;
 
-  RecentChosenMealsModel({
-    this.success,
-    this.status,
-    this.message,
-    this.data,
-  });
+    RecentChosenMealsModel({
+        this.success,
+        this.status,
+        this.message,
+        this.data,
+    });
 
-  factory RecentChosenMealsModel.fromJson(Map<String, dynamic> json) =>
-      RecentChosenMealsModel(
+    factory RecentChosenMealsModel.fromRawJson(String str) => RecentChosenMealsModel.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory RecentChosenMealsModel.fromJson(Map<String, dynamic> json) => RecentChosenMealsModel(
         success: json["success"],
         status: json["status"],
         message: json["message"],
-        data: json["data"] == null
-            ? []
-            : List<Datum>.from(
-                json["data"].map((x) => Datum.fromJson(x))),
-      );
+        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "success": success,
+        "status": status,
+        "message": message,
+        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    };
 }
 
 class Datum {
-  String? mealName;
-  String? mealType;
-  int? kcal;
-  String? description;
-  List<String>? ingredients;
-  String? status;
+    String? id;
+    String? userId;
+    String? mealName;
+    String? mealType;
+    int? kcal;
+    String? description;
+    List<CaloryCount>? caloryCount;
+    List<String>? ingredients;
+    String? mealGroupId;
+    String? image;
+    DateTime? date;
+    String? status;
+    int? v;
 
-  Datum({
-    this.mealName,
-    this.mealType,
-    this.kcal,
-    this.description,
-    this.ingredients,
-    this.status,
-  });
+    Datum({
+        this.id,
+        this.userId,
+        this.mealName,
+        this.mealType,
+        this.kcal,
+        this.description,
+        this.caloryCount,
+        this.ingredients,
+        this.mealGroupId,
+        this.image,
+        this.date,
+        this.status,
+        this.v,
+    });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["_id"],
+        userId: json["userId"],
         mealName: json["mealName"],
         mealType: json["mealType"],
         kcal: json["kcal"],
         description: json["description"],
-        ingredients: json["ingredients"] == null
-            ? []
-            : List<String>.from(json["ingredients"]),
+        caloryCount: json["caloryCount"] == null ? [] : List<CaloryCount>.from(json["caloryCount"]!.map((x) => CaloryCount.fromJson(x))),
+        ingredients: json["ingredients"] == null ? [] : List<String>.from(json["ingredients"]!.map((x) => x)),
+        mealGroupId: json["mealGroupId"],
+        image: json["image"],
+        date: json["date"] == null ? null : DateTime.parse(json["date"]),
         status: json["status"],
-      );
-
-  /// 🔥 AI → Recent Meal adapter (THE MISSING PIECE)
-  factory Datum.fromHealthyComforting(
-    HealthyComforting meal, {
-    required String mealType,
-  }) {
-    return Datum(
-      mealName: meal.mealName,
-      mealType: mealType,
-      kcal: meal.totalCalories,
-      description: meal.description,
-      ingredients:
-          meal.ingredients?.map((e) => e.name ?? '').toList(),
-      status: "ai_suggested",
+        v: json["__v"],
     );
-  }
+
+    Map<String, dynamic> toJson() => {
+        "_id": id,
+        "userId": userId,
+        "mealName": mealName,
+        "mealType": mealType,
+        "kcal": kcal,
+        "description": description,
+        "caloryCount": caloryCount == null ? [] : List<dynamic>.from(caloryCount!.map((x) => x.toJson())),
+        "ingredients": ingredients == null ? [] : List<dynamic>.from(ingredients!.map((x) => x)),
+        "mealGroupId": mealGroupId,
+        "image": image,
+        "date": date?.toIso8601String(),
+        "status": status,
+        "__v": v,
+    };
 }
 
+class CaloryCount {
+    String? label;
+    int? kcal;
+    String? id;
+
+    CaloryCount({
+        this.label,
+        this.kcal,
+        this.id,
+    });
+
+    factory CaloryCount.fromRawJson(String str) => CaloryCount.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory CaloryCount.fromJson(Map<String, dynamic> json) => CaloryCount(
+        label: json["label"],
+        kcal: json["kcal"],
+        id: json["_id"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "label": label,
+        "kcal": kcal,
+        "_id": id,
+    };
+}

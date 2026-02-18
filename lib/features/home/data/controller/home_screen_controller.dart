@@ -256,9 +256,6 @@ class HomeScreenController extends GetxController {
 
   ///--------->>> Section : Meal ID
   RxString selectedMealID = ''.obs;
-  void setSelectedMealID({required String mealID}) {
-    selectedMealID.value = mealID;
-  }
 
   Future<void> patchUpdateMealConsumptionApi({required String mealID}) async {
     isTodaysMealEatenValueLoading.value = true;
@@ -298,6 +295,8 @@ class HomeScreenController extends GetxController {
   ///-------->>> Section : Todyas Meals Eaten Api Ends Here
 
   ///--------->>> Section : Swap Meal Api Starts Here
+  ///
+  ///This api method is not implemented yet
 
   RxBool isSwapMealValueLoading = false.obs;
   RxString swapMealErrorMessage = ''.obs;
@@ -346,6 +345,11 @@ class HomeScreenController extends GetxController {
   void onInit() {
     getDailyCaloriesApi();
     getTodaysSelectedMealsApi();
+    ///----------<>>>>> Section : Swap Meal Api Methods  needs to be added Here
+    ///pathchSwapMealApi()
     super.onInit();
   }
 }
+
+
+
