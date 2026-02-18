@@ -1,4 +1,5 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/ai_suggested_meals_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repository/ai_suggested_meals_repository.dart';
 import 'package:bloodfit/helper/di.dart';
@@ -13,6 +14,9 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   ///-------<>>>> Section : Importing the AI Suggested Meals Repository
   final AiSuggestedMealsRepository _aiSuggestedMealsRepository;
+
+
+  
 
   ChooseFromOurSuggestedMealController(
     this._previouslySelectedMealsRepository,
@@ -74,8 +78,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           .previouslySelectedMealsRepository(mealType: selectedTabName.value);
 
       if (responses.statusCode == 200 && responses.isSuccess) {
-        LoggerUtils.debug("Recently Selected Meals are fatched successfully!");
-        LoggerUtils.debug("Access Token : ${appData.read(kKeyAccessToken)}");
+        LoggerUtils.debug("🥳🥳🥳Recently Selected Meals are fatched successfully!");
         final model = RecentChosenMealsModel.fromJson(responses.jsonResponse!);
 
         final List<Datum> meals = model.data ?? [];
@@ -121,6 +124,12 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     aiSuggestedMealsErrorMessage.value = '';
   }
 
+
+  ///-------------->>> Section : Per Tabs 3 Meal Types(Protein-Packed, Light & Fresh, Hearty & Comforting) List
+  RxList<HealthyComforting> proteinPackedItemsList = <HealthyComforting>[].obs;
+  RxList<HealthyComforting> lightAndFreshItemsList = <HealthyComforting>[].obs;
+  RxList<HealthyComforting> heartyAndConfortingItemsList = <HealthyComforting>[].obs;
+
   Future<void> getAiSuggestedMealsApi() async {
     isAiSuggestedMealsLoading.value = true;
     clearAiSuggestedErrorMessage();
@@ -129,8 +138,62 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           .aiSuggestedMealsRepository();
 
       if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug("🥳🥳🥳Ai Suggested Meals are fatched successfully!");
+        final model = AiSuggestedMealsModel.fromJson(response.jsonResponse!);
+
+
+
+        ///-----------<>>>>> SECTION : Data Extrection <>>>>>>>>>---------------///
+        ///-----------<>>>> Section : Breakast Items
+        final List<HealthyComforting> breakfastProteinPackedItems = model.data?.breakfastOptions?.proteinPacked ?? [];
+        final List<HealthyComforting> breakfastLightAndFreshItems = model.data?.breakfastOptions?.lightFresh ?? [];
+        final List<HealthyComforting> breakfastHeartyComforting = model.data?.breakfastOptions?.healthyComforting ?? [];
+
+        ///-----------<>>>> Section : Lunch Items
+        final List<HealthyComforting> lunchProteinPackedItems = model.data?.lunchOptions?.proteinPacked ?? [];
+        final List<HealthyComforting> lunchLightAndFreshItems = model.data?.lunchOptions?.lightFresh ?? [];
+        final List<HealthyComforting> lunchHeartyComforting = model.data?.lunchOptions?.healthyComforting ?? [];
+
+        ///-----------<>>>> Section : Dinner Items
+        final List<HealthyComforting> dinnerProteinPackedItems = model.data?.dinnerOptions?.proteinPacked ?? [];
+        final List<HealthyComforting> dinnerLightAndFreshItems = model.data?.dinnerOptions?.lightFresh ?? [];
+        final List<HealthyComforting> dinnerHeartyComforting = model.data?.dinnerOptions?.healthyComforting ?? [];
+
+
+
+        if (selectedTabName.value == 'breakfast') {
+          ///---------<>>>> Section : Assign Breakfast Extrected Data to List
+          proteinPackedItemsList.assignAll(breakfastProteinPackedItems);
+          lightAndFreshItemsList.assignAll(breakfastLightAndFreshItems);
+          heartyAndConfortingItemsList.assignAll(breakfastHeartyComforting);
+        } else if (selectedTabName.value == 'lunch') {
+          ///---------<>>>> Section : Assign Lunch Extrected Data to List
+          proteinPackedItemsList.assignAll(lunchProteinPackedItems);
+          lightAndFreshItemsList.assignAll(lunchLightAndFreshItems);
+          heartyAndConfortingItemsList.assignAll(lunchHeartyComforting);
+        } else if (selectedTabName.value == 'dinner') {
+          ///---------<>>>> Section : Assign Lunch Extrected Data to List
+          proteinPackedItemsList.assignAll(dinnerProteinPackedItems);
+          lightAndFreshItemsList.assignAll(dinnerLightAndFreshItems);
+          heartyAndConfortingItemsList.assignAll(dinnerHeartyComforting);
+        }
       } else {
         aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
+        if (selectedTabName.value == 'breakfast') {
+          proteinPackedItemsList.clear();
+          lightAndFreshItemsList.clear();
+          heartyAndConfortingItemsList.clear();
+        } else if (selectedTabName.value == 'lunch') {
+          proteinPackedItemsList.clear();
+          lightAndFreshItemsList.clear();
+          heartyAndConfortingItemsList.clear();
+        } else if (selectedTabName.value == 'dinner') {
+          proteinPackedItemsList.clear();
+          lightAndFreshItemsList.clear();
+          heartyAndConfortingItemsList.clear();
+        } else {
+          LoggerUtils.error('Unexpected tab state: ${selectedTabName.value}');
+        }
         LoggerUtils.error(
           "Failed to Get AI Suggested Mealse : Error Code :: ${response.statusCode}",
         );

@@ -107,7 +107,7 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
                   itemImagePath: meal.image ?? '',
                   itemTitle: meal.mealName ?? 'N/A',
                   kcalValue: meal.kcal ?? 0,
-                  personValue: meal.kcal ?? 1,
+                  servingValue: meal.kcal ?? 1,
                 );
               },
             ),
