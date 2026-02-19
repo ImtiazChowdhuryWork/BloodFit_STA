@@ -1,12 +1,9 @@
 import 'package:get/get.dart';
 
 import '../controllers/calendar_controller.dart';
-import '../features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/enums_controller.dart';
-import '../features/faq/data/controller/faq_screen_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
-import '../features/home/data/controller/home_screen_controller.dart';
 import '../controllers/ig_current_body_type_controller.dart';
 import '../controllers/ig_desired_weight_controller.dart';
 import '../controllers/ig_food_allergies_screen_controller.dart';
@@ -18,19 +15,17 @@ import '../controllers/ig_whats_your_activity_level_controller.dart';
 import '../controllers/ig_workout_focus_area_controller.dart';
 import '../controllers/ig_workout_main_goal_controller.dart';
 import '../controllers/information_gather_screen_controller.dart';
-import '../controllers/information_gather_work_out_controller.dart';
-import '../controllers/meal_plan_screen_controller.dart';
+import '../features/information_gather_workout/data/controller/information_gather_work_out_controller.dart';
 import '../controllers/onboarding_age_picker_screen_controller.dart';
 import '../controllers/onboarding_screen_controller.dart';
-import '../features/information_gather_meal_plan/presentation/widgets/select_desired_body_shape/data/controller/information_gather_body_shape_main_goal_controller.dart';
-import '../features/information_gather_meal_plan/presentation/widgets/select_desired_weight/data/controller/ig_select_desired_weight_widget_controller.dart';
-import '../features/my_profile/data/controller/profile_screen_controller.dart';
 import '../controllers/read_more_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
 import '../controllers/select_your_country_screen_controller.dart';
 import '../controllers/slider_button_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../controllers/work_out_screen_controller.dart';
+import '../features/information_gather_meal_plan/presentation/widgets/select_desired_body_shape/data/controller/information_gather_body_shape_main_goal_controller.dart';
+import '../features/information_gather_meal_plan/presentation/widgets/select_desired_weight/data/controller/ig_select_desired_weight_widget_controller.dart';
 
 class ControllerBindings extends Bindings {
   @override
@@ -57,7 +52,7 @@ class ControllerBindings extends Bindings {
     // Get.lazyPut(() => HomeScreenController(), fenix: true);
     Get.lazyPut(() => WorkOutScreenController(), fenix: true);
     Get.lazyPut(() => IgCurrentBodyTypeController(), fenix: true);
-    Get.lazyPut(() => InformationGatherWorkOutController(), fenix: true);
+    
     Get.lazyPut(() => IgPreferedActivityLevelController(), fenix: true);
     Get.lazyPut(() => IgWorkoutMainGoalController(), fenix: true);
     Get.lazyPut(() => IgDesiredWeightController(), fenix: true);

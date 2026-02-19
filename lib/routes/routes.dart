@@ -46,6 +46,7 @@ import '../features/home/bindings/home_screen_bindings.dart';
 import '../features/information_gather_meal_plan/binding/information_gather_meal_binding.dart';
 import '../features/information_gather_meal_plan/presentation/information_gather_meal_screen.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_height/presentation/select_height_screen_widget.dart';
+import '../features/information_gather_workout/binding/information_gather_workout_binding.dart';
 import '../features/information_gather_workout/presentation/information_gather_workout_screen.dart';
 import '../features/my_profile/bindings/my_profile_bindings.dart';
 import '../features/privacy_policy/binding/privacy_policy_binding.dart';
@@ -442,6 +443,7 @@ class Routes {
     GetPage(
       name: informationGatherWorkoutScreen,
       page: () => InformationGatherWorkoutScreen(),
+      binding: InformationGatherWorkoutBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

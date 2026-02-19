@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/information_gather_work_out_controller.dart';
+import '../data/controller/information_gather_work_out_controller.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../custom_widgets/page_indicator.dart';
 import '../../../routes/routes.dart';
@@ -61,8 +61,8 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
                     CurrentBodyShapeWidget(),
                     ActivityLevelWidget(),
                     PreferedWorkoutLevelWidget(),
-                    WorkoutMainGoalWidget(),
-                    DesiredWeightWidget(),
+                    // WorkoutMainGoalWidget(),
+                    // DesiredWeightWidget(),
                     WorkoutFocusAreaWidget(),
                     // YouAreAllSetScreen(),
                   ],
