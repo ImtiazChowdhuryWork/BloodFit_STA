@@ -44,6 +44,7 @@ class Datum {
     String? mealGroupId;
     String? image;
     DateTime? date;
+    int? serving;
     String? status;
     int? v;
 
@@ -59,6 +60,7 @@ class Datum {
         this.mealGroupId,
         this.image,
         this.date,
+        this.serving,
         this.status,
         this.v,
     });
@@ -79,6 +81,7 @@ class Datum {
         mealGroupId: json["mealGroupId"],
         image: json["image"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
+        serving: json["serving"],
         status: json["status"],
         v: json["__v"],
     );
@@ -95,6 +98,7 @@ class Datum {
         "mealGroupId": mealGroupId,
         "image": image,
         "date": date?.toIso8601String(),
+        "serving": serving,
         "status": status,
         "__v": v,
     };

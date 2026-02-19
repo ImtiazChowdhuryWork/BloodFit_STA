@@ -25,7 +25,7 @@ class LunchTab extends StatelessWidget {
           ///Section : ------------///Previously Selected Meals///----------------
           RecentlySelectedMealsWidget(
             isLoading: chooseFromOurSuggestedMealController.isPreviouslySelectedMealsLoading,
-            meals: chooseFromOurSuggestedMealController.dinnerRecentChosenMeals,
+            meals: chooseFromOurSuggestedMealController.lunchRecentChosenMeals,
           ),
           UIHelper.verticalSpace(32.h),
 

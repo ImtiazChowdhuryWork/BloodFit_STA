@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/ai_suggested_meals_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
@@ -14,9 +16,6 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   ///-------<>>>> Section : Importing the AI Suggested Meals Repository
   final AiSuggestedMealsRepository _aiSuggestedMealsRepository;
-
-
-  
 
   ChooseFromOurSuggestedMealController(
     this._previouslySelectedMealsRepository,
@@ -78,8 +77,14 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           .previouslySelectedMealsRepository(mealType: selectedTabName.value);
 
       if (responses.statusCode == 200 && responses.isSuccess) {
-        LoggerUtils.debug("🥳🥳🥳Recently Selected Meals are fatched successfully!");
+        LoggerUtils.debug(
+          "🥳🥳🥳Recently Selected Meals are fatched successfully!",
+        );
         final model = RecentChosenMealsModel.fromJson(responses.jsonResponse!);
+
+        LoggerUtils.debug(
+          const JsonEncoder.withIndent('  ').convert(responses.jsonResponse),
+        );
 
         final List<Datum> meals = model.data ?? [];
 
@@ -124,11 +129,11 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     aiSuggestedMealsErrorMessage.value = '';
   }
 
-
   ///-------------->>> Section : Per Tabs 3 Meal Types(Protein-Packed, Light & Fresh, Hearty & Comforting) List
   RxList<HealthyComforting> proteinPackedItemsList = <HealthyComforting>[].obs;
   RxList<HealthyComforting> lightAndFreshItemsList = <HealthyComforting>[].obs;
-  RxList<HealthyComforting> heartyAndConfortingItemsList = <HealthyComforting>[].obs;
+  RxList<HealthyComforting> heartyAndConfortingItemsList =
+      <HealthyComforting>[].obs;
 
   Future<void> getAiSuggestedMealsApi() async {
     isAiSuggestedMealsLoading.value = true;
@@ -141,25 +146,30 @@ class ChooseFromOurSuggestedMealController extends GetxController {
         LoggerUtils.debug("🥳🥳🥳Ai Suggested Meals are fatched successfully!");
         final model = AiSuggestedMealsModel.fromJson(response.jsonResponse!);
 
-
-
         ///-----------<>>>>> SECTION : Data Extrection <>>>>>>>>>---------------///
         ///-----------<>>>> Section : Breakast Items
-        final List<HealthyComforting> breakfastProteinPackedItems = model.data?.breakfastOptions?.proteinPacked ?? [];
-        final List<HealthyComforting> breakfastLightAndFreshItems = model.data?.breakfastOptions?.lightFresh ?? [];
-        final List<HealthyComforting> breakfastHeartyComforting = model.data?.breakfastOptions?.healthyComforting ?? [];
+        final List<HealthyComforting> breakfastProteinPackedItems =
+            model.data?.breakfastOptions?.proteinPacked ?? [];
+        final List<HealthyComforting> breakfastLightAndFreshItems =
+            model.data?.breakfastOptions?.lightFresh ?? [];
+        final List<HealthyComforting> breakfastHeartyComforting =
+            model.data?.breakfastOptions?.healthyComforting ?? [];
 
         ///-----------<>>>> Section : Lunch Items
-        final List<HealthyComforting> lunchProteinPackedItems = model.data?.lunchOptions?.proteinPacked ?? [];
-        final List<HealthyComforting> lunchLightAndFreshItems = model.data?.lunchOptions?.lightFresh ?? [];
-        final List<HealthyComforting> lunchHeartyComforting = model.data?.lunchOptions?.healthyComforting ?? [];
+        final List<HealthyComforting> lunchProteinPackedItems =
+            model.data?.lunchOptions?.proteinPacked ?? [];
+        final List<HealthyComforting> lunchLightAndFreshItems =
+            model.data?.lunchOptions?.lightFresh ?? [];
+        final List<HealthyComforting> lunchHeartyComforting =
+            model.data?.lunchOptions?.healthyComforting ?? [];
 
         ///-----------<>>>> Section : Dinner Items
-        final List<HealthyComforting> dinnerProteinPackedItems = model.data?.dinnerOptions?.proteinPacked ?? [];
-        final List<HealthyComforting> dinnerLightAndFreshItems = model.data?.dinnerOptions?.lightFresh ?? [];
-        final List<HealthyComforting> dinnerHeartyComforting = model.data?.dinnerOptions?.healthyComforting ?? [];
-
-
+        final List<HealthyComforting> dinnerProteinPackedItems =
+            model.data?.dinnerOptions?.proteinPacked ?? [];
+        final List<HealthyComforting> dinnerLightAndFreshItems =
+            model.data?.dinnerOptions?.lightFresh ?? [];
+        final List<HealthyComforting> dinnerHeartyComforting =
+            model.data?.dinnerOptions?.healthyComforting ?? [];
 
         if (selectedTabName.value == 'breakfast') {
           ///---------<>>>> Section : Assign Breakfast Extrected Data to List
@@ -198,7 +208,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           "Failed to Get AI Suggested Mealse : Error Code :: ${response.statusCode}",
         );
         LoggerUtils.error(
-          "Error Message : ${aiSuggestedMealsErrorMessage.value}",
+          "AI Suggested Meals Error Message : ${aiSuggestedMealsErrorMessage.value}",
         );
       }
     } catch (error) {
