@@ -7,13 +7,19 @@ import '../../../../utils/page_indicator_interface.dart';
 
 class InformationGatherWorkOutController extends GetxController
     implements PageIndicatorInterface {
-  final PageController pageController = PageController();
+  late PageController pageController;
 
   @override
   final RxInt currentIndex = 0.obs;
 
   @override
-  final int totalPages = 3;
+  final int totalPages = 4; // Updated to match the 4 pages in PageView
+
+  @override
+  void onInit() {
+    super.onInit();
+    pageController = PageController();
+  }
 
   void nextPage() {
     if (currentIndex.value < totalPages - 1) {
@@ -43,6 +49,14 @@ class InformationGatherWorkOutController extends GetxController
 
   bool get isFirstPage => currentIndex.value == 0;
   bool get isLastPage => currentIndex.value == totalPages - 1;
+
+  /// Reset the controller state for fresh start
+  void reset() {
+    currentIndex.value = 0;
+    if (pageController.hasClients) {
+      pageController.jumpToPage(0);
+    }
+  }
 
   @override
   void onClose() {
