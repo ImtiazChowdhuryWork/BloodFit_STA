@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/activity_level/presentation/activity_level_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/current_body_shape_widget.dart';
@@ -16,13 +14,41 @@ import '../../../custom_widgets/page_indicator.dart';
 import '../../../routes/routes.dart';
 import '../data/controller/information_gather_work_out_controller.dart';
 
-class InformationGatherWorkoutScreen extends StatelessWidget {
+class InformationGatherWorkoutScreen extends StatefulWidget {
   const InformationGatherWorkoutScreen({super.key});
 
   @override
+  State<InformationGatherWorkoutScreen> createState() =>
+      _InformationGatherWorkoutScreenState();
+}
+
+class _InformationGatherWorkoutScreenState
+    extends State<InformationGatherWorkoutScreen> {
+  late final InformationGatherWorkOutController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Delete any existing controller first to ensure fresh instance
+    Get.delete<InformationGatherWorkOutController>(force: true);
+    // Create fresh controller
+    controller = Get.put(InformationGatherWorkOutController());
+    // Reset to first page when entering the screen
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      controller.reset();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Delete controller (this also calls onClose() which disposes PageController)
+    Get.delete<InformationGatherWorkOutController>(force: true);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final InformationGatherWorkOutController controller =
-        Get.find<InformationGatherWorkOutController>();
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
@@ -83,10 +109,7 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
           return CustomElevatedButton(
             onTap: () {
               if (isLastPage) {
-                // Finish onboarding or navigate to next screen
-                log("Information Gathering Completed!");
-                // controller.currentIndex.value = 0;
-                // Example navigation:
+                // Navigate to YouAreAllSetScreen every time
                 Get.toNamed(Routes.youAreAllSetScreen);
               } else {
                 // Go to next page
