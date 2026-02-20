@@ -1,3 +1,4 @@
+import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,8 +22,8 @@ class ItemImageAndTitleWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         // Background image
-        Image.asset(imagePath, width: 1.sw, height: 0.4.sh, fit: BoxFit.cover),
-
+        // Image.asset(imagePath, width: 1.sw, height: 0.4.sh, fit: BoxFit.cover),
+        CustomNetworkImageWidget(imageUrl: imagePath, isClipOval: false,width: 1.sw, height: 0.4.sh, fit: BoxFit.cover),
         // Deep gradient fade for smooth blend
         Positioned(
           bottom: 0,

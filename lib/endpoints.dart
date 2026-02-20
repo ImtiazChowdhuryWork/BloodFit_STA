@@ -60,6 +60,9 @@ final class Endpoints {
   static String swapMealUrl({required String mealID}){
     return "$url/meal/swap-meal/$mealID";
   }
+  static String mealDetails({required String mealID}){
+    return "$url/meal/get-meal/$mealID?lang=korean";
+  }
 }
 
 
