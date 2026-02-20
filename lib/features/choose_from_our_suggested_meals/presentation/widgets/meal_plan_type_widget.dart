@@ -187,6 +187,8 @@ import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controlle
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -337,6 +339,10 @@ class MealPlanTypeWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Obx(() {
                   return FoodItemShowingWidget(
+                    onTap: (){
+                      LoggerUtils.debug("Navigate to Selected Item Description Screen");
+                      Get.toNamed(Routes.mealDetailscreen);
+                    },
                     isSelected: controller.isCheckBoxSelectedList[index].value,
                     onChanged: (value) {
                       controller.setIsCheckBoxSelectedValue(

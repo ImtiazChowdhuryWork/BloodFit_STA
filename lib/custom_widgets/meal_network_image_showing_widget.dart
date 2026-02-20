@@ -9,6 +9,7 @@ class CustomNetworkImageWidget extends StatelessWidget {
   final double height;
   final BoxFit fit;
   final BorderRadius? borderRadius;
+  final bool isClipOval;
 
   const CustomNetworkImageWidget({
     super.key,
@@ -17,6 +18,7 @@ class CustomNetworkImageWidget extends StatelessWidget {
     this.height = 120,
     this.fit = BoxFit.cover,
     this.borderRadius,
+    this.isClipOval = true,
   });
 
   String get _resolvedUrl {
@@ -32,9 +34,9 @@ class CustomNetworkImageWidget extends StatelessWidget {
 
     // Ensure no double slash
     // ✅ Replace with this
-final base = imageBaseUrl.endsWith('/')
-    ? imageBaseUrl.substring(0, imageBaseUrl.length - 1)
-    : imageBaseUrl;
+    final base = imageBaseUrl.endsWith('/')
+        ? imageBaseUrl.substring(0, imageBaseUrl.length - 1)
+        : imageBaseUrl;
     final path = imageUrl!.startsWith('/') ? imageUrl! : '/$imageUrl';
     final resolved = '$base$path';
 
@@ -62,7 +64,7 @@ final base = imageBaseUrl.endsWith('/')
     }
 
     return _buildContainer(
-      ClipOval(
+      isClipOval? ClipOval(
         child: CachedNetworkImage(
           imageUrl: _resolvedUrl,
           httpHeaders: _headers, // ✅ Pass headers
@@ -86,6 +88,28 @@ final base = imageBaseUrl.endsWith('/')
             return _errorWidget(error: error.toString());
           },
         ),
+      ): CachedNetworkImage(
+        imageUrl: _resolvedUrl,
+        httpHeaders: _headers, // ✅ Pass headers
+        fit: fit,
+        width: width,
+        height: height,
+        placeholder: (_, __) {
+          LoggerUtils.debug('MealNetworkImage → ⏳ Loading...');
+          return const Center(
+            child: CircularProgressIndicator(strokeWidth: 2),
+          );
+        },
+        errorWidget: (_, error, stackTrace) {
+          // 🔥 This will now show the actual error (403, 404, etc.)
+          LoggerUtils.error(
+            'MealNetworkImage → ❌ FAILED\n'
+            '  URL: $_resolvedUrl\n'
+            '  Error: $error\n'
+            '  Stack: $stackTrace',
+          );
+          return _errorWidget(error: error.toString());
+        },
       ),
     );
   }
@@ -104,7 +128,11 @@ final base = imageBaseUrl.endsWith('/')
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.image_not_supported, color: Colors.white54, size: 28),
+          const Icon(
+            Icons.image_not_supported,
+            color: Colors.white54,
+            size: 28,
+          ),
           if (error != null) ...[
             const SizedBox(height: 4),
             Padding(
@@ -122,7 +150,3 @@ final base = imageBaseUrl.endsWith('/')
     );
   }
 }
-
-
-
-

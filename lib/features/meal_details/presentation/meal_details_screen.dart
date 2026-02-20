@@ -4,6 +4,8 @@ import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/app_text.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
+import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
+import 'package:bloodfit/features/meal_details/data/controller/meal_details_screen_controller.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -17,8 +19,40 @@ import '../widgets/food_menarel_item_tile_widget.dart';
 import '../widgets/ingredients_item_tile_widget.dart';
 import '../widgets/item_image_and_title_widget.dart';
 
-class MealDetailsScreen extends StatelessWidget {
+class MealDetailsScreen extends StatefulWidget {
   const MealDetailsScreen({super.key});
+
+  @override
+  State<MealDetailsScreen> createState() => _MealDetailsScreenState();
+}
+
+class _MealDetailsScreenState extends State<MealDetailsScreen> {
+  MealDetailsScreenController? mealDetailsScreenController;
+
+  String mealID = '';
+
+  @override
+  void initState() {
+    ///-----<>>> Section : Initialize arguments
+    final arguments = Get.arguments as Map<String, dynamic>?;
+
+    ///-----<>>> Section : Intialize Controllers
+    mealDetailsScreenController = Get.find<MealDetailsScreenController>();
+
+    ///------<>>> Section : Get Arguments
+    mealID = arguments?['mealID']?.toString() ?? '';
+
+    ///--------<>>> Section : PostFrameCallBack Function
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
+      ///------>>> Send MealID to Controller
+      mealDetailsScreenController?.setMealID(mealId: mealID);
+      
+
+      ///------<>>> Call The api
+      await mealDetailsScreenController?.getMealDetailsApi();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +63,35 @@ class MealDetailsScreen extends StatelessWidget {
           children: [
             ///Section : ----------///Item Image///-------------
             ///Section : ----------///Item Title///-------------
-            ItemImageAndTitleWidget(
-              imagePath: Assets.images.eggOmletImage.path,
-              title: "Avocado Toast & Poached Eggs",
-            ),
+            Obx(() {
+              if (mealDetailsScreenController!.isMealDetailsLoading.value) {
+                return CircularProgressIndicator();
+              }
+              if (mealDetailsScreenController!.mealImage.isEmpty ||
+                  mealDetailsScreenController!.mealName.isEmpty) {
+                return CustomShimmerEffect(
+                  height: 0.2.sh,
+                  width: 1.sw,
+                  child: Column(
+                    children: [
+                      Text('Failed to Get Meal Name or Image',style: TextFontStyle.headline14w400cb20000StylePoppins,),
+                      UIHelper.verticalSpace(10.h),
+                      CustomElevatedButton(
+                        buttonTitle: 'Retry',
+                        onTap: () {
+                          mealDetailsScreenController?.getMealDetailsApi();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return ItemImageAndTitleWidget(
+              imagePath: mealDetailsScreenController!.mealImage,
+              title: mealDetailsScreenController!.mealName,
+            );
+            }),
             UIHelper.verticalSpace(8.h),
 
             ///Section : -----------///Meal Type -> Breakfast,Lunc,Dinner///------------
@@ -44,7 +103,7 @@ class MealDetailsScreen extends StatelessWidget {
                 FoodItemDataHelperWidget(
                   iconPath: Assets.icons.mealIcon,
                   iconColor: AppColors.cfefefe,
-                  title: "Breakfast",
+                  title: mealDetailsScreenController!.mealType,
                   value: 302,
                   isValueVisible: false,
                 ),
@@ -57,7 +116,7 @@ class MealDetailsScreen extends StatelessWidget {
                 FoodItemDataHelperWidget(
                   title: "Kcal",
                   iconPath: Assets.icons.fireRed,
-                  value: 302,
+                  value: mealDetailsScreenController!.totalKcal,
                 ),
               ],
             ),
@@ -72,7 +131,7 @@ class MealDetailsScreen extends StatelessWidget {
                 children: [
                   ///Section : ------///Text -> Mesal Details Text ///----------
                   Text(
-                    foodDetailsText,
+                    mealDetailsScreenController!.mealDescription,
                     textAlign: TextAlign.center,
                     style: TextFontStyle.headline14w500c999999StylePoppins,
                   ),

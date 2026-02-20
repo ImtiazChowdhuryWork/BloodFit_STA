@@ -1,6 +1,7 @@
 
 
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
+import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -99,11 +100,14 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
                   UIHelper.horizontalSpace(15.w),
               itemBuilder: (_, index) {
                 final meal = meals[index];
+                final mealID = meals[index].id;
 
                 return FoodItemShowingWidget(
                   isSelected: true,
                   onChanged: (_) {},
-                  
+                  onTap: (){
+                    Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID': mealID});
+                  },
                   itemImagePath: meal.image ?? '',
                   itemTitle: meal.mealName ?? 'N/A',
                   kcalValue: meal.kcal ?? 0,
