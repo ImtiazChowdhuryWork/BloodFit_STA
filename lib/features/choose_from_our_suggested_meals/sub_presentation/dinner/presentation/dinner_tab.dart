@@ -32,8 +32,12 @@ class DinnerTab extends StatelessWidget {
           ///Section : ------------///Protein-Packed ///----------------
           MealPlanTypeWidget(
             mealPlanType: "Protein-Packed",
-            // isSelected: true,
             itemImagePath: Assets.images.omletEgg.path,
+            itemsList: chooseFromOurSuggestedMealController.proteinPackedItemsList,
+             retryOnTap: (){
+              chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+             },
+            // isSelected: true,
             // itemTitle: "Avocado Toast and Poached Eggs",
             // kcalValue: 302,
             // servingValue: 1,
@@ -43,8 +47,12 @@ class DinnerTab extends StatelessWidget {
           ///Section : ------------///Light & Fresh ///----------------
           MealPlanTypeWidget(
             mealPlanType: "Light & Fresh",
-            // isSelected: true,
             itemImagePath: Assets.images.omletEgg.path,
+            itemsList: chooseFromOurSuggestedMealController.lightAndFreshItemsList,
+             retryOnTap: (){
+              chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+             },
+            // isSelected: true,
             // itemTitle: "Avocado Toast and Poached Eggs",
             // kcalValue: 302,
             // servingValue: 1,
@@ -54,8 +62,12 @@ class DinnerTab extends StatelessWidget {
           ///Section : ------------///Hearty & Comforting///----------------
           MealPlanTypeWidget(
             mealPlanType: "Hearty & Comforting",
-            // isSelected: true,
             itemImagePath: Assets.images.omletEgg.path,
+            itemsList: chooseFromOurSuggestedMealController.heartyAndConfortingItemsList,
+             retryOnTap: (){
+              chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+             },
+            // isSelected: true,
             // itemTitle: "Avocado Toast and Poached Eggs",
             // kcalValue: 302,
             // servingValue: 1,
