@@ -79,6 +79,9 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
             ///------->>> Section : Breakfast
             MealPlanItemCard(
+              onTap: (){
+                Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.breakfastMealID});
+              },
               isMealEaten: homeScreenController.breakFastMealEatenStatus == 'not_yet_done' ? false : homeScreenController.breakFastMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
               leftButtonOnTap: () {
@@ -107,6 +110,11 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
             ///------->>> Section : Lunch
             MealPlanItemCard(
+              onTap: (){
+                
+                Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.lunchMealID});
+
+              },
               isMealEaten: homeScreenController.lunchMealEatenStatus == 'not_yet_done' ? false : homeScreenController.lunchMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
               
@@ -137,6 +145,9 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
             ///------->>> Section : Dinner
             MealPlanItemCard(
+              onTap: (){
+                Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.dinerMealID});
+              },
               isMealEaten: homeScreenController.dinerMealEatenStatus == 'not_yet_done' ? false : homeScreenController.dinerMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
               leftButtonOnTap: () {
@@ -159,9 +170,6 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               kcalValue: homeScreenController.dinerKcal ?? 0,
               mealImagePath: "$imageBaseUrl${homeScreenController.dinerImage}",
             ),
-            
-
-
           ],
         );
       }
