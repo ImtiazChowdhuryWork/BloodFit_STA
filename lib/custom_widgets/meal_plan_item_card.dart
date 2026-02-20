@@ -25,6 +25,8 @@ class MealPlanItemCard extends StatelessWidget {
   final Color? leftButtonBorderColor;
   final bool isLeftButtonBorderUsed;
   final bool isMealEaten;
+  final void Function()? onTap;
+
   const MealPlanItemCard({
     super.key,
     required this.mealImagePath,
@@ -40,142 +42,150 @@ class MealPlanItemCard extends StatelessWidget {
     this.leftButtonBorderColor,
     this.isLeftButtonBorderUsed = false,
     this.leftButtonColor,
-    this.leftButtonBorderWidth, required this.isMealEaten,
+    this.leftButtonBorderWidth,
+    required this.isMealEaten,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        showSectionTitle
-            ? Text(
-                mealType,
-                style: TextFontStyle.headline18w500cfefefeStylePoppins,
-              )
-            : SizedBox.shrink(),
-        showSectionTitle ? UIHelper.verticalSpace(12.h) : SizedBox.shrink(),
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          showSectionTitle
+              ? Text(
+                  mealType,
+                  style: TextFontStyle.headline18w500cfefefeStylePoppins,
+                )
+              : SizedBox.shrink(),
+          showSectionTitle ? UIHelper.verticalSpace(12.h) : SizedBox.shrink(),
 
-        /// Meal Container
-        Align(
-          alignment: Alignment.centerRight,
-          child: Container(
-            width: 0.8.sw,
-            height: 130.h,
-            padding: EdgeInsets.all(10.sp),
-            decoration: BoxDecoration(
-              color: AppColors.c262626,
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            child: Row(
-              children: [
-                /// Food Image (half outside)
-                /// Food Image (half outside)
-                SizedBox(
-                  width: 100.w, // increase width
-                  height: 150.h, // increase height
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        left: -50.w, // half of the image width
-                        top: -16.h, // optional vertical adjustment
-                        child: CustomNetworkImageWidget(
-                          imageUrl: mealImagePath,
-                          width: 140.w,
-                          height: 140.h,
+          /// Meal Container
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 0.8.sw,
+              height: 130.h,
+              padding: EdgeInsets.all(10.sp),
+              decoration: BoxDecoration(
+                color: AppColors.c262626,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Row(
+                children: [
+                  /// Food Image (half outside)
+                  /// Food Image (half outside)
+                  SizedBox(
+                    width: 100.w, // increase width
+                    height: 150.h, // increase height
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          left: -50.w, // half of the image width
+                          top: -16.h, // optional vertical adjustment
+                          child: CustomNetworkImageWidget(
+                            imageUrl: mealImagePath,
+                            width: 140.w,
+                            height: 140.h,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-                UIHelper.horizontalSpace(14.w),
+                  UIHelper.horizontalSpace(14.w),
 
-                /// Meal Info + Buttons
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// Meal Name
-                      Text(
-                        mealTitle,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
-                      ),
-                      UIHelper.verticalSpace(6.h),
+                  /// Meal Info + Buttons
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// Meal Name
+                        Text(
+                          mealTitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              TextFontStyle.headline14w500cFFFFFFStylePoppins,
+                        ),
+                        UIHelper.verticalSpace(6.h),
 
-                      /// Kcal Info
-                      Row(
-                        children: [
-                          SvgPicture.asset(Assets.icons.fireRed),
-                          UIHelper.horizontalSpace(8.w),
-                          Text(
-                            "$kcalValue Kcal",
-                            style:
-                                TextFontStyle.headline12w500cfefefeStylePoppins,
-                          ),
-                        ],
-                      ),
-                      UIHelper.verticalSpace(8.h),
-
-                      /// Section : -----------///Left Button////------------
-                      /// Section : ----------///Right Button///-------------
-                      
-                      isMealEaten ? 
-                      CustomElevatedButton(
-                        onTap: null,
-                        // buttonWidth: 100.w,
-                        isDisabled: true,
-                        buttonHeight: 30.h,
-                        buttonColor: AppColors.cc6c6c6,
-                        buttonTitle: 'Meal Consumed',
-                        textStyle: TextFontStyle
-                            .headline12w500c000000StylePoppins,
-                      ) :
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: CustomElevatedButton(
-                              onTap: leftButtonOnTap,
-                              buttonHeight: 34.h,
-                              buttonColor: leftButtonColor,
-                              isButtonBorderUsed: isLeftButtonBorderUsed,
-                              buttonBorderColor: leftButtonBorderColor,
-                              buttonBorderWidth: leftButtonBorderWidth,
-                              buttonTitle: leftButtonTitle,
-                              textStyle: TextFontStyle
+                        /// Kcal Info
+                        Row(
+                          children: [
+                            SvgPicture.asset(Assets.icons.fireRed),
+                            UIHelper.horizontalSpace(8.w),
+                            Text(
+                              "$kcalValue Kcal",
+                              style: TextFontStyle
                                   .headline12w500cfefefeStylePoppins,
                             ),
-                          ),
-                          UIHelper.horizontalSpace(8.w),
-                          Expanded(
-                            child: CustomElevatedButton(
-                              onTap: rightButtonOnTap,
-                              // buttonWidth: 100.w,
-                              buttonHeight: 34.h,
-                              buttonTitle: rightButtonTitle,
-                              textStyle: TextFontStyle
-                                  .headline12w500cfefefeStylePoppins,
-                              isButtonBorderUsed: true,
-                              buttonColor: AppColors.scaffoldBackgroundColor,
-                              buttonBorderColor:
-                                  rightButtonBorderColor ?? AppColors.cfefefe,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        UIHelper.verticalSpace(8.h),
+
+                        /// Section : -----------///Left Button////------------
+                        /// Section : ----------///Right Button///-------------
+                        isMealEaten
+                            ? CustomElevatedButton(
+                                onTap: null,
+                                // buttonWidth: 100.w,
+                                isDisabled: true,
+                                buttonHeight: 30.h,
+                                buttonColor: AppColors.cc6c6c6,
+                                buttonTitle: 'Meal Consumed',
+                                textStyle: TextFontStyle
+                                    .headline12w500c000000StylePoppins,
+                              )
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: CustomElevatedButton(
+                                      onTap: leftButtonOnTap,
+                                      buttonHeight: 34.h,
+                                      buttonColor: leftButtonColor,
+                                      isButtonBorderUsed:
+                                          isLeftButtonBorderUsed,
+                                      buttonBorderColor: leftButtonBorderColor,
+                                      buttonBorderWidth: leftButtonBorderWidth,
+                                      buttonTitle: leftButtonTitle,
+                                      textStyle: TextFontStyle
+                                          .headline12w500cfefefeStylePoppins,
+                                    ),
+                                  ),
+                                  UIHelper.horizontalSpace(8.w),
+                                  Expanded(
+                                    child: CustomElevatedButton(
+                                      onTap: rightButtonOnTap,
+                                      // buttonWidth: 100.w,
+                                      buttonHeight: 34.h,
+                                      buttonTitle: rightButtonTitle,
+                                      textStyle: TextFontStyle
+                                          .headline12w500cfefefeStylePoppins,
+                                      isButtonBorderUsed: true,
+                                      buttonColor:
+                                          AppColors.scaffoldBackgroundColor,
+                                      buttonBorderColor:
+                                          rightButtonBorderColor ??
+                                          AppColors.cfefefe,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -43,10 +43,9 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
     mealID = arguments?['mealID']?.toString() ?? '';
 
     ///--------<>>> Section : PostFrameCallBack Function
-    WidgetsBinding.instance.addPostFrameCallback((_)async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       ///------>>> Send MealID to Controller
       mealDetailsScreenController?.setMealID(mealId: mealID);
-      
 
       ///------<>>> Call The api
       await mealDetailsScreenController?.getMealDetailsApi();
@@ -72,25 +71,17 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 return CustomShimmerEffect(
                   height: 0.2.sh,
                   width: 1.sw,
-                  child: Column(
-                    children: [
-                      Text('Failed to Get Meal Name or Image',style: TextFontStyle.headline14w400cb20000StylePoppins,),
-                      UIHelper.verticalSpace(10.h),
-                      CustomElevatedButton(
-                        buttonTitle: 'Retry',
-                        onTap: () {
-                          mealDetailsScreenController?.getMealDetailsApi();
-                        },
-                      ),
-                    ],
+                  child: Text(
+                    'Failed to Get Meal Name or Image',
+                    style: TextFontStyle.headline14w400cb20000StylePoppins,
                   ),
                 );
               }
 
               return ItemImageAndTitleWidget(
-              imagePath: mealDetailsScreenController!.mealImage,
-              title: mealDetailsScreenController!.mealName,
-            );
+                imagePath: mealDetailsScreenController!.mealImage,
+                title: mealDetailsScreenController!.mealName,
+              );
             }),
             UIHelper.verticalSpace(8.h),
 
@@ -100,24 +91,58 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 /// Food Total Kcal & Serving
-                FoodItemDataHelperWidget(
-                  iconPath: Assets.icons.mealIcon,
-                  iconColor: AppColors.cfefefe,
-                  title: mealDetailsScreenController!.mealType,
-                  value: 302,
-                  isValueVisible: false,
-                ),
+                Obx(() {
+                  if (mealDetailsScreenController!.isMealDetailsLoading.value) {
+                    return CircularProgressIndicator();
+                  }
+                  if (mealDetailsScreenController!.mealType.isEmpty) {
+                    return CustomShimmerEffect(
+                      height: 40.h,
+                      width: 60.w,
+                      child: Text(
+                        'Failed to Get Meal Type',
+                        style:
+                            TextFontStyle.headline14w400cb20000StylePoppins,
+                      ),
+                    );
+                  }
+
+                  return FoodItemDataHelperWidget(
+                    iconPath: Assets.icons.mealIcon,
+                    iconColor: AppColors.cfefefe,
+                    title: mealDetailsScreenController!.mealType,
+                    value: 302,
+                    isValueVisible: false,
+                  );
+                }),
                 UIHelper.horizontalSpace(20.w),
 
                 /// Divider
                 Container(width: 2.sp, height: 20.h, color: AppColors.c282828),
                 UIHelper.horizontalSpace(20.w),
 
-                FoodItemDataHelperWidget(
-                  title: "Kcal",
-                  iconPath: Assets.icons.fireRed,
-                  value: mealDetailsScreenController!.totalKcal,
-                ),
+                Obx(() {
+                  if (mealDetailsScreenController!.isMealDetailsLoading.value) {
+                    return CircularProgressIndicator();
+                  }
+                  if (mealDetailsScreenController!.totalKcal <= 0) {
+                    return CustomShimmerEffect(
+                      height: 40.h,
+                      width: 120.w,
+                      child: Text(
+                        'Failed to Get Total KCAL',
+                        style:
+                            TextFontStyle.headline14w400cb20000StylePoppins,
+                      ),
+                    );
+                  }
+
+                  return FoodItemDataHelperWidget(
+                    title: "Kcal",
+                    iconPath: Assets.icons.fireRed,
+                    value: mealDetailsScreenController!.totalKcal,
+                  );
+                }),
               ],
             ),
             UIHelper.verticalSpace(12.h),
@@ -130,11 +155,30 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ///Section : ------///Text -> Mesal Details Text ///----------
-                  Text(
-                    mealDetailsScreenController!.mealDescription,
-                    textAlign: TextAlign.center,
-                    style: TextFontStyle.headline14w500c999999StylePoppins,
-                  ),
+                  Obx(() {
+                    if (mealDetailsScreenController!
+                        .isMealDetailsLoading
+                        .value) {
+                      return CircularProgressIndicator();
+                    }
+                    if (mealDetailsScreenController!.mealDescription.isEmpty) {
+                      return CustomShimmerEffect(
+                        height: 20.h,
+                        width: 1.sw,
+                        child: Text(
+                          'Failed to Get Meal Description',
+                          style: TextFontStyle
+                              .headline14w400cb20000StylePoppins,
+                        ),
+                      );
+                    }
+
+                    return Text(
+                      mealDetailsScreenController!.mealDescription,
+                      textAlign: TextAlign.center,
+                      style: TextFontStyle.headline14w500c999999StylePoppins,
+                    );
+                  }),
                   UIHelper.verticalSpace(32.h),
 
                   ///Section : ---------///Text -> Calory Count For This Meal ///---------------
