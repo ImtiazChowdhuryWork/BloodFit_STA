@@ -3,20 +3,18 @@ import 'dart:developer';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/activity_level/presentation/activity_level_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/current_body_shape_widget.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/desired_weight/presentation/desired_weight_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/prefered_workout_level/presentation/prefered_workout_level_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_focus_area/presentation/workout_focus_area_widget.dart';
-import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_main_goal/presentation/workout_main_goal_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../data/controller/information_gather_work_out_controller.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../custom_widgets/page_indicator.dart';
 import '../../../routes/routes.dart';
+import '../data/controller/information_gather_work_out_controller.dart';
 
 class InformationGatherWorkoutScreen extends StatelessWidget {
   const InformationGatherWorkoutScreen({super.key});
@@ -61,10 +59,7 @@ class InformationGatherWorkoutScreen extends StatelessWidget {
                     CurrentBodyShapeWidget(),
                     ActivityLevelWidget(),
                     PreferedWorkoutLevelWidget(),
-                    // WorkoutMainGoalWidget(),
-                    // DesiredWeightWidget(),
                     WorkoutFocusAreaWidget(),
-                    // YouAreAllSetScreen(),
                   ],
                 ),
               ),
