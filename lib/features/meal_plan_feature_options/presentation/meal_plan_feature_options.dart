@@ -1,3 +1,4 @@
+import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -6,14 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../custom_widgets/meal_plan_calendar_widget.dart';
 import '../../home/presentation/widgets/app_bar_section_widget.dart';
+import '../../home/presentation/widgets/custom_calender_widget.dart';
 import '../../home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
 
 class MealPlanFeatureOptions extends StatelessWidget {
   MealPlanFeatureOptions({super.key});
 
   final EnumsController enumsController = Get.find<EnumsController>();
-  final HomeScreenController homeScreenController = Get.find<HomeScreenController>();
+  final HomeScreenController homeScreenController =
+      Get.find<HomeScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,9 @@ class MealPlanFeatureOptions extends StatelessWidget {
               ///Section : ---------------------///Profile///-----------
               AppBarSectionWidget(),
               UIHelper.verticalSpace(20.h),
+
+              ///Section : -------------<>>>>> Meal Calender
+              MealPlanCalendarWidget(),
 
               ShowSelectedMealsOrBuildMealPlanWidget(),
               UIHelper.verticalSpace(24.h),
