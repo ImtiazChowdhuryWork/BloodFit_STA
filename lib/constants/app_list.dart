@@ -656,22 +656,22 @@ class AppList {
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelSedentary.path,
       subTitle:
-          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+          "If you spend most of your day sitting and rarely engage in physical activity, this level is for you.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelLightlyActive.path,
       subTitle:
-          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+          "You do light physical activity occasionally, such as short walks or simple daily movements, but not on a regular basis.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelActive.path,
       subTitle:
-          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+          "You stay physically active most days with regular exercise, workouts, or an active lifestyle.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelVeryActive.path,
       subTitle:
-          "If You Spend Most Of Your Day Sitting And Rarely Engage In Physical Activity, This Level Is For You.",
+          "You engage in intense physical activity or workouts almost every day and maintain a highly active routine.",
     ),
   ];
 
