@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 import '../../../../../../constants/app_constant_text.dart';
 import '../../../../../../constants/text_font_style.dart';
-import '../../../../../../controllers/ig_current_body_type_controller.dart';
 import '../../../../../../helper/di.dart';
 import '../../../../../../helper/logger_util.dart';
 import '../data/controller/information_gather_workout_current_body_shape_main_goal_controller.dart';
@@ -54,7 +53,7 @@ class CurrentBodyShapeWidget extends StatelessWidget {
                   if (previousIndex != index) {
                     // Save to storage
                     appData.write(
-                      kKeyExpectedBodyShape,
+                      kKeyCurrentBodyShape,
                       controller.selectedBodyTypeTobeSaved.value,
                     );
 
@@ -71,7 +70,7 @@ class CurrentBodyShapeWidget extends StatelessWidget {
                     );
 
                     // Clear the saved value when deselecting
-                    appData.remove(kKeyExpectedBodyShape);
+                    appData.remove(kKeyCurrentBodyShape);
 
                     ///----------->>> Update the parent controller to disable the continue button
                     // Get.find<InformationGatherMealPlanController>()

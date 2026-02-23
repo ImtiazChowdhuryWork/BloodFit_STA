@@ -629,6 +629,9 @@ class AppList {
       totalCal: 500,
     ),
   ];
+
+
+  ///----------->>> Body Types List
   static List<BodyTypeModel> bodyTypeList = [
     BodyTypeModel(
       bodyType: "Medium",
@@ -661,19 +664,19 @@ class AppList {
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelLightlyActive.path,
-      title: "Lightly Active", titleEnum: "lightly active",
+      title: "Lightly Active", titleEnum: "lightly_active",
       subTitle:
           "You do light physical activity occasionally, such as short walks or simple daily movements, but not on a regular basis.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelActive.path,
-      title: "Moderately Active", titleEnum: "moderately active",
+      title: "Moderately Active", titleEnum: "moderately_active",
       subTitle:
           "You stay physically active most days with regular exercise, workouts, or an active lifestyle.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelVeryActive.path,
-      title: "Very Active", titleEnum: "very active",
+      title: "Very Active", titleEnum: "very_active",
       subTitle:
           "You engage in intense physical activity or workouts almost every day and maintain a highly active routine.",
     ),

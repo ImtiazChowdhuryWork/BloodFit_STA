@@ -40,7 +40,7 @@ class Data {
     int? kcal;
     String? description;
     List<CaloryCount>? caloryCount;
-    List<String>? ingredients;
+    List<Ingredient>? ingredients;
     String? mealGroupId;
     String? image;
     DateTime? date;
@@ -77,7 +77,7 @@ class Data {
         kcal: json["kcal"],
         description: json["description"],
         caloryCount: json["caloryCount"] == null ? [] : List<CaloryCount>.from(json["caloryCount"]!.map((x) => CaloryCount.fromJson(x))),
-        ingredients: json["ingredients"] == null ? [] : List<String>.from(json["ingredients"]!.map((x) => x)),
+        ingredients: json["ingredients"] == null ? [] : List<Ingredient>.from(json["ingredients"]!.map((x) => Ingredient.fromJson(x))),
         mealGroupId: json["mealGroupId"],
         image: json["image"],
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
@@ -94,7 +94,7 @@ class Data {
         "kcal": kcal,
         "description": description,
         "caloryCount": caloryCount == null ? [] : List<dynamic>.from(caloryCount!.map((x) => x.toJson())),
-        "ingredients": ingredients == null ? [] : List<dynamic>.from(ingredients!.map((x) => x)),
+        "ingredients": ingredients == null ? [] : List<dynamic>.from(ingredients!.map((x) => x.toJson())),
         "mealGroupId": mealGroupId,
         "image": image,
         "date": date?.toIso8601String(),
@@ -128,6 +128,38 @@ class CaloryCount {
     Map<String, dynamic> toJson() => {
         "label": label,
         "kcal": kcal,
+        "_id": id,
+    };
+}
+
+class Ingredient {
+    String? name;
+    String? quantity;
+    String? icon;
+    String? id;
+
+    Ingredient({
+        this.name,
+        this.quantity,
+        this.icon,
+        this.id,
+    });
+
+    factory Ingredient.fromRawJson(String str) => Ingredient.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory Ingredient.fromJson(Map<String, dynamic> json) => Ingredient(
+        name: json["name"],
+        quantity: json["quantity"],
+        icon: json["icon"],
+        id: json["_id"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "name": name,
+        "quantity": quantity,
+        "icon": icon,
         "_id": id,
     };
 }

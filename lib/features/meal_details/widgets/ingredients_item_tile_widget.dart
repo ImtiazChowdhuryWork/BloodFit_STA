@@ -9,25 +9,18 @@ import '../../../helper/ui_helpers.dart';
 class IngredientItemTileWidget extends StatelessWidget {
   final String imagePath;
   final String title;
-  final double gValue;
+
   final String recommendedConsumable;
 
   const IngredientItemTileWidget({
     super.key,
     required this.imagePath,
     required this.title,
-    required this.gValue,
+
     required this.recommendedConsumable,
   });
 
-  String get formattedGValue {
-    // ✅ Show without decimals if it's a whole number
-    if (gValue % 1 == 0) {
-      return gValue.toStringAsFixed(0);
-    } else {
-      return gValue.toStringAsFixed(1); // show 1 decimal place for fractions
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +33,7 @@ class IngredientItemTileWidget extends StatelessWidget {
             color: AppColors.c363636,
             shape: BoxShape.circle,
           ),
-          child: SvgPicture.asset(imagePath),
+          child: Text(imagePath),
         ),
         UIHelper.verticalSpace(8.h),
 
@@ -49,7 +42,7 @@ class IngredientItemTileWidget extends StatelessWidget {
         UIHelper.verticalSpace(2.h),
 
         Text(
-          "$formattedGValue ($recommendedConsumable)",
+          recommendedConsumable,
           style: TextFontStyle.headline12w400cc6c6c6StylePoppins,
         ),
         UIHelper.verticalSpace(8.h),
