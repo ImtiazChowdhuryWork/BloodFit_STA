@@ -55,3 +55,8 @@ const String kKeyUserFoodAlergisList = 'user_food_alergies_list';
 const String kKeyUserDislLikeFoodList = 'user_dislike_food_list';
 const String kKeyIsMealPlanSubmitted = 'is_meal_plan_submitted';
 const String kKeyExpectedBodyShape = 'expected_body_shape';
+
+
+
+///----------->>> Information Gather Work-Out Plan
+const String kKeyCurrentBodyShape = 'user_current_body_shape';
