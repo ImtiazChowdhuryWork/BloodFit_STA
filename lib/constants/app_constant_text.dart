@@ -61,4 +61,5 @@ const String kKeyExpectedBodyShape = 'expected_body_shape';
 ///----------->>> Information Gather Work-Out Plan
 const String kKeyCurrentBodyShape = 'user_current_body_shape';
 const String kKeyActivityLevel = 'user_activity_level';
+const String kKeyPreffredWorkout = 'user_preffered_workout';
 

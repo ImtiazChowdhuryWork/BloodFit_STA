@@ -684,14 +684,17 @@ class AppList {
     PreferedWorkoutLevelModel(
       iconPath: Assets.icons.easyToStartIcon,
       title: "Easy to Start",
+      titleEnum: "easy to start"
     ),
     PreferedWorkoutLevelModel(
       iconPath: Assets.icons.lightSweatIcon,
       title: "Break A Light Sweat",
+      titleEnum: "light sweat"
     ),
     PreferedWorkoutLevelModel(
       iconPath: Assets.icons.challangingIcon,
       title: "Challenging ",
+      titleEnum: "challenging"
     ),
   ];
 
