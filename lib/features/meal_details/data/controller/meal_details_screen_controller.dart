@@ -70,11 +70,14 @@ class MealDetailsScreenController extends GetxController{
 
   Data? get data => mealDetailsModel.value?.data;
 
-  String get mealName => data?.mealName ?? 'Geting the meal name...';
+
+
+
+  String get mealName => data?.mealName ?? 'Getting meal name...';
   String get mealType => data?.mealType ?? 'Geting the meal type...';
   int get totalKcal => data?.kcal ?? 0;
   String get mealDescription => data?.description ?? 'Getting the meal description';
-  List<String> get mealIngredientList => data?.ingredients ?? [];
+  List<Ingredient> get mealIngredientList => data?.ingredients ?? [];
   List <CaloryCount> get calorieCountList => data?.caloryCount ?? [];
   String get mealImage => data?.image ?? 'Getting your meal image...';
 

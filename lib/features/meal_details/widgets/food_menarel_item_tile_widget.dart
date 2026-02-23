@@ -8,7 +8,7 @@ import '../../../helper/ui_helpers.dart';
 
 class FoodMenarelItemTileWidget extends StatelessWidget {
   final String imagePath;
-  final double value;
+  final int value;
   final String menaralName;
   const FoodMenarelItemTileWidget({
     super.key,

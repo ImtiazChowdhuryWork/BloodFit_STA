@@ -1,157 +1,133 @@
 import 'dart:convert';
 
+GetTodaysMealModel getTodaysMealModelFromJson(String str) =>
+    GetTodaysMealModel.fromJson(json.decode(str));
+
 class GetTodaysMealModel {
-    bool? success;
-    int? status;
-    String? message;
-    Data? data;
+  final bool success;
+  final int status;
+  final String message;
+  final List<Datum> data;
 
-    GetTodaysMealModel({
-        this.success,
-        this.status,
-        this.message,
-        this.data,
-    });
+  GetTodaysMealModel({
+    required this.success,
+    required this.status,
+    required this.message,
+    required this.data,
+  });
 
-    factory GetTodaysMealModel.fromRawJson(String str) => GetTodaysMealModel.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory GetTodaysMealModel.fromJson(Map<String, dynamic> json) => GetTodaysMealModel(
-        success: json["success"],
-        status: json["status"],
-        message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+  factory GetTodaysMealModel.fromJson(Map<String, dynamic> json) {
+    return GetTodaysMealModel(
+      success: json['success'] ?? false,
+      status: json['status'] ?? 0,
+      message: json['message'] ?? '',
+      data: (json['data'] as List<dynamic>? ?? [])
+          .map((e) => Datum.fromJson(e))
+          .toList(),
     );
-
-    Map<String, dynamic> toJson() => {
-        "success": success,
-        "status": status,
-        "message": message,
-        "data": data?.toJson(),
-    };
+  }
 }
 
-class Data {
-    TodaysMealDataModel? breakfast;
-    TodaysMealDataModel? lunch;
-    TodaysMealDataModel? dinner;
 
-    Data({
-        this.breakfast,
-        this.lunch,
-        this.dinner,
-    });
 
-    factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+class Datum {
+  final String id;
+  final String userId;
+  final String mealName;
+  final String mealType;
+  final int kcal;
+  final String description;
+  final List<CaloryCount> caloryCount;
+  final List<Ingredient> ingredients;
+  final String mealGroupId;
+  final String image;
+  final DateTime date;
+  final int serving;
+  final String status;
+  final int version;
 
-    String toRawJson() => json.encode(toJson());
+  Datum({
+    required this.id,
+    required this.userId,
+    required this.mealName,
+    required this.mealType,
+    required this.kcal,
+    required this.description,
+    required this.caloryCount,
+    required this.ingredients,
+    required this.mealGroupId,
+    required this.image,
+    required this.date,
+    required this.serving,
+    required this.status,
+    required this.version,
+  });
 
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
-        breakfast: json["breakfast"] == null ? null : TodaysMealDataModel.fromJson(json["breakfast"]),
-        lunch: json["lunch"] == null ? null : TodaysMealDataModel.fromJson(json["lunch"]),
-        dinner: json["dinner"] == null ? null : TodaysMealDataModel.fromJson(json["dinner"]),
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    return Datum(
+      id: json['_id'] ?? '',
+      userId: json['userId'] ?? '',
+      mealName: json['mealName'] ?? '',
+      mealType: json['mealType'] ?? '',
+      kcal: json['kcal'] ?? 0,
+      description: json['description'] ?? '',
+      caloryCount: (json['caloryCount'] as List<dynamic>? ?? [])
+          .map((e) => CaloryCount.fromJson(e))
+          .toList(),
+      ingredients: (json['ingredients'] as List<dynamic>? ?? [])
+          .map((e) => Ingredient.fromJson(e))
+          .toList(),
+      mealGroupId: json['mealGroupId'] ?? '',
+      image: json['image'] ?? '',
+      date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
+      serving: json['serving'] ?? 0,
+      status: json['status'] ?? '',
+      version: json['__v'] ?? 0,
     );
-
-    Map<String, dynamic> toJson() => {
-        "breakfast": breakfast?.toJson(),
-        "lunch": lunch?.toJson(),
-        "dinner": dinner?.toJson(),
-    };
+  }
 }
 
-class TodaysMealDataModel {
-    String? id;
-    String? userId;
-    String? mealName;
-    String? mealType;
-    int? kcal;
-    String? description;
-    List<CaloryCount>? caloryCount;
-    List<String>? ingredients;
-    String? mealGroupId;
-    String? image;
-    DateTime? date;
-    String? status;
-    int? v;
-
-    TodaysMealDataModel({
-        this.id,
-        this.userId,
-        this.mealName,
-        this.mealType,
-        this.kcal,
-        this.description,
-        this.caloryCount,
-        this.ingredients,
-        this.mealGroupId,
-        this.image,
-        this.date,
-        this.status,
-        this.v,
-    });
-
-    factory TodaysMealDataModel.fromRawJson(String str) => TodaysMealDataModel.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory TodaysMealDataModel.fromJson(Map<String, dynamic> json) => TodaysMealDataModel(
-        id: json["_id"],
-        userId: json["userId"],
-        mealName: json["mealName"],
-        mealType: json["mealType"],
-        kcal: json["kcal"],
-        description: json["description"],
-        caloryCount: json["caloryCount"] == null ? [] : List<CaloryCount>.from(json["caloryCount"]!.map((x) => CaloryCount.fromJson(x))),
-        ingredients: json["ingredients"] == null ? [] : List<String>.from(json["ingredients"]!.map((x) => x)),
-        mealGroupId: json["mealGroupId"],
-        image: json["image"],
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        status: json["status"],
-        v: json["__v"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "_id": id,
-        "userId": userId,
-        "mealName": mealName,
-        "mealType": mealType,
-        "kcal": kcal,
-        "description": description,
-        "caloryCount": caloryCount == null ? [] : List<dynamic>.from(caloryCount!.map((x) => x.toJson())),
-        "ingredients": ingredients == null ? [] : List<dynamic>.from(ingredients!.map((x) => x)),
-        "mealGroupId": mealGroupId,
-        "image": image,
-        "date": date?.toIso8601String(),
-        "status": status,
-        "__v": v,
-    };
-}
 
 class CaloryCount {
-    String? label;
-    int? kcal;
-    String? id;
+  final String id;
+  final String label;
+  final int kcal;
 
-    CaloryCount({
-        this.label,
-        this.kcal,
-        this.id,
-    });
+  CaloryCount({
+    required this.id,
+    required this.label,
+    required this.kcal,
+  });
 
-    factory CaloryCount.fromRawJson(String str) => CaloryCount.fromJson(json.decode(str));
-
-    String toRawJson() => json.encode(toJson());
-
-    factory CaloryCount.fromJson(Map<String, dynamic> json) => CaloryCount(
-        label: json["label"],
-        kcal: json["kcal"],
-        id: json["_id"],
+  factory CaloryCount.fromJson(Map<String, dynamic> json) {
+    return CaloryCount(
+      id: json['_id'] ?? '',
+      label: json['label'] ?? '',
+      kcal: json['kcal'] ?? 0,
     );
+  }
+}
 
-    Map<String, dynamic> toJson() => {
-        "label": label,
-        "kcal": kcal,
-        "_id": id,
-    };
+
+class Ingredient {
+  final String id;
+  final String name;
+  final String quantity;
+  final String icon;
+
+  Ingredient({
+    required this.id,
+    required this.name,
+    required this.quantity,
+    required this.icon,
+  });
+
+  factory Ingredient.fromJson(Map<String, dynamic> json) {
+    return Ingredient(
+      id: json['_id'] ?? '',
+      name: json['name'] ?? '',
+      quantity: json['quantity'] ?? '',
+      icon: json['icon'] ?? '',
+    );
+  }
 }

@@ -11,7 +11,7 @@ import '../../../../controllers/app_snackbar_controller.dart';
 import '../../../../controllers/enums_controller.dart';
 import '../../../your_daily_calories_intake/data/model/get_calorie_requirements_model.dart';
 
-import '../model/get_todays_meal_model.dart';
+import '../model/get_todays_meal_model.dart' hide Icon;
 import '../repository/daily_calories_api_repository.dart';
 
 class HomeScreenController extends GetxController {
@@ -151,42 +151,46 @@ class HomeScreenController extends GetxController {
       LoggerUtils.debug("👁👁👁 IS Success Value : ${response.isSuccess}");
 
       if (response.statusCode == 200 && response.isSuccess) {
-        LoggerUtils.debug(
-          "🤓🤓....Todays Selected Meals Fetched From Server Successfully!",
-        );
-        todaysMealModel.value = GetTodaysMealModel.fromJson(
-          response.jsonResponse!,
-        );
+  todaysMealModel.value =
+      GetTodaysMealModel.fromJson(response.jsonResponse!);
 
-        ///Section : Assigning The Items Values to Specific Models
-        var data = todaysMealModel.value?.data;
+  final data = todaysMealModel.value?.data ?? [];
 
-        itemBreakFast.value = data?.breakfast;
-        LoggerUtils.debug("BreakFast Model Data: ${itemBreakFast.value}");
-        itemLunch.value = data?.lunch;
+  todaysSelectedMealsList.assignAll(data);
 
-        LoggerUtils.debug("Lunch Model Data: ${itemLunch.value}");
-        itemDinner.value = data?.dinner;
+  // Reset first
+  itemBreakFast.value = null;
+  itemLunch.value = null;
+  itemDinner.value = null;
 
-        LoggerUtils.debug("Dinner Model Data : ${itemDinner.value}");
+  for (final meal in todaysSelectedMealsList) {
+    switch (meal.mealType) {
+      case 'breakfast':
+        itemBreakFast.value = meal;
+        break;
+      case 'lunch':
+        itemLunch.value = meal;
+        break;
+      case 'dinner':
+        itemDinner.value = meal;
+        break;
+    }
+  }
 
-        final isMealNamesFound =
-            itemBreakFast.value?.mealName?.isNotEmpty == true &&
-            itemLunch.value?.mealName?.isNotEmpty == true &&
-            itemDinner.value?.mealName?.isNotEmpty == true;
+  final bool isMealNamesFound =
+      (itemBreakFast.value?.mealName?.isNotEmpty ?? false) &&
+      (itemLunch.value?.mealName?.isNotEmpty ?? false) &&
+      (itemDinner.value?.mealName?.isNotEmpty ?? false);
 
-        if (isMealNamesFound == true) {
-          LoggerUtils.debug(
-            "👅👅👅Meal Name Found For All Time Of Meals For Today! :: $isMealNamesFound",
-          );
-          setSelectedMealPlanAvailableStatus(status: true);
-        } else {
-          setSelectedMealPlanAvailableStatus(status: false);
-          LoggerUtils.error(
-            "Meals Name Not Found For Todays Meal! SelectedMealPlanAvailable.value ::: ${selectedMealPlanAvailable.value}",
-          );
-        }
-      } else {
+  setSelectedMealPlanAvailableStatus(status: isMealNamesFound);
+
+  LoggerUtils.debug(
+    "Meals Available: $isMealNamesFound | "
+    "Breakfast: ${itemBreakFast.value?.mealName}, "
+    "Lunch: ${itemLunch.value?.mealName}, "
+    "Dinner: ${itemDinner.value?.mealName}",
+  );
+} else {
         todaysSelectedMealsErrorMessage.value = response.errorMessage
             .toString();
         LoggerUtils.error(
@@ -208,9 +212,15 @@ class HomeScreenController extends GetxController {
     }
   }
 
-  Rxn<TodaysMealDataModel> itemBreakFast = Rxn<TodaysMealDataModel>();
-  Rxn<TodaysMealDataModel> itemLunch = Rxn<TodaysMealDataModel>();
-  Rxn<TodaysMealDataModel> itemDinner = Rxn<TodaysMealDataModel>();
+  // Rxn<Datum> itemBreakFast = Rxn<Datum>();
+  // Rxn<TodaysMealDataModel> itemLunch = Rxn<TodaysMealDataModel>();
+  // Rxn<TodaysMealDataModel> itemDinner = Rxn<TodaysMealDataModel>();
+
+// ---------- Individual Meals State ----------
+Rxn<Datum> itemBreakFast = Rxn<Datum>();
+Rxn<Datum> itemLunch = Rxn<Datum>();
+Rxn<Datum> itemDinner = Rxn<Datum>();
+  RxList<Datum> todaysSelectedMealsList = <Datum>[].obs;
 
   ///----->>> BreakFast Getters
   String? get breakfastName =>
