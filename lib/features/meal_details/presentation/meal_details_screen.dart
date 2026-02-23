@@ -58,7 +58,10 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
+
+
           children: [
+
             ///Section : ----------///Item Image///-------------
             ///Section : ----------///Item Title///-------------
             Obx(() {

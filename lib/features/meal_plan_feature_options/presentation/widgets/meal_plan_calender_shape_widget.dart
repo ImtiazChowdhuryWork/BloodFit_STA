@@ -26,9 +26,8 @@ class MealPlanCalenderShapeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16.r),
       child: Container(
         padding: EdgeInsets.all(10.sp),
         decoration: BoxDecoration(
