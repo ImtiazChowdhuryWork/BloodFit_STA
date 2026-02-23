@@ -655,25 +655,30 @@ class AppList {
   static List<ActivityLevelModel> activityLevelList = [
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelSedentary.path,
+      title: "Sedentary", titleEnum: "sedentary",
       subTitle:
           "If you spend most of your day sitting and rarely engage in physical activity, this level is for you.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelLightlyActive.path,
+      title: "Lightly Active", titleEnum: "lightly active",
       subTitle:
           "You do light physical activity occasionally, such as short walks or simple daily movements, but not on a regular basis.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelActive.path,
+      title: "Moderately Active", titleEnum: "moderately active",
       subTitle:
           "You stay physically active most days with regular exercise, workouts, or an active lifestyle.",
     ),
     ActivityLevelModel(
       imagePath: Assets.images.activityLevelVeryActive.path,
+      title: "Very Active", titleEnum: "very active",
       subTitle:
           "You engage in intense physical activity or workouts almost every day and maintain a highly active routine.",
     ),
   ];
+
 
   static List<PreferedWorkoutLevelModel> preferedWorkoutLevelList = [
     PreferedWorkoutLevelModel(

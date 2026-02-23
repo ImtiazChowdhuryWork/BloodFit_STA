@@ -25,24 +25,24 @@ class SelectableBarWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(AppList.activityLevelList.length, (index) {
-          final isSelected = index == selectedIndex;
-          return GestureDetector(
-            onTap: () => onChanged(index), // <--- pass the tapped index
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              width: 20.w,
-              height: 20.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black,
-                border: isSelected
-                    ? Border.all(color: Colors.red, width: 3.w)
-                    : null,
+            final isSelected = index == selectedIndex;
+            return GestureDetector(
+              onTap: () => onChanged(index), // <--- pass the tapped index
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                width: 20.w,
+                height: 20.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                  border: isSelected
+                      ? Border.all(color: Colors.red, width: 3.w)
+                      : null,
+                ),
               ),
-            ),
-          );
-        }),
-      ),
-    );
+            );
+          }),
+        ),
+      );
   }
 }

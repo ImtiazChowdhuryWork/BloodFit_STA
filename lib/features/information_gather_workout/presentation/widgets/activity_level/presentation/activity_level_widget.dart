@@ -1,6 +1,8 @@
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/ig_whats_your_activity_level_controller.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,10 +34,12 @@ class ActivityLevelWidget extends StatelessWidget {
         Obx(() {
           final selectedIndex =
               activityLevelController.selectedActivityLevel.value;
+          // If no selection (-1), show first item as placeholder
+          final displayIndex = selectedIndex >= 0 ? selectedIndex : 0;
           return ActivityImageAndDescriptionShowingWidget(
             selectedIndex: selectedIndex,
-            imagePath: list[selectedIndex].imagePath,
-            subTitle: list[selectedIndex].subTitle,
+            imagePath: list[displayIndex].imagePath,
+            subTitle: list[displayIndex].subTitle,
           );
         }),
 
@@ -60,11 +64,11 @@ class ActivityLevelWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Sedentary",
+                AppList.activityLevelList[0].title,
                 style: TextFontStyle.headline14w400cfefefeStylePoppins,
               ),
               Text(
-                "Very Active",
+                AppList.activityLevelList[3].title,
                 style: TextFontStyle.headline14w400cfefefeStylePoppins,
               ),
             ],
