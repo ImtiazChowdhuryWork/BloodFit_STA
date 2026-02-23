@@ -1,5 +1,7 @@
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/prefered_workout_level/presentation/widget/prefered_workout_level_showing_widget.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,7 +39,10 @@ class PreferedWorkoutLevelWidget extends StatelessWidget {
                 iconPath: data.iconPath,
                 title: data.title,
                 isSelected: controller.selectedIndex.value == index,
-                onTap: () => controller.selectLevel(index),
+                onTap: (){
+                  controller.selectLevel(index);
+                  
+                },
               );
             });
           },
