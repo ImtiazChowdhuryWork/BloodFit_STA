@@ -632,18 +632,22 @@ class AppList {
   static List<BodyTypeModel> bodyTypeList = [
     BodyTypeModel(
       bodyType: "Medium",
+      enumValue: "medium",
       bodyImage: Assets.images.bodyTypeMedium.path,
     ),
     BodyTypeModel(
       bodyType: "Flabby",
+      enumValue: "flabby",
       bodyImage: Assets.images.bodyTypeFlabby.path,
     ),
     BodyTypeModel(
       bodyType: "Skinny",
+      enumValue: "skinny",
       bodyImage: Assets.images.bodyTypeSkinny.path,
     ),
     BodyTypeModel(
       bodyType: "Muscular",
+      enumValue: "muscular",
       bodyImage: Assets.images.bodyTypeMuscular.path,
     ),
   ];

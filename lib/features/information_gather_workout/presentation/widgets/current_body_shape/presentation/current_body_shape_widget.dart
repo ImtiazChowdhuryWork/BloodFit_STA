@@ -7,12 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../../../../constants/app_constant_text.dart';
 import '../../../../../../constants/text_font_style.dart';
 import '../../../../../../controllers/ig_current_body_type_controller.dart';
+import '../../../../../../helper/di.dart';
+import '../../../../../../helper/logger_util.dart';
+import '../data/controller/information_gather_workout_current_body_shape_main_goal_controller.dart';
 
 class CurrentBodyShapeWidget extends StatelessWidget {
-  final IgCurrentBodyTypeController controller =
-      Get.find<IgCurrentBodyTypeController>();
+  // final IgCurrentBodyTypeController controller =
+  //     Get.find<IgCurrentBodyTypeController>();
+  
+  final InformationGatherWorkoutCurrentBodyShapeMainGoalController controller = Get.find<InformationGatherWorkoutCurrentBodyShapeMainGoalController>();
 
   CurrentBodyShapeWidget({super.key});
 
@@ -38,8 +44,39 @@ class CurrentBodyShapeWidget extends StatelessWidget {
             return Obx(() {
               return BodyShapeShowingWidget(
                 onTap: () {
-                  log("Tapped: On bodyType: ${data.bodyType}");
+                  int newIndex = index;
+                  LoggerUtils.debug("Tapped: On bodyType: ${data.bodyType}");
+
+                  int previousIndex = controller.selectedBodyTypeIndex.value;
                   controller.selectBodyType(index);
+
+                  // Only save and trigger if selection actually changed
+                  if (previousIndex != index) {
+                    // Save to storage
+                    appData.write(
+                      kKeyExpectedBodyShape,
+                      controller.selectedBodyTypeTobeSaved.value,
+                    );
+
+                    ///----------->>> Update the parent controller to enable/disable the continue button
+                    // Get.find<InformationGatherMealPlanController>()
+                    //     .triggerButtonUpdate();
+
+                    LoggerUtils.debug(
+                      "Saved body shape: ${controller.selectedBodyTypeTobeSaved.value}",
+                    );
+                  } else {
+                    LoggerUtils.debug(
+                      "Same Type Of Body Shape Selected, clearing selection",
+                    );
+
+                    // Clear the saved value when deselecting
+                    appData.remove(kKeyExpectedBodyShape);
+
+                    ///----------->>> Update the parent controller to disable the continue button
+                    // Get.find<InformationGatherMealPlanController>()
+                    //     .triggerButtonUpdate();
+                  }
                 },
                 boydType: data.bodyType,
                 bodyImage: data.bodyImage,
