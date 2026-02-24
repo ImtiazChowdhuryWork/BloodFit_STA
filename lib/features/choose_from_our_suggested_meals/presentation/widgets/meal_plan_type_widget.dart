@@ -185,7 +185,6 @@
 
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
-import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
@@ -337,43 +336,42 @@ class MealPlanTypeWidget extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               separatorBuilder: (_, __) => UIHelper.horizontalSpace(16.w),
               itemBuilder: (context, index) {
+                final meal = items[index];
                 return Obx(() {
+                  final isSelected = controller.isMealSelected(
+                    mealType: controller.selectedTabName.value,
+                    meal: meal,
+                  );
+
                   return FoodItemShowingWidget(
                     onTap: (){
                       LoggerUtils.debug("Navigate to Selected Item Description Screen");
                       Get.toNamed(Routes.mealDetailscreen);
                     },
-                    isSelected: controller.isCheckBoxSelectedList[index].value,
+                    isSelected: isSelected,
                     onChanged: (value) {
-                      controller.setIsCheckBoxSelectedValue(
-                        index,
-                        value ?? false,
-                      );
+                      if (value == true) {
+                        /// Select this meal (automatically deselects others in same tab)
+                        controller.toggleMealSelection(
+                          mealType: controller.selectedTabName.value,
+                          meal: meal,
+                        );
+                      } else {
+                        /// Deselect this meal
+                        controller.deselectMeal(
+                          mealType: controller.selectedTabName.value,
+                        );
+                      }
                     },
                     itemImagePath: itemImagePath,
-                    itemTitle: items[index].mealName ?? '',
-                    kcalValue: items[index].totalCalories ?? 0,
-                    servingValue: items[index].numberOfServings ?? 0,
+                    itemTitle: meal.mealName ?? '',
+                    kcalValue: meal.totalCalories ?? 0,
+                    servingValue: meal.numberOfServings ?? 0,
                   );
                 });
               },
             ),
           );
-        }),
-
-        /// Snackbar trigger — SAFE version
-        Obx(() {
-          final anySelected = controller.isCheckBoxSelectedList.any(
-            (e) => e.value,
-          );
-
-          if (!anySelected) return const SizedBox.shrink();
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            showMealPlanTracker();
-          });
-
-          return const SizedBox.shrink();
         }),
       ],
     );

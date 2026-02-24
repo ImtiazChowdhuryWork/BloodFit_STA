@@ -8,8 +8,7 @@ import '../../../presentation/widgets/meal_plan_type_widget.dart';
 import '../../../presentation/widgets/recently_selected_meals_widget.dart';
 
 class BreakfastTab extends StatelessWidget {
-  final VoidCallback? onMealSelected;
-  BreakfastTab({super.key, this.onMealSelected});
+  BreakfastTab({super.key});
 
   final ChooseFromOurSuggestedMealController
   chooseFromOurSuggestedMealController =
@@ -27,7 +26,7 @@ class BreakfastTab extends StatelessWidget {
           ),
           UIHelper.verticalSpace(32.h),
 
-          
+
 
           ///Section : ------------///Protein-Packed ///----------------
           MealPlanTypeWidget(
@@ -37,14 +36,14 @@ class BreakfastTab extends StatelessWidget {
              retryOnTap: (){
               chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
              },
-            
+
             // isSelected: true,
-            
+
             // itemTitle: "Avocado Toast and Poached Eggs",
             // kcalValue: 302,
             // servingValue: 1,
-             
-            
+
+
           ),
           UIHelper.verticalSpace(32.h),
 

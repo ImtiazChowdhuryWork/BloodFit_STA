@@ -9,8 +9,7 @@ import '../../../presentation/widgets/meal_plan_type_widget.dart';
 import '../../../presentation/widgets/recently_selected_meals_widget.dart';
 
 class LunchTab extends StatelessWidget {
-  final VoidCallback? onMealSelected;
- LunchTab({super.key, this.onMealSelected});
+ LunchTab({super.key});
 
   final ChooseFromOurSuggestedMealController
   chooseFromOurSuggestedMealController =
