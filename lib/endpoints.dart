@@ -63,6 +63,8 @@ final class Endpoints {
   static String mealDetails({required String mealID}){
     return "$url/meal/get-meal/$mealID?lang=korean";
   }
+
+  static String infoGattherWorkOutGoal() => "$url/workout/add-workout-details";
 }
 
 

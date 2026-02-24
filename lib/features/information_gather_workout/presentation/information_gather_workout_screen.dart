@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../custom_widgets/page_indicator.dart';
-import '../../../routes/routes.dart';
 import '../data/controller/information_gather_work_out_controller.dart';
 
 class InformationGatherWorkoutScreen extends StatefulWidget {
@@ -35,7 +34,7 @@ class _InformationGatherWorkoutScreenState
     // Delete any existing controller first to ensure fresh instance
     Get.delete<InformationGatherWorkOutController>(force: true);
     // Create fresh controller
-    controller = Get.put(InformationGatherWorkOutController());
+    controller = Get.put(InformationGatherWorkOutController(Get.find()));
     // Reset to first page when entering the screen
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -162,10 +161,11 @@ class _InformationGatherWorkoutScreenState
 
           final isValid = isCurrentPageDataValid();
           final isLastPage = currentIndex == controller.totalPages - 1;
-          final isButtonEnabled = isValid;
+          final isLoading = controller.isInfoWorkoutFlowLoading.value;
+          final isButtonEnabled = !isLoading && isValid;
 
           LoggerUtils.debug(
-            "Page $currentIndex - IsValid: $isValid, ButtonEnabled: $isButtonEnabled",
+            "Page $currentIndex - IsValid: $isValid, IsLoading: $isLoading, ButtonEnabled: $isButtonEnabled",
           );
 
           return CustomElevatedButton(
@@ -176,8 +176,8 @@ class _InformationGatherWorkoutScreenState
                     if (isLastPage) {
                       LoggerUtils.debug("Workout information gathering completed!");
                       _logAllStoredData();
-                      // Navigate to YouAreAllSetScreen
-                      Get.toNamed(Routes.youAreAllSetScreen);
+                      // Call the API to submit workout information
+                      controller.postInfoGatherWorkoutApi();
                     } else {
                       LoggerUtils.debug("Navigating to next page");
                       controller.nextPage();
@@ -187,6 +187,8 @@ class _InformationGatherWorkoutScreenState
             buttonTitle: isLastPage ? "Finish" : "Continue",
             buttonHeight: 60.h,
             buttonColor: isButtonEnabled ? null : Colors.grey[300],
+            isDisabled: !isButtonEnabled,
+            isLoading: isLoading && isLastPage,
           );
         }),
       ),
