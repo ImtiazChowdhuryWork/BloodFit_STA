@@ -29,48 +29,48 @@ class LunchTab extends StatelessWidget {
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Protein-Packed ///----------------
-          MealPlanTypeWidget(
-            mealPlanType: "Protein-Packed",
-            itemImagePath: Assets.images.omletEgg.path,
-            itemsList: chooseFromOurSuggestedMealController.proteinPackedItemsList,
-             retryOnTap: (){
-              chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
-             },
-            // isSelected: true,
-            // itemTitle: "Avocado Toast and Poached Eggs",
-            // kcalValue: 302,
-            // servingValue: 1,
-          ),
+          Obx(() {
+            return MealPlanTypeWidget(
+              mealPlanType: "Protein-Packed",
+              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
+                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
+                  : Assets.images.omletEgg.path,
+              itemsList: chooseFromOurSuggestedMealController.proteinPackedItemsList,
+              retryOnTap: (){
+                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+              },
+            );
+          }),
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Light & Fresh ///----------------
-          MealPlanTypeWidget(
-            mealPlanType: "Light & Fresh",
-            itemImagePath: Assets.images.omletEgg.path,
-            itemsList: chooseFromOurSuggestedMealController.lightAndFreshItemsList,
-             retryOnTap: (){
-              chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
-             },
-            // isSelected: true,
-            // itemTitle: "Avocado Toast and Poached Eggs",
-            // kcalValue: 302,
-            // servingValue: 1,
-          ),
+          Obx(() {
+            return MealPlanTypeWidget(
+              mealPlanType: "Light & Fresh",
+              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
+                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
+                  : Assets.images.omletEgg.path,
+              itemsList: chooseFromOurSuggestedMealController.lightAndFreshItemsList,
+              retryOnTap: (){
+                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+              },
+            );
+          }),
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Hearty & Comforting///----------------
-          MealPlanTypeWidget(
-            mealPlanType: "Hearty & Comforting",
-            itemImagePath: Assets.images.omletEgg.path,
-            itemsList: chooseFromOurSuggestedMealController.heartyAndConfortingItemsList,
-             retryOnTap: (){
-              chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
-             },
-            // isSelected: true,
-            // itemTitle: "Avocado Toast and Poached Eggs",
-            // kcalValue: 302,
-            // servingValue: 1,
-          ),
+          Obx(() {
+            return MealPlanTypeWidget(
+              mealPlanType: "Hearty & Comforting",
+              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
+                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
+                  : Assets.images.omletEgg.path,
+              itemsList: chooseFromOurSuggestedMealController.heartyAndConfortingItemsList,
+              retryOnTap: (){
+                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+              },
+            );
+          }),
           UIHelper.verticalSpace(32.h),
         ],
       ),

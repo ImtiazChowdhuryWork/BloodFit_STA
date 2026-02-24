@@ -1,4 +1,5 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
+import 'package:bloodfit/features/information_gather_workout/data/controller/information_gather_work_out_controller.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
@@ -93,6 +94,10 @@ class IgWorkoutFocusAreaController extends GetxController {
 
     appData.write(kKeyWorkoutFocusArea, selectedAreas);
     LoggerUtils.debug('Saved workout focus areas: $selectedAreas');
+    
+    ///----------->>> Update the parent controller to enable/disable the continue button
+    Get.find<InformationGatherWorkOutController>()
+        .triggerButtonUpdate();
   }
 
   /// Load saved focus areas from localStorage

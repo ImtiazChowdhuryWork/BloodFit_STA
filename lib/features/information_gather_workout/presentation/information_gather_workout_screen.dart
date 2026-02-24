@@ -1,9 +1,12 @@
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/activity_level/presentation/activity_level_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/current_body_shape_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/prefered_workout_level/presentation/prefered_workout_level_widget.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/workout_focus_area/presentation/workout_focus_area_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/di.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -104,23 +107,104 @@ class _InformationGatherWorkoutScreenState
         ),
         decoration: BoxDecoration(color: AppColors.scaffoldBackgroundColor),
         child: Obx(() {
-          final isLastPage =
-              controller.currentIndex.value == controller.totalPages - 1;
+          ///------->>> Listen to controller state for page status update
+          controller.currentIndex.value;
+          controller.dataUpdated.value; // Listen to data changes to rebuild button
+
+          final currentIndex = controller.currentIndex.value;
+
+          // Helper function to check if current page data is valid
+          bool isCurrentPageDataValid() {
+            LoggerUtils.debug("Validating workout page $currentIndex");
+
+            switch (currentIndex) {
+              case 0:
+                ///---------->>> Current Body Shape
+                final currentBodyShape = appData.read(kKeyCurrentBodyShape);
+                LoggerUtils.debug("Current Body Shape validation: $currentBodyShape");
+                return currentBodyShape != null && currentBodyShape is String;
+
+              case 1:
+                ///---------->>> Activity Level
+                final activityLevel = appData.read(kKeyActivityLevel);
+                LoggerUtils.debug("Activity Level validation: $activityLevel");
+                return activityLevel != null && activityLevel is String;
+
+              case 2:
+                ///---------->>> Preferred Workout Level
+                final preferredWorkout = appData.read(kKeyPreffredWorkout);
+                LoggerUtils.debug("Preferred Workout validation: $preferredWorkout");
+                return preferredWorkout != null && preferredWorkout is String;
+
+              case 3:
+                ///---------->>> Workout Focus Area
+                final workoutFocusArea = appData.read(kKeyWorkoutFocusArea);
+                LoggerUtils.debug("Workout Focus Area validation: $workoutFocusArea");
+                
+                // Workout focus area is saved as a List<String>, check if it's not empty
+                if (workoutFocusArea == null) {
+                  LoggerUtils.debug("Workout Focus Area is null - validation failed");
+                  return false;
+                }
+                if (workoutFocusArea is List) {
+                  final isValid = workoutFocusArea.isNotEmpty;
+                  LoggerUtils.debug("Workout Focus Area is List with ${workoutFocusArea.length} items - validation: $isValid");
+                  return isValid;
+                }
+                LoggerUtils.debug("Workout Focus Area is not a List - validation failed");
+                return false;
+
+              default:
+                LoggerUtils.debug("Default case - validation false");
+                return false;
+            }
+          }
+
+          final isValid = isCurrentPageDataValid();
+          final isLastPage = currentIndex == controller.totalPages - 1;
+          final isButtonEnabled = isValid;
+
+          LoggerUtils.debug(
+            "Page $currentIndex - IsValid: $isValid, ButtonEnabled: $isButtonEnabled",
+          );
+
           return CustomElevatedButton(
-            onTap: () {
-              if (isLastPage) {
-                // Navigate to YouAreAllSetScreen every time
-                Get.toNamed(Routes.youAreAllSetScreen);
-              } else {
-                // Go to next page
-                controller.nextPage();
-              }
-            },
+            onTap: isButtonEnabled
+                ? () {
+                    LoggerUtils.debug("Button tapped on page $currentIndex");
+
+                    if (isLastPage) {
+                      LoggerUtils.debug("Workout information gathering completed!");
+                      _logAllStoredData();
+                      // Navigate to YouAreAllSetScreen
+                      Get.toNamed(Routes.youAreAllSetScreen);
+                    } else {
+                      LoggerUtils.debug("Navigating to next page");
+                      controller.nextPage();
+                    }
+                  }
+                : null,
             buttonTitle: isLastPage ? "Finish" : "Continue",
             buttonHeight: 60.h,
+            buttonColor: isButtonEnabled ? null : Colors.grey[300],
           );
         }),
       ),
+    );
+  }
+
+  void _logAllStoredData() {
+    LoggerUtils.debug(
+      "Current Body Shape from Storage: ${appData.read(kKeyCurrentBodyShape)}",
+    );
+    LoggerUtils.debug(
+      "Activity Level from Storage: ${appData.read(kKeyActivityLevel)}",
+    );
+    LoggerUtils.debug(
+      "Preferred Workout from Storage: ${appData.read(kKeyPreffredWorkout)}",
+    );
+    LoggerUtils.debug(
+      "Workout Focus Area from Storage: ${appData.read(kKeyWorkoutFocusArea)}",
     );
   }
 }
