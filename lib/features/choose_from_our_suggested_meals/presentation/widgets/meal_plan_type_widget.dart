@@ -350,19 +350,13 @@ class MealPlanTypeWidget extends StatelessWidget {
                     },
                     isSelected: isSelected,
                     onChanged: (value) {
-                      if (value == true) {
-                        /// Select this meal (automatically deselects others in same tab)
-                        controller.toggleMealSelection(
-                          mealType: controller.selectedTabName.value,
-                          meal: meal,
-                        );
-                      } else {
-                        /// Deselect this meal
-                        controller.deselectMeal(
-                          mealType: controller.selectedTabName.value,
-                        );
-                      }
+                      /// Toggle selection reactively - controller handles everything
+                      controller.toggleMealSelection(
+                        mealType: controller.selectedTabName.value,
+                        meal: meal,
+                      );
                     },
+                    isImageLinkBase64: true,
                     itemImagePath: itemImagePath,
                     itemTitle: meal.mealName ?? '',
                     kcalValue: meal.totalCalories ?? 0,

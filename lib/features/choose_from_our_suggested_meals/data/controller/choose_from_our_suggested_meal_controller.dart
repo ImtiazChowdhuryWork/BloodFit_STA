@@ -24,12 +24,29 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    LoggerUtils.debug("ChooseFromOurSuggestedMealController initialized - Application scoped");
+    LoggerUtils.debug("🚀🚀🚀 ChooseFromOurSuggestedMealController initialized - Application scoped");
+    LoggerUtils.debug("📋 Setting up reactive listeners for selection changes...");
+
+    /// Set up reactive listeners for selection changes
+    ever(selectedBreakfastMeal, (_) {
+      LoggerUtils.debug("🔔 Reactive listener triggered: Breakfast selection changed");
+      onMealSelectionChanged?.call();
+    });
+    ever(selectedLunchMeal, (_) {
+      LoggerUtils.debug("🔔 Reactive listener triggered: Lunch selection changed");
+      onMealSelectionChanged?.call();
+    });
+    ever(selectedDinnerMeal, (_) {
+      LoggerUtils.debug("🔔 Reactive listener triggered: Dinner selection changed");
+      onMealSelectionChanged?.call();
+    });
+
+    LoggerUtils.debug("✅ Reactive listeners successfully registered");
   }
 
   @override
   void onClose() {
-    LoggerUtils.debug("ChooseFromOurSuggestedMealController closed");
+    LoggerUtils.debug("👋👋👋 ChooseFromOurSuggestedMealController closed");
     super.onClose();
   }
 
@@ -58,16 +75,19 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   String setSelectedTabName({required int index}) {
     if (index == 0) {
       selectedTabName.value = 'breakfast';
+      LoggerUtils.debug("📑 Tab changed to: BREAKFAST");
       return selectedTabName.value;
     } else if (index == 1) {
       selectedTabName.value = 'lunch';
+      LoggerUtils.debug("📑 Tab changed to: LUNCH");
       return selectedTabName.value;
     } else if (index == 2) {
       selectedTabName.value = 'dinner';
+      LoggerUtils.debug("📑 Tab changed to: DINNER");
       return selectedTabName.value;
     } else {
       LoggerUtils.error(
-        "Given Input is unexpected, Because the index $index has exceeded the tab total index",
+        "❌ Given Input is unexpected, Because the index $index has exceeded the tab total index",
       );
       return '';
     }
@@ -86,12 +106,24 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   Future<void> getPreviouslySelectedMeals() async {
     final mealType = selectedTabName.value;
-    
-    /// Skip if already loaded for this meal type
-    if (mealType == 'breakfast' && isBreakfastRecentMealsLoaded.value) return;
-    if (mealType == 'lunch' && isLunchRecentMealsLoaded.value) return;
-    if (mealType == 'dinner' && isDinnerRecentMealsLoaded.value) return;
 
+    LoggerUtils.debug("🔍 getPreviouslySelectedMeals called for: $mealType");
+
+    /// Skip if already loaded for this meal type
+    if (mealType == 'breakfast' && isBreakfastRecentMealsLoaded.value) {
+      LoggerUtils.debug("⏭️ Skipping - Breakfast recent meals already loaded");
+      return;
+    }
+    if (mealType == 'lunch' && isLunchRecentMealsLoaded.value) {
+      LoggerUtils.debug("⏭️ Skipping - Lunch recent meals already loaded");
+      return;
+    }
+    if (mealType == 'dinner' && isDinnerRecentMealsLoaded.value) {
+      LoggerUtils.debug("⏭️ Skipping - Dinner recent meals already loaded");
+      return;
+    }
+
+    LoggerUtils.debug("📡 Fetching previously selected meals from API...");
     clearErrorMessage();
     isPreviouslySelectedMealsLoading.value = true;
 
@@ -101,7 +133,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
       if (responses.statusCode == 200 && responses.isSuccess) {
         LoggerUtils.debug(
-          "🥳🥳🥳Recently Selected Meals are fatched successfully for $mealType!",
+          "🥳🥳🥳 Recently Selected Meals fetched successfully for $mealType!",
         );
         final model = RecentChosenMealsModel.fromJson(responses.jsonResponse!);
 
@@ -110,18 +142,26 @@ class ChooseFromOurSuggestedMealController extends GetxController {
         );
 
         final List<Datum> meals = model.data ?? [];
+        LoggerUtils.debug("📦 Received ${meals.length} meals for $mealType");
 
         if (mealType == 'breakfast') {
           breakfastRecentChosenMeals.assignAll(meals);
           isBreakfastRecentMealsLoaded.value = true;
+          LoggerUtils.debug("✅ Breakfast recent meals loaded and cached");
         } else if (mealType == 'lunch') {
           lunchRecentChosenMeals.assignAll(meals);
           isLunchRecentMealsLoaded.value = true;
+          LoggerUtils.debug("✅ Lunch recent meals loaded and cached");
         } else if (mealType == 'dinner') {
           dinnerRecentChosenMeals.assignAll(meals);
           isDinnerRecentMealsLoaded.value = true;
+          LoggerUtils.debug("✅ Dinner recent meals loaded and cached");
         }
       } else {
+        LoggerUtils.error("❌ API Error for $mealType");
+        LoggerUtils.error("🔴 Status Code : ${responses.statusCode}");
+        LoggerUtils.error("🔴 Error Message : ${responses.errorMessage}");
+        
         errorMessage.value = responses.errorMessage.toString();
         if (mealType == 'breakfast') {
           breakfastRecentChosenMeals.clear();
@@ -130,17 +170,15 @@ class ChooseFromOurSuggestedMealController extends GetxController {
         } else if (mealType == 'dinner') {
           dinnerRecentChosenMeals.clear();
         } else {
-          LoggerUtils.error('Unexpected tab state: $mealType');
+          LoggerUtils.error('❌ Unexpected tab state: $mealType');
         }
-        LoggerUtils.error("API Error");
-        LoggerUtils.error("Status Code : ${responses.statusCode}");
-        LoggerUtils.error("Error Message : ${errorMessage.value}");
       }
     } catch (error) {
       errorMessage.value = error.toString();
-      LoggerUtils.error("Caught Error : $error");
+      LoggerUtils.error("💥 Caught Error in getPreviouslySelectedMeals: $error");
     } finally {
       isPreviouslySelectedMealsLoading.value = false;
+      LoggerUtils.debug("🏁 Previously selected meals loading completed");
     }
   }
 
@@ -151,7 +189,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   /// Global loading state for UI
   RxBool isAiSuggestedMealsLoading = false.obs;
   RxString aiSuggestedMealsErrorMessage = ''.obs;
-  
+
   /// Per-meal-type loading flags to prevent duplicate API calls
   RxBool isBreakfastAiMealsLoaded = false.obs;
   RxBool isLunchAiMealsLoaded = false.obs;
@@ -166,39 +204,48 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   final RxList<HealthyComforting> cachedBreakfastProteinPacked = <HealthyComforting>[].obs;
   final RxList<HealthyComforting> cachedBreakfastLightAndFresh = <HealthyComforting>[].obs;
   final RxList<HealthyComforting> cachedBreakfastHeartyComforting = <HealthyComforting>[].obs;
+  RxString cachedBreakfastImage = ''.obs;
 
   /// Lunch Cache
   final RxList<HealthyComforting> cachedLunchProteinPacked = <HealthyComforting>[].obs;
   final RxList<HealthyComforting> cachedLunchLightAndFresh = <HealthyComforting>[].obs;
   final RxList<HealthyComforting> cachedLunchHeartyComforting = <HealthyComforting>[].obs;
+  RxString cachedLunchImage = ''.obs;
 
   /// Dinner Cache
   final RxList<HealthyComforting> cachedDinnerProteinPacked = <HealthyComforting>[].obs;
   final RxList<HealthyComforting> cachedDinnerLightAndFresh = <HealthyComforting>[].obs;
   final RxList<HealthyComforting> cachedDinnerHeartyComforting = <HealthyComforting>[].obs;
+  RxString cachedDinnerImage = ''.obs;
 
   ///-------------->>> Section : Per Tabs 3 Meal Types - These now read from cache
   RxList<HealthyComforting> proteinPackedItemsList = <HealthyComforting>[].obs;
   RxList<HealthyComforting> lightAndFreshItemsList = <HealthyComforting>[].obs;
   RxList<HealthyComforting> heartyAndConfortingItemsList = <HealthyComforting>[].obs;
+  RxString currentTabImageUrl = ''.obs;
 
   /// Fetch AI suggested meals ONCE and cache them
   Future<void> fetchAndCacheAiSuggestedMeals() async {
+    LoggerUtils.debug("🔍 fetchAndCacheAiSuggestedMeals called");
+    LoggerUtils.debug(
+      "📊 Cache status - Breakfast: ${isBreakfastAiMealsLoaded.value}, Lunch: ${isLunchAiMealsLoaded.value}, Dinner: ${isDinnerAiMealsLoaded.value}"
+    );
+
     /// Don't fetch if all meals are already cached
-    if (isBreakfastAiMealsLoaded.value && 
-        isLunchAiMealsLoaded.value && 
+    if (isBreakfastAiMealsLoaded.value &&
+        isLunchAiMealsLoaded.value &&
         isDinnerAiMealsLoaded.value) {
-      LoggerUtils.debug("All AI meals already cached - skipping API call");
+      LoggerUtils.debug("✅ All AI meals already cached - skipping API call");
       return;
     }
 
     /// Don't fetch if already loading
     if (isAiSuggestedMealsLoading.value) {
-      LoggerUtils.debug("AI meals already loading - skipping duplicate call");
+      LoggerUtils.debug("⏳ AI meals already loading - skipping duplicate call");
       return;
     }
 
-    LoggerUtils.debug("Fetching AI suggested meals from API...");
+    LoggerUtils.debug("📡 Fetching AI suggested meals from API...");
     isAiSuggestedMealsLoading.value = true;
     clearAiSuggestedErrorMessage();
 
@@ -207,83 +254,112 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           .aiSuggestedMealsRepository();
 
       if (response.statusCode == 200 && response.isSuccess) {
-        LoggerUtils.debug("🥳🥳🥳AI Suggested Meals fetched successfully!");
+        LoggerUtils.debug("🥳🥳🥳 AI Suggested Meals fetched successfully!");
         final model = AiSuggestedMealsModel.fromJson(response.jsonResponse!);
 
         ///-----------<>>>>> SECTION : Cache Breakfast Data
-        cachedBreakfastProteinPacked.assignAll(
-          model.data?.breakfastOptions?.proteinPacked ?? []);
-        cachedBreakfastLightAndFresh.assignAll(
-          model.data?.breakfastOptions?.lightFresh ?? []);
-        cachedBreakfastHeartyComforting.assignAll(
-          model.data?.breakfastOptions?.healthyComforting ?? []);
+        final breakfastProtein = model.data?.breakfastOptions?.proteinPacked ?? [];
+        final breakfastLight = model.data?.breakfastOptions?.lightFresh ?? [];
+        final breakfastHearty = model.data?.breakfastOptions?.healthyComforting ?? [];
+        
+        cachedBreakfastProteinPacked.assignAll(breakfastProtein);
+        cachedBreakfastLightAndFresh.assignAll(breakfastLight);
+        cachedBreakfastHeartyComforting.assignAll(breakfastHearty);
+        cachedBreakfastImage.value = model.data?.breakfastImage ?? '';
         isBreakfastAiMealsLoaded.value = true;
+        LoggerUtils.debug("✅ Breakfast cached: ${breakfastProtein.length + breakfastLight.length + breakfastHearty.length} meals, Image: ${cachedBreakfastImage.value}");
 
         ///-----------<>>>>> SECTION : Cache Lunch Data
-        cachedLunchProteinPacked.assignAll(
-          model.data?.lunchOptions?.proteinPacked ?? []);
-        cachedLunchLightAndFresh.assignAll(
-          model.data?.lunchOptions?.lightFresh ?? []);
-        cachedLunchHeartyComforting.assignAll(
-          model.data?.lunchOptions?.healthyComforting ?? []);
+        final lunchProtein = model.data?.lunchOptions?.proteinPacked ?? [];
+        final lunchLight = model.data?.lunchOptions?.lightFresh ?? [];
+        final lunchHearty = model.data?.lunchOptions?.healthyComforting ?? [];
+        
+        cachedLunchProteinPacked.assignAll(lunchProtein);
+        cachedLunchLightAndFresh.assignAll(lunchLight);
+        cachedLunchHeartyComforting.assignAll(lunchHearty);
+        cachedLunchImage.value = model.data?.lunchImage ?? '';
         isLunchAiMealsLoaded.value = true;
+        LoggerUtils.debug("✅ Lunch cached: ${lunchProtein.length + lunchLight.length + lunchHearty.length} meals, Image: ${cachedLunchImage.value}");
 
         ///-----------<>>>>> SECTION : Cache Dinner Data
-        cachedDinnerProteinPacked.assignAll(
-          model.data?.dinnerOptions?.proteinPacked ?? []);
-        cachedDinnerLightAndFresh.assignAll(
-          model.data?.dinnerOptions?.lightFresh ?? []);
-        cachedDinnerHeartyComforting.assignAll(
-          model.data?.dinnerOptions?.healthyComforting ?? []);
+        final dinnerProtein = model.data?.dinnerOptions?.proteinPacked ?? [];
+        final dinnerLight = model.data?.dinnerOptions?.lightFresh ?? [];
+        final dinnerHearty = model.data?.dinnerOptions?.healthyComforting ?? [];
+        
+        cachedDinnerProteinPacked.assignAll(dinnerProtein);
+        cachedDinnerLightAndFresh.assignAll(dinnerLight);
+        cachedDinnerHeartyComforting.assignAll(dinnerHearty);
+        cachedDinnerImage.value = model.data?.dinnerImage ?? '';
         isDinnerAiMealsLoaded.value = true;
+        LoggerUtils.debug("✅ Dinner cached: ${dinnerProtein.length + dinnerLight.length + dinnerHearty.length} meals, Image: ${cachedDinnerImage.value}");
 
-        LoggerUtils.debug("All meal types cached successfully");
+        LoggerUtils.debug("🎉 All meal types cached successfully");
       } else {
-        aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
-        LoggerUtils.error(
-          "Failed to Get AI Suggested Meals : Error Code :: ${response.statusCode}",
-        );
-        LoggerUtils.error(
-          "AI Suggested Meals Error Message : ${aiSuggestedMealsErrorMessage.value}",
-        );
+        LoggerUtils.error("❌ Failed to Get AI Suggested Meals");
+        LoggerUtils.error("🔴 Error Code :: ${response.statusCode}");
+        LoggerUtils.error("🔴 Error Message : ${response.errorMessage}");
+        
+        if(response.statusCode == 524){
+          aiSuggestedMealsErrorMessage.value = "Connection timed out. Please check your internet connection and try again.";
+        }else{
+          aiSuggestedMealsErrorMessage.value = response.errorMessage.toString();
+        }
       }
     } catch (error) {
+      LoggerUtils.error("💥 Error Caught While Getting AI Suggested Meals!");
+      LoggerUtils.error("🔴 Caught Error : $error");
       aiSuggestedMealsErrorMessage.value = error.toString();
-      LoggerUtils.error("Error Caught While Getting AI Suggested Meals!");
-      LoggerUtils.error("Caught Error : ${aiSuggestedMealsErrorMessage.value}");
     } finally {
       isAiSuggestedMealsLoading.value = false;
+      LoggerUtils.debug("🏁 AI meals loading completed");
     }
   }
 
   /// Load meals for the current tab from cache (no API call)
   void loadMealsForCurrentTabFromCache() {
     final mealType = selectedTabName.value;
-    LoggerUtils.debug("Loading $mealType meals from cache");
+    LoggerUtils.debug("📥 loadMealsForCurrentTabFromCache called for: $mealType");
 
     if (mealType == 'breakfast') {
       proteinPackedItemsList.assignAll(cachedBreakfastProteinPacked);
       lightAndFreshItemsList.assignAll(cachedBreakfastLightAndFresh);
       heartyAndConfortingItemsList.assignAll(cachedBreakfastHeartyComforting);
+      currentTabImageUrl.value = cachedBreakfastImage.value;
+      LoggerUtils.debug(
+        "📦 Breakfast loaded from cache: ${cachedBreakfastProteinPacked.length + cachedBreakfastLightAndFresh.length + cachedBreakfastHeartyComforting.length} meals, Image: ${currentTabImageUrl.value}"
+      );
     } else if (mealType == 'lunch') {
       proteinPackedItemsList.assignAll(cachedLunchProteinPacked);
       lightAndFreshItemsList.assignAll(cachedLunchLightAndFresh);
       heartyAndConfortingItemsList.assignAll(cachedLunchHeartyComforting);
+      currentTabImageUrl.value = cachedLunchImage.value;
+      LoggerUtils.debug(
+        "📦 Lunch loaded from cache: ${cachedLunchProteinPacked.length + cachedLunchLightAndFresh.length + cachedLunchHeartyComforting.length} meals, Image: ${currentTabImageUrl.value}"
+      );
     } else if (mealType == 'dinner') {
       proteinPackedItemsList.assignAll(cachedDinnerProteinPacked);
       lightAndFreshItemsList.assignAll(cachedDinnerLightAndFresh);
       heartyAndConfortingItemsList.assignAll(cachedDinnerHeartyComforting);
+      currentTabImageUrl.value = cachedDinnerImage.value;
+      LoggerUtils.debug(
+        "📦 Dinner loaded from cache: ${cachedDinnerProteinPacked.length + cachedDinnerLightAndFresh.length + cachedDinnerHeartyComforting.length} meals, Image: ${currentTabImageUrl.value}"
+      );
+    } else {
+      LoggerUtils.error("❌ Unknown meal type: $mealType");
     }
   }
 
   /// Combined method: Fetch if not cached, then load from cache
   Future<void> getAiSuggestedMealsApi() async {
+    LoggerUtils.debug("🔄 getAiSuggestedMealsApi called");
     await fetchAndCacheAiSuggestedMeals();
     loadMealsForCurrentTabFromCache();
+    LoggerUtils.debug("✅ getAiSuggestedMealsApi completed");
   }
 
   /// Reset all cached data (for explicit user reset or app exit)
   void resetAllCachedData() {
+    LoggerUtils.debug("🗑️ resetAllCachedData called");
     cachedBreakfastProteinPacked.clear();
     cachedBreakfastLightAndFresh.clear();
     cachedBreakfastHeartyComforting.clear();
@@ -302,7 +378,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     lightAndFreshItemsList.clear();
     heartyAndConfortingItemsList.clear();
 
-    LoggerUtils.debug("All cached AI meal data reset");
+    LoggerUtils.debug("✅ All cached AI meal data reset");
   }
 
   ///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
@@ -319,6 +395,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   /// Set the meal selection callback
   void setMealSelectionCallback(VoidCallback callback) {
+    LoggerUtils.debug("📞 setMealSelectionCallback registered");
     onMealSelectionChanged = callback;
   }
 
@@ -327,32 +404,40 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     required String mealType,
     required HealthyComforting meal,
   }) {
+    LoggerUtils.debug("➕ selectMeal called - Type: $mealType, Meal: ${meal.mealName}");
+    
     if (mealType == 'breakfast') {
       selectedBreakfastMeal.value = meal;
+      LoggerUtils.debug("✅ Breakfast selected: ${meal.mealName}");
     } else if (mealType == 'lunch') {
       selectedLunchMeal.value = meal;
+      LoggerUtils.debug("✅ Lunch selected: ${meal.mealName}");
     } else if (mealType == 'dinner') {
       selectedDinnerMeal.value = meal;
+      LoggerUtils.debug("✅ Dinner selected: ${meal.mealName}");
     }
-
-    /// Notify the UI to show the tracker
-    onMealSelectionChanged?.call();
+    
+    LoggerUtils.debug("🔔 Reactive listener (ever) will automatically trigger the callback");
   }
 
   /// Deselect a meal for a specific tab
   void deselectMeal({
     required String mealType,
   }) {
+    LoggerUtils.debug("➖ deselectMeal called for: $mealType");
+    
     if (mealType == 'breakfast') {
       selectedBreakfastMeal.value = null;
+      LoggerUtils.debug("✅ Breakfast deselected");
     } else if (mealType == 'lunch') {
       selectedLunchMeal.value = null;
+      LoggerUtils.debug("✅ Lunch deselected");
     } else if (mealType == 'dinner') {
       selectedDinnerMeal.value = null;
+      LoggerUtils.debug("✅ Dinner deselected");
     }
-
-    /// Notify the UI to show the tracker
-    onMealSelectionChanged?.call();
+    
+    LoggerUtils.debug("🔔 Reactive listener (ever) will automatically trigger the callback");
   }
 
   /// Toggle meal selection (select if not selected, deselect if already selected)
@@ -360,22 +445,39 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     required String mealType,
     required HealthyComforting meal,
   }) {
+    LoggerUtils.debug("🔄 toggleMealSelection called - Type: $mealType, Meal: ${meal.mealName}");
+    
     if (mealType == 'breakfast') {
-      if (selectedBreakfastMeal.value?.mealName == meal.mealName) {
+      final currentSelection = selectedBreakfastMeal.value?.mealName;
+      LoggerUtils.debug("📊 Current breakfast selection: $currentSelection");
+      
+      if (currentSelection == meal.mealName) {
+        LoggerUtils.debug("🔴 Same meal - will deselect");
         deselectMeal(mealType: mealType);
       } else {
+        LoggerUtils.debug("🟢 Different meal - will select");
         selectMeal(mealType: mealType, meal: meal);
       }
     } else if (mealType == 'lunch') {
-      if (selectedLunchMeal.value?.mealName == meal.mealName) {
+      final currentSelection = selectedLunchMeal.value?.mealName;
+      LoggerUtils.debug("📊 Current lunch selection: $currentSelection");
+      
+      if (currentSelection == meal.mealName) {
+        LoggerUtils.debug("🔴 Same meal - will deselect");
         deselectMeal(mealType: mealType);
       } else {
+        LoggerUtils.debug("🟢 Different meal - will select");
         selectMeal(mealType: mealType, meal: meal);
       }
     } else if (mealType == 'dinner') {
-      if (selectedDinnerMeal.value?.mealName == meal.mealName) {
+      final currentSelection = selectedDinnerMeal.value?.mealName;
+      LoggerUtils.debug("📊 Current dinner selection: $currentSelection");
+      
+      if (currentSelection == meal.mealName) {
+        LoggerUtils.debug("🔴 Same meal - will deselect");
         deselectMeal(mealType: mealType);
       } else {
+        LoggerUtils.debug("🟢 Different meal - will select");
         selectMeal(mealType: mealType, meal: meal);
       }
     }
@@ -387,20 +489,31 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     required HealthyComforting meal,
   }) {
     if (mealType == 'breakfast') {
-      return selectedBreakfastMeal.value?.mealName == meal.mealName;
+      final isSelected = selectedBreakfastMeal.value?.mealName == meal.mealName;
+      LoggerUtils.debug("🔍 isMealSelected - Breakfast: ${meal.mealName} = $isSelected");
+      return isSelected;
     } else if (mealType == 'lunch') {
-      return selectedLunchMeal.value?.mealName == meal.mealName;
+      final isSelected = selectedLunchMeal.value?.mealName == meal.mealName;
+      LoggerUtils.debug("🔍 isMealSelected - Lunch: ${meal.mealName} = $isSelected");
+      return isSelected;
     } else if (mealType == 'dinner') {
-      return selectedDinnerMeal.value?.mealName == meal.mealName;
+      final isSelected = selectedDinnerMeal.value?.mealName == meal.mealName;
+      LoggerUtils.debug("🔍 isMealSelected - Dinner: ${meal.mealName} = $isSelected");
+      return isSelected;
     }
+    LoggerUtils.error("❌ Unknown meal type in isMealSelected: $mealType");
     return false;
   }
 
   /// Check if all three meals are selected (for enabling Build Meal Plan button)
   bool get isMealPlanComplete {
-    return selectedBreakfastMeal.value != null &&
+    final isComplete = selectedBreakfastMeal.value != null &&
         selectedLunchMeal.value != null &&
         selectedDinnerMeal.value != null;
+    LoggerUtils.debug(
+      "📊 isMealPlanComplete: $isComplete (B: ${selectedBreakfastMeal.value != null}, L: ${selectedLunchMeal.value != null}, D: ${selectedDinnerMeal.value != null})"
+    );
+    return isComplete;
   }
 
   /// Get the list of all selected meals
@@ -408,22 +521,27 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     final meals = <HealthyComforting>[];
     if (selectedBreakfastMeal.value != null) {
       meals.add(selectedBreakfastMeal.value!);
+      LoggerUtils.debug("📦 Added breakfast: ${selectedBreakfastMeal.value!.mealName}");
     }
     if (selectedLunchMeal.value != null) {
       meals.add(selectedLunchMeal.value!);
+      LoggerUtils.debug("📦 Added lunch: ${selectedLunchMeal.value!.mealName}");
     }
     if (selectedDinnerMeal.value != null) {
       meals.add(selectedDinnerMeal.value!);
+      LoggerUtils.debug("📦 Added dinner: ${selectedDinnerMeal.value!.mealName}");
     }
+    LoggerUtils.debug("🎁 Total selected meals: ${meals.length}");
     return meals;
   }
 
   /// Reset all selections (for explicit user reset)
   void resetAllSelections() {
+    LoggerUtils.debug("🗑️ resetAllSelections called");
     selectedBreakfastMeal.value = null;
     selectedLunchMeal.value = null;
     selectedDinnerMeal.value = null;
-    LoggerUtils.debug("All meal selections reset");
+    LoggerUtils.debug("✅ All meal selections reset");
   }
 
   ///--------->>> Section : Meal Selection State Management Ends Here

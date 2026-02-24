@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloodfit/constants/app_list.dart';
+import 'package:bloodfit/features/information_gather_workout/data/controller/information_gather_work_out_controller.dart';
 import 'package:bloodfit/features/information_gather_workout/presentation/widgets/current_body_shape/presentation/widget/body_shape_showing_widget.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -58,8 +59,8 @@ class CurrentBodyShapeWidget extends StatelessWidget {
                     );
 
                     ///----------->>> Update the parent controller to enable/disable the continue button
-                    // Get.find<InformationGatherMealPlanController>()
-                    //     .triggerButtonUpdate();
+                    Get.find<InformationGatherWorkOutController>()
+                        .triggerButtonUpdate();
 
                     LoggerUtils.debug(
                       "Saved body shape: ${controller.selectedBodyTypeTobeSaved.value}",
@@ -73,8 +74,8 @@ class CurrentBodyShapeWidget extends StatelessWidget {
                     appData.remove(kKeyCurrentBodyShape);
 
                     ///----------->>> Update the parent controller to disable the continue button
-                    // Get.find<InformationGatherMealPlanController>()
-                    //     .triggerButtonUpdate();
+                    Get.find<InformationGatherWorkOutController>()
+                        .triggerButtonUpdate();
                   }
                 },
                 boydType: data.bodyType,

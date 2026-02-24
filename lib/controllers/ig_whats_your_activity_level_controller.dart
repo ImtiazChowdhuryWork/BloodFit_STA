@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_list.dart';
+import 'package:bloodfit/features/information_gather_workout/data/controller/information_gather_work_out_controller.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
@@ -35,5 +36,9 @@ class IgWhatsYourActivityLevelController extends GetxController {
     final enumValue = AppList.activityLevelList[newValue].titleEnum;
     appData.write(kKeyActivityLevel, enumValue);
     LoggerUtils.debug('Saved activity level enum: $enumValue (index: $newValue)');
+    
+    ///----------->>> Update the parent controller to enable/disable the continue button
+    Get.find<InformationGatherWorkOutController>()
+        .triggerButtonUpdate();
   }
 }
