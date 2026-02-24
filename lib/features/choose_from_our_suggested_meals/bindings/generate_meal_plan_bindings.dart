@@ -7,8 +7,15 @@ import '../data/repository/previously_selected_meals_repository.dart';
 class GenerateMealPlanBindings extends Bindings {
   @override
   void dependencies() {
+    /// Repositories - lazy loaded
     Get.lazyPut(() => PreviouslySelectedMealsRepository(Get.find()));
     Get.lazyPut(() => AiSuggestedMealsRepository(Get.find()));
-    Get.lazyPut(() => ChooseFromOurSuggestedMealController(Get.find(), Get.find()));
+    
+    /// Controller - Application scoped (permanent)
+    /// Stays alive throughout the app session, destroyed only on app exit
+    Get.put(
+      ChooseFromOurSuggestedMealController(Get.find(), Get.find()),
+      permanent: true,
+    );
   }
 }

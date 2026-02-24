@@ -39,21 +39,23 @@ class _ChooseFromOurSuggestedMealsScreenState
     chooseFromOurSuggestedMealController
         .setSelectedTabName(index: 0);
 
-    ///------------->>> Section : Initial API call
+    ///------------->>> Section : Initial API call (ONCE - data will be cached)
     chooseFromOurSuggestedMealController
         .getPreviouslySelectedMeals();
     chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
 
+    ///------------->>> Section : Set up meal selection callback
+    chooseFromOurSuggestedMealController.setMealSelectionCallback(() {
+      showMealPlanTracker();
+    });
 
     _tabController.addListener(() {
       ///------------->>> Section : Fires when tab changes
       debugPrint('Current Tab Index: ${_tabController.index}');
       chooseFromOurSuggestedMealController.setSelectedTabName(index: _tabController.index);
-      ///------------->>> Section : Calling the api for fetching dedicated tabs data
-  chooseFromOurSuggestedMealController
-      .getPreviouslySelectedMeals();
-  chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
-
+      ///------------->>> Section : Load from cache only (NO API CALL on tab change)
+      chooseFromOurSuggestedMealController.loadMealsForCurrentTabFromCache();
+      chooseFromOurSuggestedMealController.getPreviouslySelectedMeals();
     });
   }
 
@@ -61,11 +63,6 @@ class _ChooseFromOurSuggestedMealsScreenState
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  void _onMealSelected() {
-    ///------------->>> Section : Call the overlay whenever a meal is selected in any tab
-    showMealPlanTracker();
   }
 
   @override
@@ -179,9 +176,9 @@ class _ChooseFromOurSuggestedMealsScreenState
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    BreakfastTab(onMealSelected: _onMealSelected),
-                    LunchTab(onMealSelected: _onMealSelected),
-                    DinnerTab(onMealSelected: _onMealSelected),
+                    BreakfastTab(),
+                    LunchTab(),
+                    DinnerTab(),
                   ],
                 ),
               ),
