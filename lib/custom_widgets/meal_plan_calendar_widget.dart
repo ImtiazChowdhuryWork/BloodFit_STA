@@ -99,10 +99,50 @@ import 'package:get/get.dart';
 
 import '../controllers/calendar_controller.dart';
 
-class MealPlanCalendarWidget extends StatelessWidget {
+class MealPlanCalendarWidget extends StatefulWidget {
   MealPlanCalendarWidget({super.key});
 
+  @override
+  State<MealPlanCalendarWidget> createState() => _MealPlanCalendarWidgetState();
+}
+
+class _MealPlanCalendarWidgetState extends State<MealPlanCalendarWidget> {
+  final ScrollController _scrollController = ScrollController();
   final CalandarController calandarController = Get.find<CalandarController>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToCurrentDay();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToCurrentDay() {
+    final todayDate = DateTime.now().dateOnly;
+    final todayIndex = calandarController.allCalendarDays.indexWhere((day) {
+      final dayDate = DateTime(day.year, day.month, day.day);
+      return dayDate.isSameCalendarDay(todayDate);
+    });
+
+    if (todayIndex != -1 && _scrollController.hasClients) {
+      final itemWidth = 64.w; // Item width: 44.w (circle) + 20.w (padding)
+      final spacingWidth = 10.w; // Separator spacing
+      final totalItemWidth = itemWidth + spacingWidth;
+      final scrollPosition = (todayIndex * totalItemWidth) - (MediaQuery.of(context).size.width / 2) + (itemWidth / 2);
+      _scrollController.animateTo(
+        scrollPosition.clamp(0, _scrollController.position.maxScrollExtent),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +156,7 @@ class MealPlanCalendarWidget extends StatelessWidget {
         width: 1.sw,
         height: 100.h,
         child: ListView.separated(
+          controller: _scrollController,
           itemCount: calandarController.allCalendarDays.length,
           scrollDirection: Axis.horizontal,
           separatorBuilder: (context, index) => UIHelper.horizontalSpace(10.w),
