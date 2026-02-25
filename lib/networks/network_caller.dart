@@ -95,6 +95,13 @@ class NetworkCaller {
     try {
       Map<String, dynamic>? jsonResponse;
 
+      // Debug: Log raw response body
+      LoggerUtils.debug("===== NETWORK RESPONSE DEBUG =====");
+      LoggerUtils.debug("Status Code: ${response.statusCode}");
+      LoggerUtils.debug("Response Body Length: ${response.body.length}");
+      LoggerUtils.debug("Response Body: ${response.body}");
+      LoggerUtils.debug("========================");
+
       // Try to parse JSON response
       try {
         if (response.body.isNotEmpty) {
@@ -104,6 +111,7 @@ class NetworkCaller {
             jsonResponse = null;
           } else {
             jsonResponse = jsonDecode(response.body);
+            LoggerUtils.debug("Parsed JSON Response: $jsonResponse");
           }
         }
       } catch (e) {

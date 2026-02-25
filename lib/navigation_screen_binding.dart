@@ -1,4 +1,6 @@
 import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/repository/meal_plan_feature_repository.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +25,7 @@ class NavigationBinding extends Bindings {
     Get.lazyPut(() => UpdateCurrentWeightRepository(Get.find()));
     Get.lazyPut(() => MealConsumptionRepository(Get.find()));
     Get.lazyPut(() => SwapMealRepository(Get.find()));
+    Get.lazyPut(() => MealPlanFeatureRepository(Get.find()));
 
     // ✅ Controllers
     Get.lazyPut(
@@ -33,6 +36,12 @@ class NavigationBinding extends Bindings {
         Get.find<SwapMealRepository>(),
       ),
       fenix: true,
+    );
+
+    Get.lazyPut(
+      () => MealPlanFeatureOptionsController(
+        Get.find<MealPlanFeatureRepository>(),
+      ), fenix: true,
     );
 
     Get.lazyPut(
