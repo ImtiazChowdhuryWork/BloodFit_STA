@@ -1,106 +1,21 @@
-// import 'package:bloodfit/extensions/date_time_extension.dart';
-// import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plan_calender_shape_widget.dart';
-// import 'package:bloodfit/gen/colors.gen.dart';
-// import 'package:bloodfit/helper/ui_helpers.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:get/get.dart';
-// import '../controllers/calendar_controller.dart';
 
-// class MealPlanCalendarWidget extends StatelessWidget {
-//   MealPlanCalendarWidget({super.key});
-
-//   final CalandarController calandarController = Get.find<CalandarController>();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final todayDate = DateTime.now().dateOnly;
-
-//     return Obx(
-//       () => SizedBox(
-//         width: 1.sw,
-//         height: 100.h,
-//         child: ListView.separated(
-//           itemCount: calandarController.allCalendarDays.length,
-//           scrollDirection: Axis.horizontal,
-//           separatorBuilder: (context, index) => UIHelper.horizontalSpace(10.w),
-
-//           itemBuilder: (context, index) {
-//             final calendarDay = calandarController.allCalendarDays[index];
-//             final currentDayDate = DateTime(
-//               calendarDay.year,
-//               calendarDay.month,
-//               calendarDay.day,
-//             );
-
-//             final isTodayDate = currentDayDate.isSameCalendarDay(todayDate);
-//             final isSelectedDate =
-//                 calandarController.selectedCalendarDate.value?.isSameCalendarDay(
-//                   currentDayDate,
-//                 ) ??
-//                 false;
-
-//             // Container background color
-//             final Color dayContainerColor = isSelectedDate
-//                 ? AppColors.cb20000
-//                 : isTodayDate &&
-//                       calandarController.selectedCalendarDate.value != null &&
-//                       !calandarController.selectedCalendarDate.value!
-//                           .isSameCalendarDay(todayDate)
-//                 ? AppColors.cd7d7d7
-//                 : isTodayDate
-//                 ? AppColors.cb20000
-//                 : AppColors.scaffoldBackgroundColor;
-
-//             // Highlight logic for inner circle
-//             final bool shouldHighlight =
-//                 isSelectedDate ||
-//                 (isTodayDate &&
-//                     calandarController.selectedCalendarDate.value == null);
-
-//             // Date text color
-//             final Color dateColor = isSelectedDate
-//                 ? AppColors.cb20000
-//                 : isTodayDate
-//                 ? AppColors.cfefefe
-//                 : AppColors.c999999;
-
-//             // Day name text color
-//             final Color dayNameColor = isSelectedDate
-//                 ? AppColors.cFFFFFF
-//                 : isTodayDate
-//                 ? AppColors.c111111
-//                 : AppColors.cfefefe;
-
-//             return MealPlanCalenderShapeWidget(
-//               onTap: () =>
-//                   calandarController.toggleCalendarDateSelection(currentDayDate),
-//               dayName: calendarDay.dayName.substring(0, 3),
-//               date: calendarDay.day.toString(),
-//               isToday: shouldHighlight,
-//               backgroundColor: dayContainerColor,
-//               dateColor: dateColor,
-//               dayNameColor: dayNameColor,
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 import 'package:bloodfit/extensions/date_time_extension.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/meal_plan_calender_shape_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../controllers/calendar_controller.dart';
 
 class MealPlanCalendarWidget extends StatefulWidget {
-  MealPlanCalendarWidget({super.key});
+  final void Function(String formattedDate)? onTap;
+
+  const MealPlanCalendarWidget({super.key, this.onTap});
 
   @override
   State<MealPlanCalendarWidget> createState() => _MealPlanCalendarWidgetState();
@@ -168,6 +83,9 @@ class _MealPlanCalendarWidgetState extends State<MealPlanCalendarWidget> {
               calendarDay.day,
             );
 
+            // Formatted date string in "yyyy/MM/dd" format
+            final formattedDate = DateFormat('yyyy/MM/dd').format(currentDayDate);
+
             final isTodayDate = currentDayDate.isSameCalendarDay(todayDate);
             final isSelectedDate =
                 selectedDate?.isSameCalendarDay(currentDayDate) ?? false;
@@ -209,9 +127,13 @@ class _MealPlanCalendarWidgetState extends State<MealPlanCalendarWidget> {
             }
 
             return MealPlanCalenderShapeWidget(
-              onTap: () => calandarController.toggleCalendarDateSelection(
-                currentDayDate,
-              ),
+              onTap: () {
+                calandarController.toggleCalendarDateSelection(
+                  currentDayDate,
+                );
+                LoggerUtils.debug('Selected date: $formattedDate');
+                widget.onTap?.call(formattedDate);
+              },
               dayName: calendarDay.dayName.substring(0, 3),
               date: calendarDay.day.toString(),
               isToday: shouldHighlight,

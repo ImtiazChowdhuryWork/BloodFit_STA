@@ -7,10 +7,25 @@ import '../../../../helper/ui_helpers.dart';
 
 
 class MealShowingWidgetShimmerEffect extends StatelessWidget {
-  const MealShowingWidgetShimmerEffect({super.key});
+  final void Function()? onTap;
+  final Widget? child;
+  const MealShowingWidgetShimmerEffect({super.key, this.onTap, this.child});
 
   @override
   Widget build(BuildContext context) {
+    if (child != null) {
+      return Container(
+        width: 1.sw,
+        height: 120.h,
+        padding: EdgeInsets.all(10.sp),
+        decoration: BoxDecoration(
+          color: AppColors.c262626,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: child,
+      );
+    }
+
     return Container(
           width: 1.sw,
           height: 120.h,

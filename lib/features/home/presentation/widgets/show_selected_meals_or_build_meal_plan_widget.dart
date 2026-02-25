@@ -19,7 +19,7 @@ import '../../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom
 class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
   ShowSelectedMealsOrBuildMealPlanWidget({super.key});
 
-  
+
   final HomeScreenController homeScreenController =
       Get.find<HomeScreenController>();
 
@@ -29,9 +29,9 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
       // API Loading State
       if (homeScreenController.isTodaysSelectedMealsLoading.value) {
         return ListView.separated(
-          
+
           itemCount: 3,
-          separatorBuilder: (context,index)=> UIHelper.verticalSpace(20.h), 
+          separatorBuilder: (context,index)=> UIHelper.verticalSpace(20.h),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context,index){
@@ -71,7 +71,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
 
         LoggerUtils.debug("Image URL : $imageBaseUrl${homeScreenController.breakFastImage}");
-        
+
         ///------->>> Section : Breakfast
         return Column(
           children: [
@@ -87,7 +87,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               leftButtonOnTap: () {
                 homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.breakfastMealID ?? '');
                 LoggerUtils.debug(
-                  
+
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
               },
@@ -111,13 +111,13 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
             ///------->>> Section : Lunch
             MealPlanItemCard(
               onTap: (){
-                
+
                 Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.lunchMealID});
 
               },
               isMealEaten: homeScreenController.lunchMealEatenStatus == 'not_yet_done' ? false : homeScreenController.lunchMealEatenStatus == 'done' ? true : false,
               leftButtonTitle: "I Ate This",
-              
+
               leftButtonOnTap: () async {
                 LoggerUtils.debug("BreakFast Meal ID : ${homeScreenController.lunchMealID} ");
                 await homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.lunchMealID ?? '');

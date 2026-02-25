@@ -1,4 +1,6 @@
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/features/progress/presentation/widget/infotile_widget.dart';
+import 'package:bloodfit/features/progress/presentation/widget/overall_progress_showing_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +16,10 @@ class ProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String imageUrl1 = "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-abstract-cloudy-background-beautiful-natural-streaks-of-sky-and-clouds-red-image_15684333.jpg";
-    String imageUrl = "https://images.macrumors.com/t/qZDdMwXMtkbMV4OAonirIWNcn3A=/2500x/article-new/2025/12/Apple-26-Feature.jpg";
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
         child: SafeArea(
           child: Column(
             children: [
@@ -32,18 +33,15 @@ class ProgressScreen extends StatelessWidget {
                 child: AppBarSectionWidget(),
               ),
               UIHelper.verticalSpace(20.h),
-              Container(
 
-                  height: 200.h,
-                  width: 200.w,
-                  padding: EdgeInsets.all(20.sp),
-                  decoration: BoxDecoration(
-                    color: Colors.teal,
+              OverAllProgressShowingWidget(
+                overAllProgress: 0.7,
+                inforTypeOne: 'Mealplan',
+                infoTypeOneProgress: 0.7,
+                infoTypeTwo: 'Workout',
+                infoTypeTwoProgress: 0.4,
+              ),
 
-                  ),
-                  child: Image.network(imageUrl,height: 180,width: 180,fit: BoxFit.contain,)),
-
-              Image.asset(Assets.images.appLogo.path),
               InkWell(
                 onTap: () {
                   Get.toNamed(Routes.weightHistoryScreen);
@@ -63,17 +61,13 @@ class ProgressScreen extends StatelessWidget {
                 ),
               ),
 
-
-
-
-
-//               Card(
-//   child: Image.network('https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//     height: 200,
-//     width: 200,
-//     fit: BoxFit.cover,
-//   ),
-// ),
+              //               Card(
+              //   child: Image.network('https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              //     height: 200,
+              //     width: 200,
+              //     fit: BoxFit.cover,
+              //   ),
+              // ),
             ],
           ),
         ),

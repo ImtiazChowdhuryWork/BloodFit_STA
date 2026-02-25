@@ -65,6 +65,7 @@ final class Endpoints {
   }
 
   static String infoGattherWorkOutGoal() => "$url/workout/add-workout-details";
+  static String getMealsByDate() => "$url/meal/get-meals-by-date";
 }
 
 
