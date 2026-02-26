@@ -3,6 +3,7 @@
 // const String url = "https://sebaev.softvencefsd.xyz";
 
 const String url = "https://faisal5000.merinasib.shop/api/v1";
+const String socketBaseUrl = 'https://faisal5000.merinasib.shop';
 const String imageBaseUrl = 'https://faisal5000.merinasib.shop';
 
 final class NetworkConstants {
@@ -56,7 +57,10 @@ final class Endpoints {
   }
 
 
-  static String aiSuggestedMeals() => "$url/ai-meal/get-meals-plans";
+  static String aiSuggestedMealsJobId() => "$url/ai-meal/get-meals-plans";
+  static String aiSuggestedMealsData({required String jobID}){
+    return "$url/ai-meal/meal-status/$jobID";
+  }
   static String swapMealUrl({required String mealID}){
     return "$url/meal/swap-meal/$mealID";
   }

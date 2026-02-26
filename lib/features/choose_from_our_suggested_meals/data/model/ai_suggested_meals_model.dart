@@ -1,16 +1,12 @@
 import 'dart:convert';
 
 class AiSuggestedMealsModel {
-    bool? success;
-    int? status;
-    String? message;
-    Data? data;
+    String? status;
+    Result? result;
 
     AiSuggestedMealsModel({
-        this.success,
         this.status,
-        this.message,
-        this.data,
+        this.result,
     });
 
     factory AiSuggestedMealsModel.fromRawJson(String str) => AiSuggestedMealsModel.fromJson(json.decode(str));
@@ -18,21 +14,17 @@ class AiSuggestedMealsModel {
     String toRawJson() => json.encode(toJson());
 
     factory AiSuggestedMealsModel.fromJson(Map<String, dynamic> json) => AiSuggestedMealsModel(
-        success: json["success"],
         status: json["status"],
-        message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        result: json["result"] == null ? null : Result.fromJson(json["result"]),
     );
 
     Map<String, dynamic> toJson() => {
-        "success": success,
         "status": status,
-        "message": message,
-        "data": data?.toJson(),
+        "result": result?.toJson(),
     };
 }
 
-class Data {
+class Result {
     Options? breakfastOptions;
     Options? lunchOptions;
     Options? dinnerOptions;
@@ -46,7 +38,7 @@ class Data {
     String? dinnerImage;
     MealCalorieDistribution? mealCalorieDistribution;
 
-    Data({
+    Result({
         this.breakfastOptions,
         this.lunchOptions,
         this.dinnerOptions,
@@ -61,11 +53,11 @@ class Data {
         this.mealCalorieDistribution,
     });
 
-    factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+    factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory Data.fromJson(Map<String, dynamic> json) => Data(
+    factory Result.fromJson(Map<String, dynamic> json) => Result(
         breakfastOptions: json["breakfast_options"] == null ? null : Options.fromJson(json["breakfast_options"]),
         lunchOptions: json["lunch_options"] == null ? null : Options.fromJson(json["lunch_options"]),
         dinnerOptions: json["dinner_options"] == null ? null : Options.fromJson(json["dinner_options"]),

@@ -31,7 +31,7 @@ class MealPlanSelectionTracker extends StatelessWidget {
           ///Section : --------///Item -> Breakfast///--------------
           Obx(() {
             return MealStatusCardWidget(
-              selectedMeal: controller.selectedBreakfastMeal.value != null ? 1 : 0,
+              selectedMeal: 1.0,
               totalMeal: 1,
               mealType: "Breakfast",
             );
@@ -41,7 +41,7 @@ class MealPlanSelectionTracker extends StatelessWidget {
           ///Section : --------///Item -> Breakfast///--------------
           Obx(() {
             return MealStatusCardWidget(
-              selectedMeal: controller.selectedLunchMeal.value != null ? 1 : 0,
+              selectedMeal: 1.0,
               totalMeal: 1,
               mealType: "Lunch",
             );
@@ -51,7 +51,7 @@ class MealPlanSelectionTracker extends StatelessWidget {
           ///Section : --------///Item -> Breakfast///--------------
           Obx(() {
             return MealStatusCardWidget(
-              selectedMeal: controller.selectedDinnerMeal.value != null ? 1 : 0,
+              selectedMeal: 1.0,
               totalMeal: 1,
               mealType: "Dinner",
             );
@@ -60,22 +60,20 @@ class MealPlanSelectionTracker extends StatelessWidget {
 
           ///Section : -------///Button -> Build Meal Plan///-------------
           Obx(() {
-            final isMealPlanComplete = controller.isMealPlanComplete;
+            // final isMealPlanComplete = controller.isMealPlanComplete;
             return CustomElevatedButton(
-              onTap: isMealPlanComplete
-                  ? () {
-                      log("Button Taped : Build Meal Plan!");
-                      log("Selected Meals: ${controller.getSelectedMeals().length}");
-                      Get.closeCurrentSnackbar(); // dismiss snackbar immediately
-                      Get.toNamed(Routes.reviewYourChoosenMealScreen);
-                    }
-                  : null, // Disabled when not all meals are selected
+              onTap: () {
+                log("Button Taped : Build Meal Plan!");
+                // log("Selected Meals: ${controller.getSelectedMeals().length}");
+                Get.closeCurrentSnackbar(); // dismiss snackbar immediately
+                Get.toNamed(Routes.reviewYourChoosenMealScreen);
+              },
               buttonTitle: "Build Meal Plan",
               textStyle: TextFontStyle.headline12w400cfefefeStylePoppins,
               buttonHeight: 64.h,
               buttonWidth: 100.w,
               borderRadius: 8.r,
-              isDisabled: !isMealPlanComplete,
+              isDisabled: false,
             );
           }),
         ],
