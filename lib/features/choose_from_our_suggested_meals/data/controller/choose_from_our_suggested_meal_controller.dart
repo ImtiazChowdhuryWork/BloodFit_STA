@@ -1,22 +1,27 @@
 import 'dart:convert';
-
-import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/ai_suggested_meals_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
-import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repository/ai_suggested_meals_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
+import '../model/ai_suggested_meals_job_id_model.dart';
+import '../model/ai_suggested_meals_model.dart';
+import '../repository/ai_suggested_meals_job_id_repository.dart';
+import '../repository/ai_suggested_meals_repository.dart';
 import '../repository/previously_selected_meals_repository.dart';
 
 class ChooseFromOurSuggestedMealController extends GetxController {
   ///------->>> Section : Importing the Preselected Repository
   final PreviouslySelectedMealsRepository _previouslySelectedMealsRepository;
 
+  ///-------<>>>> Section : Importing the AI Suggested Meals Job ID Repository
+  final AiSuggestedMealsJobIdRepository _aiSuggestedMealsJobIdRepository;
+
   ///-------<>>>> Section : Importing the AI Suggested Meals Repository
   final AiSuggestedMealsRepository _aiSuggestedMealsRepository;
 
   ChooseFromOurSuggestedMealController(
     this._previouslySelectedMealsRepository,
+    this._aiSuggestedMealsJobIdRepository,
     this._aiSuggestedMealsRepository,
   );
 
@@ -193,18 +198,115 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     aiSuggestedMealsErrorMessage.value = '';
   }
 
-  ///-------------->>> Section : PERSISTENT CACHE - All meals cached once
+  ///-------------->>> Section : AI Genereted Meals Api Method Starts Here
+  ///-------------->>> Socket Is Used for getting the Response of the ai
+  ///-------------->>> For Getting the AI Meals We have to go through two API Methods
+  ///-------------->>> First Api Method Target is to get "JOB ID"
+  ///-------------->>> Second Api Method Target is to using that "JOB ID" -> GET the AI Geanareted Meals
   RxList<String> tesList = <String>[].obs;
-  /// Breakfast Cache
+  
+  ///-------Step 1------->>>> Api Method : Get Job ID
+  Rxn<AiSuggestedMealsJobIdModel> jobIdModel = Rxn<AiSuggestedMealsJobIdModel>();
+  RxString jobID = ''.obs;
+
+  void setJobId({required String id}){
+    jobID.value = id;
+    LoggerUtils.debug("Received JOB ID : ${jobID.value}");
+  }
+
+  RxBool isJobIdValueLoading = false.obs;
+  RxString jobIdErrorMessage = ''.obs;
+  void clearJobIdErrorMessage(){
+    jobIdErrorMessage.value = '';
+  }
+
+
+  Future<void> getAiSuggestedMealsJobIdApi()async{
+    try{
+      isJobIdValueLoading.value = true;
+      clearAiSuggestedErrorMessage();
+
+      final response = await _aiSuggestedMealsJobIdRepository.aiSuggestedMealsJobIdRepository();
+
+      LoggerUtils.debug("Job ID Api Response ${response.jsonResponse}");
+
+      if(response.statusCode == 200 && response.isSuccess){
+
+        final aiSuggestedMealsData = AiSuggestedMealsJobIdModel.fromJson(response.jsonResponse!);
+
+        LoggerUtils.debug("Ai Suggested Meals Job ID Fetched Successfully");
+
+        setJobId(id: aiSuggestedMealsData.data?.jobId ?? '');
+
+
+
+      }else{
+        jobIdErrorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Failed to get Job Id from Job ID Api");
+        LoggerUtils.error("Response Code : ${response.statusCode}");
+        LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
+      }
+
+    }catch(error){
+      jobIdErrorMessage.value = error.toString();
+      LoggerUtils.error("Error Catched While getting the JobID Value!");
+      LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
+
+    }finally{
+      isJobIdValueLoading.value = false;
+    }
+  }
+
+
+
+  ///-------Step 2------->>>> Api Method : Get Ai Genarated Meals Data
+  Rxn<AiSuggestedMealsModel> aiGeneratedMealsData = Rxn<AiSuggestedMealsModel>();
+
+  RxBool isAiGeneratedMealsValueLoading = false.obs;
+  
+  RxString aiGeneretedMealsDataErrorMessage = ''.obs;
+  void clearAiGeneretedMealsDataErrorMessage(){
+    aiGeneretedMealsDataErrorMessage.value = '';
+  }
+
+  Future<void> getAiSuggestedMels()async{
+    try{
+      isAiGeneratedMealsValueLoading.value = true;
+      clearAiGeneretedMealsDataErrorMessage();
+
+
+      final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository(jobId: jobID.value);
+
+      if(response.statusCode == 200 && response.isSuccess){
+
+      }else{
+        aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Failed to Get AI Genereted Meals Data!");
+        LoggerUtils.error("Status Code : ${response.statusCode}");
+        LoggerUtils.error("Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
+      }
+
+    }catch(error){
+
+      aiGeneretedMealsDataErrorMessage.value = error.toString();
+      LoggerUtils.error("Catched Error While Getting the Ai Genereted Meals Data");
+      LoggerUtils.error("Catched Error : ${aiGeneretedMealsDataErrorMessage.value}");
+
+
+    }finally{
+      isAiGeneratedMealsValueLoading.value = false;
+    }
+  }
+
+
+
+
   
 
-  /// Lunch Cache
+
   
 
-  /// Dinner Cache
   
-
-  ///-------------->>> Section : Per Tabs 3 Meal Types - These now read from cache
   
 
   ///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here

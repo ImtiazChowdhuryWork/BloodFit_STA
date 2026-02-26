@@ -4,15 +4,17 @@ import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:bloodfit/networks/network_response.dart';
 
-class AiSuggestedMealsRepository {
+
+
+class AiSuggestedMealsJobIdRepository {
   final NetworkCaller _networkCaller;
-  AiSuggestedMealsRepository(this._networkCaller);
+  AiSuggestedMealsJobIdRepository(this._networkCaller);
 
 
-  Future<NetworkResponse> aiSuggestedMealsRepository({required String jobId})async{
+  Future<NetworkResponse> aiSuggestedMealsJobIdRepository()async{
 
     String? tokenValue = appData.read(kKeyAccessToken) ?? '';
 
-    return _networkCaller.getRequest(Endpoints.aiSuggestedMealsData(jobID: jobId), headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
+    return _networkCaller.getRequest(Endpoints.aiSuggestedMealsJobId(), headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
   }
 }
