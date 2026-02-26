@@ -72,6 +72,7 @@ class HomeScreen extends StatelessWidget {
                 horizontal: UIHelper.kDefaulutPadding(),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ///Section : --------///Text -> your daily calories///----------
                   Text(

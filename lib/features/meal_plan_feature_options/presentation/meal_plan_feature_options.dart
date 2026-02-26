@@ -116,10 +116,24 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
 
                 // No Data State
                 if (mealPlanFeatureOptionsController.mealsByDateList.isEmpty) {
+                  // Check if the selected date is a past date
+                  final selectedDate = DateFormat('yyyy/MM/dd').parse(
+                    mealPlanFeatureOptionsController.selectedDate.value,
+                  );
+                  final today = DateTime.now();
+                  final isPastDate = DateTime(
+                    selectedDate.year,
+                    selectedDate.month,
+                    selectedDate.day,
+                  ).isBefore(DateTime(today.year, today.month, today.day));
+
                   return BuildMealPlanWidget(
                     onTap: () {
                       LoggerUtils.debug("Button Tapped : Get Started !");
-                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                      final selectedDate = DateFormat('yyyy/MM/dd').parse(
+                    mealPlanFeatureOptionsController.selectedDate.value,
+                  );
+                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'selectedDate' : selectedDate});
                     },
                     showSectionTitle: true,
                     sectionTitle: "Choose From Our Suggested Meals",
@@ -128,8 +142,10 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                     positionRight: -20.w,
                     imageIconPath: Assets.icons.chickeMealIcon,
                     title: "Build Your Daily Meals",
-                    subTitle:
-                        "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+                    subTitle: isPastDate
+                        ? "Meal Plan was not build for selected date!"
+                        : "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+                    isShowButton: !isPastDate,
                   );
                 }
 

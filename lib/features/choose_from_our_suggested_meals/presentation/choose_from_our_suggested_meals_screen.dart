@@ -29,6 +29,13 @@ class _ChooseFromOurSuggestedMealsScreenState
   late TabController _tabController;
   ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController = Get.find<ChooseFromOurSuggestedMealController>();
 
+  // String selectedDate = '';
+
+  // final arguments = Get.arguments as Map<String,dynamic>?;
+  // final selectedDate = arguments?['selectedDate'] ?? '';
+
+
+  
   @override
   void initState() {
     super.initState();

@@ -21,6 +21,7 @@ class BuildMealPlanWidget extends StatelessWidget {
   final String buttonTitle;
   final bool showSectionTitle;
   final String? sectionTitle;
+  final bool isShowButton;
   const BuildMealPlanWidget({
     super.key,
     this.onTap,
@@ -29,12 +30,14 @@ class BuildMealPlanWidget extends StatelessWidget {
     required this.imageIconPath,
     this.buttonColor,
     this.isBorderUsed = false,
+
     this.borderColor,
     required this.positionTop,
     required this.positionRight,
     required this.buttonTitle,
     this.borderWidth,
     this.showSectionTitle = false,
+    this.isShowButton = true,
     this.sectionTitle,
   });
 
@@ -87,6 +90,8 @@ class BuildMealPlanWidget extends StatelessWidget {
                     UIHelper.verticalSpace(32.h),
 
                     /// Section: Button -> Get Started
+                    
+                    isShowButton?
                     CustomElevatedButton(
                       onTap: onTap,
                       buttonHeight: 40.h,
@@ -96,7 +101,7 @@ class BuildMealPlanWidget extends StatelessWidget {
                       buttonBorderColor: borderColor,
                       buttonColor: buttonColor,
                       buttonTitle: buttonTitle,
-                    ),
+                    ) : SizedBox.shrink(),
                     UIHelper.verticalSpace(6.h),
                   ],
                 ),
