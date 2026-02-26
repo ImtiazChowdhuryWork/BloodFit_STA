@@ -10,6 +10,8 @@ import 'package:get/get.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../helper/ui_helpers.dart';
 import '../../home/presentation/widgets/app_bar_section_widget.dart';
+import '../../home/presentation/widgets/consistancy_stake_preview.dart';
+import '../../home/presentation/widgets/custom_calender_widget.dart';
 
 class ProgressScreen extends StatelessWidget {
   const ProgressScreen({super.key});
@@ -19,9 +21,10 @@ class ProgressScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
+        
         child: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ///Section : ---------------------///AppLogo///-----------
               ///Section : ---------------------///Notification///-----------
@@ -34,13 +37,34 @@ class ProgressScreen extends StatelessWidget {
               ),
               UIHelper.verticalSpace(20.h),
 
-              OverAllProgressShowingWidget(
-                overAllProgress: 0.7,
-                inforTypeOne: 'Mealplan',
-                infoTypeOneProgress: 0.7,
-                infoTypeTwo: 'Workout',
-                infoTypeTwoProgress: 0.4,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
+                child: OverAllProgressShowingWidget(
+                  overAllProgress: 0.7,
+                  inforTypeOne: 'Mealplan',
+                  infoTypeOneProgress: 0.7,
+                  infoTypeTwo: 'Workout',
+                  infoTypeTwoProgress: 0.4,
+                ),
               ),
+              UIHelper.verticalSpace(32.h),
+
+
+
+              ///Section : -------///Stake Section///----------
+              ///This section check the consistancy of the user. If the consistancy is broken
+              ///then the stack will return to it's original value. Which -> "0"
+              ///
+              
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
+                child: ConsistancyStakePreviewWidget(numberValue: 4),
+              ),
+              UIHelper.verticalSpace(14.h),
+
+              ///Section : -----------///Calender Widget with progress, cheat day,...///--------------
+              CustomCalenderWidget(),
+              UIHelper.verticalSpace(24.h),
 
               InkWell(
                 onTap: () {
@@ -60,14 +84,6 @@ class ProgressScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              //               Card(
-              //   child: Image.network('https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              //     height: 200,
-              //     width: 200,
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
             ],
           ),
         ),
