@@ -26,7 +26,7 @@ class MealPlanFeatureRepository {
     LoggerUtils.debug("Token Exists: ${tokenValue.isNotEmpty}");
     LoggerUtils.debug("Headers: ${tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : 'No Headers'}");
 
-    final response = await _networkCaller.getRequest(
+    final response = await _networkCaller.postRequest(
       Endpoints.getMealsByDate(),
       body: data,
       headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null

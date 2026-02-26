@@ -38,185 +38,205 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Section : ---------------------///AppLogo///-----------
-              ///Section : ---------------------///Notification///-----------
-              ///Section : ---------------------///Profile///-----------
-              AppBarSectionWidget(),
-              UIHelper.verticalSpace(20.h),
-
-              ///Section : -------///Stake Section///----------
-              ///This section check the consistancy of the user. If the consistancy is broken
-              ///then the stack will return to it's original value. Which -> "0"
-              ConsistancyStakePreviewWidget(numberValue: 4),
-              UIHelper.verticalSpace(14.h),
-
-              ///Section : -----------///Calender Widget with progress, cheat day,...///--------------
-              CustomCalenderWidget(),
-              UIHelper.verticalSpace(24.h),
-
-              ///Section : --------///Text -> your daily calories///----------
-              Text(
-                "Your Daily Calories",
-                style: TextFontStyle.headline20w500cfefefeStylePoppins,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Section : ---------------------///AppLogo///-----------
+            ///Section : ---------------------///Notification///-----------
+            ///Section : ---------------------///Profile///-----------
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: UIHelper.kDefaulutPadding(),
               ),
-              UIHelper.verticalSpace(12.h),
+              child: AppBarSectionWidget(),
+            ),
+            UIHelper.verticalSpace(20.h),
 
-              ///Sectiopn : --------///Calorie Progressbar///------------
-              Container(
-                width: 1.sw,
-                padding: EdgeInsets.all(10.sp),
-                decoration: BoxDecoration(
-                  color: AppColors.c262626,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ///Section : ------------///Total Calories///---------------
-                      Obx(() {
-                        return TotalKCalWidget(
-                          isSuccess: controller.isSuccess.value,
-                          onTap:
-                              controller.isSuccess.value ||
-                                  controller.isDailyCaloriesLoading.value
-                              ? null
-                              : () {
-                                  LoggerUtils.debug(
-                                    "Home Calories Datra Reload Taped!",
-                                  );
-                                  controller.getDailyCaloriesApi();
-                                },
-                          size: 120.w,
-                          progress: controller.completationPercentage.toDouble(),
-                          strokeWidth: 8,
-                          capColor: AppColors.cFFFFFF,
-                          capSizeMultiplier: 0.3,
-                          capPadding: 0,
-                          capRadialOffset: 0,
-                          progressColor: AppColors.cb20000,
-                          progressBoldColor: AppColors.c7e0101,
-                          isLoading: controller.isDailyCaloriesLoading.value,
-                          totalCalories: controller.isDailyCaloriesLoading.value
-                              ? 'Loading...'
-                              : controller.totalCalories,
-                        );
-                      }),
-                      UIHelper.horizontalSpace(16.w),
+            ///Section : -------///Stake Section///----------
+            ///This section check the consistancy of the user. If the consistancy is broken
+            ///then the stack will return to it's original value. Which -> "0"
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: UIHelper.kDefaulutPadding(),
+              ),
+              child: ConsistancyStakePreviewWidget(numberValue: 4),
+            ),
+            UIHelper.verticalSpace(14.h),
 
-                      ///Section : ------------///Total Carbs///---------------
-                      Row(
+            ///Section : -----------///Calender Widget with progress, cheat day,...///--------------
+            CustomCalenderWidget(),
+            UIHelper.verticalSpace(24.h),
+
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: UIHelper.kDefaulutPadding(),
+              ),
+              child: Column(
+                children: [
+                  ///Section : --------///Text -> your daily calories///----------
+                  Text(
+                    "Your Daily Calories",
+                    style: TextFontStyle.headline20w500cfefefeStylePoppins,
+                  ),
+                  UIHelper.verticalSpace(12.h),
+
+                  ///Sectiopn : --------///Calorie Progressbar///------------
+                  Container(
+                    width: 1.sw,
+                    padding: EdgeInsets.all(10.sp),
+                    decoration: BoxDecoration(
+                      color: AppColors.c262626,
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ///Section : ------------///Total Carbs///---------------
+                          ///Section : ------------///Total Calories///---------------
                           Obx(() {
-                            return SingleElementShowingWidget(
-                              elementIconPath: Assets.icons.glutenIcon,
-                              elementTitle: "Carbs",
-                              isLoading:
-                                  controller.isDailyCaloriesLoading.value,
-                              elementAmount: controller.consumedCarbs
+                            return TotalKCalWidget(
+                              isSuccess: controller.isSuccess.value,
+                              onTap:
+                                  controller.isSuccess.value ||
+                                      controller.isDailyCaloriesLoading.value
+                                  ? null
+                                  : () {
+                                      LoggerUtils.debug(
+                                        "Home Calories Datra Reload Taped!",
+                                      );
+                                      controller.getDailyCaloriesApi();
+                                    },
+                              size: 120.w,
+                              progress: controller.completationPercentage
                                   .toDouble(),
-                            );
-                          }),
-                          UIHelper.horizontalSpace(8.w),
-
-                          ///Section : ------------///Total protein///---------------
-                          Obx(() {
-                            return SingleElementShowingWidget(
-                              elementIconPath: Assets.icons.meatIcon,
-                              elementTitle: "Protein",
+                              strokeWidth: 8,
+                              capColor: AppColors.cFFFFFF,
+                              capSizeMultiplier: 0.3,
+                              capPadding: 0,
+                              capRadialOffset: 0,
+                              progressColor: AppColors.cb20000,
+                              progressBoldColor: AppColors.c7e0101,
                               isLoading:
                                   controller.isDailyCaloriesLoading.value,
-                              elementAmount: controller.consumedProtein
-                                  .toDouble(),
+                              totalCalories:
+                                  controller.isDailyCaloriesLoading.value
+                                  ? 'Loading...'
+                                  : controller.totalCalories,
                             );
                           }),
-                          UIHelper.horizontalSpace(8.w),
+                          UIHelper.horizontalSpace(16.w),
 
                           ///Section : ------------///Total Carbs///---------------
-                          Obx(() {
-                            return SingleElementShowingWidget(
-                              elementIconPath: Assets.icons.fatIcon,
-                              elementTitle: "Fat",
-                              isLoading:
-                                  controller.isDailyCaloriesLoading.value,
-                              elementAmount: controller.consumedFat.toDouble(),
-                            );
-                          }),
+                          Row(
+                            children: [
+                              ///Section : ------------///Total Carbs///---------------
+                              Obx(() {
+                                return SingleElementShowingWidget(
+                                  elementIconPath: Assets.icons.glutenIcon,
+                                  elementTitle: "Carbs",
+                                  isLoading:
+                                      controller.isDailyCaloriesLoading.value,
+                                  elementAmount: controller.consumedCarbs
+                                      .toDouble(),
+                                );
+                              }),
+                              UIHelper.horizontalSpace(8.w),
+
+                              ///Section : ------------///Total protein///---------------
+                              Obx(() {
+                                return SingleElementShowingWidget(
+                                  elementIconPath: Assets.icons.meatIcon,
+                                  elementTitle: "Protein",
+                                  isLoading:
+                                      controller.isDailyCaloriesLoading.value,
+                                  elementAmount: controller.consumedProtein
+                                      .toDouble(),
+                                );
+                              }),
+                              UIHelper.horizontalSpace(8.w),
+
+                              ///Section : ------------///Total Carbs///---------------
+                              Obx(() {
+                                return SingleElementShowingWidget(
+                                  elementIconPath: Assets.icons.fatIcon,
+                                  elementTitle: "Fat",
+                                  isLoading:
+                                      controller.isDailyCaloriesLoading.value,
+                                  elementAmount: controller.consumedFat
+                                      .toDouble(),
+                                );
+                              }),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  UIHelper.verticalSpace(24.h),
+
+                  ///Section : --------------///Selectable Days for Meal Plan,///--------------------
+                  /// Not Available only for Free Subscription Type of User///----------
+                  SelectYourDaysForMealPlanWidget(),
+                  UIHelper.verticalSpace(32.h),
+
+                  ///Section : ----------------///Text -> update your current weight///------------
+                  ///Section : --------------///Weight Drop Down///----------
+                  CurrentWeightUpdateWidget(),
+                  UIHelper.verticalSpace(24.h),
+
+                  ///Section : -------------///received 3 meal plan///--------------
+                  ReceivedThreeMealPlansWidget(),
+                  UIHelper.verticalSpace(24.h),
+
+                  ///Section : -------------///Build Your Meal Plan////------------
+                  ///Section : -------------///Show Selected Meals////------------
+                  ShowSelectedMealsOrBuildMealPlanWidget(),
+                  UIHelper.verticalSpace(24.h),
+
+                  ///Section : -------------///FOR TEST PURPOSE OF Recently Selected Meals////------------
+                  ///Section : -------------///Will be removed after test is done////------------
+                  BuildMealPlanWidget(
+                    onTap: () {
+                      log("Button Tapped : Get Started !");
+                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                    },
+                    showSectionTitle: true,
+                    sectionTitle: "Choose From Our Suggested Meals",
+                    buttonTitle: "Get Started",
+                    positionTop: -36.h,
+                    positionRight: -20.w,
+                    imageIconPath: Assets.icons.chickeMealIcon,
+                    title: "Build Your Daily Meals",
+                    subTitle:
+                        "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+                  ),
+
+                  ///Section : -------------///Build Your Meal Plan////------------
+                  BuildMealPlanWidget(
+                    onTap: () {
+                      log("Button Taped : Subscribe Now !");
+                      Get.toNamed(Routes.subscriptionScreen);
+                    },
+                    buttonTitle: "Subscribe Now",
+                    isBorderUsed: true,
+                    borderWidth: 2.sp,
+                    borderColor: AppColors.cb20000,
+                    buttonColor: AppColors.c000000,
+                    positionTop: -20.h,
+                    positionRight: -20.w,
+                    imageIconPath: Assets.icons.workoutDumbleIcon,
+                    title: "Unlock Personalized Workouts",
+                    subTitle:
+                        "Subscribe Now To Get Customized Workout Plans Tailored To Your Fitness Goals",
+                  ),
+
+                  UIHelper.verticalSpace(144.h),
+                ],
               ),
-              UIHelper.verticalSpace(24.h),
-
-              ///Section : --------------///Selectable Days for Meal Plan,///--------------------
-              /// Not Available only for Free Subscription Type of User///----------
-              SelectYourDaysForMealPlanWidget(),
-              UIHelper.verticalSpace(32.h),
-
-              ///Section : ----------------///Text -> update your current weight///------------
-              ///Section : --------------///Weight Drop Down///----------
-              CurrentWeightUpdateWidget(),
-              UIHelper.verticalSpace(24.h),
-
-              ///Section : -------------///received 3 meal plan///--------------
-              ReceivedThreeMealPlansWidget(),
-              UIHelper.verticalSpace(24.h),
-
-              ///Section : -------------///Build Your Meal Plan////------------
-              ///Section : -------------///Show Selected Meals////------------
-              ShowSelectedMealsOrBuildMealPlanWidget(),
-              UIHelper.verticalSpace(24.h),
-
-              ///Section : -------------///FOR TEST PURPOSE OF Recently Selected Meals////------------
-              ///Section : -------------///Will be removed after test is done////------------
-              BuildMealPlanWidget(
-                onTap: () {
-                  log("Button Tapped : Get Started !");
-                  Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
-                },
-                showSectionTitle: true,
-                sectionTitle: "Choose From Our Suggested Meals",
-                buttonTitle: "Get Started",
-                positionTop: -36.h,
-                positionRight: -20.w,
-                imageIconPath: Assets.icons.chickeMealIcon,
-                title: "Build Your Daily Meals",
-                subTitle:
-                    "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
-              ),
-
-              ///Section : -------------///Build Your Meal Plan////------------
-              BuildMealPlanWidget(
-                onTap: () {
-                  log("Button Taped : Subscribe Now !");
-                  Get.toNamed(Routes.subscriptionScreen);
-                },
-                buttonTitle: "Subscribe Now",
-                isBorderUsed: true,
-                borderWidth: 2.sp,
-                borderColor: AppColors.cb20000,
-                buttonColor: AppColors.c000000,
-                positionTop: -20.h,
-                positionRight: -20.w,
-                imageIconPath: Assets.icons.workoutDumbleIcon,
-                title: "Unlock Personalized Workouts",
-                subTitle:
-                    "Subscribe Now To Get Customized Workout Plans Tailored To Your Fitness Goals",
-              ),
-
-              UIHelper.verticalSpace(144.h),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

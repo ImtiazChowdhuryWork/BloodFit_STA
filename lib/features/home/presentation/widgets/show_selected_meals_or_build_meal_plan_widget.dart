@@ -71,6 +71,9 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
 
         LoggerUtils.debug("Image URL : $imageBaseUrl${homeScreenController.breakFastImage}");
+        LoggerUtils.debug("Breakfast: ${homeScreenController.breakfastName}, Lunch: ${homeScreenController.lunchName}, Dinner: ${homeScreenController.dinerName}");
+        LoggerUtils.debug("selectedMealPlanAvailable: ${homeScreenController.selectedMealPlanAvailable.value}");
+        LoggerUtils.debug("todaysSelectedMealsList length: ${homeScreenController.todaysSelectedMealsList.length}");
 
         ///------->>> Section : Breakfast
         return Column(

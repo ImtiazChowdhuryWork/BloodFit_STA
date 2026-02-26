@@ -1,3 +1,4 @@
+import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
@@ -60,7 +61,9 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
               MealPlanCalendarWidget(
                 onTap: (formattedDate) {
                   // When date is selected, fetch meals for that date
-                  mealPlanFeatureOptionsController.setSelectedDate(date: formattedDate);
+                  mealPlanFeatureOptionsController.setSelectedDate(
+                    date: formattedDate,
+                  );
                   mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
                 },
               ),
@@ -84,13 +87,29 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                 }
 
                 // Error State
-                if (mealPlanFeatureOptionsController.selectedDateDataError.value.isNotEmpty) {
+                if (mealPlanFeatureOptionsController
+                    .selectedDateDataError
+                    .value
+                    .isNotEmpty) {
                   return MealShowingWidgetShimmerEffect(
-                    child: CustomElevatedButton(
-                      buttonTitle: "Retry",
-                      onTap: () {
-                        mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
-                      },
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Failed Get Meal Plans!',style: TextFontStyle.headline14w500cFFFFFFStylePoppins,),
+                          UIHelper.verticalSpace(8.h),
+                          CustomElevatedButton(
+                            buttonWidth: 120.w,
+                            buttonHeight: 40.h,
+                            buttonTitle: "Retry",
+                            isLoading: mealPlanFeatureOptionsController.isLoading.value,
+                            onTap: () {
+                              mealPlanFeatureOptionsController
+                                  .postGetMealsBySelectedDate();
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }
@@ -116,7 +135,9 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
 
                 // Success State - Show meals from API response
                 return Column(
-                  children: mealPlanFeatureOptionsController.mealsByDateList.map((meal) {
+                  children: mealPlanFeatureOptionsController.mealsByDateList.map((
+                    meal,
+                  ) {
                     return Column(
                       children: [
                         MealPlanItemCard(
@@ -140,7 +161,8 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                             );
                             showSwapMealBottomSheet();
                           },
-                          mealType: meal.mealType?.capitalizeFirst ??
+                          mealType:
+                              meal.mealType?.capitalizeFirst ??
                               "Failed to Get Meal Type..",
                           mealTitle: meal.mealName ?? '',
                           kcalValue: meal.kcal ?? 0,
