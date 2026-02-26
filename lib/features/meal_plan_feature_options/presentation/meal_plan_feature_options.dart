@@ -133,7 +133,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                       final selectedDate = DateFormat('yyyy/MM/dd').parse(
                     mealPlanFeatureOptionsController.selectedDate.value,
                   );
-                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'selectedDate' : selectedDate});
+                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'selectedDate' : selectedDate.toString()});
                     },
                     showSectionTitle: true,
                     sectionTitle: "Choose From Our Suggested Meals",

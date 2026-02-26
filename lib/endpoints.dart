@@ -3,6 +3,7 @@
 // const String url = "https://sebaev.softvencefsd.xyz";
 
 const String url = "https://faisal5000.merinasib.shop/api/v1";
+const String socketBaseUrl = 'https://faisal5000.merinasib.shop';
 const String imageBaseUrl = 'https://faisal5000.merinasib.shop';
 
 final class NetworkConstants {

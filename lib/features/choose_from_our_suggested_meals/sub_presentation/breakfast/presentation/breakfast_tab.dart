@@ -27,48 +27,36 @@ class BreakfastTab extends StatelessWidget {
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Protein-Packed ///----------------
-          Obx(() {
-            return MealPlanTypeWidget(
+          MealPlanTypeWidget(
               mealPlanType: "Protein-Packed",
-              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
-                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
-                  : Assets.images.eggOmletImage.path,
-              itemsList: chooseFromOurSuggestedMealController.proteinPackedItemsList,
+              itemImagePath: Assets.images.omletEgg.path,
+              itemsList: chooseFromOurSuggestedMealController.tesList,
               retryOnTap: (){
-                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+                
               },
-            );
-          }),
+            ),
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Light & Fresh ///----------------
-          Obx(() {
-            return MealPlanTypeWidget(
-              mealPlanType: "Light & Fresh",
-              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
-                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
-                  : Assets.images.omletEgg.path,
-              itemsList: chooseFromOurSuggestedMealController.lightAndFreshItemsList,
+          MealPlanTypeWidget(
+              mealPlanType: "Protein-Packed",
+              itemImagePath: "base64 image url",
+              itemsList: chooseFromOurSuggestedMealController.tesList,
               retryOnTap: (){
-                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+                
               },
-            );
-          }),
+            ),
           UIHelper.verticalSpace(32.h),
 
           ///Section : ------------///Hearty & Comforting///----------------
-          Obx(() {
-            return MealPlanTypeWidget(
-              mealPlanType: "Hearty & Comforting",
-              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
-                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
-                  : Assets.images.omletEgg.path,
-              itemsList: chooseFromOurSuggestedMealController.heartyAndConfortingItemsList,
+          MealPlanTypeWidget(
+              mealPlanType: "Protein-Packed",
+              itemImagePath: "base64 image url",
+              itemsList: chooseFromOurSuggestedMealController.tesList,
               retryOnTap: (){
-                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+                
               },
-            );
-          }),
+            ),
           UIHelper.verticalSpace(32.h),
         ],
       ),

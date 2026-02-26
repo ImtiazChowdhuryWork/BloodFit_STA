@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../../../gen/assets.gen.dart';
 import '../../../../../helper/ui_helpers.dart';
 import '../../../data/controller/choose_from_our_suggested_meal_controller.dart';
 import '../../../presentation/widgets/meal_plan_type_widget.dart';
@@ -32,12 +30,10 @@ class DinnerTab extends StatelessWidget {
           Obx(() {
             return MealPlanTypeWidget(
               mealPlanType: "Protein-Packed",
-              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
-                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
-                  : Assets.images.omletEgg.path,
-              itemsList: chooseFromOurSuggestedMealController.proteinPackedItemsList,
+              itemImagePath: "base64 image url",
+              itemsList: chooseFromOurSuggestedMealController.tesList,
               retryOnTap: (){
-                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+                
               },
             );
           }),
@@ -46,13 +42,11 @@ class DinnerTab extends StatelessWidget {
           ///Section : ------------///Light & Fresh ///----------------
           Obx(() {
             return MealPlanTypeWidget(
-              mealPlanType: "Light & Fresh",
-              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
-                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
-                  : Assets.images.omletEgg.path,
-              itemsList: chooseFromOurSuggestedMealController.lightAndFreshItemsList,
+              mealPlanType: "Protein-Packed",
+              itemImagePath: "base64 image url",
+              itemsList: chooseFromOurSuggestedMealController.tesList,
               retryOnTap: (){
-                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+                
               },
             );
           }),
@@ -61,13 +55,11 @@ class DinnerTab extends StatelessWidget {
           ///Section : ------------///Hearty & Comforting///----------------
           Obx(() {
             return MealPlanTypeWidget(
-              mealPlanType: "Hearty & Comforting",
-              itemImagePath: chooseFromOurSuggestedMealController.currentTabImageUrl.value.isNotEmpty 
-                  ? chooseFromOurSuggestedMealController.currentTabImageUrl.value 
-                  : Assets.images.omletEgg.path,
-              itemsList: chooseFromOurSuggestedMealController.heartyAndConfortingItemsList,
+              mealPlanType: "Protein-Packed",
+              itemImagePath: "base64 image url",
+              itemsList: chooseFromOurSuggestedMealController.tesList,
               retryOnTap: (){
-                chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+                
               },
             );
           }),

@@ -1,7 +1,6 @@
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/go_back_widget.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
-import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/sub_presentation/dinner/presentation/dinner_tab.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -29,16 +28,21 @@ class _ChooseFromOurSuggestedMealsScreenState
   late TabController _tabController;
   ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController = Get.find<ChooseFromOurSuggestedMealController>();
 
-  // String selectedDate = '';
+  String receivedSelectedDate = '';
 
-  // final arguments = Get.arguments as Map<String,dynamic>?;
-  // final selectedDate = arguments?['selectedDate'] ?? '';
-
-
-  
   @override
   void initState() {
     super.initState();
+
+    ///-------------<>>>>> Section : Receive Arguments
+    final arguments = Get.arguments as Map<String,dynamic>?;
+    receivedSelectedDate = arguments?['selectedDate'] ?? '';
+
+    ///------------<>>>> Section : Send the selected date to controller
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      chooseFromOurSuggestedMealController.setSelectedDate(date: receivedSelectedDate);
+    });
+
     _tabController = TabController(length: 3, vsync: this);
 
 
@@ -49,19 +53,15 @@ class _ChooseFromOurSuggestedMealsScreenState
     ///------------->>> Section : Initial API call (ONCE - data will be cached)
     chooseFromOurSuggestedMealController
         .getPreviouslySelectedMeals();
-    chooseFromOurSuggestedMealController.getAiSuggestedMealsApi();
+    
 
-    ///------------->>> Section : Set up meal selection callback
-    chooseFromOurSuggestedMealController.setMealSelectionCallback(() {
-      showMealPlanTracker();
-    });
+    
+    
 
     _tabController.addListener(() {
       ///------------->>> Section : Fires when tab changes
       debugPrint('Current Tab Index: ${_tabController.index}');
       chooseFromOurSuggestedMealController.setSelectedTabName(index: _tabController.index);
-      ///------------->>> Section : Load from cache only (NO API CALL on tab change)
-      chooseFromOurSuggestedMealController.loadMealsForCurrentTabFromCache();
       chooseFromOurSuggestedMealController.getPreviouslySelectedMeals();
     });
   }
