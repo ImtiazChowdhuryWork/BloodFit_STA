@@ -9,12 +9,13 @@ import 'package:get/get.dart';
 
 import '../../../../custom_widgets/custom_shimmer_effect.dart';
 import '../../../../helper/ui_helpers.dart';
+import '../../data/model/ai_suggested_meals_model.dart';
 
 class MealPlanTypeWidget extends StatelessWidget {
   final String mealPlanType;
   final String itemImagePath;
   final void Function()? retryOnTap;
-  final RxList<String> itemsList;
+  final RxList<HealthyComforting> itemsList;
 
   MealPlanTypeWidget({
     super.key,

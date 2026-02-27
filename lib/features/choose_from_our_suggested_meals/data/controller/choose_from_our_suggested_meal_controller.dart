@@ -1,8 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
+import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
+import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
+import '../../../../networks/socket_services.dart';
 import '../model/ai_suggested_meals_job_id_model.dart';
 import '../model/ai_suggested_meals_model.dart';
 import '../repository/ai_suggested_meals_job_id_repository.dart';
@@ -35,11 +40,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     LoggerUtils.debug("✅ Reactive listeners successfully registered");
   }
 
-  @override
-  void onClose() {
-    LoggerUtils.debug("👋👋👋 ChooseFromOurSuggestedMealController closed");
-    super.onClose();
-  }
+  
 
 
 
@@ -177,139 +178,680 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   ///--------->>> Section : Previously Selected Meals Api Method Ends Here
 
-  ///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
-  ///
-  ///-------<>>>>> Section : Get The Selected Set
-  RxString selectedDate = ''.obs;
-  void setSelectedDate({required String date}){
-    selectedDate.value = date;
-  }
+  // ///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
+  // ///
+  // ///-------<>>>>> Section : Get The Selected Set
+  // RxString selectedDate = ''.obs;
+  // void setSelectedDate({required String date}){
+  //   selectedDate.value = date;
+  // }
 
-  /// Global loading state for UI
-  RxBool isAiSuggestedMealsLoading = false.obs;
-  RxString aiSuggestedMealsErrorMessage = ''.obs;
+  // /// Global loading state for UI
+  // RxBool isAiSuggestedMealsLoading = false.obs;
+  // RxString aiSuggestedMealsErrorMessage = ''.obs;
 
-  /// Per-meal-type loading flags to prevent duplicate API calls
-  RxBool isBreakfastAiMealsLoaded = false.obs;
-  RxBool isLunchAiMealsLoaded = false.obs;
-  RxBool isDinnerAiMealsLoaded = false.obs;
+  // /// Per-meal-type loading flags to prevent duplicate API calls
+  // RxBool isBreakfastAiMealsLoaded = false.obs;
+  // RxBool isLunchAiMealsLoaded = false.obs;
+  // RxBool isDinnerAiMealsLoaded = false.obs;
 
-  void clearAiSuggestedErrorMessage() {
-    aiSuggestedMealsErrorMessage.value = '';
-  }
+  // void clearAiSuggestedErrorMessage() {
+  //   aiSuggestedMealsErrorMessage.value = '';
+  // }
 
-  ///-------------->>> Section : AI Genereted Meals Api Method Starts Here
-  ///-------------->>> Socket Is Used for getting the Response of the ai
-  ///-------------->>> For Getting the AI Meals We have to go through two API Methods
-  ///-------------->>> First Api Method Target is to get "JOB ID"
-  ///-------------->>> Second Api Method Target is to using that "JOB ID" -> GET the AI Geanareted Meals
-  RxList<String> tesList = <String>[].obs;
+  // ///-------------->>> Section : AI Genereted Meals Api Method Starts Here
+  // ///-------------->>> Socket Is Used for getting the Response of the ai
+  // ///-------------->>> For Getting the AI Meals We have to go through two API Methods
+  // ///-------------->>> First Api Method Target is to get "JOB ID"
+  // ///-------------->>> Second Api Method Target is to using that "JOB ID" -> GET the AI Geanareted Meals
+  // RxList<String> tesList = <String>[].obs;
   
-  ///-------Step 1------->>>> Api Method : Get Job ID
-  Rxn<AiSuggestedMealsJobIdModel> jobIdModel = Rxn<AiSuggestedMealsJobIdModel>();
-  RxString jobID = ''.obs;
+//   ///-------Step 1------->>>> Api Method : Get Job ID
+//   Rxn<AiSuggestedMealsJobIdModel> jobIdModel = Rxn<AiSuggestedMealsJobIdModel>();
+//   RxString jobID = ''.obs;
 
-  void setJobId({required String id}){
-    jobID.value = id;
-    LoggerUtils.debug("Received JOB ID : ${jobID.value}");
-  }
+//   void setJobId({required String id}){
+//     jobID.value = id;
+//     LoggerUtils.debug("Received JOB ID : ${jobID.value}");
+//   }
 
-  RxBool isJobIdValueLoading = false.obs;
-  RxString jobIdErrorMessage = ''.obs;
-  void clearJobIdErrorMessage(){
-    jobIdErrorMessage.value = '';
-  }
-
-
-  Future<void> getAiSuggestedMealsJobIdApi()async{
-    try{
-      isJobIdValueLoading.value = true;
-      clearAiSuggestedErrorMessage();
-
-      final response = await _aiSuggestedMealsJobIdRepository.aiSuggestedMealsJobIdRepository();
-
-      LoggerUtils.debug("Job ID Api Response ${response.jsonResponse}");
-
-      if(response.statusCode == 200 && response.isSuccess){
-
-        final aiSuggestedMealsData = AiSuggestedMealsJobIdModel.fromJson(response.jsonResponse!);
-
-        LoggerUtils.debug("Ai Suggested Meals Job ID Fetched Successfully");
-
-        setJobId(id: aiSuggestedMealsData.data?.jobId ?? '');
+//   RxBool isJobIdValueLoading = false.obs;
+//   RxString jobIdErrorMessage = ''.obs;
+//   void clearJobIdErrorMessage(){
+//     jobIdErrorMessage.value = '';
+//   }
 
 
+//   Future<void> getAiSuggestedMealsJobIdApi()async{
+//     try{
+//       isJobIdValueLoading.value = true;
+//       clearAiSuggestedErrorMessage();
 
-      }else{
-        jobIdErrorMessage.value = response.errorMessage.toString();
-        LoggerUtils.error("Failed to get Job Id from Job ID Api");
-        LoggerUtils.error("Response Code : ${response.statusCode}");
-        LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
-      }
+//       final response = await _aiSuggestedMealsJobIdRepository.aiSuggestedMealsJobIdRepository();
 
-    }catch(error){
-      jobIdErrorMessage.value = error.toString();
-      LoggerUtils.error("Error Catched While getting the JobID Value!");
-      LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
+//       LoggerUtils.debug("Job ID Api Response ${response.jsonResponse}");
 
-    }finally{
-      isJobIdValueLoading.value = false;
+//       if(response.statusCode == 200 && response.isSuccess){
+
+//         final aiSuggestedMealsData = AiSuggestedMealsJobIdModel.fromJson(response.jsonResponse!);
+
+//         LoggerUtils.debug("Ai Suggested Meals Job ID Fetched Successfully");
+
+//         setJobId(id: aiSuggestedMealsData.data?.jobId ?? '');
+
+
+
+//       }else{
+//         jobIdErrorMessage.value = response.errorMessage.toString();
+//         LoggerUtils.error("Failed to get Job Id from Job ID Api");
+//         LoggerUtils.error("Response Code : ${response.statusCode}");
+//         LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
+//       }
+
+//     }catch(error){
+//       jobIdErrorMessage.value = error.toString();
+//       LoggerUtils.error("Error Catched While getting the JobID Value!");
+//       LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
+
+//     }finally{
+//       isJobIdValueLoading.value = false;
+//     }
+//   }
+
+
+
+//   ///-------Step 2------->>>> Api Method : Get Ai Genarated Meals Data using the jobId
+//   Rxn<AiSuggestedMealsModel> aiGeneratedMealsData = Rxn<AiSuggestedMealsModel>();
+
+//   RxBool isAiGeneratedMealsValueLoading = false.obs;
+  
+//   RxString aiGeneretedMealsDataErrorMessage = ''.obs;
+//   void clearAiGeneretedMealsDataErrorMessage(){
+//     aiGeneretedMealsDataErrorMessage.value = '';
+//   }
+
+//   Future<void> getAiSuggestedMels()async{
+//     try{
+//       isAiGeneratedMealsValueLoading.value = true;
+//       clearAiGeneretedMealsDataErrorMessage();
+
+
+//       final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository(jobId: jobID.value);
+
+//       if(response.statusCode == 200 && response.isSuccess){
+
+//       }else{
+//         aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
+//         LoggerUtils.error("Failed to Get AI Genereted Meals Data!");
+//         LoggerUtils.error("Status Code : ${response.statusCode}");
+//         LoggerUtils.error("Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
+//       }
+
+//     }catch(error){
+
+//       aiGeneretedMealsDataErrorMessage.value = error.toString();
+//       LoggerUtils.error("Catched Error While Getting the Ai Genereted Meals Data");
+//       LoggerUtils.error("Catched Error : ${aiGeneretedMealsDataErrorMessage.value}");
+
+
+//     }finally{
+//       isAiGeneratedMealsValueLoading.value = false;
+//     }
+//   }
+
+
+
+
+  
+///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
+///
+///-------<>>>>> Section : Get The Selected Set
+RxString selectedDate = ''.obs;
+void setSelectedDate({required String date}){
+  selectedDate.value = date;
+}
+
+/// Global loading state for UI
+RxBool isAiSuggestedMealsLoading = false.obs;
+RxString aiSuggestedMealsErrorMessage = ''.obs;
+
+/// Per-meal-type loading flags to prevent duplicate API calls
+RxBool isBreakfastAiMealsLoaded = false.obs;
+RxBool isLunchAiMealsLoaded = false.obs;
+RxBool isDinnerAiMealsLoaded = false.obs;
+
+void clearAiSuggestedErrorMessage() {
+  aiSuggestedMealsErrorMessage.value = '';
+}
+
+///-------------->>> Section : AI Genereted Meals Api Method Starts Here
+///-------------->>> Socket Is Used for getting the Response of the ai
+///-------------->>> For Getting the AI Meals We have to go through two API Methods
+///-------------->>> First Api Method Target is to get "JOB ID"
+///-------------->>> Second Api Method Target is to using that "JOB ID" -> GET the AI Geanareted Meals
+
+/// Socket service instance
+final SocketServices _socketServices = SocketServices();
+
+/// Timer for polling fallback (in case socket doesn't respond)
+Timer? _responseTimer;
+
+///-------Step 1------->>>> Api Method : Get Job ID
+Rxn<AiSuggestedMealsJobIdModel> jobIdModel = Rxn<AiSuggestedMealsJobIdModel>();
+RxString jobID = ''.obs;
+
+void setJobId({required String id}){
+  jobID.value = id;
+  LoggerUtils.debug("✅ Received JOB ID : ${jobID.value}");
+  
+  // After getting jobId, start listening for socket responses
+  _listenForAiMealsResponse();
+}
+
+RxBool isJobIdValueLoading = false.obs;
+RxString jobIdErrorMessage = ''.obs;
+
+void clearJobIdErrorMessage(){
+  jobIdErrorMessage.value = '';
+}
+
+Future<void> getAiSuggestedMealsJobIdApi() async {
+  try {
+    isJobIdValueLoading.value = true;
+    isAiSuggestedMealsLoading.value = true;
+    clearAiSuggestedErrorMessage();
+    clearJobIdErrorMessage();
+
+    final response = await _aiSuggestedMealsJobIdRepository
+        .aiSuggestedMealsJobIdRepository();
+
+    LoggerUtils.debug("📡 Job ID Api Response: ${response.jsonResponse}");
+
+    if (response.statusCode == 200 && response.isSuccess) {
+      final aiSuggestedMealsData =
+          AiSuggestedMealsJobIdModel.fromJson(response.jsonResponse!);
+
+      LoggerUtils.debug("✅ AI Suggested Meals Job ID Fetched Successfully");
+
+      // Initialize socket before setting jobId
+      await _socketServices.init();
+
+      final jobId = aiSuggestedMealsData.data?.jobId ?? '';
+      setJobId(id: jobId);
+      
+      // Save jobId to local storage with today's date
+      await _saveJobIdToLocal(jobId);
+
+    } else {
+      jobIdErrorMessage.value = response.errorMessage.toString();
+      LoggerUtils.error("❌ Failed to get Job Id from Job ID Api");
+      LoggerUtils.error("Response Code : ${response.statusCode}");
+      LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
+
+      // Reset loading states on error
+      isAiSuggestedMealsLoading.value = false;
     }
+  } catch (error) {
+    jobIdErrorMessage.value = error.toString();
+    LoggerUtils.error("💥 Error Catched While getting the JobID Value!");
+    LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
+
+    isAiSuggestedMealsLoading.value = false;
+  } finally {
+    isJobIdValueLoading.value = false;
+  }
+}
+
+///-------Step 2------->>>> Socket Listener Method : Listen for AI Generated Meals Data
+Rxn<AiSuggestedMealsModel> aiGeneratedMealsData = Rxn<AiSuggestedMealsModel>();
+
+///---------------->>> BREAKFAST Categories
+RxList<HealthyComforting> breakfastProteinPackedMeals = <HealthyComforting>[].obs;
+RxList<HealthyComforting> breakfastLightAndFreshMeals = <HealthyComforting>[].obs;
+RxList<HealthyComforting> breakfastHealthyAndComfortingMeals = <HealthyComforting>[].obs;
+
+///---------------->>> LUNCH Categories
+RxList<HealthyComforting> lunchProteinPackedMeals = <HealthyComforting>[].obs;
+RxList<HealthyComforting> lunchLightAndFreshMeals = <HealthyComforting>[].obs;
+RxList<HealthyComforting> lunchHealthyAndComfortingMeals = <HealthyComforting>[].obs;
+
+///---------------->>> DINNER Categories
+RxList<HealthyComforting> dinnerProteinPackedMeals = <HealthyComforting>[].obs;
+RxList<HealthyComforting> dinnerLightAndFreshMeals = <HealthyComforting>[].obs;
+RxList<HealthyComforting> dinnerHealthyAndComfortingMeals = <HealthyComforting>[].obs;
+
+/// Flat lists for backward compatibility or general use
+RxList<dynamic> breakfastAiGeneratedMeals = <dynamic>[].obs;
+RxList<dynamic> lunchAiGeneratedMeals = <dynamic>[].obs;
+RxList<dynamic> dinnerAiGeneratedMeals = <dynamic>[].obs;
+
+RxBool isAiGeneratedMealsValueLoading = false.obs;
+RxString aiGeneretedMealsDataErrorMessage = ''.obs;
+
+void clearAiGeneretedMealsDataErrorMessage() {
+  aiGeneretedMealsDataErrorMessage.value = '';
+}
+
+/// Listen for socket response for AI meals
+void _listenForAiMealsResponse() {
+  if (jobID.value.isEmpty) {
+    LoggerUtils.error("❌ Cannot listen for socket response: Job ID is empty");
+    return;
   }
 
-
-
-  ///-------Step 2------->>>> Api Method : Get Ai Genarated Meals Data
-  Rxn<AiSuggestedMealsModel> aiGeneratedMealsData = Rxn<AiSuggestedMealsModel>();
-
-  RxBool isAiGeneratedMealsValueLoading = false.obs;
+  LoggerUtils.debug("🎧 Setting up socket listener for jobId: ${jobID.value}");
   
-  RxString aiGeneretedMealsDataErrorMessage = ''.obs;
-  void clearAiGeneretedMealsDataErrorMessage(){
-    aiGeneretedMealsDataErrorMessage.value = '';
+  // Clear any existing timer
+  _responseTimer?.cancel();
+  
+  // Set a timeout for socket response (3 minutes)
+  _responseTimer = Timer(const Duration(minutes: 3), () {
+    LoggerUtils.error("⏰ Socket response timeout for jobId: ${jobID.value}");
+    aiGeneretedMealsDataErrorMessage.value = "Response timeout. Please try again.";
+    isAiSuggestedMealsLoading.value = false;
+    isAiGeneratedMealsValueLoading.value = false;
+  });
+
+  // Listen for the specific event using jobId
+  _socketServices.socket?.on('ai-meals-response-${jobID.value}', (data) {
+    _responseTimer?.cancel(); // Cancel timeout timer
+    LoggerUtils.debug("📥 Received socket response for jobId: ${jobID.value}");
+    LoggerUtils.debug("📦 Socket Data: $data");
+    
+    _processAiMealsResponse(data);
+  });
+
+  // Listen for error events
+  _socketServices.socket?.on('ai-meals-error-${jobID.value}', (error) {
+    _responseTimer?.cancel();
+    LoggerUtils.error("❌ Socket error response: $error");
+    aiGeneretedMealsDataErrorMessage.value = error.toString();
+    isAiSuggestedMealsLoading.value = false;
+    isAiGeneratedMealsValueLoading.value = false;
+  });
+
+  // Optional: Listen for progress updates if your backend supports it
+  _socketServices.socket?.on('ai-meals-progress-${jobID.value}', (progress) {
+    LoggerUtils.debug("📊 AI Meals Generation Progress: $progress");
+    // You can update UI with progress if needed
+  });
+}
+
+/// Process the AI meals response received via socket
+void _processAiMealsResponse(dynamic response) {
+  try {
+    LoggerUtils.debug("🔄 Processing AI meals response...");
+    
+    // Parse the response data
+    final mealsData = AiSuggestedMealsModel.fromJson(response);
+    
+    // Store the full response
+    aiGeneratedMealsData.value = mealsData;
+    
+    ///------->>> Process BREAKFAST meals
+    breakfastProteinPackedMeals.assignAll(
+      mealsData.result?.breakfastOptions?.proteinPacked ?? []
+    );
+    breakfastLightAndFreshMeals.assignAll(
+      mealsData.result?.breakfastOptions?.lightFresh ?? []
+    );
+    breakfastHealthyAndComfortingMeals.assignAll(
+      mealsData.result?.breakfastOptions?.healthyComforting ?? []
+    );
+
+    ///-------->>> Process LUNCH meals
+    lunchProteinPackedMeals.assignAll(
+      mealsData.result?.lunchOptions?.proteinPacked ?? []
+    );
+    lunchLightAndFreshMeals.assignAll(
+      mealsData.result?.lunchOptions?.lightFresh ?? []
+    );
+    lunchHealthyAndComfortingMeals.assignAll(
+      mealsData.result?.lunchOptions?.healthyComforting ?? []
+    );
+
+    ///-------->>> Process DINNER meals
+    dinnerProteinPackedMeals.assignAll(
+      mealsData.result?.dinnerOptions?.proteinPacked ?? []
+    );
+    dinnerLightAndFreshMeals.assignAll(
+      mealsData.result?.dinnerOptions?.lightFresh ?? []
+    );
+    dinnerHealthyAndComfortingMeals.assignAll(
+      mealsData.result?.dinnerOptions?.healthyComforting ?? []
+    );
+    
+    // Also populate flat lists for backward compatibility
+    _populateFlatLists();
+    
+    // Log the counts for verification
+    _logMealCounts();
+    
+    // Update loading flags based on current tab
+    _updateMealTypeLoadedFlag();
+    
+  } catch (e) {
+    LoggerUtils.error("❌ Error processing AI meals response: $e");
+    aiGeneretedMealsDataErrorMessage.value = "Failed to process meals data";
+  } finally {
+    // Reset loading states
+    isAiSuggestedMealsLoading.value = false;
+    isAiGeneratedMealsValueLoading.value = false;
   }
+}
 
-  Future<void> getAiSuggestedMels()async{
-    try{
-      isAiGeneratedMealsValueLoading.value = true;
-      clearAiGeneretedMealsDataErrorMessage();
+/// Populate flat lists for backward compatibility
+void _populateFlatLists() {
+  breakfastAiGeneratedMeals.clear();
+  breakfastAiGeneratedMeals.addAll(breakfastProteinPackedMeals);
+  breakfastAiGeneratedMeals.addAll(breakfastLightAndFreshMeals);
+  breakfastAiGeneratedMeals.addAll(breakfastHealthyAndComfortingMeals);
+  
+  lunchAiGeneratedMeals.clear();
+  lunchAiGeneratedMeals.addAll(lunchProteinPackedMeals);
+  lunchAiGeneratedMeals.addAll(lunchLightAndFreshMeals);
+  lunchAiGeneratedMeals.addAll(lunchHealthyAndComfortingMeals);
+  
+  dinnerAiGeneratedMeals.clear();
+  dinnerAiGeneratedMeals.addAll(dinnerProteinPackedMeals);
+  dinnerAiGeneratedMeals.addAll(dinnerLightAndFreshMeals);
+  dinnerAiGeneratedMeals.addAll(dinnerHealthyAndComfortingMeals);
+}
 
+/// Log meal counts for debugging
+void _logMealCounts() {
+  LoggerUtils.debug("📊 AI Meals Summary:");
+  LoggerUtils.debug("🍳 BREAKFAST:");
+  LoggerUtils.debug("   • Protein Packed: ${breakfastProteinPackedMeals.length}");
+  LoggerUtils.debug("   • Light & Fresh: ${breakfastLightAndFreshMeals.length}");
+  LoggerUtils.debug("   • Healthy & Comforting: ${breakfastHealthyAndComfortingMeals.length}");
+  
+  LoggerUtils.debug("🍱 LUNCH:");
+  LoggerUtils.debug("   • Protein Packed: ${lunchProteinPackedMeals.length}");
+  LoggerUtils.debug("   • Light & Fresh: ${lunchLightAndFreshMeals.length}");
+  LoggerUtils.debug("   • Healthy & Comforting: ${lunchHealthyAndComfortingMeals.length}");
+  
+  LoggerUtils.debug("🍽️ DINNER:");
+  LoggerUtils.debug("   • Protein Packed: ${dinnerProteinPackedMeals.length}");
+  LoggerUtils.debug("   • Light & Fresh: ${dinnerLightAndFreshMeals.length}");
+  LoggerUtils.debug("   • Healthy & Comforting: ${dinnerHealthyAndComfortingMeals.length}");
+}
 
-      final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository(jobId: jobID.value);
+/// Get meals for current tab based on category
+List<dynamic> getMealsForCurrentTab({required String category}) {
+  final currentTab = selectedTabName.value;
+  
+  switch (currentTab) {
+    case 'breakfast':
+      return _getBreakfastMealsByCategory(category);
+    case 'lunch':
+      return _getLunchMealsByCategory(category);
+    case 'dinner':
+      return _getDinnerMealsByCategory(category);
+    default:
+      return [];
+  }
+}
 
-      if(response.statusCode == 200 && response.isSuccess){
+/// Get breakfast meals by category
+List<dynamic> _getBreakfastMealsByCategory(String category) {
+  switch (category.toLowerCase()) {
+    case 'proteinpacked':
+    case 'protein_packed':
+      return breakfastProteinPackedMeals;
+    case 'lightfresh':
+    case 'light_fresh':
+      return breakfastLightAndFreshMeals;
+    case 'healthycomforting':
+    case 'healthy_comforting':
+      return breakfastHealthyAndComfortingMeals;
+    default:
+      return breakfastAiGeneratedMeals;
+  }
+}
 
-      }else{
-        aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
-        LoggerUtils.error("Failed to Get AI Genereted Meals Data!");
-        LoggerUtils.error("Status Code : ${response.statusCode}");
-        LoggerUtils.error("Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
-      }
+/// Get lunch meals by category
+List<dynamic> _getLunchMealsByCategory(String category) {
+  switch (category.toLowerCase()) {
+    case 'proteinpacked':
+    case 'protein_packed':
+      return lunchProteinPackedMeals;
+    case 'lightfresh':
+    case 'light_fresh':
+      return lunchLightAndFreshMeals;
+    case 'healthycomforting':
+    case 'healthy_comforting':
+      return lunchHealthyAndComfortingMeals;
+    default:
+      return lunchAiGeneratedMeals;
+  }
+}
 
-    }catch(error){
+/// Get dinner meals by category
+List<dynamic> _getDinnerMealsByCategory(String category) {
+  switch (category.toLowerCase()) {
+    case 'proteinpacked':
+    case 'protein_packed':
+      return dinnerProteinPackedMeals;
+    case 'lightfresh':
+    case 'light_fresh':
+      return dinnerLightAndFreshMeals;
+    case 'healthycomforting':
+    case 'healthy_comforting':
+      return dinnerHealthyAndComfortingMeals;
+    default:
+      return dinnerAiGeneratedMeals;
+  }
+}
 
-      aiGeneretedMealsDataErrorMessage.value = error.toString();
-      LoggerUtils.error("Catched Error While Getting the Ai Genereted Meals Data");
-      LoggerUtils.error("Catched Error : ${aiGeneretedMealsDataErrorMessage.value}");
+/// Check if a specific category has meals
+bool hasMealsInCategory({required String category}) {
+  return getMealsForCurrentTab(category: category).isNotEmpty;
+}
 
+/// Get total count of meals for current tab
+int getTotalMealsCountForCurrentTab() {
+  final currentTab = selectedTabName.value;
+  
+  switch (currentTab) {
+    case 'breakfast':
+      return breakfastProteinPackedMeals.length +
+             breakfastLightAndFreshMeals.length +
+             breakfastHealthyAndComfortingMeals.length;
+    case 'lunch':
+      return lunchProteinPackedMeals.length +
+             lunchLightAndFreshMeals.length +
+             lunchHealthyAndComfortingMeals.length;
+    case 'dinner':
+      return dinnerProteinPackedMeals.length +
+             dinnerLightAndFreshMeals.length +
+             dinnerHealthyAndComfortingMeals.length;
+    default:
+      return 0;
+  }
+}
 
-    }finally{
+/// Update the meal type loaded flag based on current tab
+void _updateMealTypeLoadedFlag() {
+  final currentTab = selectedTabName.value;
+  
+  if (currentTab == 'breakfast') {
+    isBreakfastAiMealsLoaded.value = getTotalMealsCountForCurrentTab() > 0;
+  } else if (currentTab == 'lunch') {
+    isLunchAiMealsLoaded.value = getTotalMealsCountForCurrentTab() > 0;
+  } else if (currentTab == 'dinner') {
+    isDinnerAiMealsLoaded.value = getTotalMealsCountForCurrentTab() > 0;
+  }
+}
+
+/// Alternative fallback method: Polling API (if socket fails)
+Future<void> getAiSuggestedMealsViaPolling() async {
+  try {
+    isAiGeneratedMealsValueLoading.value = true;
+    clearAiGeneretedMealsDataErrorMessage();
+
+    LoggerUtils.debug("📡 Falling back to polling API for jobId: ${jobID.value}");
+
+    final response = await _aiSuggestedMealsRepository
+        .aiSuggestedMealsRepository(jobId: jobID.value);
+
+    if (response.statusCode == 200 && response.isSuccess) {
+      LoggerUtils.debug("✅ AI Meals fetched via polling successfully");
+      _processAiMealsResponse(response.jsonResponse!);
+    } else {
+      aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
+      LoggerUtils.error("❌ Failed to Get AI Generated Meals Data via polling!");
+      LoggerUtils.error("Status Code : ${response.statusCode}");
+      LoggerUtils.error("Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
+
+      isAiSuggestedMealsLoading.value = false;
       isAiGeneratedMealsValueLoading.value = false;
     }
+  } catch (error) {
+    aiGeneretedMealsDataErrorMessage.value = error.toString();
+    LoggerUtils.error("💥 Caught Error While Getting the AI Generated Meals Data via polling");
+    LoggerUtils.error("Caught Error : ${aiGeneretedMealsDataErrorMessage.value}");
+
+    isAiSuggestedMealsLoading.value = false;
+    isAiGeneratedMealsValueLoading.value = false;
+  }
+}
+
+// ///--------->>> Section : Local Storage Methods for JobId Caching
+
+/// Get current date in YYYY-MM-DD format
+String _getCurrentDate() {
+  final now = DateTime.now();
+  return DateFormat('yyyy-MM-dd').format(now);
+}
+
+/// Save jobId to local storage with today's date
+Future<void> _saveJobIdToLocal(String jobId) async {
+  try {
+    final today = _getCurrentDate();
+    final data = {
+      'jobId': jobId,
+      'date': today,
+    };
+    
+    await appData.write(kKeyJobIdForAiGeneretedMeals, data);
+    
+    LoggerUtils.debug("💾 Saving jobId to local storage: $jobId for date: $today");
+  } catch (error) {
+    LoggerUtils.error("❌ Error saving jobId to local storage: $error");
+  }
+}
+
+/// Load jobId from local storage (only valid if from today)
+Future<String?> _loadJobIdFromLocal() async {
+  try {
+    final storedData = appData.read(kKeyJobIdForAiGeneretedMeals);
+    
+    if (storedData == null) {
+      LoggerUtils.debug("📭 No stored jobId found in local storage");
+      return null;
+    }
+    
+    if (storedData is Map<String, dynamic>) {
+      final storedDate = storedData['date'] as String?;
+      final storedJobId = storedData['jobId'] as String?;
+      final today = _getCurrentDate();
+      
+      if (storedDate == today) {
+        LoggerUtils.debug("📦 Found valid jobId from today: $storedJobId (stored on: $storedDate)");
+        return storedJobId;
+      } else {
+        LoggerUtils.debug("🗑️ Stored jobId is from $storedDate, not today ($today). Clearing...");
+        await _clearStoredJobId();
+        return null;
+      }
+    }
+    
+    LoggerUtils.debug("📭 Invalid stored data format");
+    return null;
+  } catch (error) {
+    LoggerUtils.error("❌ Error loading jobId from local storage: $error");
+    return null;
+  }
+}
+
+/// Clear stored jobId from local storage
+Future<void> _clearStoredJobId() async {
+  try {
+    await appData.write(kKeyJobIdForAiGeneretedMeals, null);
+    LoggerUtils.debug("🧹 Cleared stored jobId from local storage");
+  } catch (error) {
+    LoggerUtils.error("❌ Error clearing stored jobId: $error");
+  }
+}
+
+/// Initialize AI meals - check for existing jobId or fetch new one
+Future<void> initializeAiMeals() async {
+  try {
+    isAiSuggestedMealsLoading.value = true;
+    clearAiSuggestedErrorMessage();
+    
+    LoggerUtils.debug("🔄 Initializing AI meals...");
+    
+    // Check for existing jobId from today
+    final existingJobId = await _loadJobIdFromLocal();
+    
+    if (existingJobId != null && existingJobId.isNotEmpty) {
+      // Valid jobId exists from today
+      LoggerUtils.debug("🔄 Using existing jobId from local storage: $existingJobId");
+      
+      // Initialize socket
+      await _socketServices.init();
+      
+      // Set the jobId and start listening
+      setJobId(id: existingJobId);
+      
+      // Note: Meals data should already be in memory from previous session
+      // If not, the socket response will populate them
+    } else {
+      // No valid jobId, fetch new one
+      LoggerUtils.debug("🆕 No valid jobId found in local storage, fetching new one...");
+      await getAiSuggestedMealsJobIdApi();
+    }
+  } catch (error) {
+    LoggerUtils.error("❌ Failed to initialize AI meals: $error");
+    aiSuggestedMealsErrorMessage.value = "Failed to initialize: $error";
+  } finally {
+    // Don't reset loading state here - it will be reset when socket response is received
+    // or when API call completes
+  }
+}
+
+/// Clean up socket listeners when controller is closed
+@override
+void onClose() {
+  LoggerUtils.debug("👋👋👋 ChooseFromOurSuggestedMealController closed");
+
+  // Cancel any active timer
+  _responseTimer?.cancel();
+
+  // Remove socket listeners to prevent memory leaks
+  if (jobID.value.isNotEmpty) {
+    _socketServices.socket?.off('ai-meals-response-${jobID.value}');
+    _socketServices.socket?.off('ai-meals-error-${jobID.value}');
+    _socketServices.socket?.off('ai-meals-progress-${jobID.value}');
   }
 
-
-
-
+  // Optional: Disconnect socket if no other controllers are using it
+  // _socketServices.disconnect();
   
+  // DO NOT clear stored jobId from local storage - it should persist for the day
 
-
-  
-
-  
-  
-
-  ///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
-
-
+  super.onClose();
 }
+
+///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
+
+  
+
+  
+ 
+}
+
+
+
