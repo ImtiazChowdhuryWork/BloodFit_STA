@@ -410,6 +410,7 @@ RxList<HealthyComforting> breakfastProteinPackedMeals = <HealthyComforting>[].ob
 RxList<HealthyComforting> breakfastLightAndFreshMeals = <HealthyComforting>[].obs;
 RxList<HealthyComforting> breakfastHealthyAndComfortingMeals = <HealthyComforting>[].obs;
 
+
 ///---------------->>> LUNCH Categories
 RxList<HealthyComforting> lunchProteinPackedMeals = <HealthyComforting>[].obs;
 RxList<HealthyComforting> lunchLightAndFreshMeals = <HealthyComforting>[].obs;
@@ -440,23 +441,26 @@ void _listenForAiMealsResponse() {
   }
 
   LoggerUtils.debug("🎧 Setting up socket listener for jobId: ${jobID.value}");
-  
+
   // Clear any existing timer
   _responseTimer?.cancel();
-  
+
   // Set a timeout for socket response (3 minutes)
   _responseTimer = Timer(const Duration(minutes: 3), () {
     LoggerUtils.error("⏰ Socket response timeout for jobId: ${jobID.value}");
-    aiGeneretedMealsDataErrorMessage.value = "Response timeout. Please try again.";
-    isAiSuggestedMealsLoading.value = false;
-    isAiGeneratedMealsValueLoading.value = false;
+    LoggerUtils.debug("🔄 Falling back to polling API...");
+    
+    // Fallback to polling API when socket times out
+    getAiSuggestedMealsViaPolling();
   });
 
   // Listen for the specific event using jobId
   _socketServices.socket?.on('ai-meals-response-${jobID.value}', (data) {
-    _responseTimer?.cancel(); // Cancel timeout timer
     LoggerUtils.debug("📥 Received socket response for jobId: ${jobID.value}");
     LoggerUtils.debug("📦 Socket Data: $data");
+    
+    // Cancel the timeout timer since we received the response
+    _responseTimer?.cancel();
     
     _processAiMealsResponse(data);
   });
@@ -539,6 +543,11 @@ void _processAiMealsResponse(dynamic response) {
     isAiGeneratedMealsValueLoading.value = false;
   }
 }
+
+///------->>> Section : Three Tabs Meals Images
+String get breakFastMealImage => aiGeneratedMealsData.value?.result?.breakfastImage ?? '';
+String get lunchMealImage => aiGeneratedMealsData.value?.result?.lunchImage ?? '';
+String get dinnerMealImage => aiGeneratedMealsData.value?.result?.dinnerImage ?? '';
 
 /// Populate flat lists for backward compatibility
 void _populateFlatLists() {

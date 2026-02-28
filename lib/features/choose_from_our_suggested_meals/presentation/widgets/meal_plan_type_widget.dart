@@ -1,3 +1,4 @@
+import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
 import 'package:bloodfit/features/home/data/model/get_todays_meal_model.dart';
@@ -33,14 +34,20 @@ class MealPlanTypeWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
+        ///----------->>> Section : MealType
+        Text(mealPlanType,style: TextFontStyle.headline18w500cfefefeStylePoppins,),
+        UIHelper.verticalSpace(8.h),
+
         SizedBox(
           width: 1.sw,
           height: 250.h,
           child: ListView.separated(
-            itemCount: 10,
+            itemCount: itemsList.length,
             scrollDirection: Axis.horizontal,
             separatorBuilder: (_, __) => UIHelper.horizontalSpace(16.w),
             itemBuilder: (context, index) {
+              var data = itemsList[index];
               return FoodItemShowingWidget(
                 onTap: () {
                   LoggerUtils.debug(
@@ -50,11 +57,11 @@ class MealPlanTypeWidget extends StatelessWidget {
                 },
                 isSelected: true,
                 onChanged: (value) {},
-                isImageLinkBase64: false,
+                isImageLinkBase64: true,
                 itemImagePath: itemImagePath,
-                itemTitle: 'test name',
-                kcalValue: 0,
-                servingValue: 0,
+                itemTitle: data.mealName ?? 'Test name',
+                kcalValue: data.totalCalories ?? 0,
+                servingValue: data.numberOfServings ?? 0,
               );
             },
           ),

@@ -714,7 +714,7 @@ class AppList {
     ),
     WorkoutMainGoalModel(
       title: "Stay Fit",
-      enumValue: 'stay_fit',
+      enumValue: 'stay-fit',
       imagePath: Assets.images.stayFitImage.path,
     ),
   ];
