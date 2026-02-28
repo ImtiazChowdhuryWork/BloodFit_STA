@@ -53,7 +53,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
 
     return Obx(() {
       LoggerUtils.debug("🍳 [OBX] Rebuilding with Obx...");
-      
+
       // Check if meals are available (re-check inside Obx)
       final obxProteinCount = chooseFromOurSuggestedMealController.breakfastProteinPackedMeals.length;
       final obxLightCount = chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals.length;
@@ -61,19 +61,12 @@ class _BreakfastTabState extends State<BreakfastTab> {
       final obxHasMeals = obxProteinCount > 0 || obxLightCount > 0 || obxHealthyCount > 0;
       final obxIsLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
       final obxHasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
+      final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
 
-      LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals, obxIsLoading=$obxIsLoading, obxHasError=$obxHasError");
+      LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals, obxIsLoading=$obxIsLoading, obxHasError=$obxHasError, hasJobId=$hasJobId");
 
-      // Handle loading state (only show if no meals yet)
-      if (obxIsLoading && !obxHasMeals) {
-        LoggerUtils.debug("🍳 [OBX] Showing loading indicator");
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      // Handle error state
-      if (obxHasError) {
+      // Handle error state (show error with retry button)
+      if (obxHasError && !obxHasMeals) {
         LoggerUtils.debug("🍳 [OBX] Showing error state");
         return Center(
           child: Column(
@@ -97,27 +90,11 @@ class _BreakfastTabState extends State<BreakfastTab> {
         );
       }
 
-      // Handle empty state (only show if not loading and has jobId)
-      if (!obxHasMeals && !obxIsLoading) {
-        LoggerUtils.debug("⚠️ [OBX] Showing EMPTY STATE with Refresh button (THIS IS THE BUG!)");
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'No meals available',
-                style: TextStyle(fontSize: 16),
-              ),
-              UIHelper.verticalSpace(16.h),
-              ElevatedButton(
-                onPressed: () {
-                  LoggerUtils.debug("🔄 Refreshing breakfast meals...");
-                  chooseFromOurSuggestedMealController.initializeAiMeals();
-                },
-                child: const Text('Refresh'),
-              ),
-            ],
-          ),
+      // Show loader until meals are actually loaded (not just until jobId arrives)
+      if (!obxHasMeals) {
+        LoggerUtils.debug("🍳 [OBX] Showing loading indicator (no meals yet)");
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       }
 
