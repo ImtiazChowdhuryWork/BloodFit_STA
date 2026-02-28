@@ -106,7 +106,7 @@ class BreakfastTab extends StatelessWidget {
             if (proteinCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Protein-Packed",
-                itemImagePath: Assets.images.omletEgg.path,
+                itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastProteinPackedMeals,
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
@@ -119,7 +119,7 @@ class BreakfastTab extends StatelessWidget {
             if (lightCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Light & Fresh",
-                itemImagePath: Assets.images.omletEgg.path,
+                itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals,
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
@@ -132,7 +132,7 @@ class BreakfastTab extends StatelessWidget {
             if (healthyCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Hearty & Comforting",
-                itemImagePath: Assets.images.omletEgg.path,
+                itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals,
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");

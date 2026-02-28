@@ -105,7 +105,7 @@ class LunchTab extends StatelessWidget {
             if (proteinCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Protein-Packed",
-                itemImagePath: "base64 image url",
+                itemImagePath: chooseFromOurSuggestedMealController.lunchMealImage,
                 itemsList: chooseFromOurSuggestedMealController.lunchProteinPackedMeals,
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing lunch meals...");
@@ -118,7 +118,7 @@ class LunchTab extends StatelessWidget {
             if (lightCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Light & Fresh",
-                itemImagePath: "base64 image url",
+                itemImagePath: chooseFromOurSuggestedMealController.lunchMealImage,
                 itemsList: chooseFromOurSuggestedMealController.lunchLightAndFreshMeals,
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing lunch meals...");
@@ -131,7 +131,7 @@ class LunchTab extends StatelessWidget {
             if (healthyCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Hearty & Comforting",
-                itemImagePath: "base64 image url",
+                itemImagePath: chooseFromOurSuggestedMealController.lunchMealImage,
                 itemsList: chooseFromOurSuggestedMealController.lunchHealthyAndComfortingMeals,
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing lunch meals...");

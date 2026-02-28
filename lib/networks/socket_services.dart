@@ -82,8 +82,8 @@ class SocketServices {
           })
           .setQuery({'token': accessToken})
           .setAuth({'token': accessToken, 'Authorization': 'Bearer $accessToken'})
-          .setReconnectionAttempts(5)
-          .setReconnectionDelay(2000)
+          .setReconnectionAttempts(0) // Disable auto-reconnection to prevent corrupted URLs
+          .setReconnectionDelay(0)
           .setTimeout(30000)
           .build(),
     );
