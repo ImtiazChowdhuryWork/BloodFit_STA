@@ -704,12 +704,12 @@ class AppList {
   static List<WorkoutMainGoalModel> workoutMainGoalList = [
     WorkoutMainGoalModel(
       title: "Lose Weight",
-      enumValue: 'lose_weight',
+      enumValue: 'lose',
       imagePath: Assets.images.loseWeightImage.path,
     ),
     WorkoutMainGoalModel(
       title: "Gain Muscle",
-      enumValue: 'gain_muscle',
+      enumValue: 'gain',
       imagePath: Assets.images.bodyTypeMuscular.path,
     ),
     WorkoutMainGoalModel(

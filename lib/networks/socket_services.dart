@@ -23,23 +23,33 @@ class SocketServices {
   //=================================> Socket Init <=======================
 
   Future<void> init() async {
-    if (socket != null && socket!.connected) return;
-    if (_isConnecting) return; // Prevent multiple simultaneous connection attempts
+    if (socket != null && socket!.connected) {
+      LoggerUtils.debug('✅ Socket already connected');
+      return;
+    }
+    if (_isConnecting) {
+      LoggerUtils.debug('⏳ Socket already connecting, waiting...');
+      // Wait for connection to complete
+      while (_isConnecting) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      if (socket != null && socket!.connected) return;
+    }
 
     _isConnecting = true;
     try {
       // bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
       accessToken = await appData.read(kKeyAccessToken) ?? '';
-      
+
       LoggerUtils.debug("🔑 Socket: Access token retrieved: ${accessToken.isNotEmpty ? 'YES (length: ${accessToken.length})' : 'NO'}");
-      
+
       if (accessToken.isEmpty) {
         LoggerUtils.error("❌ Socket: Access token is empty! Socket authentication will fail.");
       }
-      
-      _connect();
+
+      await _connect();
     } finally {
-      _isConnecting = false;
+      // Don't reset _isConnecting here - it will be reset in onConnect/onConnectError
     }
   }
 
@@ -52,7 +62,7 @@ class SocketServices {
   }
 
   //================================> Connect the socket <====================================
-  void _connect() {
+  Future<void> _connect() async {
     // Dispose of existing socket if present to prevent memory leaks
     if (socket != null) {
       socket!.offAny(); // Remove all listeners
@@ -69,30 +79,42 @@ class SocketServices {
           .setTransports(['websocket', 'polling'])
           .setExtraHeaders({
             'Authorization': 'Bearer $accessToken',
-            'authorization': 'Bearer $accessToken',
           })
           .setQuery({'token': accessToken})
+          .setAuth({'token': accessToken, 'Authorization': 'Bearer $accessToken'})
           .setReconnectionAttempts(5)
           .setReconnectionDelay(2000)
-          .setTimeout(20000)
+          .setTimeout(30000)
           .build(),
     );
+
+    // Wait for connection with longer timeout
+    final completer = Completer<void>();
+    
     socket!.onConnect((_) {
-      LoggerUtils.debug('✅ Socket connected');
-      _isConnecting = false; // Reset connecting flag on successful connection
+      LoggerUtils.debug('✅ Socket connected successfully');
+      _isConnecting = false;
+      if (!completer.isCompleted) completer.complete();
     });
-    socket!.onDisconnect((_) {
-      LoggerUtils.debug('⚠️ Socket disconnected');
-      _isConnecting = false; // Reset connecting flag on disconnect
-    });
+    
     socket!.onConnectError((err) {
-      LoggerUtils.debug('❌ Socket connection error: $err');
-      _isConnecting = false; // Reset connecting flag on error
+      LoggerUtils.error('❌ Socket connection error: $err');
+      _isConnecting = false;
+      if (!completer.isCompleted) completer.completeError(err);
     });
-    socket!.onError((err) {
-      LoggerUtils.debug('🚨 Socket error: $err');
-      _isConnecting = false; // Reset connecting flag on error
-    });
+
+    // Wait for connection or timeout
+    await Future.any([
+      completer.future.catchError((_) => null),
+      Future.delayed(const Duration(seconds: 30)),
+    ]);
+
+    if (socket!.connected) {
+      LoggerUtils.debug('✅ Socket is now connected and ready');
+    } else {
+      LoggerUtils.error('❌ Socket failed to connect within timeout period');
+      _isConnecting = false;
+    }
   }
 
   //============================> Emit data only if socket is connected <=================================

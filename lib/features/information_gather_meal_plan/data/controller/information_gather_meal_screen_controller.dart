@@ -238,6 +238,7 @@ class InformationGatherMealScreenController extends GetxController {
   }
 
   Future<void> postInformationGatherMealPlanApi() async {
+    isLoading.value = true;
     clearErrorMessage();
 
     final validationError = validateInformationGatherMealPlan();
@@ -249,8 +250,6 @@ class InformationGatherMealScreenController extends GetxController {
       );
       return;
     }
-
-    isLoading.value = true;
 
     LoggerUtils.debug("😺😺😺😺😺Information Father Validation Passed !");
 
@@ -270,8 +269,8 @@ class InformationGatherMealScreenController extends GetxController {
         );
     LoggerUtils.debug("Api Response : ${response.jsonResponse}");
 
-    if (response.statusCode == 200 && response.isSuccess) {
-      try {
+    try {
+      if (response.statusCode == 200 && response.isSuccess) {
         LoggerUtils.debug("💪💪💪💪Information Sent to server successfully!");
 
         // API call successful - remove local data
@@ -299,20 +298,20 @@ class InformationGatherMealScreenController extends GetxController {
           LoggerUtils.error("Data posted but local storage not fully cleared");
           // You might want to show an error or try again
         }
-      } catch (e) {
-        LoggerUtils.error("🪢🪢🪢🪢Some Thing went Wrong");
-        errorMessage.value = e.toString();
+      } else {
+        errorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Error Status Code : ${response.statusCode}");
         LoggerUtils.error(
-          "🎍🎍🎍Error Message From Server : ${errorMessage.value}",
+          "Failed to Send information to server : ${errorMessage.value}",
         );
-      } finally {
-        isLoading.value = false;
       }
-    } else {
-      errorMessage.value = response.errorMessage.toString();
+    } catch (error) {
+      LoggerUtils.error("🪢🪢🪢🪢Error Catched While Submitting HealthDetails");
+      errorMessage.value = error.toString();
       LoggerUtils.error(
-        "Failed to Send information to server : ${errorMessage.value}",
+        "🎍🎍🎍Error Message From Server : ${errorMessage.value}",
       );
+    } finally {
       isLoading.value = false;
     }
   }
