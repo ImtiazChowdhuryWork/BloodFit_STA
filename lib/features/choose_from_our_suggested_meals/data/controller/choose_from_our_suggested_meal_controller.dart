@@ -373,14 +373,20 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
 
       LoggerUtils.debug("✅ AI Suggested Meals Job ID Fetched Successfully");
 
-      // Initialize socket before setting jobId
-      await _socketServices.init();
-
       final jobId = aiSuggestedMealsData.data?.jobId ?? '';
-      setJobId(id: jobId);
       
       // Save jobId to local storage with today's date
       await _saveJobIdToLocal(jobId);
+
+      // Initialize socket in background (don't wait)
+      _socketServices.init().then((_) {
+        setJobId(id: jobId);
+        LoggerUtils.debug("🎧 Socket listener setup in background for jobId: $jobId");
+      });
+      
+      // Poll immediately for meals (don't wait for socket)
+      LoggerUtils.debug("📡 Polling API immediately for new jobId: $jobId");
+      await getAiSuggestedMealsViaPolling();
 
     } else {
       jobIdErrorMessage.value = response.errorMessage.toString();
@@ -483,15 +489,18 @@ void _listenForAiMealsResponse() {
 
 /// Process the AI meals response received via socket
 void _processAiMealsResponse(dynamic response) {
+  LoggerUtils.debug("🔄 [PROCESS] _processAiMealsResponse() CALLED");
+  LoggerUtils.debug("🔄 [PROCESS] Current loading state before processing: ${isAiSuggestedMealsLoading.value}");
+  
   try {
-    LoggerUtils.debug("🔄 Processing AI meals response...");
-    
+    LoggerUtils.debug("🔄 [PROCESS] Processing AI meals response...");
+
     // Parse the response data
     final mealsData = AiSuggestedMealsModel.fromJson(response);
-    
+
     // Store the full response
     aiGeneratedMealsData.value = mealsData;
-    
+
     ///------->>> Process BREAKFAST meals
     breakfastProteinPackedMeals.assignAll(
       mealsData.result?.breakfastOptions?.proteinPacked ?? []
@@ -524,23 +533,28 @@ void _processAiMealsResponse(dynamic response) {
     dinnerHealthyAndComfortingMeals.assignAll(
       mealsData.result?.dinnerOptions?.healthyComforting ?? []
     );
-    
+
     // Also populate flat lists for backward compatibility
     _populateFlatLists();
-    
+
     // Log the counts for verification
     _logMealCounts();
-    
+
     // Update loading flags based on current tab
     _updateMealTypeLoadedFlag();
-    
+
+    LoggerUtils.debug("✅ [PROCESS] Meals populated successfully");
+    LoggerUtils.debug("✅ [PROCESS] Loading state after processing: ${isAiSuggestedMealsLoading.value}");
+
   } catch (e) {
-    LoggerUtils.error("❌ Error processing AI meals response: $e");
+    LoggerUtils.error("❌ [PROCESS] Error processing AI meals response: $e");
     aiGeneretedMealsDataErrorMessage.value = "Failed to process meals data";
   } finally {
     // Reset loading states
+    LoggerUtils.debug("🔓 [PROCESS] Finally block - resetting loading states");
     isAiSuggestedMealsLoading.value = false;
     isAiGeneratedMealsValueLoading.value = false;
+    LoggerUtils.debug("🔓 [PROCESS] Loading states reset to FALSE");
   }
 }
 
@@ -695,31 +709,42 @@ void _updateMealTypeLoadedFlag() {
 
 /// Alternative fallback method: Polling API (if socket fails)
 Future<void> getAiSuggestedMealsViaPolling() async {
+  LoggerUtils.debug("📡 [POLLING] getAiSuggestedMealsViaPolling() CALLED");
+  LoggerUtils.debug("📡 [POLLING] Current jobId: ${jobID.value}");
+  LoggerUtils.debug("📡 [POLLING] Current loading state: ${isAiSuggestedMealsLoading.value}");
+  
   try {
     isAiGeneratedMealsValueLoading.value = true;
     clearAiGeneretedMealsDataErrorMessage();
 
-    LoggerUtils.debug("📡 Falling back to polling API for jobId: ${jobID.value}");
+    LoggerUtils.debug("📡 [POLLING] Calling API...");
 
     final response = await _aiSuggestedMealsRepository
         .aiSuggestedMealsRepository(jobId: jobID.value);
 
+    LoggerUtils.debug("📡 [POLLING] API response received: statusCode=${response.statusCode}");
+
     if (response.statusCode == 200 && response.isSuccess) {
-      LoggerUtils.debug("✅ AI Meals fetched via polling successfully");
+      LoggerUtils.debug("✅ [POLLING] AI Meals fetched via polling successfully");
       _processAiMealsResponse(response.jsonResponse!);
+      
+      // Reset loading states on success
+      isAiSuggestedMealsLoading.value = false;
+      isAiGeneratedMealsValueLoading.value = false;
+      LoggerUtils.debug("✅ [POLLING] Loading states RESET to FALSE");
     } else {
       aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
-      LoggerUtils.error("❌ Failed to Get AI Generated Meals Data via polling!");
-      LoggerUtils.error("Status Code : ${response.statusCode}");
-      LoggerUtils.error("Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
+      LoggerUtils.error("❌ [POLLING] Failed to Get AI Generated Meals Data via polling!");
+      LoggerUtils.error("❌ [POLLING] Status Code : ${response.statusCode}");
+      LoggerUtils.error("❌ [POLLING] Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
 
       isAiSuggestedMealsLoading.value = false;
       isAiGeneratedMealsValueLoading.value = false;
     }
   } catch (error) {
     aiGeneretedMealsDataErrorMessage.value = error.toString();
-    LoggerUtils.error("💥 Caught Error While Getting the AI Generated Meals Data via polling");
-    LoggerUtils.error("Caught Error : ${aiGeneretedMealsDataErrorMessage.value}");
+    LoggerUtils.error("💥 [POLLING] Caught Error While Getting the AI Generated Meals Data via polling");
+    LoggerUtils.error("💥 [POLLING] Caught Error : ${aiGeneretedMealsDataErrorMessage.value}");
 
     isAiSuggestedMealsLoading.value = false;
     isAiGeneratedMealsValueLoading.value = false;
@@ -796,38 +821,57 @@ Future<void> _clearStoredJobId() async {
 
 /// Initialize AI meals - check for existing jobId or fetch new one
 Future<void> initializeAiMeals() async {
+  LoggerUtils.debug("🎯 [CONTROLLER] initializeAiMeals() CALLED");
+  LoggerUtils.debug("🎯 [CONTROLLER] Current loading state: ${isAiSuggestedMealsLoading.value}");
+  
+  // Set loading IMMEDIATELY - before any checks
+  isAiSuggestedMealsLoading.value = true;
+  LoggerUtils.debug("🎯 [CONTROLLER] Loading state SET to TRUE");
+  clearAiSuggestedErrorMessage();
+  
   try {
-    isAiSuggestedMealsLoading.value = true;
-    clearAiSuggestedErrorMessage();
+    // Check if meals already exist in memory - if yes, no need to reload
+    final hasMealsInMemory = breakfastProteinPackedMeals.isNotEmpty ||
+                            lunchProteinPackedMeals.isNotEmpty ||
+                            dinnerProteinPackedMeals.isNotEmpty;
     
-    LoggerUtils.debug("🔄 Initializing AI meals...");
+    LoggerUtils.debug("🎯 [CONTROLLER] hasMealsInMemory=$hasMealsInMemory");
     
+    if (hasMealsInMemory) {
+      LoggerUtils.debug("✅ [CONTROLLER] Meals already in memory, skipping initialization");
+      isAiSuggestedMealsLoading.value = false;
+      return;
+    }
+    
+    // No meals in memory, proceed with initialization
+    LoggerUtils.debug("🔄 [CONTROLLER] Initializing AI meals (no meals in memory)...");
+
     // Check for existing jobId from today
     final existingJobId = await _loadJobIdFromLocal();
-    
+    LoggerUtils.debug("🎯 [CONTROLLER] existingJobId=$existingJobId");
+
     if (existingJobId != null && existingJobId.isNotEmpty) {
-      // Valid jobId exists from today
-      LoggerUtils.debug("🔄 Using existing jobId from local storage: $existingJobId");
+      // Valid jobId exists from today - POLL IMMEDIATELY (socket is too slow)
+      LoggerUtils.debug("🔄 [CONTROLLER] Using existing jobId from local storage: $existingJobId");
+      LoggerUtils.debug("📡 [CONTROLLER] Polling API immediately for jobId: $existingJobId");
       
-      // Initialize socket
-      await _socketServices.init();
+      // Poll immediately - don't wait for socket
+      await getAiSuggestedMealsViaPolling();
       
-      // Set the jobId and start listening
-      setJobId(id: existingJobId);
-      
-      // Note: Meals data should already be in memory from previous session
-      // If not, the socket response will populate them
+      // Setup socket listener in background for real-time updates (if any)
+      _socketServices.init().then((_) {
+        setJobId(id: existingJobId);
+        LoggerUtils.debug("🎧 [CONTROLLER] Socket listener setup in background for jobId: $existingJobId");
+      });
     } else {
       // No valid jobId, fetch new one
-      LoggerUtils.debug("🆕 No valid jobId found in local storage, fetching new one...");
+      LoggerUtils.debug("🆕 [CONTROLLER] No valid jobId found in local storage, fetching new one...");
       await getAiSuggestedMealsJobIdApi();
     }
   } catch (error) {
-    LoggerUtils.error("❌ Failed to initialize AI meals: $error");
+    LoggerUtils.error("❌ [CONTROLLER] Failed to initialize AI meals: $error");
     aiSuggestedMealsErrorMessage.value = "Failed to initialize: $error";
-  } finally {
-    // Don't reset loading state here - it will be reset when socket response is received
-    // or when API call completes
+    isAiSuggestedMealsLoading.value = false;
   }
 }
 

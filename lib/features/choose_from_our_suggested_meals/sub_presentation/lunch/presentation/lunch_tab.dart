@@ -7,35 +7,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class LunchTab extends StatelessWidget {
- LunchTab({super.key});
+class LunchTab extends StatefulWidget {
+  const LunchTab({super.key});
 
+  @override
+  State<LunchTab> createState() => _LunchTabState();
+}
+
+class _LunchTabState extends State<LunchTab> {
   final ChooseFromOurSuggestedMealController
   chooseFromOurSuggestedMealController =
       Get.find<ChooseFromOurSuggestedMealController>();
 
   @override
-  Widget build(BuildContext context) {
-    // Initialize AI meals on first build if jobId is empty
+  void initState() {
+    super.initState();
+    // Initialize AFTER build completes to avoid setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (chooseFromOurSuggestedMealController.jobID.isEmpty) {
-        LoggerUtils.debug("🍱 Lunch tab: jobId is empty, initializing AI meals...");
-        chooseFromOurSuggestedMealController.initializeAiMeals();
-      } else {
-        LoggerUtils.debug("🍱 Lunch tab: jobId already exists: ${chooseFromOurSuggestedMealController.jobID.value}");
-      }
+      _checkAndInitialize();
     });
+  }
+
+  void _checkAndInitialize() {
+    final proteinCount = chooseFromOurSuggestedMealController.lunchProteinPackedMeals.length;
+    final lightCount = chooseFromOurSuggestedMealController.lunchLightAndFreshMeals.length;
+    final healthyCount = chooseFromOurSuggestedMealController.lunchHealthyAndComfortingMeals.length;
+    final hasMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
+    final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
+    
+    LoggerUtils.debug("🍱 [INIT] hasMeals=$hasMeals, isLoading=$isLoading");
+    
+    if (!hasMeals && !isLoading) {
+      LoggerUtils.debug("🍱 [INIT] No meals + Not loading → Calling initializeAiMeals()");
+      chooseFromOurSuggestedMealController.initializeAiMeals();
+    } else if (hasMeals) {
+      LoggerUtils.debug("🍱 [INIT] Meals already in memory, skipping init");
+    } else if (isLoading) {
+      LoggerUtils.debug("🍱 [INIT] Already loading, skipping init");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    LoggerUtils.debug("🍱 [BUILD] Lunch tab build() called");
 
     return Obx(() {
-      // Handle loading state
-      if (chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value) {
+
+      // Check if meals are available
+      final proteinCount = chooseFromOurSuggestedMealController.lunchProteinPackedMeals.length;
+      final lightCount = chooseFromOurSuggestedMealController.lunchLightAndFreshMeals.length;
+      final healthyCount = chooseFromOurSuggestedMealController.lunchHealthyAndComfortingMeals.length;
+      final hasMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
+      final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
+      final hasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
+
+      LoggerUtils.debug("🍱 [OBX] hasMeals=$hasMeals, isLoading=$isLoading, protein=$proteinCount, light=$lightCount, healthy=$healthyCount");
+
+      // Handle loading state (only show if no meals yet)
+      if (isLoading && !hasMeals) {
         return const Center(
           child: CircularProgressIndicator(),
         );
       }
 
       // Handle error state
-      if (chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty) {
+      if (hasError) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -58,15 +94,8 @@ class LunchTab extends StatelessWidget {
         );
       }
 
-      // Check if meals are available
-      final proteinCount = chooseFromOurSuggestedMealController.lunchProteinPackedMeals.length;
-      final lightCount = chooseFromOurSuggestedMealController.lunchLightAndFreshMeals.length;
-      final healthyCount = chooseFromOurSuggestedMealController.lunchHealthyAndComfortingMeals.length;
-
-      LoggerUtils.debug("🍱 Building Lunch tab - Protein: $proteinCount, Light: $lightCount, Healthy: $healthyCount");
-
-      // Handle empty state
-      if (proteinCount == 0 && lightCount == 0 && healthyCount == 0) {
+      // Handle empty state (only show if not loading and has jobId)
+      if (!hasMeals && !isLoading) {
         LoggerUtils.debug("⚠️ No meals found in lunch, showing empty state");
         return Center(
           child: Column(
