@@ -93,28 +93,40 @@ class _DinnerTabState extends State<DinnerTab> {
         );
       }
 
-      // Handle empty state (only show if not loading and has jobId)
+      // Handle empty state (only show if not loading, has jobId, and still no meals)
+      // If no jobId exists, we need to fetch - show loading instead
+      final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
+      
       if (!hasMeals && !isLoading) {
-        LoggerUtils.debug("⚠️ No meals found in dinner, showing empty state");
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'No meals available',
-                style: TextStyle(fontSize: 16),
-              ),
-              UIHelper.verticalSpace(16.h),
-              ElevatedButton(
-                onPressed: () {
-                  LoggerUtils.debug("🔄 Refreshing dinner meals...");
-                  chooseFromOurSuggestedMealController.initializeAiMeals();
-                },
-                child: const Text('Refresh'),
-              ),
-            ],
-          ),
-        );
+        if (!hasJobId) {
+          // No jobId means we need to fetch - show loading
+          LoggerUtils.debug("🍽️ [OBX] No jobId, showing loading (will fetch)");
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          // Has jobId but no meals - show empty state with refresh
+          LoggerUtils.debug("⚠️ [OBX] Showing EMPTY STATE with Refresh button");
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'No meals available',
+                  style: TextStyle(fontSize: 16),
+                ),
+                UIHelper.verticalSpace(16.h),
+                ElevatedButton(
+                  onPressed: () {
+                    LoggerUtils.debug("🔄 Refreshing dinner meals...");
+                    chooseFromOurSuggestedMealController.initializeAiMeals();
+                  },
+                  child: const Text('Refresh'),
+                ),
+              ],
+            ),
+          );
+        }
       }
 
       // Display meals
