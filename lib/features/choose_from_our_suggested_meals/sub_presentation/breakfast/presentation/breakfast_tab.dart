@@ -8,35 +8,73 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class BreakfastTab extends StatelessWidget {
-  BreakfastTab({super.key});
+class BreakfastTab extends StatefulWidget {
+  const BreakfastTab({super.key});
 
-  final ChooseFromOurSuggestedMealController
-  chooseFromOurSuggestedMealController =
+  @override
+  State<BreakfastTab> createState() => _BreakfastTabState();
+}
+
+class _BreakfastTabState extends State<BreakfastTab> {
+  final ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController =
       Get.find<ChooseFromOurSuggestedMealController>();
 
   @override
-  Widget build(BuildContext context) {
-    // Initialize AI meals on first build if jobId is empty
+  void initState() {
+    super.initState();
+    // Initialize AFTER build completes to avoid setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (chooseFromOurSuggestedMealController.jobID.isEmpty) {
-        LoggerUtils.debug("🍳 Breakfast tab: jobId is empty, initializing AI meals...");
-        chooseFromOurSuggestedMealController.initializeAiMeals();
-      } else {
-        LoggerUtils.debug("🍳 Breakfast tab: jobId already exists: ${chooseFromOurSuggestedMealController.jobID.value}");
-      }
+      _checkAndInitialize();
     });
+  }
+
+  void _checkAndInitialize() {
+    final proteinCount = chooseFromOurSuggestedMealController.breakfastProteinPackedMeals.length;
+    final lightCount = chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals.length;
+    final healthyCount = chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals.length;
+    final hasMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
+    final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
+    
+    LoggerUtils.debug("🍳 [INIT] hasMeals=$hasMeals, isLoading=$isLoading");
+    
+    if (!hasMeals && !isLoading) {
+      LoggerUtils.debug("🍳 [INIT] No meals + Not loading → Calling initializeAiMeals()");
+      chooseFromOurSuggestedMealController.initializeAiMeals();
+    } else if (hasMeals) {
+      LoggerUtils.debug("🍳 [INIT] Meals already in memory, skipping init");
+    } else if (isLoading) {
+      LoggerUtils.debug("🍳 [INIT] Already loading, skipping init");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    LoggerUtils.debug("🍳 [BUILD] Breakfast tab build() called");
 
     return Obx(() {
-      // Handle loading state
-      if (chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value) {
+      LoggerUtils.debug("🍳 [OBX] Rebuilding with Obx...");
+      
+      // Check if meals are available (re-check inside Obx)
+      final obxProteinCount = chooseFromOurSuggestedMealController.breakfastProteinPackedMeals.length;
+      final obxLightCount = chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals.length;
+      final obxHealthyCount = chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals.length;
+      final obxHasMeals = obxProteinCount > 0 || obxLightCount > 0 || obxHealthyCount > 0;
+      final obxIsLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
+      final obxHasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
+
+      LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals, obxIsLoading=$obxIsLoading, obxHasError=$obxHasError");
+
+      // Handle loading state (only show if no meals yet)
+      if (obxIsLoading && !obxHasMeals) {
+        LoggerUtils.debug("🍳 [OBX] Showing loading indicator");
         return const Center(
           child: CircularProgressIndicator(),
         );
       }
 
       // Handle error state
-      if (chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty) {
+      if (obxHasError) {
+        LoggerUtils.debug("🍳 [OBX] Showing error state");
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -59,16 +97,9 @@ class BreakfastTab extends StatelessWidget {
         );
       }
 
-      // Check if meals are available
-      final proteinCount = chooseFromOurSuggestedMealController.breakfastProteinPackedMeals.length;
-      final lightCount = chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals.length;
-      final healthyCount = chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals.length;
-
-      LoggerUtils.debug("🍳 Building Breakfast tab - Protein: $proteinCount, Light: $lightCount, Healthy: $healthyCount");
-
-      // Handle empty state
-      if (proteinCount == 0 && lightCount == 0 && healthyCount == 0) {
-        LoggerUtils.debug("⚠️ No meals found in breakfast, showing empty state");
+      // Handle empty state (only show if not loading and has jobId)
+      if (!obxHasMeals && !obxIsLoading) {
+        LoggerUtils.debug("⚠️ [OBX] Showing EMPTY STATE with Refresh button (THIS IS THE BUG!)");
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +134,7 @@ class BreakfastTab extends StatelessWidget {
             UIHelper.verticalSpace(32.h),
 
             ///Section : ------------///Protein-Packed ///----------------
-            if (proteinCount > 0)
+            if (obxProteinCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Protein-Packed",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
@@ -116,7 +147,7 @@ class BreakfastTab extends StatelessWidget {
             UIHelper.verticalSpace(32.h),
 
             ///Section : ------------///Light & Fresh ///----------------
-            if (lightCount > 0)
+            if (obxLightCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Light & Fresh",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
@@ -129,7 +160,7 @@ class BreakfastTab extends StatelessWidget {
             UIHelper.verticalSpace(32.h),
 
             ///Section : ------------///Hearty & Comforting///----------------
-            if (healthyCount > 0)
+            if (obxHealthyCount > 0)
               MealPlanTypeWidget(
                 mealPlanType: "Hearty & Comforting",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
