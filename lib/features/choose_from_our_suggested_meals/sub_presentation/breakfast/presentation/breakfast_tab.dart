@@ -20,34 +20,6 @@ class _BreakfastTabState extends State<BreakfastTab> {
       Get.find<ChooseFromOurSuggestedMealController>();
 
   @override
-  void initState() {
-    super.initState();
-    // Initialize AFTER build completes to avoid setState during build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndInitialize();
-    });
-  }
-
-  void _checkAndInitialize() {
-    final proteinCount = chooseFromOurSuggestedMealController.breakfastProteinPackedMeals.length;
-    final lightCount = chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals.length;
-    final healthyCount = chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals.length;
-    final hasMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
-    final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
-    
-    LoggerUtils.debug("🍳 [INIT] hasMeals=$hasMeals, isLoading=$isLoading");
-    
-    if (!hasMeals && !isLoading) {
-      LoggerUtils.debug("🍳 [INIT] No meals + Not loading → Calling initializeAiMeals()");
-      chooseFromOurSuggestedMealController.initializeAiMeals();
-    } else if (hasMeals) {
-      LoggerUtils.debug("🍳 [INIT] Meals already in memory, skipping init");
-    } else if (isLoading) {
-      LoggerUtils.debug("🍳 [INIT] Already loading, skipping init");
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     LoggerUtils.debug("🍳 [BUILD] Breakfast tab build() called");
 
