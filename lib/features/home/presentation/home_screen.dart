@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/custom_widgets/current_weight_update_widget.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/app_bar_section_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
@@ -23,10 +24,31 @@ import 'package:get/get.dart';
 
 import 'widgets/custom_calender_widget.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final EnumsController enumsController = Get.find<EnumsController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Preload AI meals data in background when home screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      LoggerUtils.debug("🏠 [HOME] Preloading AI meals data...");
+      // Check if controller exists before calling
+      if (Get.isRegistered<ChooseFromOurSuggestedMealController>()) {
+        final mealController = Get.find<ChooseFromOurSuggestedMealController>();
+        mealController.initializeAiMeals();
+      } else {
+        LoggerUtils.debug("🏠 [HOME] Controller not registered yet, skipping preload");
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

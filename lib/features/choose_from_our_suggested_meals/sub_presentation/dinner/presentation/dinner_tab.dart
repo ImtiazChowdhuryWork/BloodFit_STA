@@ -20,34 +20,6 @@ class _DinnerTabState extends State<DinnerTab> {
       Get.find<ChooseFromOurSuggestedMealController>();
 
   @override
-  void initState() {
-    super.initState();
-    // Initialize AFTER build completes to avoid setState during build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndInitialize();
-    });
-  }
-
-  void _checkAndInitialize() {
-    final proteinCount = chooseFromOurSuggestedMealController.dinnerProteinPackedMeals.length;
-    final lightCount = chooseFromOurSuggestedMealController.dinnerLightAndFreshMeals.length;
-    final healthyCount = chooseFromOurSuggestedMealController.dinnerHealthyAndComfortingMeals.length;
-    final hasMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
-    final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
-    
-    LoggerUtils.debug("🍽️ [INIT] hasMeals=$hasMeals, isLoading=$isLoading");
-    
-    if (!hasMeals && !isLoading) {
-      LoggerUtils.debug("🍽️ [INIT] No meals + Not loading → Calling initializeAiMeals()");
-      chooseFromOurSuggestedMealController.initializeAiMeals();
-    } else if (hasMeals) {
-      LoggerUtils.debug("🍽️ [INIT] Meals already in memory, skipping init");
-    } else if (isLoading) {
-      LoggerUtils.debug("🍽️ [INIT] Already loading, skipping init");
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     LoggerUtils.debug("🍽️ [BUILD] Dinner tab build() called");
 
@@ -93,40 +65,28 @@ class _DinnerTabState extends State<DinnerTab> {
         );
       }
 
-      // Handle empty state (only show if not loading, has jobId, and still no meals)
-      // If no jobId exists, we need to fetch - show loading instead
-      final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
-      
+      // Handle empty state (only show if not loading and has jobId)
       if (!hasMeals && !isLoading) {
-        if (!hasJobId) {
-          // No jobId means we need to fetch - show loading
-          LoggerUtils.debug("🍽️ [OBX] No jobId, showing loading (will fetch)");
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          // Has jobId but no meals - show empty state with refresh
-          LoggerUtils.debug("⚠️ [OBX] Showing EMPTY STATE with Refresh button");
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'No meals available',
-                  style: TextStyle(fontSize: 16),
-                ),
-                UIHelper.verticalSpace(16.h),
-                ElevatedButton(
-                  onPressed: () {
-                    LoggerUtils.debug("🔄 Refreshing dinner meals...");
-                    chooseFromOurSuggestedMealController.initializeAiMeals();
-                  },
-                  child: const Text('Refresh'),
-                ),
-              ],
-            ),
-          );
-        }
+        LoggerUtils.debug("⚠️ No meals found in dinner, showing empty state");
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'No meals available',
+                style: TextStyle(fontSize: 16),
+              ),
+              UIHelper.verticalSpace(16.h),
+              ElevatedButton(
+                onPressed: () {
+                  LoggerUtils.debug("🔄 Refreshing dinner meals...");
+                  chooseFromOurSuggestedMealController.initializeAiMeals();
+                },
+                child: const Text('Refresh'),
+              ),
+            ],
+          ),
+        );
       }
 
       // Display meals
