@@ -7,6 +7,7 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../endpoints.dart';
 import '../../../../networks/socket_services.dart';
 import '../model/ai_suggested_meals_job_id_model.dart';
 import '../model/ai_suggested_meals_model.dart';
@@ -374,19 +375,40 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
       LoggerUtils.debug("✅ AI Suggested Meals Job ID Fetched Successfully");
 
       final jobId = aiSuggestedMealsData.data?.jobId ?? '';
-      
+      LoggerUtils.debug("🆔 Extracted jobId: '$jobId'");
+
       // Save jobId to local storage with today's date
       await _saveJobIdToLocal(jobId);
 
+      // Set jobId IMMEDIATELY (before polling) so polling has valid jobId
+      LoggerUtils.debug("🔄 Setting jobID.value = '$jobId' BEFORE polling...");
+      jobID.value = jobId;
+      LoggerUtils.debug("✅ jobID.value is now: '${jobID.value}'");
+
       // Initialize socket in background (don't wait)
+      LoggerUtils.debug("🎧 Initializing socket in background...");
       _socketServices.init().then((_) {
-        setJobId(id: jobId);
-        LoggerUtils.debug("🎧 Socket listener setup in background for jobId: $jobId");
+        LoggerUtils.debug("🎧 Socket initialized, setting up listener for jobId: $jobId");
+        _listenForAiMealsResponse();
+        LoggerUtils.debug("🎧 Socket listener setup complete for jobId: $jobId");
+      }).catchError((error) {
+        LoggerUtils.error("❌ Socket initialization failed: $error");
       });
+
+      // Poll immediately for meals (NOW jobId is set)
+      LoggerUtils.debug("📡 Calling getAiSuggestedMealsViaPolling() with jobId: $jobId");
+      LoggerUtils.debug("📡 Current jobID.value before polling: '${jobID.value}'");
       
-      // Poll immediately for meals (don't wait for socket)
-      LoggerUtils.debug("📡 Polling API immediately for new jobId: $jobId");
-      await getAiSuggestedMealsViaPolling();
+      // CRITICAL: Ensure polling happens even if socket fails
+      try {
+        await getAiSuggestedMealsViaPolling();
+        LoggerUtils.debug("📡 getAiSuggestedMealsViaPolling() COMPLETED successfully");
+      } catch (pollingError) {
+        LoggerUtils.error("❌ getAiSuggestedMealsViaPolling() FAILED: $pollingError");
+        LoggerUtils.error("❌ Error type: ${pollingError.runtimeType}");
+      }
+      
+      LoggerUtils.debug("📡 ✅ Polling flow completed");
 
     } else {
       jobIdErrorMessage.value = response.errorMessage.toString();
@@ -487,21 +509,31 @@ void _listenForAiMealsResponse() {
   });
 }
 
-/// Process the AI meals response received via socket
+/// Process the AI meals response received via socket or polling
 void _processAiMealsResponse(dynamic response) {
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
   LoggerUtils.debug("🔄 [PROCESS] _processAiMealsResponse() CALLED");
-  LoggerUtils.debug("🔄 [PROCESS] Current loading state before processing: ${isAiSuggestedMealsLoading.value}");
-  
+  LoggerUtils.debug("🔄 [PROCESS] Response type: ${response.runtimeType}");
+  LoggerUtils.debug("🔄 [PROCESS] Response data: $response");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
   try {
-    LoggerUtils.debug("🔄 [PROCESS] Processing AI meals response...");
+    LoggerUtils.debug("🔄 [PROCESS] Starting AI meals processing...");
 
     // Parse the response data
+    LoggerUtils.debug("🔄 [PROCESS] Parsing response to AiSuggestedMealsModel...");
     final mealsData = AiSuggestedMealsModel.fromJson(response);
+    LoggerUtils.debug("✅ [PROCESS] Response parsed successfully");
+    LoggerUtils.debug("🔄 [PROCESS] mealsData.result: ${mealsData.result}");
+    LoggerUtils.debug("🔄 [PROCESS] mealsData.result?.breakfastOptions: ${mealsData.result?.breakfastOptions}");
 
     // Store the full response
+    LoggerUtils.debug("🔄 [PROCESS] Storing aiGeneratedMealsData...");
     aiGeneratedMealsData.value = mealsData;
+    LoggerUtils.debug("✅ [PROCESS] aiGeneratedMealsData stored");
 
     ///------->>> Process BREAKFAST meals
+    LoggerUtils.debug("🔄 [PROCESS] Processing BREAKFAST meals...");
     breakfastProteinPackedMeals.assignAll(
       mealsData.result?.breakfastOptions?.proteinPacked ?? []
     );
@@ -511,8 +543,13 @@ void _processAiMealsResponse(dynamic response) {
     breakfastHealthyAndComfortingMeals.assignAll(
       mealsData.result?.breakfastOptions?.healthyComforting ?? []
     );
+    LoggerUtils.debug("✅ [PROCESS] BREAKFAST meals processed:");
+    LoggerUtils.debug("   • Protein Packed: ${breakfastProteinPackedMeals.length}");
+    LoggerUtils.debug("   • Light & Fresh: ${breakfastLightAndFreshMeals.length}");
+    LoggerUtils.debug("   • Healthy & Comforting: ${breakfastHealthyAndComfortingMeals.length}");
 
     ///-------->>> Process LUNCH meals
+    LoggerUtils.debug("🔄 [PROCESS] Processing LUNCH meals...");
     lunchProteinPackedMeals.assignAll(
       mealsData.result?.lunchOptions?.proteinPacked ?? []
     );
@@ -522,8 +559,13 @@ void _processAiMealsResponse(dynamic response) {
     lunchHealthyAndComfortingMeals.assignAll(
       mealsData.result?.lunchOptions?.healthyComforting ?? []
     );
+    LoggerUtils.debug("✅ [PROCESS] LUNCH meals processed:");
+    LoggerUtils.debug("   • Protein Packed: ${lunchProteinPackedMeals.length}");
+    LoggerUtils.debug("   • Light & Fresh: ${lunchLightAndFreshMeals.length}");
+    LoggerUtils.debug("   • Healthy & Comforting: ${lunchHealthyAndComfortingMeals.length}");
 
     ///-------->>> Process DINNER meals
+    LoggerUtils.debug("🔄 [PROCESS] Processing DINNER meals...");
     dinnerProteinPackedMeals.assignAll(
       mealsData.result?.dinnerOptions?.proteinPacked ?? []
     );
@@ -533,28 +575,46 @@ void _processAiMealsResponse(dynamic response) {
     dinnerHealthyAndComfortingMeals.assignAll(
       mealsData.result?.dinnerOptions?.healthyComforting ?? []
     );
+    LoggerUtils.debug("✅ [PROCESS] DINNER meals processed:");
+    LoggerUtils.debug("   • Protein Packed: ${dinnerProteinPackedMeals.length}");
+    LoggerUtils.debug("   • Light & Fresh: ${dinnerLightAndFreshMeals.length}");
+    LoggerUtils.debug("   • Healthy & Comforting: ${dinnerHealthyAndComfortingMeals.length}");
 
     // Also populate flat lists for backward compatibility
+    LoggerUtils.debug("🔄 [PROCESS] Populating flat lists...");
     _populateFlatLists();
+    LoggerUtils.debug("✅ [PROCESS] Flat lists populated");
 
     // Log the counts for verification
     _logMealCounts();
 
     // Update loading flags based on current tab
+    LoggerUtils.debug("🔄 [PROCESS] Updating meal type loaded flags...");
     _updateMealTypeLoadedFlag();
+    LoggerUtils.debug("✅ [PROCESS] Meal type loaded flags updated");
 
     LoggerUtils.debug("✅ [PROCESS] Meals populated successfully");
     LoggerUtils.debug("✅ [PROCESS] Loading state after processing: ${isAiSuggestedMealsLoading.value}");
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("✅ [PROCESS] _processAiMealsResponse() COMPLETED SUCCESSFULLY");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
 
   } catch (e) {
+    LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
     LoggerUtils.error("❌ [PROCESS] Error processing AI meals response: $e");
+    LoggerUtils.error("❌ [PROCESS] Error type: ${e.runtimeType}");
+    LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
     aiGeneretedMealsDataErrorMessage.value = "Failed to process meals data";
   } finally {
     // Reset loading states
     LoggerUtils.debug("🔓 [PROCESS] Finally block - resetting loading states");
+    LoggerUtils.debug("🔓 [PROCESS] Current isAiSuggestedMealsLoading: ${isAiSuggestedMealsLoading.value}");
+    LoggerUtils.debug("🔓 [PROCESS] Current isAiGeneratedMealsValueLoading: ${isAiGeneratedMealsValueLoading.value}");
     isAiSuggestedMealsLoading.value = false;
     isAiGeneratedMealsValueLoading.value = false;
     LoggerUtils.debug("🔓 [PROCESS] Loading states reset to FALSE");
+    LoggerUtils.debug("🔓 [PROCESS] New isAiSuggestedMealsLoading: ${isAiSuggestedMealsLoading.value}");
+    LoggerUtils.debug("🔓 [PROCESS] New isAiGeneratedMealsValueLoading: ${isAiGeneratedMealsValueLoading.value}");
   }
 }
 
@@ -709,43 +769,78 @@ void _updateMealTypeLoadedFlag() {
 
 /// Alternative fallback method: Polling API (if socket fails)
 Future<void> getAiSuggestedMealsViaPolling() async {
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
   LoggerUtils.debug("📡 [POLLING] getAiSuggestedMealsViaPolling() CALLED");
-  LoggerUtils.debug("📡 [POLLING] Current jobId: ${jobID.value}");
+  LoggerUtils.debug("📡 [POLLING] Current jobId: '${jobID.value}'");
   LoggerUtils.debug("📡 [POLLING] Current loading state: ${isAiSuggestedMealsLoading.value}");
-  
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
   try {
     isAiGeneratedMealsValueLoading.value = true;
     clearAiGeneretedMealsDataErrorMessage();
 
     LoggerUtils.debug("📡 [POLLING] Calling API...");
+    LoggerUtils.debug("📡 [POLLING] Endpoint: ${Endpoints.aiSuggestedMealsData(jobID: jobID.value)}");
 
     final response = await _aiSuggestedMealsRepository
         .aiSuggestedMealsRepository(jobId: jobID.value);
 
     LoggerUtils.debug("📡 [POLLING] API response received: statusCode=${response.statusCode}");
+    LoggerUtils.debug("📡 [POLLING] isSuccess: ${response.isSuccess}");
+    LoggerUtils.debug("📡 [POLLING] errorMessage: ${response.errorMessage}");
+    LoggerUtils.debug("📡 [POLLING] Response data length: ${response.jsonResponse.toString().length}");
 
-    if (response.statusCode == 200 && response.isSuccess) {
+    // CRITICAL: Check both conditions explicitly
+    final isStatusOk = response.statusCode == 200;
+    final isSuccessful = response.isSuccess == true;
+    
+    LoggerUtils.debug("📡 [POLLING] isStatusOk (200): $isStatusOk");
+    LoggerUtils.debug("📡 [POLLING] isSuccessful: $isSuccessful");
+    LoggerUtils.debug("📡 [POLLING] Both conditions met: ${isStatusOk && isSuccessful}");
+
+    if (isStatusOk && isSuccessful) {
       LoggerUtils.debug("✅ [POLLING] AI Meals fetched via polling successfully");
-      _processAiMealsResponse(response.jsonResponse!);
+      LoggerUtils.debug("🔄 [POLLING] Calling _processAiMealsResponse() with data...");
       
+      try {
+        _processAiMealsResponse(response.jsonResponse!);
+        LoggerUtils.debug("✅ [POLLING] _processAiMealsResponse() COMPLETED");
+      } catch (processError) {
+        LoggerUtils.error("❌ [POLLING] _processAiMealsResponse() threw error: $processError");
+        LoggerUtils.error("❌ [POLLING] Error type: ${processError.runtimeType}");
+        // Continue to reset loading states even if processing fails
+      }
+
       // Reset loading states on success
+      LoggerUtils.debug("🔓 [POLLING] Resetting loading states to FALSE");
       isAiSuggestedMealsLoading.value = false;
       isAiGeneratedMealsValueLoading.value = false;
       LoggerUtils.debug("✅ [POLLING] Loading states RESET to FALSE");
+      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug("✅ [POLLING] getAiSuggestedMealsViaPolling() COMPLETED SUCCESSFULLY");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
     } else {
-      aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
+      LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
       LoggerUtils.error("❌ [POLLING] Failed to Get AI Generated Meals Data via polling!");
       LoggerUtils.error("❌ [POLLING] Status Code : ${response.statusCode}");
-      LoggerUtils.error("❌ [POLLING] Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
+      LoggerUtils.error("❌ [POLLING] isSuccess : ${response.isSuccess}");
+      LoggerUtils.error("❌ [POLLING] Error Message : ${response.errorMessage}");
+      LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
+      aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
 
+      LoggerUtils.debug("🔓 [POLLING] Resetting loading states to FALSE (on error)");
       isAiSuggestedMealsLoading.value = false;
       isAiGeneratedMealsValueLoading.value = false;
     }
   } catch (error) {
+    LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.error("💥 [POLLING] Caught Error While Getting AI Generated Meals Data");
+    LoggerUtils.error("💥 [POLLING] Error type: ${error.runtimeType}");
+    LoggerUtils.error("💥 [POLLING] Error: $error");
+    LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
     aiGeneretedMealsDataErrorMessage.value = error.toString();
-    LoggerUtils.error("💥 [POLLING] Caught Error While Getting the AI Generated Meals Data via polling");
-    LoggerUtils.error("💥 [POLLING] Caught Error : ${aiGeneretedMealsDataErrorMessage.value}");
 
+    LoggerUtils.debug("🔓 [POLLING] Resetting loading states to FALSE (on exception)");
     isAiSuggestedMealsLoading.value = false;
     isAiGeneratedMealsValueLoading.value = false;
   }
@@ -767,44 +862,65 @@ Future<void> _saveJobIdToLocal(String jobId) async {
       'jobId': jobId,
       'date': today,
     };
-    
+
     await appData.write(kKeyJobIdForAiGeneretedMeals, data);
-    
-    LoggerUtils.debug("💾 Saving jobId to local storage: $jobId for date: $today");
+
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("💾 [STORAGE] Saving jobId to local storage");
+    LoggerUtils.debug("💾 [STORAGE] jobId: $jobId");
+    LoggerUtils.debug("💾 [STORAGE] date: $today");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
   } catch (error) {
-    LoggerUtils.error("❌ Error saving jobId to local storage: $error");
+    LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.error("❌ [STORAGE] Error saving jobId to local storage: $error");
+    LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
   }
 }
 
 /// Load jobId from local storage (only valid if from today)
 Future<String?> _loadJobIdFromLocal() async {
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+  LoggerUtils.debug("📥 [STORAGE] Loading jobId from local storage...");
+  
   try {
     final storedData = appData.read(kKeyJobIdForAiGeneretedMeals);
-    
+
     if (storedData == null) {
-      LoggerUtils.debug("📭 No stored jobId found in local storage");
+      LoggerUtils.debug("📥 [STORAGE] No stored jobId found in local storage");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
       return null;
     }
-    
+
     if (storedData is Map<String, dynamic>) {
       final storedDate = storedData['date'] as String?;
       final storedJobId = storedData['jobId'] as String?;
       final today = _getCurrentDate();
-      
+
+      LoggerUtils.debug("📥 [STORAGE] Found stored data:");
+      LoggerUtils.debug("📥 [STORAGE]   • storedJobId: '$storedJobId'");
+      LoggerUtils.debug("📥 [STORAGE]   • storedDate: '$storedDate'");
+      LoggerUtils.debug("📥 [STORAGE]   • today: '$today'");
+
       if (storedDate == today) {
-        LoggerUtils.debug("📦 Found valid jobId from today: $storedJobId (stored on: $storedDate)");
+        LoggerUtils.debug("📥 [STORAGE] ✅ Date matches today! Using stored jobId");
+        LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
         return storedJobId;
       } else {
-        LoggerUtils.debug("🗑️ Stored jobId is from $storedDate, not today ($today). Clearing...");
+        LoggerUtils.debug("📥 [STORAGE] ❌ Date mismatch! storedDate != today");
+        LoggerUtils.debug("🗑️ [STORAGE] Clearing old stored jobId...");
         await _clearStoredJobId();
+        LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
         return null;
       }
     }
-    
-    LoggerUtils.debug("📭 Invalid stored data format");
+
+    LoggerUtils.debug("📥 [STORAGE] ❌ Invalid stored data format");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
     return null;
   } catch (error) {
-    LoggerUtils.error("❌ Error loading jobId from local storage: $error");
+    LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.error("❌ [STORAGE] Error loading jobId from local storage: $error");
+    LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
     return null;
   }
 }
@@ -813,63 +929,90 @@ Future<String?> _loadJobIdFromLocal() async {
 Future<void> _clearStoredJobId() async {
   try {
     await appData.write(kKeyJobIdForAiGeneretedMeals, null);
-    LoggerUtils.debug("🧹 Cleared stored jobId from local storage");
+    LoggerUtils.debug("🧹 [STORAGE] Cleared stored jobId from local storage");
   } catch (error) {
-    LoggerUtils.error("❌ Error clearing stored jobId: $error");
+    LoggerUtils.error("❌ [STORAGE] Error clearing stored jobId: $error");
   }
 }
 
 /// Initialize AI meals - check for existing jobId or fetch new one
 Future<void> initializeAiMeals() async {
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
   LoggerUtils.debug("🎯 [CONTROLLER] initializeAiMeals() CALLED");
   LoggerUtils.debug("🎯 [CONTROLLER] Current loading state: ${isAiSuggestedMealsLoading.value}");
-  
+  LoggerUtils.debug("🎯 [CONTROLLER] Current jobId: '${jobID.value}'");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
   // Set loading IMMEDIATELY - before any checks
   isAiSuggestedMealsLoading.value = true;
   LoggerUtils.debug("🎯 [CONTROLLER] Loading state SET to TRUE");
   clearAiSuggestedErrorMessage();
-  
+
   try {
     // Check if meals already exist in memory - if yes, no need to reload
     final hasMealsInMemory = breakfastProteinPackedMeals.isNotEmpty ||
                             lunchProteinPackedMeals.isNotEmpty ||
                             dinnerProteinPackedMeals.isNotEmpty;
-    
+
     LoggerUtils.debug("🎯 [CONTROLLER] hasMealsInMemory=$hasMealsInMemory");
-    
+    LoggerUtils.debug("🎯 [CONTROLLER] Breakfast meals: ${breakfastProteinPackedMeals.length + breakfastLightAndFreshMeals.length + breakfastHealthyAndComfortingMeals.length}");
+    LoggerUtils.debug("🎯 [CONTROLLER] Lunch meals: ${lunchProteinPackedMeals.length + lunchLightAndFreshMeals.length + lunchHealthyAndComfortingMeals.length}");
+    LoggerUtils.debug("🎯 [CONTROLLER] Dinner meals: ${dinnerProteinPackedMeals.length + dinnerLightAndFreshMeals.length + dinnerHealthyAndComfortingMeals.length}");
+
     if (hasMealsInMemory) {
       LoggerUtils.debug("✅ [CONTROLLER] Meals already in memory, skipping initialization");
+      LoggerUtils.debug("🎯 [CONTROLLER] Resetting loading state to FALSE");
       isAiSuggestedMealsLoading.value = false;
       return;
     }
-    
+
     // No meals in memory, proceed with initialization
     LoggerUtils.debug("🔄 [CONTROLLER] Initializing AI meals (no meals in memory)...");
+    LoggerUtils.debug("🔄 [CONTROLLER] Loading jobId from local storage...");
 
     // Check for existing jobId from today
     final existingJobId = await _loadJobIdFromLocal();
-    LoggerUtils.debug("🎯 [CONTROLLER] existingJobId=$existingJobId");
+    LoggerUtils.debug("🎯 [CONTROLLER] existingJobId from local storage: '${existingJobId ?? 'NULL'}'");
 
     if (existingJobId != null && existingJobId.isNotEmpty) {
-      // Valid jobId exists from today - POLL IMMEDIATELY (socket is too slow)
-      LoggerUtils.debug("🔄 [CONTROLLER] Using existing jobId from local storage: $existingJobId");
-      LoggerUtils.debug("📡 [CONTROLLER] Polling API immediately for jobId: $existingJobId");
+      // Valid jobId exists from today - Set jobId FIRST, then POLL
+      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug("🔄 [CONTROLLER] ✅ Valid jobId found in local storage");
+      LoggerUtils.debug("🔄 [CONTROLLER] Using existing jobId: $existingJobId");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
       
-      // Poll immediately - don't wait for socket
+      // Set jobId BEFORE polling (so API call has valid jobId)
+      LoggerUtils.debug("🔄 [CONTROLLER] Setting jobID.value = $existingJobId");
+      jobID.value = existingJobId;
+      LoggerUtils.debug("🔄 [CONTROLLER] jobID.value is now: '${jobID.value}'");
+      
+      // Poll immediately for meals
+      LoggerUtils.debug("📡 [CONTROLLER] Calling getAiSuggestedMealsViaPolling()...");
       await getAiSuggestedMealsViaPolling();
-      
+      LoggerUtils.debug("📡 [CONTROLLER] getAiSuggestedMealsViaPolling() COMPLETED");
+
       // Setup socket listener in background for real-time updates (if any)
+      LoggerUtils.debug("🎧 [CONTROLLER] Setting up socket listener in background...");
       _socketServices.init().then((_) {
-        setJobId(id: existingJobId);
+        LoggerUtils.debug("🎧 [CONTROLLER] Socket initialized successfully");
         LoggerUtils.debug("🎧 [CONTROLLER] Socket listener setup in background for jobId: $existingJobId");
+      }).catchError((error) {
+        LoggerUtils.error("❌ [CONTROLLER] Socket initialization failed: $error");
       });
     } else {
       // No valid jobId, fetch new one
-      LoggerUtils.debug("🆕 [CONTROLLER] No valid jobId found in local storage, fetching new one...");
+      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug("🆕 [CONTROLLER] ❌ No valid jobId found in local storage");
+      LoggerUtils.debug("🆕 [CONTROLLER] Fetching new jobId via API...");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
       await getAiSuggestedMealsJobIdApi();
+      LoggerUtils.debug("🆕 [CONTROLLER] getAiSuggestedMealsJobIdApi() COMPLETED");
     }
   } catch (error) {
+    LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
     LoggerUtils.error("❌ [CONTROLLER] Failed to initialize AI meals: $error");
+    LoggerUtils.error("❌ [CONTROLLER] Error type: ${error.runtimeType}");
+    LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
     aiSuggestedMealsErrorMessage.value = "Failed to initialize: $error";
     isAiSuggestedMealsLoading.value = false;
   }
