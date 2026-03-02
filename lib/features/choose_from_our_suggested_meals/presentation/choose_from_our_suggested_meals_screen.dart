@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../helper/logger_util.dart';
 import '../../../routes/routes.dart';
 import '../sub_presentation/breakfast/presentation/breakfast_tab.dart';
 import '../sub_presentation/lunch/presentation/lunch_tab.dart';
@@ -40,6 +41,10 @@ class _ChooseFromOurSuggestedMealsScreenState
 
     ///------------<>>>> Section : Send the selected date to controller
     WidgetsBinding.instance.addPostFrameCallback((_){
+      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug("📱 [SCREEN] ChooseFromOurSuggestedMealsScreen loaded");
+      LoggerUtils.debug("📱 [SCREEN] Setting selected date: $receivedSelectedDate");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
       chooseFromOurSuggestedMealController.setSelectedDate(date: receivedSelectedDate);
     });
 
@@ -50,13 +55,18 @@ class _ChooseFromOurSuggestedMealsScreenState
     chooseFromOurSuggestedMealController
         .setSelectedTabName(index: 0);
 
-    ///------------->>> Section : Initial API call (ONCE - data will be cached)
+    ///------------->>> Section : Initialize AI Meals (MAIN DATA SOURCE)
+    /// This loads the AI-generated meals for all tabs (Breakfast, Lunch, Dinner)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug("📱 [SCREEN] Calling initializeAiMeals() to load meal data...");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+      chooseFromOurSuggestedMealController.initializeAiMeals();
+    });
+
+    ///------------->>> Section : Initial API call for Previously Selected Meals
     chooseFromOurSuggestedMealController
         .getPreviouslySelectedMeals();
-    
-
-    
-    
 
     _tabController.addListener(() {
       ///------------->>> Section : Fires when tab changes

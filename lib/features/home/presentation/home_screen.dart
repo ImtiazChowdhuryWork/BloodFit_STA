@@ -39,13 +39,20 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // Preload AI meals data in background when home screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug("🏠 [HOME] initState() - HomeScreen loaded");
       LoggerUtils.debug("🏠 [HOME] Preloading AI meals data...");
+      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+      
       // Check if controller exists before calling
       if (Get.isRegistered<ChooseFromOurSuggestedMealController>()) {
+        LoggerUtils.debug("✅ [HOME] ChooseFromOurSuggestedMealController is registered");
         final mealController = Get.find<ChooseFromOurSuggestedMealController>();
+        LoggerUtils.debug("🏠 [HOME] Calling initializeAiMeals()...");
         mealController.initializeAiMeals();
+        LoggerUtils.debug("🏠 [HOME] initializeAiMeals() called successfully");
       } else {
-        LoggerUtils.debug("🏠 [HOME] Controller not registered yet, skipping preload");
+        LoggerUtils.debug("⚠️ [HOME] ChooseFromOurSuggestedMealController NOT registered yet, skipping preload");
       }
     });
   }

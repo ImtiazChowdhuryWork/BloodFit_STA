@@ -21,7 +21,9 @@ class _BreakfastTabState extends State<BreakfastTab> {
 
   @override
   Widget build(BuildContext context) {
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
     LoggerUtils.debug("🍳 [BUILD] Breakfast tab build() called");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
 
     return Obx(() {
       LoggerUtils.debug("🍳 [OBX] Rebuilding with Obx...");
@@ -35,11 +37,15 @@ class _BreakfastTabState extends State<BreakfastTab> {
       final obxHasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
       final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
 
-      LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals, obxIsLoading=$obxIsLoading, obxHasError=$obxHasError, hasJobId=$hasJobId");
+      LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals");
+      LoggerUtils.debug("🍳 [OBX] obxIsLoading=$obxIsLoading");
+      LoggerUtils.debug("🍳 [OBX] obxHasError=$obxHasError");
+      LoggerUtils.debug("🍳 [OBX] hasJobId=$hasJobId");
+      LoggerUtils.debug("🍳 [OBX] Meal counts - Protein: $obxProteinCount, Light: $obxLightCount, Healthy: $obxHealthyCount");
 
       // Handle error state (show error with retry button)
       if (obxHasError && !obxHasMeals) {
-        LoggerUtils.debug("🍳 [OBX] Showing error state");
+        LoggerUtils.debug("🍳 [OBX] >>> Showing ERROR state (hasError=$obxHasError, hasMeals=$obxHasMeals)");
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +58,8 @@ class _BreakfastTabState extends State<BreakfastTab> {
               UIHelper.verticalSpace(16.h),
               ElevatedButton(
                 onPressed: () {
-                  LoggerUtils.debug("🔄 Refreshing breakfast meals...");
+                  LoggerUtils.debug("🔄 [BREAKFAST] User tapped Retry button");
+                  LoggerUtils.debug("🔄 [BREAKFAST] Calling initializeAiMeals()...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
                 },
                 child: const Text('Retry'),
@@ -62,15 +69,43 @@ class _BreakfastTabState extends State<BreakfastTab> {
         );
       }
 
-      // Show loader until meals are actually loaded (not just until jobId arrives)
-      if (!obxHasMeals) {
-        LoggerUtils.debug("🍳 [OBX] Showing loading indicator (no meals yet)");
+      // Show loader ONLY when:
+      // 1. Loading is in progress, OR
+      // 2. No jobId yet (need to fetch)
+      if (obxIsLoading || !hasJobId) {
+        LoggerUtils.debug("🍳 [OBX] >>> Showing LOADING indicator (loading=$obxIsLoading, hasJobId=$hasJobId)");
         return const Center(
           child: CircularProgressIndicator(),
         );
       }
 
+      // Loading completed but no meals - show refresh button
+      if (!obxHasMeals) {
+        LoggerUtils.debug("⚠️ [OBX] >>> Showing EMPTY STATE with Refresh button (loading complete, no meals)");
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'No meals available',
+                style: TextStyle(fontSize: 16),
+              ),
+              UIHelper.verticalSpace(16.h),
+              ElevatedButton(
+                onPressed: () {
+                  LoggerUtils.debug("🔄 [BREAKFAST] User tapped Refresh button");
+                  LoggerUtils.debug("🔄 [BREAKFAST] Calling initializeAiMeals()...");
+                  chooseFromOurSuggestedMealController.initializeAiMeals();
+                },
+                child: const Text('Refresh'),
+              ),
+            ],
+          ),
+        );
+      }
+
       // Display meals
+      LoggerUtils.debug("🍳 [OBX] >>> Displaying MEALS (hasMeals=$obxHasMeals)");
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
