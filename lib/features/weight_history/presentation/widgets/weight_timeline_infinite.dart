@@ -49,16 +49,29 @@ class WeightTimelineInfinite extends StatelessWidget {
       );
     }
 
-    // Calculate total height: each entry adds 84px spacing
-    final totalHeight = 47.5 + (entries.length - 1) * 84.0 + 50.0 + 50.0;
+    // Calculate total height based on entries
+    // First circle at Y=47.5, each entry adds 84px
+    // Last entry's path extends ~124px below previous circle
+    final totalHeight = _calculateTotalHeight(entries.length);
 
     return SizedBox(
-      height: totalHeight.h,
+      height: totalHeight, // Don't scale with .h - use calculated height directly
       width: double.infinity,
       child: CustomPaint(
         painter: WeightTimelineInfinitePainter(entries: entries),
       ),
     );
+  }
+
+  double _calculateTotalHeight(int entryCount) {
+    if (entryCount == 0) return 50.0;
+    if (entryCount == 1) return 150.0;
+    
+    // Last circle Y position
+    final lastCircleY = 47.5 + (entryCount - 1) * 84.0;
+    
+    // Add circle radius + generous bottom padding for path and spacing
+    return lastCircleY + 38.5 + 300.0;
   }
 }
 
@@ -200,7 +213,7 @@ class WeightTimelineInfinitePainter extends CustomPainter {
       case DesignType.middle3: return 244.5; // Right
       case DesignType.middle4: return 38.5;  // Left
       case DesignType.middle5: return 239.5; // Right
-      case DesignType.end: return 38.5;      // Left
+      case DesignType.end: return 239.5;     // Right (mirror of Design 1)
     }
   }
 
@@ -284,13 +297,17 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         break;
         
       case DesignType.end:
-        // Path 6: From Design 5 area to Design 6 (LEFT, last entry)
-        // Only draw the LEFT side curve (Path 6), not Path 5 (already drawn by previous entry)
-        path.moveTo(128, prevCircleY + 42);
-        path.lineTo(53, prevCircleY + 42);
-        path.cubicTo(30.3563, prevCircleY + 42, 12, prevCircleY + 60.356, 12, prevCircleY + 83);
-        path.cubicTo(12, prevCircleY + 105.644, 30.3563, prevCircleY + 124, 53, prevCircleY + 124);
-        path.lineTo(128, prevCircleY + 124);
+        // Path 6 (END): ONE continuous path like Design 1 (mirrored)
+        // Design 1: Long top line from LEFT (x=15) → curve → short bottom
+        // Design 6: Short top → curve → long bottom line to LEFT (x=15)
+        path.moveTo(152, prevCircleY + 42);
+        path.lineTo(227, prevCircleY + 42);
+        path.cubicTo(250.748, prevCircleY + 42, 270, prevCircleY + 61.252, 270, prevCircleY + 85);
+        path.cubicTo(270, prevCircleY + 108.377, 251.345, prevCircleY + 127.398, 228.109, prevCircleY + 127.986);
+        path.lineTo(227, prevCircleY + 128);
+        path.lineTo(152, prevCircleY + 128);
+        // Extend bottom line to the LEFT (mirror of Design 1's long top from left)
+        path.lineTo(15, prevCircleY + 128);
         break;
     }
     
@@ -352,10 +369,9 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         canvas.drawCircle(ui.Offset(152, prevCircleY + 128), 6.0, paint);  // End
         break;
       case DesignType.end:
-        // Path 6: starts at (128, prevCircleY+42), ends at (128, prevCircleY+124)
-        // LEFT side curve only (like Design 4)
-        canvas.drawCircle(ui.Offset(128, prevCircleY + 42), 6.0, paint);   // Start
-        canvas.drawCircle(ui.Offset(128, prevCircleY + 124), 6.0, paint);  // End
+        // Path 6 (END): ONE continuous path - small circles at start and end
+        canvas.drawCircle(ui.Offset(152, prevCircleY + 42), 6.0, paint);   // Start of curve
+        canvas.drawCircle(ui.Offset(15, prevCircleY + 128), 6.0, paint);   // End of extended line (left side)
         break;
     }
   }

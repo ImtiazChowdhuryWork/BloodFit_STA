@@ -48,7 +48,7 @@ class _WeightHistoryScreenState extends State<WeightHistoryScreen> {
         WeightEntry(weight: 65.0, date: DateTime(2025, 9, 25)),
         WeightEntry(weight: 64.5, date: DateTime(2025, 10, 1)),
         WeightEntry(weight: 63.0, date: DateTime(2025, 10, 10)),
-        WeightEntry(weight: 62.5, date: DateTime(2025, 10, 20)),
+        WeightEntry(weight: 777.5, date: DateTime(2025, 10, 20)),
         WeightEntry(weight: 62.0, date: DateTime(2025, 10, 25)),
         WeightEntry(weight: 64.0, date: DateTime(2025, 11, 25)),
       ];
@@ -94,6 +94,7 @@ class _WeightHistoryScreenState extends State<WeightHistoryScreen> {
                   entries: _weightEntries,
                   onRefresh: () => _loadWeightHistory(),
                 ),
+                UIHelper.verticalSpace(120.h),
               UIHelper.spacerFromBottomNav,
             ],
           ),
