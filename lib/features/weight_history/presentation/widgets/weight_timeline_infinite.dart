@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-/// Infinite timeline that preserves the EXACT original design
-/// and repeats the pattern every 6 entries (one full cycle)
+/// Continuous timeline that creates a single flowing path
+/// First entry = Design 1 (starting point)
+/// Last entry = Design 6 (ending point)
+/// Middle entries = Designs 2-5 (repeating pattern)
 class WeightTimelineInfinite extends StatelessWidget {
   final List<WeightEntry> entries;
   final VoidCallback? onRefresh;
@@ -47,9 +49,8 @@ class WeightTimelineInfinite extends StatelessWidget {
       );
     }
 
-    // One full cycle = 6 entries = 509px height (where path 6 ends)
-    final cycles = (entries.length / 6).ceil();
-    final totalHeight = (cycles * 509.0) + 50.0;
+    // Calculate total height: each entry adds 84px spacing
+    final totalHeight = 47.5 + (entries.length - 1) * 84.0 + 50.0 + 50.0;
 
     return SizedBox(
       height: totalHeight.h,
@@ -69,6 +70,9 @@ class WeightTimelineInfinitePainter extends CustomPainter {
   static const textColor = Color(0xFFFFFFFF);
   static const dateColor = Color(0xFF999999);
 
+  static const double entrySpacing = 84.0;
+  static const double firstCircleY = 47.5;
+
   WeightTimelineInfinitePainter({required this.entries});
 
   @override
@@ -85,7 +89,6 @@ class WeightTimelineInfinitePainter extends CustomPainter {
 
     canvas.save();
     
-    // Apply scale and offset
     final transformMatrix = Matrix4.identity()
       ..scale(scale, scale, 1.0)
       ..translate(offsetX / scale, offsetY / scale);
@@ -104,204 +107,217 @@ class WeightTimelineInfinitePainter extends CustomPainter {
       ..color = pathColor
       ..style = ui.PaintingStyle.fill;
 
-    // Draw repeating pattern - cycle height is 509px (where path 6 ends)
-    int entryIndex = 0;
-    double yOffset = 0.0;
-    final totalCycles = (entries.length / 6).ceil();
-    int currentCycle = 0;
+    if (entries.isEmpty) {
+      canvas.restore();
+      return;
+    }
+
+    final totalEntries = entries.length;
+
+    // Draw starting point
+    canvas.drawCircle(const ui.Offset(15, 0), 6.0, smallCirclePaint);
     
-    // Each cycle is 509px tall - path 6 ends at y=509, next cycle's path 1 starts at y=509
-    const cycleHeight = 509.0;
-    
-    while (entryIndex < entries.length) {
-      currentCycle++;
-      // Draw one cycle (6 entries) at this yOffset
-      final entriesInThisCycle = ((entries.length - entryIndex) > 6) 
-          ? 6 
-          : (entries.length - entryIndex);
+    // Draw Path 1 (from start point to Design 1 area) - only if we have entries
+    if (totalEntries > 0) {
+      final path1 = ui.Path();
+      path1.moveTo(15, 0);
+      path1.cubicTo(17.9729, 0, 20.4388, 2.16245, 20.915, 5);
+      path1.lineTo(232, 5);
+      path1.cubicTo(255.748, 5, 275, 24.2518, 275, 48);
+      path1.cubicTo(275, 71.7482, 255.748, 91, 232, 91);
+      path1.lineTo(157, 91);
+      canvas.drawPath(path1, pathPaint);
       
-      final isFirstCycle = (currentCycle == 1);
-      final isLastCycle = (currentCycle == totalCycles);
+      // Draw small circle at the END of Path 1 (connection to Path 2)
+      canvas.drawCircle(const ui.Offset(157, 91), 6.0, smallCirclePaint);
+    }
+
+    // Draw all entries using dynamic design widget
+    for (int i = 0; i < totalEntries; i++) {
+      final entry = entries[i];
+      final designType = _getDesignType(i, totalEntries);
+      final circleY = firstCircleY + i * entrySpacing;
       
-      _drawOneCycle(
-        canvas, 
-        yOffset, 
-        entries.sublist(entryIndex, entryIndex + entriesInThisCycle),
+      // Draw the design component at this position
+      _drawDesignComponent(
+        canvas,
+        designType,
+        circleY,
+        entry,
         circlePaint,
         pathPaint,
         smallCirclePaint,
-        isFirstCycle,
-        isLastCycle,
+        i > 0, // hasPrevious (false for first entry)
       );
-      
-      entryIndex += 6;
-      yOffset += cycleHeight;
     }
 
     canvas.restore();
   }
 
-  void _drawOneCycle(
+  /// Returns the design type for an entry index
+  DesignType _getDesignType(int entryIndex, int totalEntries) {
+    if (entryIndex == 0) return DesignType.start;
+    if (entryIndex == totalEntries - 1) return DesignType.end;
+    
+    // Middle entries cycle through designs 2-5
+    final middleIndex = (entryIndex - 1) % 4;
+    return DesignType.values[middleIndex + 1]; // +1 because start is index 0
+  }
+
+  /// Draw a complete design component (circle + path + small circles + text)
+  void _drawDesignComponent(
     ui.Canvas canvas,
-    double yOffset,
-    List<WeightEntry> cycleEntries,
+    DesignType designType,
+    double circleY,
+    WeightEntry entry,
     ui.Paint circlePaint,
     ui.Paint pathPaint,
     ui.Paint smallCirclePaint,
-    bool isFirstCycle,
-    bool isLastCycle,
+    bool hasPrevious,
   ) {
-    // Circle positions for one cycle (6 entries) - EXACT from original
-    final circleData = [
-      {'cx': 244.5, 'cy': 47.5 + yOffset, 'r': 38.5},
-      {'cx': 43.5, 'cy': 131.5 + yOffset, 'r': 38.5},
-      {'cx': 244.5, 'cy': 215.5 + yOffset, 'r': 38.5},
-      {'cx': 38.5, 'cy': 298.5 + yOffset, 'r': 38.5},
-      {'cx': 239.5, 'cy': 382.5 + yOffset, 'r': 38.5},
-      {'cx': 38.5, 'cy': 465.5 + yOffset, 'r': 38.5},
-    ];
-
-    // Draw large circles
-    for (int i = 0; i < cycleEntries.length && i < 6; i++) {
-      final data = circleData[i];
-      canvas.drawCircle(
-        ui.Offset(data['cx']!, data['cy']!),
-        data['r']!,
-        circlePaint,
-      );
-    }
-
-    // Draw paths (only if we have enough entries)
-    if (cycleEntries.length > 1) {
-      _drawCyclePaths(canvas, yOffset, pathPaint, cycleEntries.length, isFirstCycle, isLastCycle);
-    }
-
-    // Draw small circles
-    _drawCycleSmallCircles(canvas, yOffset, smallCirclePaint, cycleEntries.length, isFirstCycle, isLastCycle);
-
-    // Draw starting point circle (only for first cycle)
-    if (isFirstCycle) {
-      canvas.drawCircle(ui.Offset(15, 0 + yOffset), 6.0, smallCirclePaint);
-    }
-
-    // Draw text labels
-    for (int i = 0; i < cycleEntries.length && i < 6; i++) {
-      final entry = cycleEntries[i];
-      final data = circleData[i];
-      _drawText(canvas, entry, data['cx']!, data['cy']!, data['r']!);
-    }
-  }
-
-  void _drawCyclePaths(ui.Canvas canvas, double yOffset, ui.Paint paint, int entryCount, bool isFirstCycle, bool isLastCycle) {
-    // Draw paths 1-6 (EXACT curves from original)
-    if (entryCount >= 2) {
-      // Path 1: Top to first circle
-      final path1 = ui.Path();
-      path1.moveTo(15, 0 + yOffset);
-      path1.cubicTo(17.9729, 0 + yOffset, 20.4388, 2.16245 + yOffset, 20.915, 5 + yOffset);
-      path1.lineTo(232, 5 + yOffset);
-      path1.cubicTo(255.748, 5 + yOffset, 275, 24.2518 + yOffset, 275, 48 + yOffset);
-      path1.cubicTo(275, 71.7482 + yOffset, 255.748, 91 + yOffset, 232, 91 + yOffset);
-      path1.lineTo(157, 91 + yOffset);
-      canvas.drawPath(path1, paint);
-    }
-
-    if (entryCount >= 3) {
-      // Path 2: First to second circle
-      final path2 = ui.Path();
-      path2.moveTo(133, 91 + yOffset);
-      path2.lineTo(58, 91 + yOffset);
-      path2.cubicTo(35.3563, 91 + yOffset, 17, 109.356 + yOffset, 17, 132 + yOffset);
-      path2.cubicTo(17, 154.644 + yOffset, 35.3563, 173 + yOffset, 58, 173 + yOffset);
-      path2.lineTo(133, 173 + yOffset);
-      canvas.drawPath(path2, paint);
-    }
-
-    if (entryCount >= 4) {
-      // Path 3: Second to third circle
-      final path3 = ui.Path();
-      path3.moveTo(157, 173 + yOffset);
-      path3.lineTo(232, 173 + yOffset);
-      path3.cubicTo(255.748, 173 + yOffset, 275, 192.252 + yOffset, 275, 216 + yOffset);
-      path3.cubicTo(275, 239.377 + yOffset, 256.345, 258.398 + yOffset, 233.109, 258.986 + yOffset);
-      path3.lineTo(232, 259 + yOffset);
-      path3.lineTo(157, 259 + yOffset);
-      canvas.drawPath(path3, paint);
-    }
-
-    if (entryCount >= 5) {
-      // Path 4: Third to fourth circle
-      final path4 = ui.Path();
-      path4.moveTo(128, 259 + yOffset);
-      path4.lineTo(53, 259 + yOffset);
-      path4.cubicTo(30.3563, 259 + yOffset, 12, 277.356 + yOffset, 12, 300 + yOffset);
-      path4.cubicTo(12, 322.644 + yOffset, 30.3563, 341 + yOffset, 53, 341 + yOffset);
-      path4.lineTo(128, 341 + yOffset);
-      canvas.drawPath(path4, paint);
-    }
-
-    if (entryCount >= 6) {
-      // Path 5: Fourth to fifth circle
-      final path5 = ui.Path();
-      path5.moveTo(152, 341 + yOffset);
-      path5.lineTo(227, 341 + yOffset);
-      path5.cubicTo(250.748, 341 + yOffset, 270, 360.252 + yOffset, 270, 384 + yOffset);
-      path5.cubicTo(270, 407.377 + yOffset, 251.345, 426.398 + yOffset, 228.109, 426.986 + yOffset);
-      path5.lineTo(227, 427 + yOffset);
-      path5.lineTo(152, 427 + yOffset);
-      canvas.drawPath(path5, paint);
-
-      // Path 6: Fifth to sixth circle - extend to connect to next cycle at same level
-      final path6 = ui.Path();
-      path6.moveTo(128, 427 + yOffset);
-      path6.lineTo(53, 427 + yOffset);
-      path6.cubicTo(30.3563, 427 + yOffset, 12, 445.356 + yOffset, 12, 468 + yOffset);
-      path6.cubicTo(12, 490.29 + yOffset, 29.787, 508.425 + yOffset, 51.9414, 508.986 + yOffset);
-      path6.lineTo(53, 509 + yOffset);
-      
-      // If not last cycle, extend to right side so next cycle's path 1 can start at same level
-      if (!isLastCycle) {
-        path6.lineTo(270, 509 + yOffset);
-        // End at right side - next cycle's path 1 will start at left side at same Y level (509 + yOffset)
-      }
-      
-      canvas.drawPath(path6, paint);
-    }
-  }
-
-  void _drawCycleSmallCircles(ui.Canvas canvas, double yOffset, ui.Paint paint, int entryCount, bool isFirstCycle, bool isLastCycle) {
-    // Small circle positions - EXACT from original
-    final smallCirclePositions = [
-      ui.Offset(157, 90 + yOffset),
-      ui.Offset(133, 90 + yOffset),
-      ui.Offset(133, 173 + yOffset),
-      ui.Offset(157, 173 + yOffset),
-      ui.Offset(157, 257 + yOffset),
-      ui.Offset(128, 257 + yOffset),
-      ui.Offset(128, 340 + yOffset),
-      ui.Offset(152, 340 + yOffset),
-      ui.Offset(152, 424 + yOffset),
-      ui.Offset(128, 424 + yOffset),
-      ui.Offset(270, 508 + yOffset),
-    ];
-
-    // Draw small circles based on how many entries we have
-    final circlesToDraw = switch (entryCount) {
-      1 => 0,
-      2 => 4,
-      3 => 7,
-      4 => 10,
-      _ => 11,
-    };
-
-    for (int i = 0; i < circlesToDraw && i < smallCirclePositions.length; i++) {
-      canvas.drawCircle(smallCirclePositions[i], 6.0, paint);
+    final circleX = _getCircleX(designType);
+    final circleRadius = 38.5;
+    
+    // Draw large circle
+    canvas.drawCircle(ui.Offset(circleX, circleY), circleRadius, circlePaint);
+    
+    // Draw path from previous entry
+    if (hasPrevious) {
+      _drawPath(canvas, designType, circleY, pathPaint);
     }
     
-    // Add connection point small circle if not last cycle
-    if (!isLastCycle && entryCount >= 6) {
-      // Small circle at the connection point to next cycle
-      canvas.drawCircle(ui.Offset(290, 520 + yOffset), 6.0, paint);
+    // Draw small circles
+    _drawSmallCircles(canvas, designType, circleY, smallCirclePaint, hasPrevious);
+    
+    // Draw text labels
+    _drawText(canvas, entry, circleX, circleY, circleRadius);
+  }
+
+  double _getCircleX(DesignType designType) {
+    switch (designType) {
+      case DesignType.start: return 244.5;   // Right
+      case DesignType.middle2: return 43.5;  // Left
+      case DesignType.middle3: return 244.5; // Right
+      case DesignType.middle4: return 38.5;  // Left
+      case DesignType.middle5: return 239.5; // Right
+      case DesignType.end: return 38.5;      // Left
+    }
+  }
+
+  void _drawPath(ui.Canvas canvas, DesignType designType, double circleY, ui.Paint paint) {
+    final path = ui.Path();
+    
+    // Calculate entry index: circleY = firstCircleY + entryIndex * entrySpacing
+    final entryIndex = (circleY - firstCircleY) / entrySpacing;
+    
+    // For each design, the path should connect from the PREVIOUS entry's circle area
+    // to THIS entry's circle area
+    // Previous circle Y = firstCircleY + (entryIndex - 1) * entrySpacing
+    final prevCircleY = firstCircleY + (entryIndex - 1) * entrySpacing;
+    
+    switch (designType) {
+      case DesignType.start:
+        // No path for first entry (it's the start)
+        break;
+        
+      case DesignType.middle2:
+        // Path 2: From Design 1 (RIGHT, y=47.5) to Design 2 (LEFT, y=131.5)
+        // Path flows from right side to left side
+        path.moveTo(157, 91);
+        path.lineTo(58, 91);
+        path.cubicTo(35.3563, 91, 17, 109.356, 17, 132);
+        path.cubicTo(17, 154.644, 35.3563, 173, 58, 173);
+        path.lineTo(133, 173);
+        break;
+        
+      case DesignType.middle3:
+        // Path 3: From Design 2 (LEFT, prevCircleY) to Design 3 (RIGHT, circleY)
+        // Path flows from left side to right side
+        path.moveTo(157, prevCircleY + 42);
+        path.lineTo(232, prevCircleY + 42);
+        path.cubicTo(255.748, prevCircleY + 42, 275, prevCircleY + 61.252, 275, prevCircleY + 85);
+        path.cubicTo(275, prevCircleY + 108.377, 256.345, prevCircleY + 127.398, 233.109, prevCircleY + 127.986);
+        path.lineTo(232, prevCircleY + 128);
+        path.lineTo(157, prevCircleY + 128);
+        break;
+        
+      case DesignType.middle4:
+        // Path 4: From Design 3 (RIGHT, prevCircleY) to Design 4 (LEFT, circleY)
+        // Path flows from right side to left side
+        path.moveTo(128, prevCircleY + 42);
+        path.lineTo(53, prevCircleY + 42);
+        path.cubicTo(30.3563, prevCircleY + 42, 12, prevCircleY + 60.356, 12, prevCircleY + 83);
+        path.cubicTo(12, prevCircleY + 105.644, 30.3563, prevCircleY + 124, 53, prevCircleY + 124);
+        path.lineTo(128, prevCircleY + 124);
+        break;
+        
+      case DesignType.middle5:
+        // Path 5: From Design 4 (LEFT, prevCircleY) to Design 5 (RIGHT, circleY)
+        // Path flows from left side to right side
+        path.moveTo(152, prevCircleY + 42);
+        path.lineTo(227, prevCircleY + 42);
+        path.cubicTo(250.748, prevCircleY + 42, 270, prevCircleY + 61.252, 270, prevCircleY + 85);
+        path.cubicTo(270, prevCircleY + 108.377, 251.345, prevCircleY + 127.398, 228.109, prevCircleY + 127.986);
+        path.lineTo(227, prevCircleY + 128);
+        path.lineTo(152, prevCircleY + 128);
+        break;
+        
+      case DesignType.end:
+        // Path 6: From Design 5 (RIGHT, prevCircleY) to Design 6 (LEFT, circleY)
+        // Path flows from right side to left side (ending)
+        path.moveTo(128, prevCircleY + 42);
+        path.lineTo(53, prevCircleY + 42);
+        path.cubicTo(30.3563, prevCircleY + 42, 12, prevCircleY + 60.356, 12, prevCircleY + 83);
+        path.cubicTo(12, prevCircleY + 105.644, 30.3563, prevCircleY + 124, 53, prevCircleY + 124);
+        path.lineTo(128, prevCircleY + 124);
+        break;
+    }
+    
+    canvas.drawPath(path, paint);
+  }
+
+  void _drawSmallCircles(
+    ui.Canvas canvas,
+    DesignType designType,
+    double circleY,
+    ui.Paint paint,
+    bool hasPrevious,
+  ) {
+    // Calculate entry index: circleY = firstCircleY + entryIndex * entrySpacing
+    final entryIndex = (circleY - firstCircleY) / entrySpacing;
+    
+    // Previous circle Y for calculating small circle positions
+    final prevCircleY = firstCircleY + (entryIndex - 1) * entrySpacing;
+    
+    switch (designType) {
+      case DesignType.start:
+        // No small circles for start
+        break;
+      case DesignType.middle2:
+        // Path 2: starts at (157, 91), ends at (133, 173)
+        canvas.drawCircle(ui.Offset(157, 91), 6.0, paint);   // Start
+        canvas.drawCircle(ui.Offset(133, 173), 6.0, paint);  // End
+        break;
+      case DesignType.middle3:
+        // Path 3: starts at (157, prevCircleY+42), ends at (157, prevCircleY+128)
+        canvas.drawCircle(ui.Offset(157, prevCircleY + 42), 6.0, paint);   // Start
+        canvas.drawCircle(ui.Offset(157, prevCircleY + 128), 6.0, paint);  // End
+        break;
+      case DesignType.middle4:
+        // Path 4: starts at (128, prevCircleY+42), ends at (128, prevCircleY+124)
+        canvas.drawCircle(ui.Offset(128, prevCircleY + 42), 6.0, paint);   // Start
+        canvas.drawCircle(ui.Offset(128, prevCircleY + 124), 6.0, paint);  // End
+        break;
+      case DesignType.middle5:
+        // Path 5: starts at (152, prevCircleY+42), ends at (152, prevCircleY+128)
+        canvas.drawCircle(ui.Offset(152, prevCircleY + 42), 6.0, paint);   // Start
+        canvas.drawCircle(ui.Offset(152, prevCircleY + 128), 6.0, paint);  // End
+        break;
+      case DesignType.end:
+        // Path 6: starts at (128, prevCircleY+42), ends at (128, prevCircleY+124)
+        canvas.drawCircle(ui.Offset(128, prevCircleY + 42), 6.0, paint);   // Start
+        canvas.drawCircle(ui.Offset(128, prevCircleY + 124), 6.0, paint);  // End
+        break;
     }
   }
 
@@ -357,4 +373,14 @@ class WeightTimelineInfinitePainter extends CustomPainter {
   bool shouldRepaint(covariant WeightTimelineInfinitePainter oldDelegate) {
     return oldDelegate.entries != entries;
   }
+}
+
+/// Design types for the timeline entries
+enum DesignType {
+  start,    // Design 1 - Starting point
+  middle2,  // Design 2 - Middle (left)
+  middle3,  // Design 3 - Middle (right)
+  middle4,  // Design 4 - Middle (left)
+  middle5,  // Design 5 - Middle (right)
+  end,      // Design 6 - Ending point
 }
