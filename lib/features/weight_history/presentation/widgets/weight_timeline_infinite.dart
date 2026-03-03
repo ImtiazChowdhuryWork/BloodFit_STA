@@ -210,10 +210,21 @@ class WeightTimelineInfinitePainter extends CustomPainter {
     // Calculate entry index: circleY = firstCircleY + entryIndex * entrySpacing
     final entryIndex = (circleY - firstCircleY) / entrySpacing;
     
-    // For each design, the path should connect from the PREVIOUS entry's circle area
-    // to THIS entry's circle area
-    // Previous circle Y = firstCircleY + (entryIndex - 1) * entrySpacing
+    // Previous circle Y
     final prevCircleY = firstCircleY + (entryIndex - 1) * entrySpacing;
+    
+    // Get previous design type to know where the path should start from
+    // This is calculated the same way as in the loop
+    DesignType prevDesignType;
+    if (entryIndex == 1) {
+      prevDesignType = DesignType.start;
+    } else {
+      // For entryIndex > 1, calculate what design the previous entry was
+      // We need totalEntries to determine if previous was 'end', but since we're
+      // drawing sequentially, previous entry was never 'end' (only the current can be 'end')
+      final prevMiddleIndex = ((entryIndex - 2) % 4).toInt();
+      prevDesignType = DesignType.values[prevMiddleIndex + 1]; // middle2, middle3, middle4, or middle5
+    }
     
     switch (designType) {
       case DesignType.start:
@@ -221,18 +232,30 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         break;
         
       case DesignType.middle2:
-        // Path 2: From Design 1 (RIGHT, y=47.5) to Design 2 (LEFT, y=131.5)
-        // Path flows from right side to left side
-        path.moveTo(157, 91);
-        path.lineTo(58, 91);
-        path.cubicTo(35.3563, 91, 17, 109.356, 17, 132);
-        path.cubicTo(17, 154.644, 35.3563, 173, 58, 173);
-        path.lineTo(133, 173);
+        // Path to Design 2 (LEFT) - can come from Design 1 (start) or Design 5 (cycle transition)
+        if (prevDesignType == DesignType.start) {
+          // From Design 1 (RIGHT) to Design 2 (LEFT) - original Path 1 + Path 2
+          path.moveTo(157, 91);
+          path.lineTo(58, 91);
+          path.cubicTo(35.3563, 91, 17, 109.356, 17, 132);
+          path.cubicTo(17, 154.644, 35.3563, 173, 58, 173);
+          path.lineTo(133, 173);
+        } else {
+          // From Design 5 (RIGHT) to Design 2 (LEFT) - cycle transition
+          // DON'T draw Path 5 again - it was already drawn by previous entry!
+          // Only draw Path 6 (LEFT side curve) to connect to Design 2
+          // Position relative to circleY so it ends at the current circle
+          final pathBaseY = circleY - 84; // Position path to connect to current circle
+          path.moveTo(128, pathBaseY + 42);
+          path.lineTo(53, pathBaseY + 42);
+          path.cubicTo(30.3563, pathBaseY + 42, 12, pathBaseY + 60.356, 12, pathBaseY + 83);
+          path.cubicTo(12, pathBaseY + 105.644, 30.3563, pathBaseY + 124, 53, pathBaseY + 124);
+          path.lineTo(128, pathBaseY + 124);
+        }
         break;
         
       case DesignType.middle3:
-        // Path 3: From Design 2 (LEFT, prevCircleY) to Design 3 (RIGHT, circleY)
-        // Path flows from left side to right side
+        // Path 3: From Design 2 (LEFT) to Design 3 (RIGHT)
         path.moveTo(157, prevCircleY + 42);
         path.lineTo(232, prevCircleY + 42);
         path.cubicTo(255.748, prevCircleY + 42, 275, prevCircleY + 61.252, 275, prevCircleY + 85);
@@ -242,8 +265,7 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         break;
         
       case DesignType.middle4:
-        // Path 4: From Design 3 (RIGHT, prevCircleY) to Design 4 (LEFT, circleY)
-        // Path flows from right side to left side
+        // Path 4: From Design 3 (RIGHT) to Design 4 (LEFT)
         path.moveTo(128, prevCircleY + 42);
         path.lineTo(53, prevCircleY + 42);
         path.cubicTo(30.3563, prevCircleY + 42, 12, prevCircleY + 60.356, 12, prevCircleY + 83);
@@ -252,8 +274,7 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         break;
         
       case DesignType.middle5:
-        // Path 5: From Design 4 (LEFT, prevCircleY) to Design 5 (RIGHT, circleY)
-        // Path flows from left side to right side
+        // Path 5: From Design 4 (LEFT) to Design 5 (RIGHT)
         path.moveTo(152, prevCircleY + 42);
         path.lineTo(227, prevCircleY + 42);
         path.cubicTo(250.748, prevCircleY + 42, 270, prevCircleY + 61.252, 270, prevCircleY + 85);
@@ -263,8 +284,8 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         break;
         
       case DesignType.end:
-        // Path 6: From Design 5 (RIGHT, prevCircleY) to Design 6 (LEFT, circleY)
-        // Path flows from right side to left side (ending)
+        // Path 6: From Design 5 area to Design 6 (LEFT, last entry)
+        // Only draw the LEFT side curve (Path 6), not Path 5 (already drawn by previous entry)
         path.moveTo(128, prevCircleY + 42);
         path.lineTo(53, prevCircleY + 42);
         path.cubicTo(30.3563, prevCircleY + 42, 12, prevCircleY + 60.356, 12, prevCircleY + 83);
@@ -289,14 +310,31 @@ class WeightTimelineInfinitePainter extends CustomPainter {
     // Previous circle Y for calculating small circle positions
     final prevCircleY = firstCircleY + (entryIndex - 1) * entrySpacing;
     
+    // Get previous design type
+    DesignType prevDesignType;
+    if (entryIndex == 1) {
+      prevDesignType = DesignType.start;
+    } else {
+      final prevMiddleIndex = ((entryIndex - 2) % 4).toInt();
+      prevDesignType = DesignType.values[prevMiddleIndex + 1];
+    }
+    
     switch (designType) {
       case DesignType.start:
         // No small circles for start
         break;
       case DesignType.middle2:
-        // Path 2: starts at (157, 91), ends at (133, 173)
-        canvas.drawCircle(ui.Offset(157, 91), 6.0, paint);   // Start
-        canvas.drawCircle(ui.Offset(133, 173), 6.0, paint);  // End
+        if (prevDesignType == DesignType.start) {
+          // From Design 1: small circles at (157, 91) and (133, 173)
+          canvas.drawCircle(ui.Offset(157, 91), 6.0, paint);   // Start
+          canvas.drawCircle(ui.Offset(133, 173), 6.0, paint);  // End
+        } else {
+          // From Design 5 (cycle transition): Only Path 6 small circles
+          // Path 5 was already drawn by previous entry
+          final pathBaseY = circleY - 84;
+          canvas.drawCircle(ui.Offset(128, pathBaseY + 42), 6.0, paint);   // Start of Path 6
+          canvas.drawCircle(ui.Offset(128, pathBaseY + 124), 6.0, paint);  // End of Path 6
+        }
         break;
       case DesignType.middle3:
         // Path 3: starts at (157, prevCircleY+42), ends at (157, prevCircleY+128)
@@ -315,6 +353,7 @@ class WeightTimelineInfinitePainter extends CustomPainter {
         break;
       case DesignType.end:
         // Path 6: starts at (128, prevCircleY+42), ends at (128, prevCircleY+124)
+        // LEFT side curve only (like Design 4)
         canvas.drawCircle(ui.Offset(128, prevCircleY + 42), 6.0, paint);   // Start
         canvas.drawCircle(ui.Offset(128, prevCircleY + 124), 6.0, paint);  // End
         break;
