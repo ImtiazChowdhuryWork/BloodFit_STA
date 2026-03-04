@@ -40,13 +40,23 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
     ///------<>>> Section : Get Arguments
     mealID = arguments?['mealID']?.toString() ?? '';
+    
+    ///------<>>> Section : Get Direct Meal Data (from AI suggested meals)
+    final mealData = arguments?['mealData'] as Map<String, dynamic>?;
 
     ///--------<>>> Section : PostFrameCallBack Function
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       ///------>>> Send MealID to Controller
-      mealDetailsScreenController?.setMealID(mealId: mealID);
+      if (mealID.isNotEmpty) {
+        mealDetailsScreenController?.setMealID(mealId: mealID);
+      }
+      
+      ///------>>> Send Direct Meal Data to Controller
+      if (mealData != null) {
+        mealDetailsScreenController?.setDirectMealData(mealData);
+      }
 
-      ///------<>>> Call The api
+      ///------<>>> Call The api (or use direct data)
       await mealDetailsScreenController?.getMealDetailsApi();
     });
     super.initState();
@@ -83,6 +93,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               return ItemImageAndTitleWidget(
                 imagePath: mealDetailsScreenController!.mealImage,
                 title: mealDetailsScreenController!.mealName,
+                isBase64: mealDetailsScreenController!.isMealImageBase64,
               );
             }),
             UIHelper.verticalSpace(8.h),

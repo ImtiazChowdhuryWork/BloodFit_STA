@@ -62,6 +62,7 @@ class FoodItemShowingWidget extends StatelessWidget {
           ? ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
             child: Image.memory(
+              width: 1.sw,
                 base64Decode(
                   itemImagePath.contains(',')
                       ? itemImagePath.split(',').last
