@@ -1,3 +1,142 @@
+// import 'dart:ui' as ui;
+
+// import 'package:bloodfit/constants/text_font_style.dart';
+// import 'package:bloodfit/features/weight_history/presentation/widgets/transformation_timline_widget.dart';
+// import 'package:bloodfit/features/weight_history/presentation/widgets/weight_start_design.dart';
+// import 'package:bloodfit/features/weight_history/presentation/widgets/weight_middle_left_design.dart';
+// import 'package:bloodfit/features/weight_history/presentation/widgets/weight_middle_right_design.dart';
+// import 'package:bloodfit/features/weight_history/presentation/widgets/weight_end_design.dart';
+// import 'package:bloodfit/gen/colors.gen.dart';
+// import 'package:bloodfit/helper/ui_helpers.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// /// Continuous timeline that creates a single flowing path
+// /// First entry = Design 1 (starting point)
+// /// Last entry = Design 6 (ending point)
+// /// Middle entries = Designs 2-5 (repeating pattern: left, right, left, right)
+// class WeightTimelineInfinite extends StatelessWidget {
+//   final List<WeightEntry> entries;
+//   final VoidCallback? onRefresh;
+
+//   const WeightTimelineInfinite({
+//     Key? key,
+//     required this.entries,
+//     this.onRefresh,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (entries.isEmpty) {
+//       return Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(Icons.history, size: 64.h, color: AppColors.c999999),
+//             UIHelper.verticalSpace(16.h),
+//             Text('No weight history yet',
+//                 style: TextFontStyle.headline16w500c999999StylePoppins),
+//             UIHelper.verticalSpace(8.h),
+//             Text('Start tracking your transformation!',
+//                 style: TextFontStyle.headline14w400c999999StylePoppins),
+//             if (onRefresh != null) ...[
+//               UIHelper.verticalSpace(24.h),
+//               ElevatedButton.icon(
+//                 onPressed: onRefresh,
+//                 icon: const Icon(Icons.refresh),
+//                 label: const Text('Refresh'),
+//               ),
+//             ],
+//           ],
+//         ),
+//       );
+//     }
+
+//     // Calculate total height
+//     final totalHeight = _calculateTotalHeight(entries.length);
+
+//     return SizedBox(
+//       height: totalHeight,
+//       width: double.infinity,
+//       child: CustomPaint(
+//         painter: WeightTimelineInfinitePainter(entries: entries),
+//       ),
+//     );
+//   }
+
+//   double _calculateTotalHeight(int entryCount) {
+//     if (entryCount == 0) return 50.0;
+//     if (entryCount == 1) return 150.0;
+    
+//     // Last circle Y position
+//     final lastCircleY = 47.5 + (entryCount - 1) * 84.0;
+    
+//     // Add circle radius + generous bottom padding for path and spacing
+//     return lastCircleY + 38.5 + 300.0;
+//   }
+// }
+
+// class WeightTimelineInfinitePainter extends CustomPainter {
+//   final List<WeightEntry> entries;
+
+//   WeightTimelineInfinitePainter({required this.entries});
+
+//   @override
+//   void paint(ui.Canvas canvas, ui.Size size) {
+//     if (entries.isEmpty) return;
+
+//     final totalEntries = entries.length;
+
+//     // Draw each entry using the appropriate design widget painter
+//     for (int i = 0; i < totalEntries; i++) {
+//       final entry = entries[i];
+//       final designType = _getDesignType(i, totalEntries);
+//       final yOffset = i * 84.0;
+
+//       switch (designType) {
+//         case DesignType.start:
+//           WeightStartDesignPainter(entry: entry, yOffset: yOffset).paint(canvas, size);
+//           break;
+//         case DesignType.middleLeft:
+//           WeightMiddleLeftDesignPainter(entry: entry, yOffset: yOffset).paint(canvas, size);
+//           break;
+//         case DesignType.middleRight:
+//           WeightMiddleRightDesignPainter(entry: entry, yOffset: yOffset).paint(canvas, size);
+//           break;
+//         case DesignType.end:
+//           WeightEndDesignPainter(entry: entry, yOffset: yOffset).paint(canvas, size);
+//           break;
+//       }
+//     }
+//   }
+
+//   DesignType _getDesignType(int entryIndex, int totalEntries) {
+//     if (entryIndex == 0) return DesignType.start;
+//     if (entryIndex == totalEntries - 1) return DesignType.end;
+    
+//     // Middle entries cycle: left, right, left, right...
+//     final middleIndex = (entryIndex - 1) % 4;
+//     if (middleIndex == 0 || middleIndex == 2) {
+//       return DesignType.middleLeft; // Designs 2, 4
+//     } else {
+//       return DesignType.middleRight; // Designs 3, 5
+//     }
+//   }
+
+//   @override
+//   bool shouldRepaint(covariant WeightTimelineInfinitePainter oldDelegate) {
+//     return oldDelegate.entries != entries;
+//   }
+// }
+
+// enum DesignType {
+//   start,       // Design 1 - Starting point (RIGHT circle)
+//   middleLeft,  // Designs 2, 4 - Middle left (LEFT circle)
+//   middleRight, // Designs 3, 5 - Middle right (RIGHT circle)
+//   end,         // Design 6 - Ending point (RIGHT circle, mirror of start)
+// }
+
+
 import 'dart:ui' as ui;
 
 import 'package:bloodfit/constants/text_font_style.dart';
