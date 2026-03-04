@@ -13,7 +13,7 @@ class MealDetailsScreenController extends GetxController{
 
   MealDetailsScreenController(this._mealDetailsRepository);
 
-  
+
 
 
 
@@ -34,8 +34,30 @@ class MealDetailsScreenController extends GetxController{
     LoggerUtils.debug("From Meal Deatails Screen -> Received MealID : ${mealID.value}");
   }
 
+  ///---------------<>>>>>> Section : Direct Meal Data (from AI suggested meals)
+  RxMap directMealData = {}.obs;
+  RxBool hasDirectMealData = false.obs;
+  
+  void setDirectMealData(Map<String, dynamic> data) {
+    directMealData.value = data;
+    hasDirectMealData.value = true;
+    LoggerUtils.debug("✅ Received direct meal data: ${data['mealName']}");
+  }
+  
+  void clearDirectMealData() {
+    directMealData.value = {};
+    hasDirectMealData.value = false;
+  }
 
   Future<void> getMealDetailsApi()async{
+    /// If we have direct meal data, use it instead of calling API
+    if (hasDirectMealData.value) {
+      LoggerUtils.debug("📦 Using direct meal data instead of API call");
+      _populateFromDirectMealData();
+      isMealDetailsLoading.value = false;
+      return;
+    }
+
     isMealDetailsLoading.value = true;
     clearMealDetailsErrorMessage();
 
@@ -80,11 +102,72 @@ class MealDetailsScreenController extends GetxController{
   List<Ingredient> get mealIngredientList => data?.ingredients ?? [];
   List <CaloryCount> get calorieCountList => data?.caloryCount ?? [];
   String get mealImage => data?.image ?? 'Getting your meal image...';
+  
+  /// Check if the current meal image is base64
+  bool get isMealImageBase64 {
+    if (hasDirectMealData.value) {
+      // For direct meal data from AI suggested meals, the image is base64
+      return true;
+    }
+    // For API data (Previously Selected Meals), check the image format
+    final image = data?.image ?? '';
+    if (image.startsWith('data:image')) return true;
+    if (image.startsWith('http://') || image.startsWith('https://')) return false;
+    final cleanPath = image.contains(',') ? image.split(',').last : image;
+    return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(cleanPath);
+  }
 
 
-
-
-
+  ///---------------<>>>>>> Section : Helper method to populate data from direct meal data
+  void _populateFromDirectMealData() {
+    try {
+      LoggerUtils.debug("🔄 Populating meal details from direct data...");
+      
+      final ingredientsData = directMealData['ingredients'] as List<dynamic>? ?? [];
+      final macronutrientsData = directMealData['macronutrients'] as Map<String, dynamic>? ?? {};
+      
+      /// Create a fake MealDetailsModel from direct data
+      final directModel = MealDetailsModel(
+        success: true,
+        status: 200,
+        message: 'Success',
+        data: Data(
+          id: directMealData['id'] ?? '',
+          mealName: directMealData['mealName'] ?? '',
+          mealType: directMealData['mealType'] ?? '',
+          kcal: directMealData['totalCalories'] ?? 0,
+          description: directMealData['description'] ?? '',
+          image: directMealData['image'] ?? '',
+          serving: directMealData['numberOfServings'] ?? 1,
+          ingredients: ingredientsData.map((ing) => Ingredient(
+            name: ing['name'] ?? '',
+            quantity: ing['quantity'] ?? '',
+            icon: ing['icon'] ?? '',
+          )).toList(),
+          caloryCount: [
+            CaloryCount(
+              label: 'Carbs',
+              kcal: macronutrientsData['carbohydrates'] ?? 0,
+            ),
+            CaloryCount(
+              label: 'Protein',
+              kcal: macronutrientsData['protein'] ?? 0,
+            ),
+            CaloryCount(
+              label: 'Fat',
+              kcal: macronutrientsData['fat'] ?? 0,
+            ),
+          ],
+        ),
+      );
+      
+      mealDetailsModel.value = directModel;
+      LoggerUtils.debug("✅ Meal details populated from direct data successfully");
+    } catch (e) {
+      LoggerUtils.error("❌ Error populating from direct meal data: $e");
+      mealDetailsErrorMessage.value = "Failed to load meal details";
+    }
+  }
 
   ///---------------<>>>>>> Section : Meal Details API Ended Here
 
