@@ -19,63 +19,37 @@ void showMealPlanTracker() {
   LoggerUtils.debug("📢 [SHOW_SNACKBAR] isComplete: $isComplete");
   LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
 
-  // Get the current context from Get
-  final context = Get.context;
-  if (context == null) {
-    LoggerUtils.error("❌ [SNACKBAR] Get.context is null");
-    return;
-  }
+  // Show as a bottom sheet
+  Get.bottomSheet(
+    Container(
+      margin: const EdgeInsets.all(16),
+      constraints: BoxConstraints(maxHeight: 100.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: _MealPlanTrackerContent(controller: controller),
+    ),
+    isScrollControlled: false,
+    backgroundColor: Colors.transparent,
+    isDismissible: true,
+    enableDrag: true,
+    enterBottomSheetDuration: const Duration(milliseconds: 300),
+    exitBottomSheetDuration: const Duration(milliseconds: 300),
+  ).then((_) {
+    LoggerUtils.debug("📢 [SNACKBAR] Bottom sheet closed");
+  });
 
-  // Show as a bottom sheet-style dialog
-  showGeneralDialog(
-    context: context,
-    barrierColor: Colors.black54,
-    transitionDuration: const Duration(milliseconds: 300),
-    transitionBuilder: (context, animation, secondaryAnimation, child) {
-      return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 1),
-          end: Offset.zero,
-        ).animate(CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutCubic,
-        )),
-        child: child,
-      );
-    },
-    pageBuilder: (context, animation, secondaryAnimation) {
-      return SafeArea(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            constraints: BoxConstraints(maxHeight: 100.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            // Add Material widget for InkWell to work
-            child: Material(
-              color: Colors.transparent,
-              child: _MealPlanTrackerContent(controller: controller),
-            ),
-          ),
-        ),
-      );
-    },
-  );
+  LoggerUtils.debug("📢 [SNACKBAR] Bottom sheet shown successfully");
 
-  LoggerUtils.debug("📢 [SNACKBAR] Dialog shown successfully");
-
-  // Auto-close after duration if not complete
+  // Auto-close after duration only if NOT complete
+  // If complete, keep it available but dismissible (user can close by tapping outside or dragging down)
   if (!isComplete) {
     Future.delayed(const Duration(seconds: 3), () {
-      // Close if dialog is still open
-      try {
-        Navigator.of(context).pop();
-        LoggerUtils.debug("📢 [SNACKBAR] Auto-closed dialog");
-      } catch (e) {
-        // Dialog already closed
+      // Close bottom sheet safely without affecting navigation
+      if (Get.isBottomSheetOpen ?? false) {
+        Get.back();
+        LoggerUtils.debug("📢 [SNACKBAR] Auto-closed bottom sheet");
       }
     });
   }
