@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/meal_details/data/repository/meal_details_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
@@ -35,17 +36,17 @@ class MealDetailsScreenController extends GetxController{
   }
 
   ///---------------<>>>>>> Section : Direct Meal Data (from AI suggested meals)
-  RxMap directMealData = {}.obs;
+  Rxn<MealDataModel> directMealDataModel = Rxn<MealDataModel>();
   RxBool hasDirectMealData = false.obs;
   
-  void setDirectMealData(Map<String, dynamic> data) {
-    directMealData.value = data;
+  void setDirectMealData(MealDataModel data) {
+    directMealDataModel.value = data;
     hasDirectMealData.value = true;
-    LoggerUtils.debug("✅ Received direct meal data: ${data['mealName']}");
+    LoggerUtils.debug("✅ Received direct meal data: ${data.mealName}");
   }
   
   void clearDirectMealData() {
-    directMealData.value = {};
+    directMealDataModel.value = null;
     hasDirectMealData.value = false;
   }
 
@@ -95,19 +96,75 @@ class MealDetailsScreenController extends GetxController{
 
 
 
-  String get mealName => data?.mealName ?? 'Getting meal name...';
-  String get mealType => data?.mealType ?? 'Geting the meal type...';
-  int get totalKcal => data?.kcal ?? 0;
-  String get mealDescription => data?.description ?? 'Getting the meal description';
-  List<Ingredient> get mealIngredientList => data?.ingredients ?? [];
-  List <CaloryCount> get calorieCountList => data?.caloryCount ?? [];
-  String get mealImage => data?.image ?? 'Getting your meal image...';
+  String get mealName {
+    if (hasDirectMealData.value) {
+      return directMealDataModel.value?.mealName ?? 'Getting meal name...';
+    }
+    return data?.mealName ?? 'Getting meal name...';
+  }
+  
+  String get mealType {
+    if (hasDirectMealData.value) {
+      return directMealDataModel.value?.mealType ?? 'Getting the meal type...';
+    }
+    return data?.mealType ?? 'Geting the meal type...';
+  }
+  
+  int get totalKcal {
+    if (hasDirectMealData.value) {
+      return directMealDataModel.value?.totalCalories ?? 0;
+    }
+    return data?.kcal ?? 0;
+  }
+  
+  String get mealDescription {
+    if (hasDirectMealData.value) {
+      return directMealDataModel.value?.description ?? 'Getting the meal description';
+    }
+    return data?.description ?? 'Getting the meal description';
+  }
+  
+  List<Ingredient> get mealIngredientList {
+    if (hasDirectMealData.value) {
+      final ingredients = directMealDataModel.value?.ingredients ?? [];
+      return ingredients.map((ing) => Ingredient(
+        name: ing.name,
+        quantity: ing.quantity,
+        icon: ing.icon,
+      )).toList();
+    }
+    return data?.ingredients ?? [];
+  }
+  
+  List<CaloryCount> get calorieCountList {
+    if (hasDirectMealData.value) {
+      final macros = directMealDataModel.value?.macronutrients;
+      return [
+        CaloryCount(label: 'Carbs', kcal: macros?.carbohydrates ?? 0),
+        CaloryCount(label: 'Protein', kcal: macros?.protein ?? 0),
+        CaloryCount(label: 'Fat', kcal: macros?.fat ?? 0),
+      ];
+    }
+    return data?.caloryCount ?? [];
+  }
+  
+  String get mealImage {
+    if (hasDirectMealData.value) {
+      return directMealDataModel.value?.image ?? 'Getting your meal image...';
+    }
+    return data?.image ?? 'Getting your meal image...';
+  }
   
   /// Check if the current meal image is base64
   bool get isMealImageBase64 {
     if (hasDirectMealData.value) {
       // For direct meal data from AI suggested meals, the image is base64
-      return true;
+      final image = directMealDataModel.value?.image ?? '';
+      if (image.isEmpty) return false;
+      if (image.startsWith('data:image')) return true;
+      if (image.startsWith('http://') || image.startsWith('https://')) return false;
+      final cleanPath = image.contains(',') ? image.split(',').last : image;
+      return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(cleanPath);
     }
     // For API data (Previously Selected Meals), check the image format
     final image = data?.image ?? '';
@@ -123,39 +180,42 @@ class MealDetailsScreenController extends GetxController{
     try {
       LoggerUtils.debug("🔄 Populating meal details from direct data...");
       
-      final ingredientsData = directMealData['ingredients'] as List<dynamic>? ?? [];
-      final macronutrientsData = directMealData['macronutrients'] as Map<String, dynamic>? ?? {};
+      final mealData = directMealDataModel.value;
+      if (mealData == null) {
+        LoggerUtils.error("❌ Direct meal data is null");
+        mealDetailsErrorMessage.value = "No meal data available";
+        return;
+      }
       
-      /// Create a fake MealDetailsModel from direct data
+      /// Create a MealDetailsModel from MealDataModel
       final directModel = MealDetailsModel(
         success: true,
         status: 200,
         message: 'Success',
         data: Data(
-          id: directMealData['id'] ?? '',
-          mealName: directMealData['mealName'] ?? '',
-          mealType: directMealData['mealType'] ?? '',
-          kcal: directMealData['totalCalories'] ?? 0,
-          description: directMealData['description'] ?? '',
-          image: directMealData['image'] ?? '',
-          serving: directMealData['numberOfServings'] ?? 1,
-          ingredients: ingredientsData.map((ing) => Ingredient(
-            name: ing['name'] ?? '',
-            quantity: ing['quantity'] ?? '',
-            icon: ing['icon'] ?? '',
+          mealName: mealData.mealName,
+          mealType: mealData.mealType,
+          kcal: mealData.totalCalories,
+          description: mealData.description,
+          image: mealData.image,
+          serving: mealData.numberOfServings,
+          ingredients: mealData.ingredients.map((ing) => Ingredient(
+            name: ing.name,
+            quantity: ing.quantity,
+            icon: ing.icon,
           )).toList(),
           caloryCount: [
             CaloryCount(
               label: 'Carbs',
-              kcal: macronutrientsData['carbohydrates'] ?? 0,
+              kcal: mealData.macronutrients.carbohydrates,
             ),
             CaloryCount(
               label: 'Protein',
-              kcal: macronutrientsData['protein'] ?? 0,
+              kcal: mealData.macronutrients.protein,
             ),
             CaloryCount(
               label: 'Fat',
-              kcal: macronutrientsData['fat'] ?? 0,
+              kcal: mealData.macronutrients.fat,
             ),
           ],
         ),

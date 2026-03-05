@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
@@ -51,29 +52,32 @@ class MealPlanTypeWidget extends StatelessWidget {
                   LoggerUtils.debug(
                     "Navigate to Selected Item Description Screen",
                   );
-                  
-                  /// Pass the meal data directly to the details screen
+
+                  /// Create a MealDataModel from the AI suggested meal data
+                  final mealDataModel = MealDataModel(
+                    mealName: data.mealName ?? '',
+                    mealType: mealPlanType.toLowerCase(),
+                    totalCalories: data.totalCalories ?? 0,
+                    description: data.description ?? '',
+                    ingredients: data.ingredients?.map((ing) => MealIngredientData(
+                      name: ing.name ?? '',
+                      quantity: ing.quantity ?? '',
+                      icon: ing.icon ?? '',
+                    )).toList() ?? [],
+                    macronutrients: MealMacronutrientsData(
+                      carbohydrates: data.macronutrients?.carbohydrates ?? 0,
+                      protein: data.macronutrients?.protein ?? 0,
+                      fat: data.macronutrients?.fat ?? 0,
+                    ),
+                    numberOfServings: data.numberOfServings ?? 1,
+                    image: itemImagePath,
+                    category: data.category?.name,
+                    subCategory: data.subCategory?.name,
+                  );
+
+                  /// Pass the model to the details screen
                   Get.toNamed(Routes.mealDetailscreen, arguments: {
-                    'mealData': {
-                      'mealName': data.mealName ?? '',
-                      'mealType': mealPlanType.toLowerCase(),
-                      'totalCalories': data.totalCalories ?? 0,
-                      'description': data.description ?? '',
-                      'ingredients': data.ingredients?.map((ing) => {
-                        'name': ing.name ?? '',
-                        'quantity': ing.quantity ?? '',
-                        'icon': ing.icon ?? '',
-                      }).toList() ?? [],
-                      'macronutrients': {
-                        'carbohydrates': data.macronutrients?.carbohydrates ?? 0,
-                        'protein': data.macronutrients?.protein ?? 0,
-                        'fat': data.macronutrients?.fat ?? 0,
-                      },
-                      'numberOfServings': data.numberOfServings ?? 1,
-                      'image': itemImagePath,
-                      'category': data.category?.name ?? '',
-                      'subCategory': data.subCategory?.name ?? '',
-                    },
+                    'mealData': mealDataModel,
                   });
                 },
                 isSelected: true,
