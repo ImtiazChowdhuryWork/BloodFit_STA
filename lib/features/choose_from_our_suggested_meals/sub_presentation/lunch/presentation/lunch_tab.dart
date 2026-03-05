@@ -116,6 +116,7 @@ class _LunchTabState extends State<LunchTab> {
             RecentlySelectedMealsWidget(
               isLoading: chooseFromOurSuggestedMealController.isPreviouslySelectedMealsLoading,
               meals: chooseFromOurSuggestedMealController.lunchRecentChosenMeals,
+              tabName: 'lunch',
             ),
             UIHelper.verticalSpace(32.h),
 
@@ -125,6 +126,7 @@ class _LunchTabState extends State<LunchTab> {
                 mealPlanType: "Protein-Packed",
                 itemImagePath: chooseFromOurSuggestedMealController.lunchMealImage,
                 itemsList: chooseFromOurSuggestedMealController.lunchProteinPackedMeals,
+                tabName: 'lunch',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing lunch meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -138,6 +140,7 @@ class _LunchTabState extends State<LunchTab> {
                 mealPlanType: "Light & Fresh",
                 itemImagePath: chooseFromOurSuggestedMealController.lunchMealImage,
                 itemsList: chooseFromOurSuggestedMealController.lunchLightAndFreshMeals,
+                tabName: 'lunch',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing lunch meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -151,6 +154,7 @@ class _LunchTabState extends State<LunchTab> {
                 mealPlanType: "Hearty & Comforting",
                 itemImagePath: chooseFromOurSuggestedMealController.lunchMealImage,
                 itemsList: chooseFromOurSuggestedMealController.lunchHealthyAndComfortingMeals,
+                tabName: 'lunch',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing lunch meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();

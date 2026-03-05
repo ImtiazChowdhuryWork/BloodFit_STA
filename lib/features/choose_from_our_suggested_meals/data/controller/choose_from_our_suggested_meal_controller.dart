@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
+import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../endpoints.dart';
 import '../../../../networks/socket_services.dart';
+import '../../../../routes/routes.dart';
 import '../model/ai_suggested_meals_job_id_model.dart';
 import '../model/ai_suggested_meals_model.dart';
 import '../repository/ai_suggested_meals_job_id_repository.dart';
@@ -57,6 +60,222 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   }
 
   ///---------->>> Section : Boiler Code End
+
+  ///--------->>> Section : Meal Selection Tracking (One meal per tab)
+  /// Track selected meal ID for each tab (only one meal can be selected per tab)
+  RxString selectedBreakfastMealId = ''.obs;
+  RxString selectedLunchMealId = ''.obs;
+  RxString selectedDinnerMealId = ''.obs;
+  
+  /// Track selected meal data for display in tracker
+  RxString selectedBreakfastMealName = ''.obs;
+  RxString selectedLunchMealName = ''.obs;
+  RxString selectedDinnerMealName = ''.obs;
+  
+  /// Get selected meal ID based on current tab
+  String getSelectedMealIdForTab(String tabName) {
+    if (tabName == 'breakfast') {
+      return selectedBreakfastMealId.value;
+    } else if (tabName == 'lunch') {
+      return selectedLunchMealId.value;
+    } else if (tabName == 'dinner') {
+      return selectedDinnerMealId.value;
+    }
+    return '';
+  }
+  
+  /// Set selected meal for a specific tab (automatically deselects previous selection)
+  void setSelectedMeal({
+    required String tabName,
+    required String mealId,
+    required String mealName,
+  }) {
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("🎯 [SELECTION] setSelectedMeal CALLED");
+    LoggerUtils.debug("🎯 [SELECTION] tabName: $tabName");
+    LoggerUtils.debug("🎯 [SELECTION] mealId: $mealId");
+    LoggerUtils.debug("🎯 [SELECTION] mealName: $mealName");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+    
+    String actionText = '';
+    
+    if (tabName == 'breakfast') {
+      // If clicking the same meal, deselect it
+      if (selectedBreakfastMealId.value == mealId) {
+        LoggerUtils.debug("🎯 [SELECTION] Deselecting breakfast meal");
+        selectedBreakfastMealId.value = '';
+        selectedBreakfastMealName.value = '';
+        actionText = 'Breakfast meal deselected';
+      } else {
+        LoggerUtils.debug("🎯 [SELECTION] Selecting new breakfast meal");
+        selectedBreakfastMealId.value = mealId;
+        selectedBreakfastMealName.value = mealName;
+        actionText = 'Breakfast: $mealName';
+      }
+    } else if (tabName == 'lunch') {
+      // If clicking the same meal, deselect it
+      if (selectedLunchMealId.value == mealId) {
+        LoggerUtils.debug("🎯 [SELECTION] Deselecting lunch meal");
+        selectedLunchMealId.value = '';
+        selectedLunchMealName.value = '';
+        actionText = 'Lunch meal deselected';
+      } else {
+        LoggerUtils.debug("🎯 [SELECTION] Selecting new lunch meal");
+        selectedLunchMealId.value = mealId;
+        selectedLunchMealName.value = mealName;
+        actionText = 'Lunch: $mealName';
+      }
+    } else if (tabName == 'dinner') {
+      // If clicking the same meal, deselect it
+      if (selectedDinnerMealId.value == mealId) {
+        LoggerUtils.debug("🎯 [SELECTION] Deselecting dinner meal");
+        selectedDinnerMealId.value = '';
+        selectedDinnerMealName.value = '';
+        actionText = 'Dinner meal deselected';
+      } else {
+        LoggerUtils.debug("🎯 [SELECTION] Selecting new dinner meal");
+        selectedDinnerMealId.value = mealId;
+        selectedDinnerMealName.value = mealName;
+        actionText = 'Dinner: $mealName';
+      }
+    }
+    
+    LoggerUtils.debug("🎯 [SELECTION] Current selections - Breakfast: ${selectedBreakfastMealId.value}, Lunch: ${selectedLunchMealId.value}, Dinner: ${selectedDinnerMealId.value}");
+    
+    // Show snackbar notification
+    _showSelectionSnackbar(actionText);
+  }
+  
+  /// Show snackbar notification for meal selection
+  void _showSelectionSnackbar(String actionText) {
+    final selectedCount = getSelectedMealsCount();
+    final isComplete = isMealPlanComplete;
+
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("📢 [SNACKBAR] _showSelectionSnackbar CALLED");
+    LoggerUtils.debug("📢 [SNACKBAR] actionText: $actionText");
+    LoggerUtils.debug("📢 [SNACKBAR] selectedCount: $selectedCount");
+    LoggerUtils.debug("📢 [SNACKBAR] isComplete: $isComplete");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
+    // Use Get.overlayContext to show snackbar
+    final overlayContext = Get.overlayContext;
+    if (overlayContext == null) {
+      LoggerUtils.error("❌ [SNACKBAR] overlayContext is null - cannot show snackbar");
+      return;
+    }
+
+    if (isComplete) {
+      // Show success snackbar that stays until user interacts
+      LoggerUtils.debug("📢 [SNACKBAR] Showing COMPLETE snackbar");
+      ScaffoldMessenger.of(overlayContext).showSnackBar(
+        SnackBar(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                '🎉 Meal Plan Complete!',
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'All 3 meals selected. Ready to build!',
+                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.cb20000,
+          duration: const Duration(seconds: 5),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          margin: const EdgeInsets.all(16),
+          action: SnackBarAction(
+            label: 'Build Now',
+            textColor: Colors.white,
+            onPressed: () {
+              ScaffoldMessenger.of(overlayContext).hideCurrentSnackBar();
+              Get.toNamed(Routes.reviewYourChoosenMealScreen);
+            },
+          ),
+          dismissDirection: DismissDirection.down,
+        ),
+      );
+    } else {
+      // Show progress snackbar that auto-dismisses
+      LoggerUtils.debug("📢 [SNACKBAR] Showing PROGRESS snackbar ($selectedCount/3)");
+      ScaffoldMessenger.of(overlayContext).showSnackBar(
+        SnackBar(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Meal Selected',
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '$actionText ($selectedCount/3 meals selected)',
+                style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.c262626,
+          duration: const Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          margin: const EdgeInsets.all(16),
+          dismissDirection: DismissDirection.down,
+        ),
+      );
+    }
+  }
+  
+  /// Check if a meal is currently selected in a specific tab
+  bool isMealSelected({
+    required String tabName,
+    required String mealId,
+  }) {
+    if (tabName == 'breakfast') {
+      return selectedBreakfastMealId.value == mealId;
+    } else if (tabName == 'lunch') {
+      return selectedLunchMealId.value == mealId;
+    } else if (tabName == 'dinner') {
+      return selectedDinnerMealId.value == mealId;
+    }
+    return false;
+  }
+  
+  /// Get count of selected meals (0-3, one per tab)
+  int getSelectedMealsCount() {
+    int count = 0;
+    if (selectedBreakfastMealId.value.isNotEmpty) count++;
+    if (selectedLunchMealId.value.isNotEmpty) count++;
+    if (selectedDinnerMealId.value.isNotEmpty) count++;
+    return count;
+  }
+  
+  /// Check if meal plan is complete (all 3 meals selected)
+  bool get isMealPlanComplete => getSelectedMealsCount() == 3;
+  
+  /// Get all selected meals
+  Map<String, String> getSelectedMeals() {
+    return {
+      'breakfast': selectedBreakfastMealName.value,
+      'lunch': selectedLunchMealName.value,
+      'dinner': selectedDinnerMealName.value,
+    };
+  }
+  
+  /// Clear all selections
+  void clearAllSelections() {
+    selectedBreakfastMealId.value = '';
+    selectedBreakfastMealName.value = '';
+    selectedLunchMealId.value = '';
+    selectedLunchMealName.value = '';
+    selectedDinnerMealId.value = '';
+    selectedDinnerMealName.value = '';
+    LoggerUtils.debug("🎯 [SELECTION] All selections cleared");
+  }
 
   ///--------->>> Section : Previously Selected Meals Api Method Start Here
 

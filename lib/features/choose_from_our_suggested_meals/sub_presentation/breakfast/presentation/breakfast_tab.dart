@@ -115,6 +115,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
             RecentlySelectedMealsWidget(
               isLoading: chooseFromOurSuggestedMealController.isPreviouslySelectedMealsLoading,
               meals: chooseFromOurSuggestedMealController.breakfastRecentChosenMeals,
+              tabName: 'breakfast',
             ),
             UIHelper.verticalSpace(32.h),
 
@@ -124,6 +125,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 mealPlanType: "Protein-Packed",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastProteinPackedMeals,
+                tabName: 'breakfast',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -131,7 +133,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
               ),
             UIHelper.verticalSpace(32.h),
 
-            
+
 
             ///Section : ------------///Light & Fresh ///----------------
             if (obxLightCount > 0)
@@ -139,6 +141,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 mealPlanType: "Light & Fresh",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals,
+                tabName: 'breakfast',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -152,6 +155,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 mealPlanType: "Hearty & Comforting",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals,
+                tabName: 'breakfast',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
