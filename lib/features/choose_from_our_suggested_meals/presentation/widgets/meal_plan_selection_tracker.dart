@@ -94,6 +94,8 @@ class MealPlanSelectionTracker extends StatelessWidget {
                 buttonWidth: 100.w,
                 borderRadius: 8.r,
                 isDisabled: !isMealPlanComplete,
+
+                buttonColor: Colors.amber,
               );
             }),
           ],
