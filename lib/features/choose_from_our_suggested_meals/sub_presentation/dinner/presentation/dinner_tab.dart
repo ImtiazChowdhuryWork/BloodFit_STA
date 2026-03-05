@@ -116,6 +116,7 @@ class _DinnerTabState extends State<DinnerTab> {
             RecentlySelectedMealsWidget(
               isLoading: chooseFromOurSuggestedMealController.isPreviouslySelectedMealsLoading,
               meals: chooseFromOurSuggestedMealController.dinnerRecentChosenMeals,
+              tabName: 'dinner',
             ),
             UIHelper.verticalSpace(32.h),
 
@@ -125,6 +126,7 @@ class _DinnerTabState extends State<DinnerTab> {
                 mealPlanType: "Protein-Packed",
                 itemImagePath: chooseFromOurSuggestedMealController.dinnerMealImage,
                 itemsList: chooseFromOurSuggestedMealController.dinnerProteinPackedMeals,
+                tabName: 'dinner',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing dinner meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -138,6 +140,7 @@ class _DinnerTabState extends State<DinnerTab> {
                 mealPlanType: "Light & Fresh",
                 itemImagePath: chooseFromOurSuggestedMealController.dinnerMealImage,
                 itemsList: chooseFromOurSuggestedMealController.dinnerLightAndFreshMeals,
+                tabName: 'dinner',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing dinner meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -151,6 +154,7 @@ class _DinnerTabState extends State<DinnerTab> {
                 mealPlanType: "Hearty & Comforting",
                 itemImagePath: chooseFromOurSuggestedMealController.dinnerMealImage,
                 itemsList: chooseFromOurSuggestedMealController.dinnerHealthyAndComfortingMeals,
+                tabName: 'dinner',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing dinner meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();

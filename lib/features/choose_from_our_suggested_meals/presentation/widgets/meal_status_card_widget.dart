@@ -6,36 +6,51 @@ import '../../../../gen/colors.gen.dart';
 import '../../../../helper/ui_helpers.dart';
 
 class MealStatusCardWidget extends StatelessWidget {
-  final double totalMeal;
-  final double selectedMeal;
+  final bool isSelected;
+  final String mealName;
   final String mealType;
+  
   const MealStatusCardWidget({
     super.key,
-    required this.totalMeal,
-    required this.selectedMeal,
+    required this.isSelected,
+    required this.mealName,
     required this.mealType,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80.w,
+      width: 120.w,
       padding: EdgeInsets.all(10.sp),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColors.c909090,
+        color: isSelected ? AppColors.cb20000 : AppColors.c909090,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Column(
         children: [
           Text(
-            "${selectedMeal % 1 == 0 ? selectedMeal.toInt() : selectedMeal}/${totalMeal % 1 == 0 ? totalMeal.toInt() : totalMeal}",
-            style: TextFontStyle.headline12w400cfefefeStylePoppins,
+            isSelected ? '✓' : '○',
+            style: TextFontStyle.headline22w600cfefefeStylePoppins.copyWith(
+              fontSize: 14.sp,
+            ),
           ),
-          UIHelper.verticalSpace(8.h),
+          UIHelper.verticalSpace(4.h),
+          Text(
+            mealName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextFontStyle.headline14w500cfefefeStylePoppins.copyWith(
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              fontSize: 12.sp,
+            ),
+          ),
+          UIHelper.verticalSpace(4.h),
           Text(
             mealType,
-            style: TextFontStyle.headline12w400cfefefeStylePoppins,
+            style: TextFontStyle.headline14w500cc6c6c6StylePoppins.copyWith(
+              fontSize: 12.sp,
+            ),
           ),
         ],
       ),
