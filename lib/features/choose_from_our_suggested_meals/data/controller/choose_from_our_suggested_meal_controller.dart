@@ -316,6 +316,9 @@ void setSelectedDate({required String date}){
 RxBool isAiSuggestedMealsLoading = false.obs;
 RxString aiSuggestedMealsErrorMessage = ''.obs;
 
+/// Track if initial AI meals load has been attempted
+RxBool hasLoadedAiMealsInitially = false.obs;
+
 /// Per-meal-type loading flags to prevent duplicate API calls
 RxBool isBreakfastAiMealsLoaded = false.obs;
 RxBool isLunchAiMealsLoaded = false.obs;
@@ -1015,7 +1018,16 @@ Future<void> initializeAiMeals() async {
     LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
     aiSuggestedMealsErrorMessage.value = "Failed to initialize: $error";
     isAiSuggestedMealsLoading.value = false;
+    hasLoadedAiMealsInitially.value = true; // Mark as attempted even on error
+  } finally {
+    // Mark that initial load has been attempted
+    hasLoadedAiMealsInitially.value = true;
+    LoggerUtils.debug("✅ [CONTROLLER] Initial AI meals load attempt completed");
   }
+  
+  // Reset loading state at the end
+  isAiSuggestedMealsLoading.value = false;
+  LoggerUtils.debug("🎯 [CONTROLLER] Resetting loading state to FALSE");
 }
 
 /// Clean up socket listeners when controller is closed

@@ -4,6 +4,7 @@ import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/meal_details/data/controller/meal_details_screen_controller.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -40,9 +41,9 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
     ///------<>>> Section : Get Arguments
     mealID = arguments?['mealID']?.toString() ?? '';
-    
+
     ///------<>>> Section : Get Direct Meal Data (from AI suggested meals)
-    final mealData = arguments?['mealData'] as Map<String, dynamic>?;
+    final mealData = arguments?['mealData'] as MealDataModel?;
 
     ///--------<>>> Section : PostFrameCallBack Function
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -50,7 +51,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
       if (mealID.isNotEmpty) {
         mealDetailsScreenController?.setMealID(mealId: mealID);
       }
-      
+
       ///------>>> Send Direct Meal Data to Controller
       if (mealData != null) {
         mealDetailsScreenController?.setDirectMealData(mealData);
@@ -68,15 +69,12 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
-
-
           children: [
-
             ///Section : ----------///Item Image///-------------
             ///Section : ----------///Item Title///-------------
             Obx(() {
               if (mealDetailsScreenController!.isMealDetailsLoading.value) {
-                return CircularProgressIndicator();
+                return CustomShimmerEffect(height: 0.5.sh, width: 1.sw);
               }
               if (mealDetailsScreenController!.mealImage.isEmpty ||
                   mealDetailsScreenController!.mealName.isEmpty) {
@@ -106,7 +104,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 /// Food Total Kcal & Serving
                 Obx(() {
                   if (mealDetailsScreenController!.isMealDetailsLoading.value) {
-                    return CircularProgressIndicator();
+                    return CustomShimmerEffect(height: 20.h, width: 120.w);
                   }
                   if (mealDetailsScreenController!.mealType.isEmpty) {
                     return CustomShimmerEffect(
@@ -123,7 +121,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     iconPath: Assets.icons.mealIcon,
                     iconColor: AppColors.cfefefe,
                     title: mealDetailsScreenController!.mealType,
-                    value: 302,
+                    value: 0,
                     isValueVisible: false,
                   );
                 }),
@@ -135,7 +133,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
                 Obx(() {
                   if (mealDetailsScreenController!.isMealDetailsLoading.value) {
-                    return CircularProgressIndicator();
+                    return CustomShimmerEffect(height: 20.h, width: 120.w);
                   }
                   if (mealDetailsScreenController!.totalKcal <= 0) {
                     return CustomShimmerEffect(
@@ -170,7 +168,20 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     if (mealDetailsScreenController!
                         .isMealDetailsLoading
                         .value) {
-                      return CircularProgressIndicator();
+                      return Column(
+                        children: [
+                          CustomShimmerEffect(height: 10.h, width: 1.sw),
+                          UIHelper.verticalSpace(8.h),
+                          CustomShimmerEffect(height: 10.h, width: 1.sw),
+                          UIHelper.verticalSpace(8.h),
+                          CustomShimmerEffect(height: 10.h, width: 1.sw),
+                          UIHelper.verticalSpace(8.h),
+                          CustomShimmerEffect(height: 10.h, width: 8.sw),
+                          UIHelper.verticalSpace(8.h),
+                          CustomShimmerEffect(height: 10.h, width: 1.sh),
+                          UIHelper.verticalSpace(8.h),
+                        ],
+                      );
                     }
                     if (mealDetailsScreenController!.mealDescription.isEmpty) {
                       return CustomShimmerEffect(
@@ -199,9 +210,6 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                   ),
                   UIHelper.verticalSpace(16.h),
 
-
-                  
-
                   ///Section : -----///Carbs,Protein,Fat///-----------
                   Obx(() {
                     if (mealDetailsScreenController!
@@ -213,10 +221,15 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                         child: ListView.separated(
                           itemCount: 3,
                           scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context,index)=> UIHelper.horizontalSpace(10.w), 
-                          itemBuilder: (context,index){
-                          return CustomShimmerEffect(height: 30.h, width: 80.w);
-                        }, ),
+                          separatorBuilder: (context, index) =>
+                              UIHelper.horizontalSpace(10.w),
+                          itemBuilder: (context, index) {
+                            return CustomShimmerEffect(
+                              height: 30.h,
+                              width: 80.w,
+                            );
+                          },
+                        ),
                       );
                     }
 
@@ -264,31 +277,34 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                   UIHelper.verticalSpace(16.h),
 
                   ///Section : -----------///Ingredients Images,Name, Weight, amount///-------
-                  Obx((){
-
+                  Obx(() {
                     if (mealDetailsScreenController!
                         .isMealDetailsLoading
                         .value) {
                       return Wrap(
-                    spacing: 42.w,
-                    runSpacing: 16.h,
-                    alignment: WrapAlignment.center,
-                    children: mealDetailsScreenController!.mealIngredientList
-                        .map(
-                          (ingredient) => Column(
-                            children: [
-                              CustomShimmerEffect(height: 30.h, width: 30.w),
-                              UIHelper.verticalSpace(10.h),
-                              CustomShimmerEffect(height: 20.h, width: 60.w)
-                            ],
-                          ),
-                        )
-                        .toList(),
-                  );
+                        spacing: 42.w,
+                        runSpacing: 16.h,
+                        alignment: WrapAlignment.center,
+                        children: mealDetailsScreenController!
+                            .mealIngredientList
+                            .map(
+                              (ingredient) => Column(
+                                children: [
+                                  CustomShimmerEffect(
+                                    height: 30.h,
+                                    width: 30.w,
+                                  ),
+                                  UIHelper.verticalSpace(10.h),
+                                  CustomShimmerEffect(
+                                    height: 20.h,
+                                    width: 60.w,
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      );
                     }
-
-
-                    
 
                     if (mealDetailsScreenController!.calorieCountList.isEmpty) {
                       return CustomShimmerEffect(
@@ -302,36 +318,52 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                       );
                     }
 
-
                     return Wrap(
-                    spacing: 42.w,
-                    runSpacing: 16.h,
-                    alignment: WrapAlignment.center,
-                    children: mealDetailsScreenController!.mealIngredientList
-                        .map(
-                          (ingredient) => IngredientItemTileWidget(
-                            imagePath: ingredient.icon ?? '',
-                            title: ingredient.name ?? '',
-                            recommendedConsumable:
-                                ingredient.quantity ?? '',
-                          ),
-                        )
-                        .toList(),
-                  );
+                      spacing: 42.w,
+                      runSpacing: 16.h,
+                      alignment: WrapAlignment.center,
+                      children: mealDetailsScreenController!.mealIngredientList
+                          .map(
+                            (ingredient) => IngredientItemTileWidget(
+                              imagePath: ingredient.icon ?? '',
+                              title: ingredient.name ?? '',
+                              recommendedConsumable: ingredient.quantity ?? '',
+                            ),
+                          )
+                          .toList(),
+                    );
                   }),
                   UIHelper.verticalSpace(24.h),
 
                   ///Section : ----------///Button -> Select This Meal///----------
-                  CustomElevatedButton(
-                    onTap: () {
-                      log("Button Taped : Select This Meal!");
-                      Get.toNamed(Routes.reviewYourChoosenMealScreen);
-                    },
-                    buttonWidth: 1.sw,
-                    buttonHeight: 52.h,
-                    borderRadius: 24.r,
-                    buttonTitle: "Select This Meal",
-                  ),
+                  Obx(() {
+                    if (mealDetailsScreenController!
+                        .isMealDetailsLoading
+                        .value) {
+                      return CustomShimmerEffect(height: 52.h, width: 1.sw);
+                    }
+
+                    if (mealDetailsScreenController!.calorieCountList.isEmpty) {
+                      return CustomElevatedButton(
+                        onTap: null,
+                        buttonWidth: 1.sw,
+                        buttonHeight: 52.h,
+                        borderRadius: 24.r,
+                        buttonTitle: "Select This Meal",
+                      );
+                    }
+
+                    return CustomElevatedButton(
+                      onTap: () {
+                        log("Button Taped : Select This Meal!");
+                        Get.toNamed(Routes.reviewYourChoosenMealScreen);
+                      },
+                      buttonWidth: 1.sw,
+                      buttonHeight: 52.h,
+                      borderRadius: 24.r,
+                      buttonTitle: "Select This Meal",
+                    );
+                  }),
                   UIHelper.verticalSpace(40.h),
                 ],
               ),

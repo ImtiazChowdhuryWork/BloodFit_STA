@@ -36,11 +36,13 @@ class _LunchTabState extends State<LunchTab> {
       final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
       final hasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
       final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
+      final hasLoadedInitially = chooseFromOurSuggestedMealController.hasLoadedAiMealsInitially.value;
 
       LoggerUtils.debug("🍱 [OBX] hasMeals=$hasMeals");
       LoggerUtils.debug("🍱 [OBX] isLoading=$isLoading");
       LoggerUtils.debug("🍱 [OBX] hasError=$hasError");
       LoggerUtils.debug("🍱 [OBX] hasJobId=$hasJobId");
+      LoggerUtils.debug("🍱 [OBX] hasLoadedInitially=$hasLoadedInitially");
       LoggerUtils.debug("🍱 [OBX] Meal counts - Protein: $proteinCount, Light: $lightCount, Healthy: $healthyCount");
 
       // Handle error state (show error with retry button)
@@ -69,11 +71,11 @@ class _LunchTabState extends State<LunchTab> {
         );
       }
 
-      // Show loader ONLY when:
+      // Show loader when:
       // 1. Loading is in progress, OR
-      // 2. No jobId yet (need to fetch)
-      if (isLoading || !hasJobId) {
-        LoggerUtils.debug("🍱 [OBX] >>> Showing LOADING indicator (loading=$isLoading, hasJobId=$hasJobId)");
+      // 2. No jobId yet AND initial load hasn't completed
+      if (isLoading || (!hasJobId && !hasLoadedInitially)) {
+        LoggerUtils.debug("🍱 [OBX] >>> Showing LOADING indicator (loading=$isLoading, hasJobId=$hasJobId, hasLoadedInitially=$hasLoadedInitially)");
         return const Center(
           child: CircularProgressIndicator(),
         );

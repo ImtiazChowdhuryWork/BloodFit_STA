@@ -1,7 +1,6 @@
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/meal_plan_type_widget.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/recently_selected_meals_widget.dart';
-import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +35,13 @@ class _BreakfastTabState extends State<BreakfastTab> {
       final obxIsLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
       final obxHasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
       final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
+      final hasLoadedInitially = chooseFromOurSuggestedMealController.hasLoadedAiMealsInitially.value;
 
       LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals");
       LoggerUtils.debug("🍳 [OBX] obxIsLoading=$obxIsLoading");
       LoggerUtils.debug("🍳 [OBX] obxHasError=$obxHasError");
       LoggerUtils.debug("🍳 [OBX] hasJobId=$hasJobId");
+      LoggerUtils.debug("🍳 [OBX] hasLoadedInitially=$hasLoadedInitially");
       LoggerUtils.debug("🍳 [OBX] Meal counts - Protein: $obxProteinCount, Light: $obxLightCount, Healthy: $obxHealthyCount");
 
       // Handle error state (show error with retry button)
@@ -69,11 +70,11 @@ class _BreakfastTabState extends State<BreakfastTab> {
         );
       }
 
-      // Show loader ONLY when:
+      // Show loader when:
       // 1. Loading is in progress, OR
-      // 2. No jobId yet (need to fetch)
-      if (obxIsLoading || !hasJobId) {
-        LoggerUtils.debug("🍳 [OBX] >>> Showing LOADING indicator (loading=$obxIsLoading, hasJobId=$hasJobId)");
+      // 2. No jobId yet AND initial load hasn't completed
+      if (obxIsLoading || (!hasJobId && !hasLoadedInitially)) {
+        LoggerUtils.debug("🍳 [OBX] >>> Showing LOADING indicator (loading=$obxIsLoading, hasJobId=$hasJobId, hasLoadedInitially=$hasLoadedInitially)");
         return const Center(
           child: CircularProgressIndicator(),
         );
@@ -129,6 +130,8 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 },
               ),
             UIHelper.verticalSpace(32.h),
+
+            
 
             ///Section : ------------///Light & Fresh ///----------------
             if (obxLightCount > 0)
