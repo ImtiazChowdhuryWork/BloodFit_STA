@@ -12,6 +12,7 @@ import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../../controllers/custom_image_picker_controller.dart';
 import '../../../custom_widgets/card_tile_option_widget.dart';
 import '../../../custom_widgets/custom_image_picker_widget.dart';
@@ -58,7 +59,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         backgroundColor: AppColors.scaffoldBackgroundColor,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: const CustomBackButton(),
+        leading: CustomBackButton(
+          onTap: () {
+            Get.back();
+          },
+        ),
         title: Text(
           'my_profile'.tr,
           style: TextFontStyle.headline24w700cFFFFFFStylePoppins,

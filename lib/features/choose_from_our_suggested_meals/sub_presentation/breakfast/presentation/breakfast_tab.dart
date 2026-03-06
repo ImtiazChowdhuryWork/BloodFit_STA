@@ -27,16 +27,25 @@ class _BreakfastTabState extends State<BreakfastTab> {
     return Obx(() {
       LoggerUtils.debug("🍳 [OBX] Rebuilding with Obx...");
 
-      // Check if meals are available (re-check inside Obx)
+      // Check if AI meals are available
       final obxProteinCount = chooseFromOurSuggestedMealController.breakfastProteinPackedMeals.length;
       final obxLightCount = chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals.length;
       final obxHealthyCount = chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals.length;
-      final obxHasMeals = obxProteinCount > 0 || obxLightCount > 0 || obxHealthyCount > 0;
+      final obxHasAiMeals = obxProteinCount > 0 || obxLightCount > 0 || obxHealthyCount > 0;
+      
+      // Check if previously selected meals exist
+      final obxHasPreviouslySelectedMeals = chooseFromOurSuggestedMealController.breakfastRecentChosenMeals.isNotEmpty;
+      
+      // Show content if either AI meals OR previously selected meals exist
+      final obxHasMeals = obxHasAiMeals || obxHasPreviouslySelectedMeals;
+      
       final obxIsLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
       final obxHasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
       final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
       final hasLoadedInitially = chooseFromOurSuggestedMealController.hasLoadedAiMealsInitially.value;
 
+      LoggerUtils.debug("🍳 [OBX] obxHasAiMeals=$obxHasAiMeals");
+      LoggerUtils.debug("🍳 [OBX] obxHasPreviouslySelectedMeals=$obxHasPreviouslySelectedMeals");
       LoggerUtils.debug("🍳 [OBX] obxHasMeals=$obxHasMeals");
       LoggerUtils.debug("🍳 [OBX] obxIsLoading=$obxIsLoading");
       LoggerUtils.debug("🍳 [OBX] obxHasError=$obxHasError");
@@ -80,9 +89,9 @@ class _BreakfastTabState extends State<BreakfastTab> {
         );
       }
 
-      // Loading completed but no meals - show refresh button
+      // Loading completed but no meals from ANY source - show refresh button
       if (!obxHasMeals) {
-        LoggerUtils.debug("⚠️ [OBX] >>> Showing EMPTY STATE with Refresh button (loading complete, no meals)");
+        LoggerUtils.debug("⚠️ [OBX] >>> Showing EMPTY STATE with Refresh button (no AI meals, no previously selected meals)");
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -115,6 +124,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
             RecentlySelectedMealsWidget(
               isLoading: chooseFromOurSuggestedMealController.isPreviouslySelectedMealsLoading,
               meals: chooseFromOurSuggestedMealController.breakfastRecentChosenMeals,
+              tabName: 'breakfast',
             ),
             UIHelper.verticalSpace(32.h),
 
@@ -124,6 +134,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 mealPlanType: "Protein-Packed",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastProteinPackedMeals,
+                tabName: 'breakfast',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -131,7 +142,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
               ),
             UIHelper.verticalSpace(32.h),
 
-            
+
 
             ///Section : ------------///Light & Fresh ///----------------
             if (obxLightCount > 0)
@@ -139,6 +150,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 mealPlanType: "Light & Fresh",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastLightAndFreshMeals,
+                tabName: 'breakfast',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
@@ -152,6 +164,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
                 mealPlanType: "Hearty & Comforting",
                 itemImagePath: chooseFromOurSuggestedMealController.breakFastMealImage,
                 itemsList: chooseFromOurSuggestedMealController.breakfastHealthyAndComfortingMeals,
+                tabName: 'breakfast',
                 retryOnTap: () {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();

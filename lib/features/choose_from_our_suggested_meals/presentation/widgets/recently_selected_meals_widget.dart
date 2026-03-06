@@ -1,5 +1,4 @@
-
-
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/food_item_showing_widget.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +15,21 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
   final RxList<Datum> meals;
   final RxBool isLoading;
   final String title;
+  final String tabName; // 'breakfast', 'lunch', or 'dinner'
 
   const RecentlySelectedMealsWidget({
     super.key,
     required this.meals,
     required this.isLoading,
     this.title = "Previously Selected Meals",
+    required this.tabName,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ChooseFromOurSuggestedMealController controller = 
+        Get.find<ChooseFromOurSuggestedMealController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,9 +48,9 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
               child: ListView.separated(
                 itemCount: 2,
                 scrollDirection: Axis.horizontal,
-                separatorBuilder: (_, __) =>
+                separatorBuilder: (context, index) =>
                     UIHelper.horizontalSpace(10.w),
-                itemBuilder: (_, __) {
+                itemBuilder: (context, index) {
                   return CustomShimmerEffect(
                     height: 120.h,
                     width: 0.4.sw,
@@ -96,23 +100,46 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: meals.length,
-              separatorBuilder: (_, __) =>
+              separatorBuilder: (context, index) =>
                   UIHelper.horizontalSpace(15.w),
-              itemBuilder: (_, index) {
+              itemBuilder: (context, index) {
                 final meal = meals[index];
                 final mealID = meals[index].id;
+                final mealName = meal.mealName ?? 'N/A';
 
-                return FoodItemShowingWidget(
-                  isSelected: true,
-                  onChanged: (_) {},
-                  onTap: (){
-                    Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID': mealID});
-                  },
-                  itemImagePath: meal.image ?? '',
-                  itemTitle: meal.mealName ?? 'N/A',
-                  kcalValue: meal.kcal ?? 0,
-                  servingValue: meal.kcal ?? 1,
-                );
+                return Obx(() {
+                  final isSelected = controller.isMealSelected(
+                    tabName: tabName,
+                    mealId: mealID ?? '',
+                  );
+
+                  return FoodItemShowingWidget(
+                    isSelected: isSelected,
+                    onChanged: (value) {
+                      if (value == true) {
+                        controller.setSelectedMeal(
+                          tabName: tabName,
+                          mealId: mealID ?? '',
+                          mealName: mealName,
+                        );
+                      }
+                    },
+                    onTap: (){
+                      // For Previously Selected Meals, we need to pass both mealID and tabName
+                      // The mealID from API is used for fetching details
+                      // We also create a selection tracking ID using the API's _id
+                      Get.toNamed(Routes.mealDetailscreen, arguments: {
+                        'mealID': mealID,
+                        'tabNameForSelection': tabName,
+                        'mealIdForSelection': mealID ?? '',
+                      });
+                    },
+                    itemImagePath: meal.image ?? '',
+                    itemTitle: mealName,
+                    kcalValue: meal.kcal ?? 0,
+                    servingValue: meal.serving ?? 1,
+                  );
+                });
               },
             ),
           );

@@ -13,6 +13,7 @@ class MealDataModel {
   final String image;
   final String? category;
   final String? subCategory;
+  final String? mealId; // Added for meal selection tracking
 
   MealDataModel({
     required this.mealName,
@@ -25,6 +26,7 @@ class MealDataModel {
     this.image = '',
     this.category,
     this.subCategory,
+    this.mealId,
   });
 
   factory MealDataModel.fromRawJson(String str) =>
@@ -48,6 +50,7 @@ class MealDataModel {
         image: json["image"] ?? '',
         category: json["category"],
         subCategory: json["subCategory"],
+        mealId: json["mealId"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -62,6 +65,7 @@ class MealDataModel {
         "image": image,
         "category": category,
         "subCategory": subCategory,
+        "mealId": mealId,
       };
 }
 

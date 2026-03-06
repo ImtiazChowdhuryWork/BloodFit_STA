@@ -4,12 +4,13 @@ import 'package:bloodfit/constants/app_list.dart';
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/meal_details/data/controller/meal_details_screen_controller.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
-import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,8 +29,11 @@ class MealDetailsScreen extends StatefulWidget {
 
 class _MealDetailsScreenState extends State<MealDetailsScreen> {
   MealDetailsScreenController? mealDetailsScreenController;
+  ChooseFromOurSuggestedMealController? chooseFromOurSuggestedMealController;
 
   String mealID = '';
+  String? mealIdForSelection; // Unique ID for meal selection
+  String? tabNameForSelection; // Tab name (breakfast/lunch/dinner)
 
   @override
   void initState() {
@@ -38,12 +42,59 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
     ///-----<>>> Section : Intialize Controllers
     mealDetailsScreenController = Get.find<MealDetailsScreenController>();
+    chooseFromOurSuggestedMealController =
+        Get.find<ChooseFromOurSuggestedMealController>();
 
     ///------<>>> Section : Get Arguments
     mealID = arguments?['mealID']?.toString() ?? '';
 
     ///------<>>> Section : Get Direct Meal Data (from AI suggested meals)
     final mealData = arguments?['mealData'] as MealDataModel?;
+
+    ///------>>> Extract selection info from mealData if available
+    if (mealData != null) {
+      // Extract tab name from mealType
+      final mealType = mealData.mealType.toLowerCase();
+      if (mealType.contains('breakfast')) {
+        tabNameForSelection = 'breakfast';
+      } else if (mealType.contains('lunch')) {
+        tabNameForSelection = 'lunch';
+      } else if (mealType.contains('dinner')) {
+        tabNameForSelection = 'dinner';
+      }
+
+      // Use the mealId passed from the meal card (if available)
+      // This ensures the same ID is used for selection tracking
+      if (mealData.mealId != null && mealData.mealId!.isNotEmpty) {
+        mealIdForSelection = mealData.mealId;
+        LoggerUtils.debug(
+          "🎯 [MEAL DETAILS] Using passed mealId from MealDataModel: $mealIdForSelection",
+        );
+      } else {
+        // Fallback: Create a unique meal ID using mealName and image
+        mealIdForSelection =
+            '${tabNameForSelection}_${mealData.mealName}_${mealData.image}';
+        LoggerUtils.debug(
+          "🎯 [MEAL DETAILS] Created fallback mealId: $mealIdForSelection",
+        );
+      }
+
+      LoggerUtils.debug(
+        "🎯 [MEAL DETAILS] Selection info - tabName: $tabNameForSelection, mealId: $mealIdForSelection",
+      );
+    } else if (arguments != null &&
+        arguments['tabNameForSelection'] != null &&
+        arguments['mealIdForSelection'] != null) {
+      // Handle Previously Selected Meals (passed directly from recently_selected_meals_widget)
+      tabNameForSelection = arguments['tabNameForSelection'] as String?;
+      mealIdForSelection = arguments['mealIdForSelection'] as String?;
+      LoggerUtils.debug(
+        "🎯 [MEAL DETAILS] Using selection info from Previously Selected Meals",
+      );
+      LoggerUtils.debug(
+        "🎯 [MEAL DETAILS] Selection info - tabName: $tabNameForSelection, mealId: $mealIdForSelection",
+      );
+    }
 
     ///--------<>>> Section : PostFrameCallBack Function
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -98,7 +149,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
             ///Section : -----------///Meal Type -> Breakfast,Lunc,Dinner///------------
             Row(
-              mainAxisSize: MainAxisSize.min, // ✅ Row doesn’t stretch
+              mainAxisSize: MainAxisSize.max, // ✅ Row doesn’t stretch
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 /// Food Total Kcal & Serving
@@ -131,6 +182,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 Container(width: 2.sp, height: 20.h, color: AppColors.c282828),
                 UIHelper.horizontalSpace(20.w),
 
+                /// Kcal Value Showing Section
                 Obx(() {
                   if (mealDetailsScreenController!.isMealDetailsLoading.value) {
                     return CustomShimmerEffect(height: 20.h, width: 120.w);
@@ -150,6 +202,42 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     title: "Kcal",
                     iconPath: Assets.icons.fireRed,
                     value: mealDetailsScreenController!.totalKcal,
+                  );
+                }),
+                UIHelper.horizontalSpace(20.w),
+
+                Obx(() {
+                  if (mealDetailsScreenController!.isMealDetailsLoading.value) {
+                    return CustomShimmerEffect(height: 20.h, width: 120.w);
+                  }
+                  if (mealDetailsScreenController!.totalKcal <= 0) {
+                    return CustomShimmerEffect(
+                      height: 40.h,
+                      width: 120.w,
+                      child: Text(
+                        'Failed to show Generate Image Button',
+                        style: TextFontStyle.headline14w400cb20000StylePoppins,
+                      ),
+                    );
+                  }
+
+                  return CustomElevatedButton(
+                    onTap: () {
+                      LoggerUtils.debug("Generate Image Button Taped!");
+                    },
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(
+                          0.2,
+                        ), // subtle white glow
+                        blurRadius: 12, // soft, spread-out effect
+                        offset: Offset(0, 2), // slight downward direction
+                      ),
+                    ],
+                    buttonColor: AppColors.c000000,
+                    buttonTitle: " Generate Image  ",
+                    borderRadius: 8.r,
+                    buttonHeight: 40.h,
                   );
                 }),
               ],
@@ -353,15 +441,78 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                       );
                     }
 
+                    // Check if meal is currently selected (only for AI suggested meals)
+                    final isMealSelected =
+                        tabNameForSelection != null &&
+                            mealIdForSelection != null
+                        ? chooseFromOurSuggestedMealController!.isMealSelected(
+                            tabName: tabNameForSelection!,
+                            mealId: mealIdForSelection!,
+                          )
+                        : false;
+
+                    LoggerUtils.debug(
+                      "🎯 [BUTTON] isMealSelected: $isMealSelected",
+                    );
+                    LoggerUtils.debug(
+                      "🎯 [BUTTON] tabNameForSelection: $tabNameForSelection",
+                    );
+                    LoggerUtils.debug(
+                      "🎯 [BUTTON] mealIdForSelection: $mealIdForSelection",
+                    );
+
+                    // Determine button color and title based on selection state
+                    final buttonTitle = isMealSelected
+                        ? "Deselect This Meal"
+                        : "Select This Meal";
+                    final buttonColor = isMealSelected
+                        ? AppColors
+                              .c999999 // Gray for deselection (selected state)
+                        : AppColors
+                              .cb20000; // Red for selection (unselected state)
+
                     return CustomElevatedButton(
                       onTap: () {
                         log("Button Taped : Select This Meal!");
-                        Get.toNamed(Routes.reviewYourChoosenMealScreen);
+
+                        // Only allow selection if we have valid selection info
+                        if (tabNameForSelection != null &&
+                            mealIdForSelection != null) {
+                          final mealName =
+                              mealDetailsScreenController!.mealName;
+
+                          if (isMealSelected) {
+                            // Deselect the meal
+                            LoggerUtils.debug(
+                              "🎯 [BUTTON] Deselecting meal...",
+                            );
+                            chooseFromOurSuggestedMealController!
+                                .setSelectedMeal(
+                                  tabName: tabNameForSelection!,
+                                  mealId: mealIdForSelection!,
+                                  mealName: mealName,
+                                );
+                          } else {
+                            // Select the meal
+                            LoggerUtils.debug("🎯 [BUTTON] Selecting meal...");
+                            chooseFromOurSuggestedMealController!
+                                .setSelectedMeal(
+                                  tabName: tabNameForSelection!,
+                                  mealId: mealIdForSelection!,
+                                  mealName: mealName,
+                                );
+                          }
+                        } else {
+                          LoggerUtils.debug(
+                            "⚠️ [BUTTON] Cannot select meal - missing selection info",
+                          );
+                        }
                       },
                       buttonWidth: 1.sw,
                       buttonHeight: 52.h,
                       borderRadius: 24.r,
-                      buttonTitle: "Select This Meal",
+                      buttonTitle: buttonTitle,
+                      buttonColor: buttonColor,
                     );
                   }),
                   UIHelper.verticalSpace(40.h),

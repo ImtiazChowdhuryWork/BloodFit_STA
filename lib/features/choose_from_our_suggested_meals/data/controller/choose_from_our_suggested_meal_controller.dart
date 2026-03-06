@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repository/create_meal_plan_repository.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/show_meal_plan_tracker_snackbar.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
@@ -25,10 +27,15 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   ///-------<>>>> Section : Importing the AI Suggested Meals Repository
   final AiSuggestedMealsRepository _aiSuggestedMealsRepository;
 
+
+  ///--------<>>>> Section : Importing the Creat Meal Plan Repository
+  final CreateMealPlanRepository _createMealPlanRepository;
+
   ChooseFromOurSuggestedMealController(
     this._previouslySelectedMealsRepository,
     this._aiSuggestedMealsJobIdRepository,
     this._aiSuggestedMealsRepository,
+    this._createMealPlanRepository,
   );
 
   @override
@@ -57,6 +64,155 @@ class ChooseFromOurSuggestedMealController extends GetxController {
   }
 
   ///---------->>> Section : Boiler Code End
+
+  ///--------->>> Section : Meal Selection Tracking (One meal per tab)
+  /// Track selected meal ID for each tab (only one meal can be selected per tab)
+  RxString selectedBreakfastMealId = ''.obs;
+  RxString selectedLunchMealId = ''.obs;
+  RxString selectedDinnerMealId = ''.obs;
+  
+  /// Track selected meal data for display in tracker
+  RxString selectedBreakfastMealName = ''.obs;
+  RxString selectedLunchMealName = ''.obs;
+  RxString selectedDinnerMealName = ''.obs;
+  
+  /// Get selected meal ID based on current tab
+  String getSelectedMealIdForTab(String tabName) {
+    if (tabName == 'breakfast') {
+      return selectedBreakfastMealId.value;
+    } else if (tabName == 'lunch') {
+      return selectedLunchMealId.value;
+    } else if (tabName == 'dinner') {
+      return selectedDinnerMealId.value;
+    }
+    return '';
+  }
+  
+  /// Set selected meal for a specific tab (automatically deselects previous selection)
+  void setSelectedMeal({
+    required String tabName,
+    required String mealId,
+    required String mealName,
+  }) {
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("🎯 [SELECTION] setSelectedMeal CALLED");
+    LoggerUtils.debug("🎯 [SELECTION] tabName: $tabName");
+    LoggerUtils.debug("🎯 [SELECTION] mealId: $mealId");
+    LoggerUtils.debug("🎯 [SELECTION] mealName: $mealName");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+    
+    String actionText = '';
+    
+    if (tabName == 'breakfast') {
+      // If clicking the same meal, deselect it
+      if (selectedBreakfastMealId.value == mealId) {
+        LoggerUtils.debug("🎯 [SELECTION] Deselecting breakfast meal");
+        selectedBreakfastMealId.value = '';
+        selectedBreakfastMealName.value = '';
+        actionText = 'Breakfast meal deselected';
+      } else {
+        LoggerUtils.debug("🎯 [SELECTION] Selecting new breakfast meal");
+        selectedBreakfastMealId.value = mealId;
+        selectedBreakfastMealName.value = mealName;
+        actionText = 'Breakfast: $mealName';
+      }
+    } else if (tabName == 'lunch') {
+      // If clicking the same meal, deselect it
+      if (selectedLunchMealId.value == mealId) {
+        LoggerUtils.debug("🎯 [SELECTION] Deselecting lunch meal");
+        selectedLunchMealId.value = '';
+        selectedLunchMealName.value = '';
+        actionText = 'Lunch meal deselected';
+      } else {
+        LoggerUtils.debug("🎯 [SELECTION] Selecting new lunch meal");
+        selectedLunchMealId.value = mealId;
+        selectedLunchMealName.value = mealName;
+        actionText = 'Lunch: $mealName';
+      }
+    } else if (tabName == 'dinner') {
+      // If clicking the same meal, deselect it
+      if (selectedDinnerMealId.value == mealId) {
+        LoggerUtils.debug("🎯 [SELECTION] Deselecting dinner meal");
+        selectedDinnerMealId.value = '';
+        selectedDinnerMealName.value = '';
+        actionText = 'Dinner meal deselected';
+      } else {
+        LoggerUtils.debug("🎯 [SELECTION] Selecting new dinner meal");
+        selectedDinnerMealId.value = mealId;
+        selectedDinnerMealName.value = mealName;
+        actionText = 'Dinner: $mealName';
+      }
+    }
+    
+    LoggerUtils.debug("🎯 [SELECTION] Current selections - Breakfast: ${selectedBreakfastMealId.value}, Lunch: ${selectedLunchMealId.value}, Dinner: ${selectedDinnerMealId.value}");
+    
+    // Show snackbar notification
+    _showSelectionSnackbar(actionText);
+  }
+  
+  /// Show snackbar notification for meal selection
+  void _showSelectionSnackbar(String actionText) {
+    final selectedCount = getSelectedMealsCount();
+    final isComplete = isMealPlanComplete;
+
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("📢 [SNACKBAR] _showSelectionSnackbar CALLED");
+    LoggerUtils.debug("📢 [SNACKBAR] actionText: $actionText");
+    LoggerUtils.debug("📢 [SNACKBAR] selectedCount: $selectedCount");
+    LoggerUtils.debug("📢 [SNACKBAR] isComplete: $isComplete");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
+    // Show the custom MealPlanSelectionTracker snackbar
+    LoggerUtils.debug("📢 [SNACKBAR] Calling showMealPlanTracker()...");
+    showMealPlanTracker();
+  }
+  
+  /// Check if a meal is currently selected in a specific tab
+  bool isMealSelected({
+    required String tabName,
+    required String mealId,
+  }) {
+    if (tabName == 'breakfast') {
+      return selectedBreakfastMealId.value == mealId;
+    } else if (tabName == 'lunch') {
+      return selectedLunchMealId.value == mealId;
+    } else if (tabName == 'dinner') {
+      return selectedDinnerMealId.value == mealId;
+    }
+    return false;
+  }
+  
+  /// Get count of selected meals (0-3, one per tab)
+  int getSelectedMealsCount() {
+    int count = 0;
+    if (selectedBreakfastMealId.value.isNotEmpty) count++;
+    if (selectedLunchMealId.value.isNotEmpty) count++;
+    if (selectedDinnerMealId.value.isNotEmpty) count++;
+    return count;
+  }
+  
+  /// Check if meal plan is complete (all 3 meals selected)
+  bool get isMealPlanComplete => getSelectedMealsCount() == 3;
+  
+  /// Get all selected meals
+  Map<String, String> getSelectedMeals() {
+    return {
+      'breakfast': selectedBreakfastMealName.value,
+      'lunch': selectedLunchMealName.value,
+      'dinner': selectedDinnerMealName.value,
+    };
+  }
+  
+  /// Clear all selections
+  void clearAllSelections() {
+    selectedBreakfastMealId.value = '';
+    selectedBreakfastMealName.value = '';
+    selectedLunchMealId.value = '';
+    selectedLunchMealName.value = '';
+    selectedDinnerMealId.value = '';
+    selectedDinnerMealName.value = '';
+    LoggerUtils.debug("🎯 [SELECTION] All selections cleared");
+  }
 
   ///--------->>> Section : Previously Selected Meals Api Method Start Here
 
@@ -177,128 +333,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     }
   }
 
-  ///--------->>> Section : Previously Selected Meals Api Method Ends Here
-
-  // ///--------->>> Section : AI SUGGESTED Meals Api Method Start Here
-  // ///
-  // ///-------<>>>>> Section : Get The Selected Set
-  // RxString selectedDate = ''.obs;
-  // void setSelectedDate({required String date}){
-  //   selectedDate.value = date;
-  // }
-
-  // /// Global loading state for UI
-  // RxBool isAiSuggestedMealsLoading = false.obs;
-  // RxString aiSuggestedMealsErrorMessage = ''.obs;
-
-  // /// Per-meal-type loading flags to prevent duplicate API calls
-  // RxBool isBreakfastAiMealsLoaded = false.obs;
-  // RxBool isLunchAiMealsLoaded = false.obs;
-  // RxBool isDinnerAiMealsLoaded = false.obs;
-
-  // void clearAiSuggestedErrorMessage() {
-  //   aiSuggestedMealsErrorMessage.value = '';
-  // }
-
-  // ///-------------->>> Section : AI Genereted Meals Api Method Starts Here
-  // ///-------------->>> Socket Is Used for getting the Response of the ai
-  // ///-------------->>> For Getting the AI Meals We have to go through two API Methods
-  // ///-------------->>> First Api Method Target is to get "JOB ID"
-  // ///-------------->>> Second Api Method Target is to using that "JOB ID" -> GET the AI Geanareted Meals
-  // RxList<String> tesList = <String>[].obs;
   
-//   ///-------Step 1------->>>> Api Method : Get Job ID
-//   Rxn<AiSuggestedMealsJobIdModel> jobIdModel = Rxn<AiSuggestedMealsJobIdModel>();
-//   RxString jobID = ''.obs;
-
-//   void setJobId({required String id}){
-//     jobID.value = id;
-//     LoggerUtils.debug("Received JOB ID : ${jobID.value}");
-//   }
-
-//   RxBool isJobIdValueLoading = false.obs;
-//   RxString jobIdErrorMessage = ''.obs;
-//   void clearJobIdErrorMessage(){
-//     jobIdErrorMessage.value = '';
-//   }
-
-
-//   Future<void> getAiSuggestedMealsJobIdApi()async{
-//     try{
-//       isJobIdValueLoading.value = true;
-//       clearAiSuggestedErrorMessage();
-
-//       final response = await _aiSuggestedMealsJobIdRepository.aiSuggestedMealsJobIdRepository();
-
-//       LoggerUtils.debug("Job ID Api Response ${response.jsonResponse}");
-
-//       if(response.statusCode == 200 && response.isSuccess){
-
-//         final aiSuggestedMealsData = AiSuggestedMealsJobIdModel.fromJson(response.jsonResponse!);
-
-//         LoggerUtils.debug("Ai Suggested Meals Job ID Fetched Successfully");
-
-//         setJobId(id: aiSuggestedMealsData.data?.jobId ?? '');
-
-
-
-//       }else{
-//         jobIdErrorMessage.value = response.errorMessage.toString();
-//         LoggerUtils.error("Failed to get Job Id from Job ID Api");
-//         LoggerUtils.error("Response Code : ${response.statusCode}");
-//         LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
-//       }
-
-//     }catch(error){
-//       jobIdErrorMessage.value = error.toString();
-//       LoggerUtils.error("Error Catched While getting the JobID Value!");
-//       LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
-
-//     }finally{
-//       isJobIdValueLoading.value = false;
-//     }
-//   }
-
-
-
-//   ///-------Step 2------->>>> Api Method : Get Ai Genarated Meals Data using the jobId
-//   Rxn<AiSuggestedMealsModel> aiGeneratedMealsData = Rxn<AiSuggestedMealsModel>();
-
-//   RxBool isAiGeneratedMealsValueLoading = false.obs;
-  
-//   RxString aiGeneretedMealsDataErrorMessage = ''.obs;
-//   void clearAiGeneretedMealsDataErrorMessage(){
-//     aiGeneretedMealsDataErrorMessage.value = '';
-//   }
-
-//   Future<void> getAiSuggestedMels()async{
-//     try{
-//       isAiGeneratedMealsValueLoading.value = true;
-//       clearAiGeneretedMealsDataErrorMessage();
-
-
-//       final response = await _aiSuggestedMealsRepository.aiSuggestedMealsRepository(jobId: jobID.value);
-
-//       if(response.statusCode == 200 && response.isSuccess){
-
-//       }else{
-//         aiGeneretedMealsDataErrorMessage.value = response.errorMessage.toString();
-//         LoggerUtils.error("Failed to Get AI Genereted Meals Data!");
-//         LoggerUtils.error("Status Code : ${response.statusCode}");
-//         LoggerUtils.error("Error Message : ${aiGeneretedMealsDataErrorMessage.value}");
-//       }
-
-//     }catch(error){
-
-//       aiGeneretedMealsDataErrorMessage.value = error.toString();
-//       LoggerUtils.error("Catched Error While Getting the Ai Genereted Meals Data");
-//       LoggerUtils.error("Catched Error : ${aiGeneretedMealsDataErrorMessage.value}");
-
-
-//     }finally{
-//       isAiGeneratedMealsValueLoading.value = false;
-//     }
-//   }
 
 
 
@@ -1055,6 +1090,22 @@ void onClose() {
 
 ///--------->>> Section : AI SUGGESTED Meals Api Method Ends Here
 
+
+///--------->>>> Section : Create Meal Plan Api Starts Here
+
+RxBool isMealCreating = false.obs;
+RxString mealCreatingErrorMessage = ''.obs;
+void clearMealCreatingErrorMessage(){
+  mealCreatingErrorMessage.value = '';
+}
+
+
+Future<void> postCreateMealPlanApi()async{
+  ///------>>> This api will be implemented later. For Now it's an empty implementation
+}
+
+
+///--------->>>> Section : Create Meal Plan Api Ends. Here
   
 
   
