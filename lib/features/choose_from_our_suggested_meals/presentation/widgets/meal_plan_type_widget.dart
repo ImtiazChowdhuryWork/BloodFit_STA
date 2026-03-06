@@ -68,7 +68,7 @@ class MealPlanTypeWidget extends StatelessWidget {
                     /// Create a MealDataModel from the AI suggested meal data
                     final mealDataModel = MealDataModel(
                       mealName: mealName,
-                      mealType: mealPlanType.toLowerCase(),
+                      mealType: tabName, // Use tabName (breakfast/lunch/dinner) instead of mealPlanType
                       totalCalories: data.totalCalories ?? 0,
                       description: data.description ?? '',
                       ingredients: data.ingredients?.map((ing) => MealIngredientData(
@@ -85,7 +85,13 @@ class MealPlanTypeWidget extends StatelessWidget {
                       image: itemImagePath,
                       category: data.category?.name,
                       subCategory: data.subCategory?.name,
+                      mealId: mealId, // Pass the mealId for selection tracking
                     );
+
+                    LoggerUtils.debug("✅ [MEAL DATA] Created MealDataModel with:");
+                    LoggerUtils.debug("   • mealName: ${mealDataModel.mealName}");
+                    LoggerUtils.debug("   • mealType: ${mealDataModel.mealType}");
+                    LoggerUtils.debug("   • mealId: ${mealDataModel.mealId}");
 
                     /// Pass the model to the details screen
                     Get.toNamed(Routes.mealDetailscreen, arguments: {

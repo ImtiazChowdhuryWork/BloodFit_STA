@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../data/repository/ai_suggested_meals_job_id_repository.dart';
 import '../data/repository/ai_suggested_meals_repository.dart';
+import '../data/repository/create_meal_plan_repository.dart';
 import '../data/repository/previously_selected_meals_repository.dart';
 
 class GenerateMealPlanBindings extends Bindings {
@@ -12,11 +13,12 @@ class GenerateMealPlanBindings extends Bindings {
     Get.lazyPut(() => PreviouslySelectedMealsRepository(Get.find()));
     Get.lazyPut(() => AiSuggestedMealsJobIdRepository(Get.find()));
     Get.lazyPut(() => AiSuggestedMealsRepository(Get.find()));
-    
+    Get.lazyPut(() => CreateMealPlanRepository(Get.find()));
+
     /// Controller - Application scoped (permanent)
     /// Stays alive throughout the app session, destroyed only on app exit
     Get.put(
-      ChooseFromOurSuggestedMealController(Get.find(), Get.find(), Get.find()),
+      ChooseFromOurSuggestedMealController(Get.find(), Get.find(), Get.find(), Get.find()),
       permanent: true,
     );
   }

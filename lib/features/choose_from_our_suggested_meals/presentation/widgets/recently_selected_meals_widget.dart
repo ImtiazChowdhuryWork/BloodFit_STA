@@ -125,7 +125,14 @@ class RecentlySelectedMealsWidget extends StatelessWidget {
                       }
                     },
                     onTap: (){
-                      Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID': mealID});
+                      // For Previously Selected Meals, we need to pass both mealID and tabName
+                      // The mealID from API is used for fetching details
+                      // We also create a selection tracking ID using the API's _id
+                      Get.toNamed(Routes.mealDetailscreen, arguments: {
+                        'mealID': mealID,
+                        'tabNameForSelection': tabName,
+                        'mealIdForSelection': mealID ?? '',
+                      });
                     },
                     itemImagePath: meal.image ?? '',
                     itemTitle: mealName,
