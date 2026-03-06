@@ -1,3 +1,4 @@
+/**
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
@@ -180,6 +181,225 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                           mealType:
                               meal.mealType?.capitalizeFirst ??
                               "Failed to Get Meal Type..",
+                          mealTitle: meal.mealName ?? '',
+                          kcalValue: meal.kcal ?? 0,
+                          mealImagePath: "$imageBaseUrl${meal.image}",
+                        ),
+                        UIHelper.verticalSpace(20.h),
+                      ],
+                    );
+                  }).toList(),
+                );
+              }),
+
+              // ShowSelectedMealsOrBuildMealPlanWidget(),
+              UIHelper.verticalSpace(24.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
+
+
+
+
+
+///
+///
+///
+/// todo:: adding korean
+///
+///
+///
+
+
+
+
+import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
+import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
+import 'package:bloodfit/gen/assets.gen.dart';
+import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/ui_helpers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+import '../../../custom_widgets/meal_plan_calendar_widget.dart';
+import '../../../custom_widgets/meal_plan_item_card.dart';
+import '../../../endpoints.dart';
+import '../../../helper/logger_util.dart';
+import '../../../routes/routes.dart';
+import '../../home/presentation/widgets/app_bar_section_widget.dart';
+import '../../home/presentation/widgets/build_meal_plan_icon_widget.dart';
+import '../../home/presentation/widgets/meal_showing_widget_shimmer_effect.dart';
+import '../../home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
+
+class MealPlanFeatureOptions extends StatefulWidget {
+  MealPlanFeatureOptions({super.key});
+
+  @override
+  State<MealPlanFeatureOptions> createState() => _MealPlanFeatureOptionsState();
+}
+
+class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
+  final MealPlanFeatureOptionsController mealPlanFeatureOptionsController =
+  Get.find<MealPlanFeatureOptionsController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default date (today) and fetch meals on load
+    final today = DateFormat('yyyy/MM/dd').format(DateTime.now());
+    mealPlanFeatureOptionsController.setSelectedDate(date: today);
+    mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBackgroundColor,
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(UIHelper.kDefaulutPadding()),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ///Section : ---------------------///AppLogo///-----------
+              ///Section : ---------------------///Notification///-----------
+              ///Section : ---------------------///Profile///-----------
+              AppBarSectionWidget(),
+              UIHelper.verticalSpace(20.h),
+
+              ///Section : -------------<>>>>> Meal Calender
+              MealPlanCalendarWidget(
+                onTap: (formattedDate) {
+                  // When date is selected, fetch meals for that date
+                  mealPlanFeatureOptionsController.setSelectedDate(
+                    date: formattedDate,
+                  );
+                  mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+                },
+              ),
+              UIHelper.verticalSpace(20.h),
+
+              ///Section : -------------<>>>>>> Selected Date Meals List
+              Obx(() {
+                // Loading State
+                if (mealPlanFeatureOptionsController.isLoading.value) {
+                  return Column(
+                    children: List.generate(
+                      3,
+                          (index) => Column(
+                        children: [
+                          MealShowingWidgetShimmerEffect(),
+                          UIHelper.verticalSpace(20.h),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                // Error State
+                if (mealPlanFeatureOptionsController
+                    .selectedDateDataError
+                    .value
+                    .isNotEmpty) {
+                  return MealShowingWidgetShimmerEffect(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('failed_get_meal_plans'.tr, style: TextFontStyle.headline14w500cFFFFFFStylePoppins,),
+                          UIHelper.verticalSpace(8.h),
+                          CustomElevatedButton(
+                            buttonWidth: 120.w,
+                            buttonHeight: 40.h,
+                            buttonTitle: 'retry'.tr,
+                            isLoading: mealPlanFeatureOptionsController.isLoading.value,
+                            onTap: () {
+                              mealPlanFeatureOptionsController
+                                  .postGetMealsBySelectedDate();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                // No Data State
+                if (mealPlanFeatureOptionsController.mealsByDateList.isEmpty) {
+                  // Check if the selected date is a past date
+                  final selectedDate = DateFormat('yyyy/MM/dd').parse(
+                    mealPlanFeatureOptionsController.selectedDate.value,
+                  );
+                  final today = DateTime.now();
+                  final isPastDate = DateTime(
+                    selectedDate.year,
+                    selectedDate.month,
+                    selectedDate.day,
+                  ).isBefore(DateTime(today.year, today.month, today.day));
+
+                  return BuildMealPlanWidget(
+                    onTap: () {
+                      LoggerUtils.debug("Button Tapped : Get Started !");
+                      final selectedDate = DateFormat('yyyy/MM/dd').parse(
+                        mealPlanFeatureOptionsController.selectedDate.value,
+                      );
+                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'selectedDate' : selectedDate.toString()});
+                    },
+                    showSectionTitle: true,
+                    sectionTitle: 'choose_from_suggested_meals'.tr,
+                    buttonTitle: 'get_started'.tr,
+                    positionTop: -36.h,
+                    positionRight: -20.w,
+                    imageIconPath: Assets.icons.chickeMealIcon,
+                    title: 'build_your_daily_meals'.tr,
+                    subTitle: isPastDate
+                        ? 'meal_plan_not_built'.tr
+                        : 'select_meals_description'.tr,
+                    isShowButton: !isPastDate,
+                  );
+                }
+
+                // Success State - Show meals from API response
+                return Column(
+                  children: mealPlanFeatureOptionsController.mealsByDateList.map((
+                      meal,
+                      ) {
+                    return Column(
+                      children: [
+                        MealPlanItemCard(
+                          onTap: () {
+                            Get.toNamed(
+                              Routes.mealDetailscreen,
+                              arguments: {'mealID': meal.id},
+                            );
+                          },
+                          isMealEaten: meal.status == 'done',
+                          leftButtonTitle: 'i_ate_this'.tr,
+                          leftButtonOnTap: () {
+                            LoggerUtils.debug(
+                              "Button Tapped: I Ate This, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
+                            );
+                          },
+                          rightButtonTitle: 'swap_meal'.tr,
+                          rightButtonOnTap: () {
+                            LoggerUtils.debug(
+                              "Button Tapped: Swap Meal, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
+                            );
+                            showSwapMealBottomSheet();
+                          },
+                          mealType:
+                          meal.mealType?.capitalizeFirst ??
+                              'failed_to_get_meal_type'.tr,
                           mealTitle: meal.mealName ?? '',
                           kcalValue: meal.kcal ?? 0,
                           mealImagePath: "$imageBaseUrl${meal.image}",
