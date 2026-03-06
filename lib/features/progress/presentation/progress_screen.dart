@@ -140,10 +140,6 @@ class ProgressScreen extends StatelessWidget {
 }
 */
 
-
-
-
-
 ///
 ///
 ///
@@ -153,9 +149,6 @@ class ProgressScreen extends StatelessWidget {
 ///
 ///
 ///
-
-
-
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/progress/presentation/widget/custom_progress_indicator.dart';
@@ -244,13 +237,12 @@ class ProgressScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(50.r),
                       ),
                       child: ProgressIndicatorWithMarkers(
-                        progress: 0.7,
-                        indicatorHeight: 3.h,
-                        markerRadius: 8.r,
+                        startValue: 90,
+                        currentValue: 70,
+                        goalValue: 60,
+                        unit: 'kg',
                       ),
                     ),
-
-
                   ],
                 ),
               ),
