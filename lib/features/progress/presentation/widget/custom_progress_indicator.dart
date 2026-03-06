@@ -48,7 +48,7 @@ class ProgressIndicatorWithMarkers extends StatelessWidget {
                 height: markerDiameter,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color: AppColors.cb20000,
                   border: Border.all(color: AppColors.cb20000, width: 2),
                 ),
               ),
@@ -63,7 +63,7 @@ class ProgressIndicatorWithMarkers extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.cb20000,
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: AppColors.cb20000, width: 2),
                 ),
               ),
             ),
@@ -76,7 +76,7 @@ class ProgressIndicatorWithMarkers extends StatelessWidget {
                 height: markerDiameter,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color: AppColors.c999999,
                   border: Border.all(color: AppColors.c999999, width: 2),
                 ),
               ),
