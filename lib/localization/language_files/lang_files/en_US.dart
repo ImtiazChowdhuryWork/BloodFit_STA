@@ -1,8 +1,3 @@
-/**
-Map<String, String> englishLanguage = {};
-*/
-
-
 ///
 ///
 /// todo:: added by rakibul
@@ -71,5 +66,49 @@ Map<String, String> englishLanguage = {
   'subscription_free': 'Subscription: Free',
   'subscription_pro': 'Subscription: Pro',
   'subscription_elite': 'Subscription: Elite',
+
+
+  // Home Screen
+  'your_daily_calories': 'Your Daily Calories',
+  'carbs': 'Carbs',
+  'protein': 'Protein',
+  'fat': 'Fat',
+  'loading': 'Loading...',
+  'choose_from_suggested_meals': 'Choose From Our Suggested Meals',
+  'get_started': 'Get Started',
+  'build_your_daily_meals': 'Build Your Daily Meals',
+  'select_meals_description': 'Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions',
+  'subscribe_now': 'Subscribe Now',
+  'unlock_personalized_workouts': 'Unlock Personalized Workouts',
+  'subscribe_description': 'Subscribe Now To Get Customized Workout Plans Tailored To Your Fitness Goals',
+
+
+  // Select Your Days For Meal Plan Widget
+  'meal_plan_calendar': 'Meal Plan Calendar',
+  'customize_three_days': 'Customize Your Three Days',
+  'selected_days_count': 'Selected: @selected/@total days',
+
+
+  // Current Weight Update Widget
+  'update_current_weight': 'Update Your Current Weight',
+  'enter_your_weight': 'Enter Your Weight',
+  'submit': 'Submit',
+
+
+  // Received Three Meal Plans Widget
+  'youve_received': 'You’ve Received ',
+  'free_meal_plans': 'free Meal Plans',
+  'for_today': ' for Today!',
+
+
+
+  // Show Selected Meals Widget
+  'retry': 'Retry',
+  'i_ate_this': 'I Ate This',
+  'swap_meal': 'Swap Meal',
+  'failed_to_get_meal_type': 'Failed to Get Meal Type..',
+
+
+
 
 };
