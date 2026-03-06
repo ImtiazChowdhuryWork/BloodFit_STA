@@ -403,14 +403,20 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     LoggerUtils.debug("🎯 [BUTTON] tabNameForSelection: $tabNameForSelection");
                     LoggerUtils.debug("🎯 [BUTTON] mealIdForSelection: $mealIdForSelection");
 
+                    // Determine button color and title based on selection state
+                    final buttonTitle = isMealSelected ? "Deselect This Meal" : "Select This Meal";
+                    final buttonColor = isMealSelected 
+                        ? AppColors.c999999 // Gray for deselection (selected state)
+                        : AppColors.cb20000; // Red for selection (unselected state)
+
                     return CustomElevatedButton(
                       onTap: () {
                         log("Button Taped : Select This Meal!");
-                        
+
                         // Only allow selection if we have valid selection info
                         if (tabNameForSelection != null && mealIdForSelection != null) {
                           final mealName = mealDetailsScreenController!.mealName;
-                          
+
                           if (isMealSelected) {
                             // Deselect the meal
                             LoggerUtils.debug("🎯 [BUTTON] Deselecting meal...");
@@ -435,7 +441,8 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                       buttonWidth: 1.sw,
                       buttonHeight: 52.h,
                       borderRadius: 24.r,
-                      buttonTitle: isMealSelected ? "Deselect This Meal" : "Select This Meal",
+                      buttonTitle: buttonTitle,
+                      buttonColor: buttonColor,
                     );
                   }),
                   UIHelper.verticalSpace(40.h),
