@@ -110,6 +110,16 @@ Map<String, String> koreanLanguage = {
   'failed_to_get_meal_type': '식사 유형을 불러올 수 없습니다..',
 
 
+  // Meal Plan Feature Options
+  'failed_get_meal_plans': '식단 계획을 불러오지 못했습니다!',
+  'meal_plan_not_built': '선택한 날짜에 식단 계획이 없습니다!',
+
+
+  // Progress Screen
+  'mealplan': '식단 계획',
+  'workout': '운동',
+  'weight_history': '체중 기록',
+
 
 
 

@@ -109,6 +109,13 @@ Map<String, String> englishLanguage = {
   'failed_to_get_meal_type': 'Failed to Get Meal Type..',
 
 
+  // Meal Plan Feature Options
+  'failed_get_meal_plans': 'Failed Get Meal Plans!',
+  'meal_plan_not_built': 'Meal Plan was not built for selected date!',
 
+  // Progress Screen
+  'mealplan': 'Mealplan',
+  'workout': 'Workout',
+  'weight_history': 'Weight History',
 
 };
