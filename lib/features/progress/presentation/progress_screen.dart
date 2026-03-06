@@ -79,15 +79,15 @@ class ProgressScreen extends StatelessWidget {
                   children: [
                     ///Section : -----------//// Liner Progress Bar ///-------------
                     Container(
-                      padding: EdgeInsets.all(10.sp),
+                      padding: EdgeInsets.all(14.sp),
                       decoration: BoxDecoration(
                         color: AppColors.c000000,
                         borderRadius: BorderRadius.circular(50.r),
                       ),
                       child: ProgressIndicatorWithMarkers(
                       progress: 0.7,
-                      indicatorHeight: 8.h, // match your bar height
-                      markerRadius: 8.r, // adjust as needed
+                      indicatorHeight: 3.h,
+                      markerRadius: 8.r,
                     ),
                     ),
 
