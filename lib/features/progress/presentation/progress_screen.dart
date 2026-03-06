@@ -1,4 +1,5 @@
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/features/progress/presentation/widget/custom_progress_indicator.dart';
 import 'package:bloodfit/features/progress/presentation/widget/infotile_widget.dart';
 import 'package:bloodfit/features/progress/presentation/widget/overall_progress_showing_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -22,7 +23,6 @@ class ProgressScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +39,9 @@ class ProgressScreen extends StatelessWidget {
               UIHelper.verticalSpace(20.h),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
+                padding: EdgeInsets.symmetric(
+                  horizontal: UIHelper.kDefaulutPadding(),
+                ),
                 child: OverAllProgressShowingWidget(
                   overAllProgress: 0.7,
                   inforTypeOne: 'Mealplan',
@@ -50,15 +52,14 @@ class ProgressScreen extends StatelessWidget {
               ),
               UIHelper.verticalSpace(32.h),
 
-
-
               ///Section : -------///Stake Section///----------
               ///This section check the consistancy of the user. If the consistancy is broken
               ///then the stack will return to it's original value. Which -> "0"
               ///
-              
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
+                padding: EdgeInsets.symmetric(
+                  horizontal: UIHelper.kDefaulutPadding(),
+                ),
                 child: ConsistancyStakePreviewWidget(numberValue: 4),
               ),
               UIHelper.verticalSpace(14.h),
@@ -67,36 +68,62 @@ class ProgressScreen extends StatelessWidget {
               CustomCalenderWidget(),
               UIHelper.verticalSpace(24.h),
 
+              ///Section : ----------/// Your Weight Progress ///-----------
+              Container(
+                padding: EdgeInsets.all(10.sp),
+                decoration: BoxDecoration(
+                  color: AppColors.c262626,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Column(
+                  children: [
+                    ///Section : -----------//// Liner Progress Bar ///-------------
+                    Container(
+                      padding: EdgeInsets.all(10.sp),
+                      decoration: BoxDecoration(
+                        color: AppColors.c000000,
+                        borderRadius: BorderRadius.circular(50.r),
+                      ),
+                      child: ProgressIndicatorWithMarkers(
+                      progress: 0.7,
+                      indicatorHeight: 8.h, // match your bar height
+                      markerRadius: 8.r, // adjust as needed
+                    ),
+                    ),
+
+                    
+                  ],
+                ),
+              ),
 
               CustomShimmerEffect(
-                    height: 120.h,
-                    width: 0.4.sw,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                height: 120.h,
+                width: 0.4.sw,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomShimmerEffect(
+                        height: 50.h,
+                        width: 50.w,
+                        isShapUsed: true,
+                        shapType: BoxShape.circle,
+                      ),
+                      UIHelper.verticalSpace(10.h),
+                      CustomShimmerEffect(height: 10.h, width: 0.3.sw),
+                      UIHelper.verticalSpace(10.h),
+                      Row(
                         children: [
-                          CustomShimmerEffect(
-                            height: 50.h,
-                            width: 50.w,
-                            isShapUsed: true,
-                            shapType: BoxShape.circle,
-                          ),
-                          UIHelper.verticalSpace(10.h),
-                          CustomShimmerEffect(height: 10.h, width: 0.3.sw),
-                          UIHelper.verticalSpace(10.h),
-                          Row(
-                            children: [
-                              CustomShimmerEffect(height: 10.h, width: 0.10.sw),
-                              UIHelper.horizontalSpace(10.w),
-                              CustomShimmerEffect(height: 10.h, width: 0.10.sw),
-                            ],
-                          ),
+                          CustomShimmerEffect(height: 10.h, width: 0.10.sw),
+                          UIHelper.horizontalSpace(10.w),
+                          CustomShimmerEffect(height: 10.h, width: 0.10.sw),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-              
+                ),
+              ),
 
               InkWell(
                 onTap: () {
