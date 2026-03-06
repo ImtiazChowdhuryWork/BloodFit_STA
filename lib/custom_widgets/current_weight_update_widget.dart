@@ -1,4 +1,4 @@
-import 'package:bloodfit/constants/validator.dart';
+
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/weight_history/data/controller/weight_history_screen_controller.dart';
@@ -16,9 +16,9 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
   CurrentWeightUpdateWidget({super.key});
 
   final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
+  Get.find<HomeScreenController>();
   final WeightHistoryScreenController weightHistoryScreenController =
-      Get.find<WeightHistoryScreenController>();
+  Get.find<WeightHistoryScreenController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,7 +27,7 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Update Your Current Weight",
+          'update_current_weight'.tr,
           style: TextFontStyle.headline20w500cfefefeStylePoppins,
         ),
         UIHelper.verticalSpace(8.h),
@@ -55,7 +55,7 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
                     );
                   },
                   decoration: InputDecoration(
-                    hintText: "Enter Your Weight",
+                    hintText: 'enter_your_weight'.tr,
                     hintStyle: TextFontStyle.headline12w500c999999StylePoppins,
 
                     border: OutlineInputBorder(
@@ -106,15 +106,15 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
                             ),
                             items: weightHistoryScreenController.weightUnits
                                 .map((unit) {
-                                  return DropdownMenuItem<String>(
-                                    value: unit,
-                                    child: Text(
-                                      unit,
-                                      style: TextFontStyle
-                                          .headline12w500cfefefeStylePoppins,
-                                    ),
-                                  );
-                                })
+                              return DropdownMenuItem<String>(
+                                value: unit,
+                                child: Text(
+                                  unit,
+                                  style: TextFontStyle
+                                      .headline12w500cfefefeStylePoppins,
+                                ),
+                              );
+                            })
                                 .toList(),
                             onChanged: (value) {
                               weightHistoryScreenController
@@ -131,47 +131,47 @@ class CurrentWeightUpdateWidget extends StatelessWidget {
                 Obx(() {
                   return weightHistoryScreenController.isWeightAvailable.value
                       ? Column(
-                          children: [
-                            UIHelper.verticalSpace(14.h),
-                            CustomElevatedButton(
-                              onTap:
-                                  weightHistoryScreenController
-                                      .isUpdateCurrentWeightLoading
-                                      .value
-                                  ? null
-                                  : () async {
-                                      LoggerUtils.debug(
-                                        "Button Taped : Submit Button!",
-                                      );
-                                      if (_formKey.currentState!.validate()) {
-                                        LoggerUtils.debug(
-                                          "Button Taped : Submit Button!",
-                                        );
+                    children: [
+                      UIHelper.verticalSpace(14.h),
+                      CustomElevatedButton(
+                        onTap:
+                        weightHistoryScreenController
+                            .isUpdateCurrentWeightLoading
+                            .value
+                            ? null
+                            : () async {
+                          LoggerUtils.debug(
+                            "Button Taped : Submit Button!",
+                          );
+                          if (_formKey.currentState!.validate()) {
+                            LoggerUtils.debug(
+                              "Button Taped : Submit Button!",
+                            );
 
-                                        final success =
-                                            await weightHistoryScreenController
-                                                .postUpdateCurrentWeightApi();
+                            final success =
+                            await weightHistoryScreenController
+                                .postUpdateCurrentWeightApi();
 
-                                        if (success) {
-                                          _formKey.currentState!.reset();
-                                          showDialog(
-                                            barrierDismissible: false,
-                                            context: context,
-                                            builder: (context) {
-                                              return CurrentWeightUpdateSuccessAlertBox();
-                                            },
-                                          );
-                                        }
-                                      }
-                                    },
-                              buttonHeight: 32.h,
-                              buttonColor: AppColors.c111111,
-                              isButtonBorderUsed: true,
-                              buttonBorderColor: AppColors.cb20000,
-                              buttonTitle: "Submit",
-                            ),
-                          ],
-                        )
+                            if (success) {
+                              _formKey.currentState!.reset();
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return CurrentWeightUpdateSuccessAlertBox();
+                                },
+                              );
+                            }
+                          }
+                        },
+                        buttonHeight: 32.h,
+                        buttonColor: AppColors.c111111,
+                        isButtonBorderUsed: true,
+                        buttonBorderColor: AppColors.cb20000,
+                        buttonTitle: 'submit'.tr,
+                      ),
+                    ],
+                  )
                       : SizedBox.shrink();
                 }),
               ],

@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../../constants/text_font_style.dart';
 import '../../../../gen/assets.gen.dart';
@@ -34,15 +36,15 @@ class ReceivedThreeMealPlansWidget extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "You’ve Received ",
+                    text: 'youve_received'.tr,
                     style: TextFontStyle.headline16w400cd7d7d7StylePoppins,
                   ),
                   TextSpan(
-                    text: "${3} free Meal Plans ",
+                    text: '${3} ' + 'free_meal_plans'.tr,
                     style: TextFontStyle.headline16w500cfefefeStylePoppins,
                   ),
                   TextSpan(
-                    text: "for Today!",
+                    text: 'for_today'.tr,
                     style: TextFontStyle.headline16w400cd7d7d7StylePoppins,
                   ),
                 ],

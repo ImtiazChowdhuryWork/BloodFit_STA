@@ -1,3 +1,4 @@
+
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/extensions/week_days_extension.dart';
@@ -11,7 +12,7 @@ import 'package:get/get.dart';
 
 class SelectYourDaysForMealPlanWidget extends StatelessWidget {
   final HomeScreenController homeScreenController =
-      Get.find<HomeScreenController>();
+  Get.find<HomeScreenController>();
 
   SelectYourDaysForMealPlanWidget({super.key});
 
@@ -21,12 +22,12 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Meal Plan Calendar",
+          'meal_plan_calendar'.tr,
           style: TextFontStyle.headline20w500cfefefeStylePoppins,
         ),
         UIHelper.verticalSpace(4.h),
         Text(
-          "Customize Your Three Days",
+          'customize_three_days'.tr,
           style: TextFontStyle.headline14w400cfefefeStylePoppins,
         ),
         UIHelper.verticalSpace(12.h),
@@ -43,8 +44,8 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
           child: Obx(() {
             // Create a list of widgets inside the Obx so GetX can track observables properly
             List<Widget> dayWidgets = homeScreenController.weekDayList.map((
-              day,
-            ) {
+                day,
+                ) {
               bool isSelected = homeScreenController.selectedDaysList.contains(
                 day,
               );
@@ -69,10 +70,13 @@ class SelectYourDaysForMealPlanWidget extends StatelessWidget {
 
         ///Section: Show selected days count
         Obx(
-          () => Padding(
+              () => Padding(
             padding: EdgeInsets.only(top: 8.h),
             child: Text(
-              "Selected: ${homeScreenController.selectedDaysList.length}/${homeScreenController.mealCalanderSelectableDays.value} days",
+              'selected_days_count'.trParams({
+                'selected': homeScreenController.selectedDaysList.length.toString(),
+                'total': homeScreenController.mealCalanderSelectableDays.value.toString(),
+              }),
               style: TextFontStyle.headline14w400c999999StylePoppins,
             ),
           ),

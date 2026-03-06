@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/controllers/enums_controller.dart';
 import 'package:bloodfit/custom_widgets/current_weight_update_widget.dart';
@@ -43,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       LoggerUtils.debug("🏠 [HOME] initState() - HomeScreen loaded");
       LoggerUtils.debug("🏠 [HOME] Preloading AI meals data...");
       LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
-      
+
       // Check if controller exists before calling
       if (Get.isRegistered<ChooseFromOurSuggestedMealController>()) {
         LoggerUtils.debug("✅ [HOME] ChooseFromOurSuggestedMealController is registered");
@@ -105,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   ///Section : --------///Text -> your daily calories///----------
                   Text(
-                    "Your Daily Calories",
+                    'your_daily_calories'.tr,
                     style: TextFontStyle.headline20w500cfefefeStylePoppins,
                   ),
                   UIHelper.verticalSpace(12.h),
@@ -129,15 +128,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             return TotalKCalWidget(
                               isSuccess: controller.isSuccess.value,
                               onTap:
-                                  controller.isSuccess.value ||
-                                      controller.isDailyCaloriesLoading.value
+                              controller.isSuccess.value ||
+                                  controller.isDailyCaloriesLoading.value
                                   ? null
                                   : () {
-                                      LoggerUtils.debug(
-                                        "Home Calories Datra Reload Taped!",
-                                      );
-                                      controller.getDailyCaloriesApi();
-                                    },
+                                LoggerUtils.debug(
+                                  "Home Calories Datra Reload Taped!",
+                                );
+                                controller.getDailyCaloriesApi();
+                              },
                               size: 120.w,
                               progress: controller.completationPercentage
                                   .toDouble(),
@@ -149,10 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               progressColor: AppColors.cb20000,
                               progressBoldColor: AppColors.c7e0101,
                               isLoading:
-                                  controller.isDailyCaloriesLoading.value,
+                              controller.isDailyCaloriesLoading.value,
                               totalCalories:
-                                  controller.isDailyCaloriesLoading.value
-                                  ? 'Loading...'
+                              controller.isDailyCaloriesLoading.value
+                                  ? 'loading'.tr
                                   : controller.totalCalories,
                             );
                           }),
@@ -165,9 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Obx(() {
                                 return SingleElementShowingWidget(
                                   elementIconPath: Assets.icons.glutenIcon,
-                                  elementTitle: "Carbs",
+                                  elementTitle: 'carbs'.tr,
                                   isLoading:
-                                      controller.isDailyCaloriesLoading.value,
+                                  controller.isDailyCaloriesLoading.value,
                                   elementAmount: controller.consumedCarbs
                                       .toDouble(),
                                 );
@@ -178,9 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Obx(() {
                                 return SingleElementShowingWidget(
                                   elementIconPath: Assets.icons.meatIcon,
-                                  elementTitle: "Protein",
+                                  elementTitle: 'protein'.tr,
                                   isLoading:
-                                      controller.isDailyCaloriesLoading.value,
+                                  controller.isDailyCaloriesLoading.value,
                                   elementAmount: controller.consumedProtein
                                       .toDouble(),
                                 );
@@ -191,9 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Obx(() {
                                 return SingleElementShowingWidget(
                                   elementIconPath: Assets.icons.fatIcon,
-                                  elementTitle: "Fat",
+                                  elementTitle: 'fat'.tr,
                                   isLoading:
-                                      controller.isDailyCaloriesLoading.value,
+                                  controller.isDailyCaloriesLoading.value,
                                   elementAmount: controller.consumedFat
                                       .toDouble(),
                                 );
@@ -233,14 +232,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
                     },
                     showSectionTitle: true,
-                    sectionTitle: "Choose From Our Suggested Meals",
-                    buttonTitle: "Get Started",
+                    sectionTitle: 'choose_from_suggested_meals'.tr,
+                    buttonTitle: 'get_started'.tr,
                     positionTop: -36.h,
                     positionRight: -20.w,
                     imageIconPath: Assets.icons.chickeMealIcon,
-                    title: "Build Your Daily Meals",
-                    subTitle:
-                        "Select Your Breakfast, Lunch, And Dinner From Personalized Meal Suggestions",
+                    title: 'build_your_daily_meals'.tr,
+                    subTitle: 'select_meals_description'.tr,
                   ),
 
                   ///Section : -------------///Build Your Meal Plan////------------
@@ -249,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       log("Button Taped : Subscribe Now !");
                       Get.toNamed(Routes.subscriptionScreen);
                     },
-                    buttonTitle: "Subscribe Now",
+                    buttonTitle: 'subscribe_now'.tr,
                     isBorderUsed: true,
                     borderWidth: 2.sp,
                     borderColor: AppColors.cb20000,
@@ -257,9 +255,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     positionTop: -20.h,
                     positionRight: -20.w,
                     imageIconPath: Assets.icons.workoutDumbleIcon,
-                    title: "Unlock Personalized Workouts",
-                    subTitle:
-                        "Subscribe Now To Get Customized Workout Plans Tailored To Your Fitness Goals",
+                    title: 'unlock_personalized_workouts'.tr,
+                    subTitle: 'subscribe_description'.tr,
                   ),
 
                   UIHelper.verticalSpace(144.h),
