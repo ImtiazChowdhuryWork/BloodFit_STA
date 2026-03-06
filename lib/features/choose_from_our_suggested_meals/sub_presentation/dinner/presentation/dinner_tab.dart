@@ -28,16 +28,25 @@ class _DinnerTabState extends State<DinnerTab> {
     return Obx(() {
       LoggerUtils.debug("🍽️ [OBX] Rebuilding with Obx...");
 
-      // Check if meals are available
+      // Check if AI meals are available
       final proteinCount = chooseFromOurSuggestedMealController.dinnerProteinPackedMeals.length;
       final lightCount = chooseFromOurSuggestedMealController.dinnerLightAndFreshMeals.length;
       final healthyCount = chooseFromOurSuggestedMealController.dinnerHealthyAndComfortingMeals.length;
-      final hasMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
+      final hasAiMeals = proteinCount > 0 || lightCount > 0 || healthyCount > 0;
+      
+      // Check if previously selected meals exist
+      final hasPreviouslySelectedMeals = chooseFromOurSuggestedMealController.dinnerRecentChosenMeals.isNotEmpty;
+      
+      // Show content if either AI meals OR previously selected meals exist
+      final hasMeals = hasAiMeals || hasPreviouslySelectedMeals;
+      
       final isLoading = chooseFromOurSuggestedMealController.isAiSuggestedMealsLoading.value;
       final hasError = chooseFromOurSuggestedMealController.aiSuggestedMealsErrorMessage.value.isNotEmpty;
       final hasJobId = chooseFromOurSuggestedMealController.jobID.value.isNotEmpty;
       final hasLoadedInitially = chooseFromOurSuggestedMealController.hasLoadedAiMealsInitially.value;
 
+      LoggerUtils.debug("🍽️ [OBX] hasAiMeals=$hasAiMeals");
+      LoggerUtils.debug("🍽️ [OBX] hasPreviouslySelectedMeals=$hasPreviouslySelectedMeals");
       LoggerUtils.debug("🍽️ [OBX] hasMeals=$hasMeals");
       LoggerUtils.debug("🍽️ [OBX] isLoading=$isLoading");
       LoggerUtils.debug("🍽️ [OBX] hasError=$hasError");
@@ -81,9 +90,9 @@ class _DinnerTabState extends State<DinnerTab> {
         );
       }
 
-      // Loading completed but no meals - show refresh button
+      // Loading completed but no meals from ANY source - show refresh button
       if (!hasMeals) {
-        LoggerUtils.debug("⚠️ [OBX] >>> Showing EMPTY STATE with Refresh button");
+        LoggerUtils.debug("⚠️ [OBX] >>> Showing EMPTY STATE with Refresh button (no AI meals, no previously selected meals)");
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
