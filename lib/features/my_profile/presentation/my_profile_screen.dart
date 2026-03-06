@@ -63,7 +63,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         backgroundColor: AppColors.scaffoldBackgroundColor,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: const CustomBackButton(),
+        leading: CustomBackButton(
+          onTap: () {
+            Get.back();
+          },
+        ),
         title: Text(
           isKorean ? "내 프로필" : "My Profile",
           style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
@@ -393,7 +397,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         backgroundColor: AppColors.scaffoldBackgroundColor,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        leading: const CustomBackButton(),
+        leading: CustomBackButton(
+          onTap: () {
+            Get.back();
+          },
+        ),
         title: Text(
           'my_profile'.tr,
           style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
