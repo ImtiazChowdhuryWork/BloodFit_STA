@@ -1,25 +1,16 @@
+
+
+
+
+import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-/// A weight-loss / goal progress indicator showing Starting, Current, and Goal
-/// markers along a horizontal track. The "Current" value label and sub-label
-/// float directly above/below the current marker and move with it.
-///
-/// Collision avoidance: when the current marker is close to the start or goal
-/// markers, the "Current" labels shift away to avoid overlap.
+
 class ProgressIndicatorWithMarkers extends StatelessWidget {
-  /// The value at the start of the journey (e.g. 90).
   final double startValue;
-
-  /// The current value (e.g. 70).
   final double currentValue;
-
-  /// The target / goal value (e.g. 60).
   final double goalValue;
-
-  /// Unit label appended to every value (e.g. "kg").
   final String unit;
-
-  /// Height of the track bar.
   final double trackHeight;
 
   const ProgressIndicatorWithMarkers({
@@ -28,7 +19,7 @@ class ProgressIndicatorWithMarkers extends StatelessWidget {
     this.currentValue = 70,
     this.goalValue = 60,
     this.unit = 'kg',
-    this.trackHeight = 6,
+    this.trackHeight = 3, // ← thinner track (was 6)
   });
 
   double _fraction(double value) {
@@ -38,211 +29,274 @@ class ProgressIndicatorWithMarkers extends StatelessWidget {
 
   String _fmt(double v) => '${v % 1 == 0 ? v.toInt() : v}$unit';
 
+  double _currentCentreX({
+    required double totalWidth,
+    required double currentX,
+  }) {
+    const double halfLabelW = 28.0;
+    const double minGap = 6.0;
+
+    double cx = currentX.clamp(halfLabelW, totalWidth - halfLabelW);
+
+    final double startRightEdge = halfLabelW * 2;
+    if (cx - halfLabelW < startRightEdge + minGap) {
+      cx = startRightEdge + minGap + halfLabelW;
+    }
+
+    final double goalLeftEdge = totalWidth - halfLabelW * 2;
+    if (cx + halfLabelW > goalLeftEdge - minGap) {
+      cx = goalLeftEdge - minGap - halfLabelW;
+    }
+
+    return cx.clamp(halfLabelW, totalWidth - halfLabelW);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double currentFraction = _fraction(currentValue);
 
+    // ── Marker radius is also slimmed down ──────────────────────────────
+    const double markerRadius = 8.0; // ← smaller dots (was 10)
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
         color: const Color(0xFF1C1C1E),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final double totalWidth = constraints.maxWidth;
-          const double markerRadius = 10.0;
-
-          // ── X positions ──────────────────────────────────────────────────
-          final double startX = markerRadius;
-          final double goalX = totalWidth - markerRadius;
-          final double trackLen = goalX - startX;
-          final double currentX = startX + trackLen * currentFraction;
-
-          // ── Layout constants ─────────────────────────────────────────────
-          const double topLabelH = 24.0;
-          const double topGap = 8.0;
-          const double trackAreaH = markerRadius * 2;
-          const double bottomGap = 10.0;
-          const double bottomLabelH = 18.0;
-          final double totalH =
-              topLabelH + topGap + trackAreaH + bottomGap + bottomLabelH;
-
-          final double trackTop = topLabelH + topGap;
-          final double markerTop = trackTop;
-          final double labelTop = trackTop + trackAreaH + bottomGap;
-
-          // ── Label width & collision threshold ────────────────────────────
-          // halfLabelW covers the wider value text (e.g. "70kg" at fontSize 20)
-          const double halfLabelW = 28.0;
-          const double minGap = 6.0; // minimum pixel gap between label edges
-          const double collisionDist = halfLabelW * 2 + minGap;
-
-          // Raw centred position, clamped to container bounds
-          double currentCentreX =
-              currentX.clamp(halfLabelW, totalWidth - halfLabelW);
-
-          // ── Collision with START label ────────────────────────────────────
-          // Start label left-edge is at 0, right-edge ~≈ halfLabelW*2 (approx)
-          final double startRightEdge = halfLabelW * 2; // conservative estimate
-          if (currentCentreX - halfLabelW < startRightEdge + minGap) {
-            currentCentreX = startRightEdge + minGap + halfLabelW;
-          }
-
-          // ── Collision with GOAL label ─────────────────────────────────────
-          // Goal label right-edge is at totalWidth, left-edge ≈ totalWidth - halfLabelW*2
-          final double goalLeftEdge = totalWidth - halfLabelW * 2;
-          if (currentCentreX + halfLabelW > goalLeftEdge - minGap) {
-            currentCentreX = goalLeftEdge - minGap - halfLabelW;
-          }
-
-          // Final clamp so we never go out of bounds after adjustments
-          currentCentreX =
-              currentCentreX.clamp(halfLabelW, totalWidth - halfLabelW);
-
-          return SizedBox(
-            height: totalH,
-            child: Stack(
-              clipBehavior: Clip.none,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── Middle container ─────────────────────────────────────────
+          Container(
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2C2C2E),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // ── Static: Start value label (top-left) ──────────────────
-                Positioned(
-                  left: 0,
-                  top: 0,
-                  child: Text(
-                    _fmt(startValue),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.3,
+                // Values row
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final double totalWidth = constraints.maxWidth;
+                    final double startX = markerRadius;
+                    final double goalX = totalWidth - markerRadius;
+                    final double trackLen = goalX - startX;
+                    final double currentX = startX + trackLen * currentFraction;
+                    const double halfLabelW = 28.0;
+
+                    final double cx = _currentCentreX(
+                      totalWidth: totalWidth,
+                      currentX: currentX,
+                    );
+
+                    return SizedBox(
+                      height: 26,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Text(
+                              _fmt(startValue),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Text(
+                              _fmt(goalValue),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: cx - halfLabelW,
+                            width: halfLabelW * 2,
+                            top: 0,
+                            child: Text(
+                              _fmt(currentValue),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppColors.cb20000,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 8),
+
+                // ── Inner container (black + cyan border, track only) ──
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 1.2,
                     ),
                   ),
-                ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final double totalWidth = constraints.maxWidth;
+                      final double startX = markerRadius;
+                      final double goalX = totalWidth - markerRadius;
+                      final double trackLen = goalX - startX;
+                      final double currentX =
+                          startX + trackLen * currentFraction;
 
-                // ── Static: Goal value label (top-right) ──────────────────
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Text(
-                    _fmt(goalValue),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.3,
-                    ),
+                      return SizedBox(
+                        height: markerRadius * 2,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            // Grey background track
+                            Positioned(
+                              left: startX,
+                              width: trackLen,
+                              top: markerRadius - trackHeight / 2,
+                              child: Container(
+                                height: trackHeight,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF3A3A3C),
+                                  borderRadius:
+                                      BorderRadius.circular(trackHeight / 2),
+                                ),
+                              ),
+                            ),
+                            // Red filled track
+                            Positioned(
+                              left: startX,
+                              width: (currentX - startX).clamp(0.0, trackLen),
+                              top: markerRadius - trackHeight / 2,
+                              child: Container(
+                                height: trackHeight,
+                                decoration: BoxDecoration(
+                                  color: AppColors.cb20000,
+                                  borderRadius:
+                                      BorderRadius.circular(trackHeight / 2),
+                                ),
+                              ),
+                            ),
+                            // Start marker
+                            Positioned(
+                              left: startX - markerRadius,
+                              top: 0,
+                              child: _markerCircle(
+                                radius: markerRadius,
+                                color: AppColors.cb20000,
+                                borderColor: Colors.black,
+                                borderWidth: 2,
+                              ),
+                            ),
+                            // Current marker
+                            Positioned(
+                              left: currentX - markerRadius,
+                              top: 0,
+                              child: _markerCircle(
+                                radius: markerRadius,
+                                color: AppColors.cb20000,
+                                borderColor: Colors.black,
+                                borderWidth: 2,
+                              ),
+                            ),
+                            // Goal marker
+                            Positioned(
+                              left: goalX - markerRadius,
+                              top: 0,
+                              child: _markerCircle(
+                                radius: markerRadius,
+                                color: const Color(0xFF6E6E73),
+                                borderColor: Colors.black,
+                                borderWidth: 2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
-                ),
-
-                // ── Dynamic: Current value label (top, follows marker) ────
-                Positioned(
-                  top: 0,
-                  left: currentCentreX - halfLabelW,
-                  width: halfLabelW * 2,
-                  child: Text(
-                    _fmt(currentValue),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Color(0xFFE53935),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                ),
-
-                // ── Grey background track ─────────────────────────────────
-                Positioned(
-                  left: startX,
-                  width: trackLen,
-                  top: markerTop + markerRadius - trackHeight / 2,
-                  child: Container(
-                    height: trackHeight,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3A3A3C),
-                      borderRadius: BorderRadius.circular(trackHeight / 2),
-                    ),
-                  ),
-                ),
-
-                // ── Red filled track (start → current) ───────────────────
-                Positioned(
-                  left: startX,
-                  width: (currentX - startX).clamp(0.0, trackLen),
-                  top: markerTop + markerRadius - trackHeight / 2,
-                  child: Container(
-                    height: trackHeight,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE53935),
-                      borderRadius: BorderRadius.circular(trackHeight / 2),
-                    ),
-                  ),
-                ),
-
-                // ── Start marker (solid red) ──────────────────────────────
-                Positioned(
-                  left: startX - markerRadius,
-                  top: markerTop,
-                  child: _markerCircle(
-                    radius: markerRadius,
-                    color: const Color(0xFFE53935),
-                  ),
-                ),
-
-                // ── Current marker (red with dark border) ─────────────────
-                Positioned(
-                  left: currentX - markerRadius,
-                  top: markerTop,
-                  child: _markerCircle(
-                    radius: markerRadius,
-                    color: const Color(0xFFE53935),
-                    borderColor: const Color(0xFF1C1C1E),
-                    borderWidth: 2.5,
-                  ),
-                ),
-
-                // ── Goal marker (grey) ────────────────────────────────────
-                Positioned(
-                  left: goalX - markerRadius,
-                  top: markerTop,
-                  child: _markerCircle(
-                    radius: markerRadius,
-                    color: const Color(0xFF6E6E73),
-                    borderColor: const Color(0xFF1C1C1E),
-                    borderWidth: 2.5,
-                  ),
-                ),
-
-                // ── Static: "Starting" sub-label (bottom-left) ───────────
-                Positioned(
-                  left: 0,
-                  top: labelTop,
-                  child: const Text('Starting', style: _subLabelStyle),
-                ),
-
-                // ── Dynamic: "Current" sub-label (follows marker, same collision logic) ──
-                Positioned(
-                  top: labelTop,
-                  left: currentCentreX - halfLabelW,
-                  width: halfLabelW * 2,
-                  child: const Text(
-                    'Current',
-                    textAlign: TextAlign.center,
-                    style: _subLabelStyle,
-                  ),
-                ),
-
-                // ── Static: "Goal" sub-label (bottom-right) ───────────────
-                Positioned(
-                  right: 0,
-                  top: labelTop,
-                  child: const Text('Goal', style: _subLabelStyle),
                 ),
               ],
             ),
-          );
-        },
+          ),
+
+          const SizedBox(height: 10),
+
+          // ── Labels row — outside middle container ─────────────────────
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final double totalWidth = constraints.maxWidth;
+              const double hPad = 14.0;
+              const double innerHPad = 10.0;
+
+              final double effectiveStart = hPad + innerHPad + markerRadius;
+              final double effectiveEnd =
+                  totalWidth - hPad - innerHPad - markerRadius;
+              final double effectiveLen = effectiveEnd - effectiveStart;
+              final double currentX =
+                  effectiveStart + effectiveLen * currentFraction;
+
+              const double halfLabelW = 28.0;
+              final double cx = _currentCentreX(
+                totalWidth: totalWidth,
+                currentX: currentX,
+              );
+
+              return SizedBox(
+                height: 18,
+                child: Stack(
+                  children: [
+                    const Positioned(
+                      left: 0,
+                      top: 0,
+                      child: Text('Starting', style: _subLabelStyle),
+                    ),
+                    Positioned(
+                      left: cx - halfLabelW,
+                      width: halfLabelW * 2,
+                      top: 0,
+                      child: const Text(
+                        'Current',
+                        textAlign: TextAlign.center,
+                        style: _subLabelStyle,
+                      ),
+                    ),
+                    const Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Text('Goal', style: _subLabelStyle),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -273,4 +327,3 @@ class ProgressIndicatorWithMarkers extends StatelessWidget {
     letterSpacing: 0.1,
   );
 }
-
