@@ -238,7 +238,6 @@ import '../../../routes/routes.dart';
 import '../../home/presentation/widgets/app_bar_section_widget.dart';
 import '../../home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import '../../home/presentation/widgets/meal_showing_widget_shimmer_effect.dart';
-import '../../home/presentation/widgets/show_selected_meals_or_build_meal_plan_widget.dart';
 
 class MealPlanFeatureOptions extends StatefulWidget {
   MealPlanFeatureOptions({super.key});
@@ -353,7 +352,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                       final selectedDate = DateFormat('yyyy/MM/dd').parse(
                         mealPlanFeatureOptionsController.selectedDate.value,
                       );
-                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'selectedDate' : selectedDate.toString()});
+                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'mealGenerationDate' : selectedDate.toString()});
                     },
                     showSectionTitle: true,
                     sectionTitle: 'choose_from_suggested_meals'.tr,

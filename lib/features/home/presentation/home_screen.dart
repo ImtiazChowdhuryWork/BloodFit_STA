@@ -20,6 +20,7 @@ import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'widgets/custom_calender_widget.dart';
 
@@ -38,20 +39,28 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // Preload AI meals data in background when home screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug(
+        "╔═══════════════════════════════════════════════════════════",
+      );
       LoggerUtils.debug("🏠 [HOME] initState() - HomeScreen loaded");
       LoggerUtils.debug("🏠 [HOME] Preloading AI meals data...");
-      LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+      LoggerUtils.debug(
+        "╚═══════════════════════════════════════════════════════════",
+      );
 
       // Check if controller exists before calling
       if (Get.isRegistered<ChooseFromOurSuggestedMealController>()) {
-        LoggerUtils.debug("✅ [HOME] ChooseFromOurSuggestedMealController is registered");
+        LoggerUtils.debug(
+          "✅ [HOME] ChooseFromOurSuggestedMealController is registered",
+        );
         final mealController = Get.find<ChooseFromOurSuggestedMealController>();
         LoggerUtils.debug("🏠 [HOME] Calling initializeAiMeals()...");
         mealController.initializeAiMeals();
         LoggerUtils.debug("🏠 [HOME] initializeAiMeals() called successfully");
       } else {
-        LoggerUtils.debug("⚠️ [HOME] ChooseFromOurSuggestedMealController NOT registered yet, skipping preload");
+        LoggerUtils.debug(
+          "⚠️ [HOME] ChooseFromOurSuggestedMealController NOT registered yet, skipping preload",
+        );
       }
     });
   }
@@ -128,15 +137,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             return TotalKCalWidget(
                               isSuccess: controller.isSuccess.value,
                               onTap:
-                              controller.isSuccess.value ||
-                                  controller.isDailyCaloriesLoading.value
+                                  controller.isSuccess.value ||
+                                      controller.isDailyCaloriesLoading.value
                                   ? null
                                   : () {
-                                LoggerUtils.debug(
-                                  "Home Calories Datra Reload Taped!",
-                                );
-                                controller.getDailyCaloriesApi();
-                              },
+                                      LoggerUtils.debug(
+                                        "Home Calories Datra Reload Taped!",
+                                      );
+                                      controller.getDailyCaloriesApi();
+                                    },
                               size: 120.w,
                               progress: controller.completationPercentage
                                   .toDouble(),
@@ -148,9 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               progressColor: AppColors.cb20000,
                               progressBoldColor: AppColors.c7e0101,
                               isLoading:
-                              controller.isDailyCaloriesLoading.value,
+                                  controller.isDailyCaloriesLoading.value,
                               totalCalories:
-                              controller.isDailyCaloriesLoading.value
+                                  controller.isDailyCaloriesLoading.value
                                   ? 'loading'.tr
                                   : controller.totalCalories,
                             );
@@ -166,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elementIconPath: Assets.icons.glutenIcon,
                                   elementTitle: 'carbs'.tr,
                                   isLoading:
-                                  controller.isDailyCaloriesLoading.value,
+                                      controller.isDailyCaloriesLoading.value,
                                   elementAmount: controller.consumedCarbs
                                       .toDouble(),
                                 );
@@ -179,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elementIconPath: Assets.icons.meatIcon,
                                   elementTitle: 'protein'.tr,
                                   isLoading:
-                                  controller.isDailyCaloriesLoading.value,
+                                      controller.isDailyCaloriesLoading.value,
                                   elementAmount: controller.consumedProtein
                                       .toDouble(),
                                 );
@@ -192,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   elementIconPath: Assets.icons.fatIcon,
                                   elementTitle: 'fat'.tr,
                                   isLoading:
-                                  controller.isDailyCaloriesLoading.value,
+                                      controller.isDailyCaloriesLoading.value,
                                   elementAmount: controller.consumedFat
                                       .toDouble(),
                                 );
@@ -228,8 +237,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ///Section : -------------///Will be removed after test is done////------------
                   BuildMealPlanWidget(
                     onTap: () {
-                      log("Button Tapped : Get Started !");
-                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+                      LoggerUtils.debug("================ Button Tapped : Get Started ================!");
+                      final DateTime now = DateTime.now();
+                      final String formatedCurrentDate = DateFormat(
+                        'yyyy-MM-dd',
+                      ).format(now);
+                      Get.toNamed(
+                        Routes.chooseFromOurSuggestedMealsScreen,
+                        arguments: {
+                          'mealGenerationDate': formatedCurrentDate,
+                        },
+                      );
                     },
                     showSectionTitle: true,
                     sectionTitle: 'choose_from_suggested_meals'.tr,

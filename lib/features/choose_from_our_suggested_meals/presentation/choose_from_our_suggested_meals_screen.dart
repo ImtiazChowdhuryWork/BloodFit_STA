@@ -29,7 +29,8 @@ class _ChooseFromOurSuggestedMealsScreenState
   late TabController _tabController;
   ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController = Get.find<ChooseFromOurSuggestedMealController>();
 
-  String receivedSelectedDate = '';
+  // String receivedSelectedDate = '';
+  String mealGenerationDate = '';
 
   @override
   void initState() {
@@ -37,15 +38,16 @@ class _ChooseFromOurSuggestedMealsScreenState
 
     ///-------------<>>>>> Section : Receive Arguments
     final arguments = Get.arguments as Map<String,dynamic>?;
-    receivedSelectedDate = arguments?['selectedDate'] ?? '';
+    // receivedSelectedDate = arguments?['selectedDate'] ?? '';
+    mealGenerationDate = arguments?['mealGenerationDate'] ?? '';
 
     ///------------<>>>> Section : Send the selected date to controller
     WidgetsBinding.instance.addPostFrameCallback((_){
       LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
       LoggerUtils.debug("📱 [SCREEN] ChooseFromOurSuggestedMealsScreen loaded");
-      LoggerUtils.debug("📱 [SCREEN] Setting selected date: $receivedSelectedDate");
+      LoggerUtils.debug("📱 [SCREEN] Setting selected date: $mealGenerationDate");
       LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
-      chooseFromOurSuggestedMealController.setSelectedDate(date: receivedSelectedDate);
+      chooseFromOurSuggestedMealController.setSelectedDate(date: mealGenerationDate);
     });
 
     _tabController = TabController(length: 3, vsync: this);
