@@ -67,6 +67,8 @@ class ProgressScreen extends StatelessWidget {
               CustomCalenderWidget(),
               UIHelper.verticalSpace(24.h),
 
+              
+
               ///Section : -----------//// your weight progress ///-------------
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -107,11 +109,13 @@ class ProgressScreen extends StatelessWidget {
               ),
               UIHelper.verticalSpace(20.h),
 
+
               ///Section : -----------//// Your Weight History ///-------------
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: UIHelper.kDefaulutPadding()),
                 child: WeightHistoryChart(
                 title: 'Your Weight History',
+                targetTitle: 'Weight Loss',
                 goalWeight: 58,
                 currentWeight: 83,
                 // initialMonth: DateTime(2025, 9),
@@ -132,6 +136,8 @@ class ProgressScreen extends StatelessWidget {
                 onMonthChanged: (m) => debugPrint('Month → $m'),
                             ),
               ),
+
+              
 
               CustomShimmerEffect(
                 height: 120.h,
