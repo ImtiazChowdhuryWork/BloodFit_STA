@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:bloodfit/constants/text_font_style.dart';
@@ -11,6 +10,7 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../../custom_widgets/meal_plan_item_card.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -20,9 +20,8 @@ import '../../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom
 class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
   ShowSelectedMealsOrBuildMealPlanWidget({super.key});
 
-
   final HomeScreenController homeScreenController =
-  Get.find<HomeScreenController>();
+      Get.find<HomeScreenController>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +29,14 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
       // API Loading State
       if (homeScreenController.isTodaysSelectedMealsLoading.value) {
         return ListView.separated(
-
           itemCount: 3,
-          separatorBuilder: (context,index)=> UIHelper.verticalSpace(20.h),
+          separatorBuilder: (context, index) => UIHelper.verticalSpace(20.h),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context,index){
+          itemBuilder: (context, index) {
             return MealShowingWidgetShimmerEffect();
-          }, );
+          },
+        );
       }
 
       // API Error State
@@ -69,29 +68,43 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
 
       ///------->>> Section : Todays Meal Plan For ("Breakfast", "Lunch", "Dinner")
       if (homeScreenController.selectedMealPlanAvailable.value) {
-
-
-        LoggerUtils.debug("Image URL : $imageBaseUrl${homeScreenController.breakFastImage}");
-        LoggerUtils.debug("Breakfast: ${homeScreenController.breakfastName}, Lunch: ${homeScreenController.lunchName}, Dinner: ${homeScreenController.dinerName}");
-        LoggerUtils.debug("selectedMealPlanAvailable: ${homeScreenController.selectedMealPlanAvailable.value}");
-        LoggerUtils.debug("todaysSelectedMealsList length: ${homeScreenController.todaysSelectedMealsList.length}");
+        LoggerUtils.debug(
+          "Image URL : $imageBaseUrl${homeScreenController.breakFastImage}",
+        );
+        LoggerUtils.debug(
+          "Breakfast: ${homeScreenController.breakfastName}, Lunch: ${homeScreenController.lunchName}, Dinner: ${homeScreenController.dinerName}",
+        );
+        LoggerUtils.debug(
+          "selectedMealPlanAvailable: ${homeScreenController.selectedMealPlanAvailable.value}",
+        );
+        LoggerUtils.debug(
+          "todaysSelectedMealsList length: ${homeScreenController.todaysSelectedMealsList.length}",
+        );
 
         ///------->>> Section : Breakfast
         return Column(
           children: [
-
-
             ///------->>> Section : Breakfast
             MealPlanItemCard(
-              onTap: (){
-                Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.breakfastMealID});
+              onTap: () {
+                Get.toNamed(
+                  Routes.mealDetailscreen,
+                  arguments: {'mealID': homeScreenController.breakfastMealID},
+                );
               },
-              isMealEaten: homeScreenController.breakFastMealEatenStatus == 'not_yet_done' ? false : homeScreenController.breakFastMealEatenStatus == 'done' ? true : false,
+              isMealEaten:
+                  homeScreenController.breakFastMealEatenStatus ==
+                      'not_yet_done'
+                  ? false
+                  : homeScreenController.breakFastMealEatenStatus == 'done'
+                  ? true
+                  : false,
               leftButtonTitle: 'i_ate_this'.tr,
               leftButtonOnTap: () {
-                homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.breakfastMealID ?? '');
+                homeScreenController.patchUpdateMealConsumptionApi(
+                  mealID: homeScreenController.breakfastMealID ?? '',
+                );
                 LoggerUtils.debug(
-
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
               },
@@ -103,28 +116,42 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                 showSwapMealBottomSheet();
               },
               mealType:
-              homeScreenController.itemBreakFast.value?.mealType?.capitalizeFirst ??
+                  homeScreenController
+                      .itemBreakFast
+                      .value
+                      ?.mealType
+                      ?.capitalizeFirst ??
                   'failed_to_get_meal_type'.tr,
               mealTitle: homeScreenController.breakfastName ?? '',
               kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
-              mealImagePath: "$imageBaseUrl${homeScreenController.breakFastImage}",
+              mealImagePath:
+                  "$imageBaseUrl${homeScreenController.breakFastImage}",
             ),
             UIHelper.verticalSpace(24.h),
 
-
             ///------->>> Section : Lunch
             MealPlanItemCard(
-              onTap: (){
-
-                Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.lunchMealID});
-
+              onTap: () {
+                Get.toNamed(
+                  Routes.mealDetailscreen,
+                  arguments: {'mealID': homeScreenController.lunchMealID},
+                );
               },
-              isMealEaten: homeScreenController.lunchMealEatenStatus == 'not_yet_done' ? false : homeScreenController.lunchMealEatenStatus == 'done' ? true : false,
+              isMealEaten:
+                  homeScreenController.lunchMealEatenStatus == 'not_yet_done'
+                  ? false
+                  : homeScreenController.lunchMealEatenStatus == 'done'
+                  ? true
+                  : false,
               leftButtonTitle: 'i_ate_this'.tr,
 
               leftButtonOnTap: () async {
-                LoggerUtils.debug("BreakFast Meal ID : ${homeScreenController.lunchMealID} ");
-                await homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.lunchMealID ?? '');
+                LoggerUtils.debug(
+                  "BreakFast Meal ID : ${homeScreenController.lunchMealID} ",
+                );
+                await homeScreenController.patchUpdateMealConsumptionApi(
+                  mealID: homeScreenController.lunchMealID ?? '',
+                );
                 LoggerUtils.debug(
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
@@ -137,7 +164,11 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                 showSwapMealBottomSheet();
               },
               mealType:
-              homeScreenController.itemLunch.value?.mealType?.capitalizeFirst ??
+                  homeScreenController
+                      .itemLunch
+                      .value
+                      ?.mealType
+                      ?.capitalizeFirst ??
                   'failed_to_get_meal_type'.tr,
               mealTitle: homeScreenController.lunchName ?? '',
               kcalValue: homeScreenController.lunchTotalKcal ?? 0,
@@ -145,17 +176,25 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
             ),
             UIHelper.verticalSpace(24.h),
 
-
-
             ///------->>> Section : Dinner
             MealPlanItemCard(
-              onTap: (){
-                Get.toNamed(Routes.mealDetailscreen, arguments: {'mealID':homeScreenController.dinerMealID});
+              onTap: () {
+                Get.toNamed(
+                  Routes.mealDetailscreen,
+                  arguments: {'mealID': homeScreenController.dinerMealID},
+                );
               },
-              isMealEaten: homeScreenController.dinerMealEatenStatus == 'not_yet_done' ? false : homeScreenController.dinerMealEatenStatus == 'done' ? true : false,
+              isMealEaten:
+                  homeScreenController.dinerMealEatenStatus == 'not_yet_done'
+                  ? false
+                  : homeScreenController.dinerMealEatenStatus == 'done'
+                  ? true
+                  : false,
               leftButtonTitle: 'i_ate_this'.tr,
               leftButtonOnTap: () {
-                homeScreenController.patchUpdateMealConsumptionApi(mealID: homeScreenController.dinerMealID ?? '');
+                homeScreenController.patchUpdateMealConsumptionApi(
+                  mealID: homeScreenController.dinerMealID ?? '',
+                );
                 LoggerUtils.debug(
                   "Button Tapped: I Ate This, Meal Type :: ${homeScreenController.itemDinner.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
@@ -168,7 +207,11 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                 showSwapMealBottomSheet();
               },
               mealType:
-              homeScreenController.itemDinner.value?.mealType?.capitalizeFirst ??
+                  homeScreenController
+                      .itemDinner
+                      .value
+                      ?.mealType
+                      ?.capitalizeFirst ??
                   'failed_to_get_meal_type'.tr,
               mealTitle: homeScreenController.dinerName ?? '',
               kcalValue: homeScreenController.dinerKcal ?? 0,
@@ -181,8 +224,12 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
       // Default state: Build Meal Plan Widget
       return BuildMealPlanWidget(
         onTap: () {
-          log("Button Tapped : Get Started !");
-          Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen);
+          final DateTime now = DateTime.now();
+          final String formatedCurrentDate = DateFormat('yyyy-MM-dd').format(now);
+          Get.toNamed(
+            Routes.chooseFromOurSuggestedMealsScreen,
+            arguments: {'mealGenerationDate': formatedCurrentDate},
+          );
         },
         showSectionTitle: true,
         sectionTitle: 'choose_from_suggested_meals'.tr,
