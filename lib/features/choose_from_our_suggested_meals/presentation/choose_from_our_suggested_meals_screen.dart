@@ -36,6 +36,12 @@ class _ChooseFromOurSuggestedMealsScreenState
   void initState() {
     super.initState();
 
+    ///-------------<>>>>> Section : NAVIGATION CONFIRMATION
+    LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+    LoggerUtils.debug("🚀 [NAVIGATION] ChooseFromOurSuggestedMealsScreen - initState() CALLED");
+    LoggerUtils.debug("🚀 [NAVIGATION] Received arguments: ${Get.arguments}");
+    LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
     ///-------------<>>>>> Section : Receive Arguments
     final arguments = Get.arguments as Map<String,dynamic>?;
     // receivedSelectedDate = arguments?['selectedDate'] ?? '';
@@ -86,6 +92,8 @@ class _ChooseFromOurSuggestedMealsScreenState
 
   @override
   Widget build(BuildContext context) {
+    LoggerUtils.debug("🏗️ [BUILD] ChooseFromOurSuggestedMealsScreen - build() called");
+    
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
