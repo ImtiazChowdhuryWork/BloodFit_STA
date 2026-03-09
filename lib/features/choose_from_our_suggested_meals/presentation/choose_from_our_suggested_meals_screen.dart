@@ -106,6 +106,30 @@ class _ChooseFromOurSuggestedMealsScreenState
           style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
         ),
         actions: [
+          // DEBUG BUTTON: Clear cached jobId and re-fetch
+          InkWell(
+            onTap: () {
+              LoggerUtils.debug("🔧 [DEBUG] Clear cached jobId button tapped!");
+              chooseFromOurSuggestedMealController.clearCachedJobIdAndReFetch();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+              margin: EdgeInsets.only(right: 8.w),
+              decoration: BoxDecoration(
+                color: Colors.red.shade800,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Text(
+                '🔄 Clear\nJobId',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           InkWell(
             onTap: () {
               Get.toNamed(Routes.notificationScreen);
