@@ -1,3 +1,4 @@
+import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/meal_plan_type_widget.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/recently_selected_meals_widget.dart';
@@ -6,6 +7,8 @@ import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../../presentation/widgets/meals_loading_shimmer_card.dart';
 
 class BreakfastTab extends StatefulWidget {
   const BreakfastTab({super.key});
@@ -139,7 +142,10 @@ class _BreakfastTabState extends State<BreakfastTab> {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
                 },
-              ),
+              )
+            else if (!obxIsLoading && hasJobId)
+              // Show shimmer only for this section while waiting for data
+              MealsLoadingShimmerCard(),
             UIHelper.verticalSpace(32.h),
 
 
@@ -155,7 +161,10 @@ class _BreakfastTabState extends State<BreakfastTab> {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
                 },
-              ),
+              )
+            else if (!obxIsLoading && hasJobId)
+              // Show shimmer only for this section while waiting for data
+              MealsLoadingShimmerCard(),
             UIHelper.verticalSpace(32.h),
 
             ///Section : ------------///Hearty & Comforting///----------------
@@ -169,11 +178,13 @@ class _BreakfastTabState extends State<BreakfastTab> {
                   LoggerUtils.debug("🔄 Refreshing breakfast meals...");
                   chooseFromOurSuggestedMealController.initializeAiMeals();
                 },
-              ),
+              )
+            else if (!obxIsLoading && hasJobId)
+              // Show shimmer only for this section while waiting for data
+              MealsLoadingShimmerCard(),
             UIHelper.verticalSpace(32.h),
           ],
         ),
       );
     });
-  }
-}
+  }}
