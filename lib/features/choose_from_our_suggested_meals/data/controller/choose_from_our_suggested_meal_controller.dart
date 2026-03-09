@@ -371,6 +371,22 @@ final SocketServices _socketServices = SocketServices();
 /// Timer for polling fallback (in case socket doesn't respond)
 Timer? _responseTimer;
 
+/// Retry counter for tracking failed polling attempts
+int _pollingRetryCount = 0;
+static const int _maxPollingRetries = 60; // Max retries before considering it failed (60 * 3s = 3 minutes)
+static const int _pollingIntervalSeconds = 3;
+
+/// Track if job generation has failed
+RxBool hasJobGenerationFailed = false.obs;
+RxString jobGenerationFailureReason = ''.obs;
+
+/// Reset polling retry counter
+void _resetPollingRetryCount() {
+  _pollingRetryCount = 0;
+  hasJobGenerationFailed.value = false;
+  jobGenerationFailureReason.value = '';
+}
+
 ///-------Step 1------->>>> Api Method : Get Job ID
 Rxn<AiSuggestedMealsJobIdModel> jobIdModel = Rxn<AiSuggestedMealsJobIdModel>();
 RxString jobID = ''.obs;
@@ -442,6 +458,9 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
         LoggerUtils.error("❌ Error type: ${pollingError.runtimeType}");
       }
       
+      // Reset retry counter after successfully getting a new jobId
+      _resetPollingRetryCount();
+
       LoggerUtils.debug("📡 ✅ Polling flow completed");
 
     } else {
@@ -548,8 +567,100 @@ void _processAiMealsResponse(dynamic response) {
   LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
   LoggerUtils.debug("🔄 [PROCESS] _processAiMealsResponse() CALLED");
   LoggerUtils.debug("🔄 [PROCESS] Response type: ${response.runtimeType}");
-  LoggerUtils.debug("🔄 [PROCESS] Response data: $response");
   LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
+  // DEBUG: Log the complete response structure
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+  LoggerUtils.debug("📦 [PROCESS] FULL API RESPONSE:");
+  LoggerUtils.debug("${const JsonEncoder.withIndent('  ').convert(response)}");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+
+  // Check what keys are available
+  if (response is Map<String, dynamic>) {
+    LoggerUtils.debug("🔑 [PROCESS] Available keys in response: ${response.keys.toList()}");
+    LoggerUtils.debug("🔑 [PROCESS] Has 'result' key: ${response.containsKey('result')}");
+    LoggerUtils.debug("🔑 [PROCESS] Has 'status' key: ${response.containsKey('status')}");
+    
+    // CRITICAL: Check the status field first
+    final status = response['status'] as String?;
+    LoggerUtils.debug("🔑 [PROCESS] Status value: '$status'");
+    
+    // Check if job failed
+    if (status == 'failed') {
+      LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
+      LoggerUtils.error("❌ [PROCESS] Backend failed to generate meals!");
+      LoggerUtils.error("❌ [PROCESS] Error: ${response['error'] ?? 'Unknown error'}");
+      LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
+      
+      // Mark job generation as failed
+      hasJobGenerationFailed.value = true;
+      final backendError = response['error'] ?? 'Backend failed to generate meals';
+      jobGenerationFailureReason.value = "Server error: $backendError. Please try again.";
+      
+      // Clear the cached jobId so user can get a fresh one
+      _clearStoredJobId();
+      jobID.value = '';
+      
+      // Reset loading states
+      isAiSuggestedMealsLoading.value = false;
+      isAiGeneratedMealsValueLoading.value = false;
+      
+      return;
+    }
+    
+    // If status is not "completed", don't process meals - continue waiting/polling
+    if (status != 'completed') {
+      LoggerUtils.debug("⏳ [PROCESS] Job status is '$status' - meals not ready yet. Continuing to wait...");
+      LoggerUtils.debug("⏳ [PROCESS] Polling retry count: $_pollingRetryCount/$_maxPollingRetries");
+      
+      // Continue polling if we're still waiting for completion
+      if (status == 'waiting' || status == 'active') {
+        _pollingRetryCount++;
+        
+        // Check if we've exceeded max retries (timeout)
+        if (_pollingRetryCount >= _maxPollingRetries) {
+          LoggerUtils.error("╔═══════════════════════════════════════════════════════════");
+          LoggerUtils.error("❌ [PROCESS] Max polling retries exceeded ($_maxPollingRetries attempts)");
+          LoggerUtils.error("❌ [PROCESS] Job generation has TIMED OUT");
+          LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
+          
+          // Mark job generation as failed
+          hasJobGenerationFailed.value = true;
+          jobGenerationFailureReason.value = "Meal generation timed out after ${_maxPollingRetries * _pollingIntervalSeconds} seconds. Please try again.";
+          
+          // Clear the cached jobId so user can get a fresh one
+          _clearStoredJobId();
+          jobID.value = '';
+          
+          // Reset loading states
+          isAiSuggestedMealsLoading.value = false;
+          isAiGeneratedMealsValueLoading.value = false;
+          
+          return;
+        }
+        
+        LoggerUtils.debug("⏳ [PROCESS] Scheduling next poll in $_pollingIntervalSeconds seconds...");
+        // Schedule another poll attempt after 3 seconds
+        Future.delayed(Duration(seconds: _pollingIntervalSeconds), () {
+          if (jobID.value.isNotEmpty) {
+            LoggerUtils.debug("🔄 [PROCESS] Retrying polling for jobId: ${jobID.value} (attempt $_pollingRetryCount/$_maxPollingRetries)");
+            getAiSuggestedMealsViaPolling();
+          }
+        });
+      }
+      
+      // Don't reset loading states here - keep waiting for "completed" status
+      return; // Exit early - no meal data to process yet
+    }
+    
+    if (response.containsKey('result') && response['result'] != null) {
+      final result = response['result'] as Map<String, dynamic>;
+      LoggerUtils.debug("🔑 [PROCESS] Keys in 'result': ${result.keys.toList()}");
+      LoggerUtils.debug("🔑 [PROCESS] Has 'breakfast_options': ${result.containsKey('breakfast_options')}");
+      LoggerUtils.debug("🔑 [PROCESS] Has 'lunch_options': ${result.containsKey('lunch_options')}");
+      LoggerUtils.debug("🔑 [PROCESS] Has 'dinner_options': ${result.containsKey('dinner_options')}");
+    }
+  }
 
   try {
     LoggerUtils.debug("🔄 [PROCESS] Starting AI meals processing...");
@@ -560,6 +671,12 @@ void _processAiMealsResponse(dynamic response) {
     LoggerUtils.debug("✅ [PROCESS] Response parsed successfully");
     LoggerUtils.debug("🔄 [PROCESS] mealsData.result: ${mealsData.result}");
     LoggerUtils.debug("🔄 [PROCESS] mealsData.result?.breakfastOptions: ${mealsData.result?.breakfastOptions}");
+
+    // DEBUG: Check if result is null
+    if (mealsData.result == null) {
+      LoggerUtils.error("❌ [PROCESS] ⚠️ WARNING: result is NULL!");
+      LoggerUtils.error("❌ [PROCESS] ⚠️ API response structure might be different than expected!");
+    }
 
     // Store the full response
     LoggerUtils.debug("🔄 [PROCESS] Storing aiGeneratedMealsData...");
@@ -807,6 +924,7 @@ Future<void> getAiSuggestedMealsViaPolling() async {
   LoggerUtils.debug("📡 [POLLING] getAiSuggestedMealsViaPolling() CALLED");
   LoggerUtils.debug("📡 [POLLING] Current jobId: '${jobID.value}'");
   LoggerUtils.debug("📡 [POLLING] Current loading state: ${isAiSuggestedMealsLoading.value}");
+  LoggerUtils.debug("📡 [POLLING] Retry count: $_pollingRetryCount/$_maxPollingRetries");
   LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
 
   try {
@@ -823,6 +941,10 @@ Future<void> getAiSuggestedMealsViaPolling() async {
     LoggerUtils.debug("📡 [POLLING] isSuccess: ${response.isSuccess}");
     LoggerUtils.debug("📡 [POLLING] errorMessage: ${response.errorMessage}");
     LoggerUtils.debug("📡 [POLLING] Response data length: ${response.jsonResponse.toString().length}");
+    
+    // DEBUG: Log the actual response structure
+    LoggerUtils.debug("📡 [POLLING] 📦 Full Response JSON:");
+    LoggerUtils.debug("${const JsonEncoder.withIndent('  ').convert(response.jsonResponse)}");
 
     // CRITICAL: Check both conditions explicitly
     final isStatusOk = response.statusCode == 200;
@@ -967,6 +1089,64 @@ Future<void> _clearStoredJobId() async {
   } catch (error) {
     LoggerUtils.error("❌ [STORAGE] Error clearing stored jobId: $error");
   }
+}
+
+/// Public method to clear cached jobId and re-fetch AI meals with new jobId
+/// This is useful when the cached jobId is expired or returning empty data
+Future<void> clearCachedJobIdAndReFetch() async {
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+  LoggerUtils.debug("🔄 [CONTROLLER] clearCachedJobIdAndReFetch() CALLED");
+  LoggerUtils.debug("🔄 [CONTROLLER] Clearing cached jobId and fetching fresh data...");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+  
+  // Clear the cached jobId
+  await _clearStoredJobId();
+  
+  // Clear current meal data
+  breakfastProteinPackedMeals.clear();
+  breakfastLightAndFreshMeals.clear();
+  breakfastHealthyAndComfortingMeals.clear();
+  lunchProteinPackedMeals.clear();
+  lunchLightAndFreshMeals.clear();
+  lunchHealthyAndComfortingMeals.clear();
+  dinnerProteinPackedMeals.clear();
+  dinnerLightAndFreshMeals.clear();
+  dinnerHealthyAndComfortingMeals.clear();
+  
+  // Reset jobID
+  jobID.value = '';
+  
+  // Reset failure state
+  _resetPollingRetryCount();
+  
+  LoggerUtils.debug("🔄 [CONTROLLER] Cleared all meal data and reset jobID");
+  
+  // Re-initialize AI meals (will fetch new jobId)
+  await initializeAiMeals();
+  
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+  LoggerUtils.debug("✅ [CONTROLLER] clearCachedJobIdAndReFetch() COMPLETED");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+}
+
+/// Public method to retry AI meal generation when it fails or times out
+/// This clears the cached jobId and fetches a completely new one
+Future<void> retryAiMealGeneration() async {
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+  LoggerUtils.debug("🔄 [CONTROLLER] retryAiMealGeneration() CALLED");
+  LoggerUtils.debug("🔄 [CONTROLLER] Retrying AI meal generation with fresh jobId...");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
+  
+  // Clear any existing error states
+  aiSuggestedMealsErrorMessage.value = '';
+  aiGeneretedMealsDataErrorMessage.value = '';
+  
+  // Clear cached jobId and re-fetch
+  await clearCachedJobIdAndReFetch();
+  
+  LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+  LoggerUtils.debug("✅ [CONTROLLER] retryAiMealGeneration() COMPLETED");
+  LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
 }
 
 /// Initialize AI meals - check for existing jobId or fetch new one
