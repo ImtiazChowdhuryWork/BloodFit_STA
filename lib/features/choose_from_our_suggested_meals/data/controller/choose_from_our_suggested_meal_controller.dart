@@ -302,6 +302,14 @@ class ChooseFromOurSuggestedMealController extends GetxController {
       
       if (meal != null) {
         LoggerUtils.debug("✅ [REVIEW] Found AI meal: ${meal.mealName}");
+        
+        // Get the meal-specific image or fall back to category image
+        String mealImageUrl = imageUrl; // Default to category image (breakFastMealImage, etc.)
+        
+        LoggerUtils.debug("🖼️ [CONTROLLER] AI meal image source: $imageUrl");
+        LoggerUtils.debug("🖼️ [CONTROLLER] Image length: ${imageUrl.length}");
+        LoggerUtils.debug("🖼️ [CONTROLLER] Is empty: ${imageUrl.isEmpty}");
+        
         return {
           'mealName': meal.mealName ?? '',
           'description': meal.description ?? '',
@@ -312,7 +320,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
             {'label': 'Protein', 'kcal': meal.macronutrients?.protein ?? 0},
             {'label': 'Fat', 'kcal': meal.macronutrients?.fat ?? 0},
           ],
-          'image': imageUrl,
+          'image': mealImageUrl,
           'mealType': mealType,
           'hasId': false,
           'id': null,
