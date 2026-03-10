@@ -32,6 +32,34 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
   final MealPlanFeatureOptionsController mealPlanFeatureOptionsController =
       Get.find<MealPlanFeatureOptionsController>();
 
+  /// Helper method to resolve image URL (handles base64, relative paths, and full URLs)
+  String _resolveImageUrl(String? image) {
+    if (image == null || image.isEmpty) {
+      return '$imageBaseUrl/images/cucumber.jpeg';
+    }
+
+    // If it's already a full URL (starts with http), return as is
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+      return image;
+    }
+
+    // If it's base64 data (starts with "data:image" or looks like base64), return default
+    // Base64 typically starts with iVBORw0KGgo... for PNG or /9j/... for JPEG
+    if (image.startsWith('data:image') ||
+        image.startsWith('iVBORw0KGgo') ||
+        image.startsWith('/9j/')) {
+      return '$imageBaseUrl/images/cucumber.jpeg';
+    }
+
+    // If it's a relative path (starts with /), concatenate with base URL
+    if (image.startsWith('/')) {
+      return '$imageBaseUrl$image';
+    }
+
+    // Otherwise, assume it's already a path and concatenate
+    return '$imageBaseUrl/$image';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -250,6 +278,35 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
   final MealPlanFeatureOptionsController mealPlanFeatureOptionsController =
   Get.find<MealPlanFeatureOptionsController>();
 
+  /// Helper method to convert image to URL (handles base64, relative paths, etc.)
+  String _convertImageToUrl(String imageData) {
+    if (imageData.isEmpty) {
+      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+    }
+
+    // If it's already a URL (starts with http), return as is
+    if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+      return imageData;
+    }
+
+    // If it's base64 data (starts with "data:image" or looks like base64), return AS-IS
+    // Base64 typically starts with iVBORw0KGgo... for PNG or /9j/... for JPEG
+    // We need to pass base64 directly to MealDataModel for the details screen to handle
+    if (imageData.startsWith('data:image') ||
+        imageData.startsWith('iVBORw0KGgo') ||
+        imageData.startsWith('/9j/')) {
+      return imageData; // Return base64 as-is, don't convert to default image
+    }
+
+    // If it's a relative path (starts with /), concatenate with base URL
+    if (imageData.startsWith('/')) {
+      return 'https://faisal5000.merinasib.shop$imageData';
+    }
+
+    // Otherwise, assume it's already a path and concatenate
+    return 'https://faisal5000.merinasib.shop/$imageData';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -401,7 +458,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                               'failed_to_get_meal_type'.tr,
                           mealTitle: meal.mealName ?? '',
                           kcalValue: meal.kcal ?? 0,
-                          mealImagePath: "$imageBaseUrl${meal.image}",
+                          mealImagePath: _convertImageToUrl(meal.image ?? ''),
                         ),
                         UIHelper.verticalSpace(20.h),
                       ],

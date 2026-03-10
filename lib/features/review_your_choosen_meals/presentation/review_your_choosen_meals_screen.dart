@@ -4,6 +4,7 @@ import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controlle
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/ai_suggested_meals_model.dart' as ai_model;
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart' as recent_model;
+import 'package:bloodfit/features/review_your_choosen_meals/data/controller/review_your_choosen_meals_screen_controller.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -26,10 +27,11 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ChooseFromOurSuggestedMealController>();
-    
+    final chooseController = Get.find<ChooseFromOurSuggestedMealController>();
+    final reviewController = Get.find<ReviewYourChoosenMealsScreenController>();
+
     // Get selected meals data
-    final selectedMealsData = controller.getSelectedMealsCompleteData();
+    final selectedMealsData = chooseController.getSelectedMealsCompleteData();
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
@@ -158,17 +160,67 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                 UIHelper.verticalSpace(32.h),
 
                 ///Section : -----------///Button -> Confirm Meal Plan///------------
-                CustomElevatedButton(
-                  onTap: () {
-                    log("Button Taped -> Confirm Mealplan");
+                Obx(() {
+                  final isLoading = reviewController.isMealCreating.value;
+                  final hasError = reviewController.mealCreatingErrorMessage.value.isNotEmpty;
+                  
+                  return CustomElevatedButton(
+                    onTap: isLoading ? null : () async {
+                      log("Button Taped -> Confirm Mealplan");
+                      
+                      // Show loading indicator
+                      Get.dialog(
+                        Center(
+                          child: Container(
+                            width: 100.w,
+                            height: 100.h,
+                            decoration: BoxDecoration(
+                              color: Colors.black87,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFFB20000),
+                              ),
+                            ),
+                          ),
+                        ),
+                        barrierDismissible: false,
+                      );
 
-                    showMealPlanBuildConfirmationBottomSheet();
-                  },
-                  buttonWidth: 1.sw,
-                  buttonHeight: 52.h,
-                  borderRadius: 24.r,
-                  buttonTitle: "Confirm Mealplan",
-                ),
+                      // Call the API from review controller
+                      await reviewController.postCreateMealPlanApi();
+
+                      // Close loading dialog
+                      if (Get.isDialogOpen ?? false) {
+                        Get.back();
+                      }
+
+                      // Check if API was successful
+                      if (reviewController.mealCreatingErrorMessage.value.isEmpty) {
+                        LoggerUtils.debug("✅ [REVIEW SCREEN] Meal plan created successfully!");
+                        
+                        // Show success bottom sheet
+                        showMealPlanBuildConfirmationBottomSheet();
+                      } else {
+                        LoggerUtils.error("❌ [REVIEW SCREEN] Error: ${reviewController.mealCreatingErrorMessage.value}");
+                        
+                        // Show error snackbar
+                        Get.snackbar(
+                          'Error',
+                          reviewController.mealCreatingErrorMessage.value,
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      }
+                    },
+                    buttonWidth: 1.sw,
+                    buttonHeight: 52.h,
+                    borderRadius: 24.r,
+                    buttonTitle: isLoading ? "Creating..." : "Confirm Mealplan",
+                  );
+                }),
                 UIHelper.verticalSpace(32.h),
               ],
             ),

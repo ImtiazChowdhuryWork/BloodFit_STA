@@ -198,6 +198,7 @@ class WorkOutScreen extends StatelessWidget {
 
             /// Upgrade Plan Overlay - Full screen glass effect (like the completed overlay)
             Obx(() {
+              // return workOutScreenController.isSubscriptionTypeElite.value
               return workOutScreenController.isSubscriptionTypeElite.value
                   ? const SizedBox.shrink()
                   : Positioned.fill(

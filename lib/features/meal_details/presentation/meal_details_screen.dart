@@ -43,12 +43,18 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
     ///-----<>>> Section : Intialize Controllers
     mealDetailsScreenController = Get.find<MealDetailsScreenController>();
-    chooseFromOurSuggestedMealController =
-        Get.find<ChooseFromOurSuggestedMealController>();
+    
+    /// Try to get ChooseFromOurSuggestedMealController (optional - only available when navigating from AI suggested meals)
+    try {
+      chooseFromOurSuggestedMealController = Get.find<ChooseFromOurSuggestedMealController>();
+    } catch (_) {
+      /// Controller not registered - this is OK when navigating from meal_plan_feature_options
+      LoggerUtils.debug("⚠️ [MEAL DETAILS] ChooseFromOurSuggestedMealController not registered - navigating from different screen");
+    }
 
     ///------<>>> Section : Get Arguments
     mealID = arguments?['mealID']?.toString() ?? '';
-    
+
     ///------<>>> Section : Check if select button should be hidden
     hideSelectButton = arguments?['hideSelectButton'] ?? false;
 
@@ -297,7 +303,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
                   ///Section : ---------///Text -> Calory Count For This Meal ///---------------
                   Text(
-                    "Calory Count For This Meal",
+                    "Calorie Count For This Meal",
                     style: TextFontStyle.headline20w500cfefefeStylePoppins,
                   ),
                   UIHelper.verticalSpace(16.h),
@@ -352,7 +358,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                             return FoodMenarelItemTileWidget(
                               imagePath: iconPath,
                               value: menarel.kcal ?? 0,
-                              menaralName: 'Kcal',
+                              menaralName: index == 0 ? ' Carbs' : index == 1 ? ' Protein' : ' Fat',
                             );
                           },
                         ),
