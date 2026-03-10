@@ -188,12 +188,13 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
       return imageData;
     }
     
-    // If it's base64 data (starts with "data:image" or looks like base64), return default
+    // If it's base64 data (starts with "data:image" or looks like base64), return AS-IS
     // Base64 typically starts with iVBORw0KGgo... for PNG or /9j/... for JPEG
+    // We need to pass base64 directly to MealDataModel for the details screen to handle
     if (imageData.startsWith('data:image') || 
         imageData.startsWith('iVBORw0KGgo') || 
         imageData.startsWith('/9j/')) {
-      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+      return imageData; // Return base64 as-is, don't convert to default image
     }
     
     // If it's a relative path (starts with /), concatenate with base URL
@@ -219,8 +220,14 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
     final caloryCount = mealData['caloryCount'] as List;
     final imageUrl = mealData['image'] as String;
     
+    LoggerUtils.debug("🖼️ [REVIEW IMAGE] Creating MealDataModel for: $mealName");
+    LoggerUtils.debug("🖼️ [REVIEW IMAGE] Original imageUrl: ${imageUrl.length > 50 ? '${imageUrl.substring(0, 50)}...' : imageUrl}");
+    LoggerUtils.debug("🖼️ [REVIEW IMAGE] hasId: $hasId, mealType: $mealType");
+
     // Resolve image URL
     final resolvedImageUrl = _convertImageToUrl(imageUrl);
+    
+    LoggerUtils.debug("🖼️ [REVIEW IMAGE] Resolved imageUrl: ${resolvedImageUrl.length > 50 ? '${resolvedImageUrl.substring(0, 50)}...' : resolvedImageUrl}");
     
     // Convert ingredients to MealIngredientData list
     List<MealIngredientData> ingredientList = [];
