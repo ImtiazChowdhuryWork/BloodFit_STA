@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +28,7 @@ class MealPlanItemCard extends StatelessWidget {
   final bool isLeftButtonBorderUsed;
   final bool isMealEaten;
   final void Function()? onTap;
+  final bool isImageLinkBase64;
 
   const MealPlanItemCard({
     super.key,
@@ -45,6 +48,7 @@ class MealPlanItemCard extends StatelessWidget {
     this.leftButtonBorderWidth,
     required this.isMealEaten,
     this.onTap,
+    this.isImageLinkBase64 = false,
   });
 
   @override
@@ -86,11 +90,25 @@ class MealPlanItemCard extends StatelessWidget {
                         Positioned(
                           left: -50.w, // half of the image width
                           top: -16.h, // optional vertical adjustment
-                          child: CustomNetworkImageWidget(
-                            imageUrl: mealImagePath,
-                            width: 140.w,
-                            height: 140.h,
-                          ),
+                          child: isImageLinkBase64
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(100.r),
+                                  child: Image.memory(
+                                    base64Decode(
+                                      mealImagePath.contains(',')
+                                          ? mealImagePath.split(',').last
+                                          : mealImagePath,
+                                    ),
+                                    width: 140.w,
+                                    height: 140.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : CustomNetworkImageWidget(
+                                  imageUrl: mealImagePath,
+                                  width: 140.w,
+                                  height: 140.h,
+                                ),
                         ),
                       ],
                     ),

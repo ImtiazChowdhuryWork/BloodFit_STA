@@ -158,7 +158,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       ),
       bottomNavigationBar: LogoutButton(
         onTap: () {
-          _showLogoutDialog();
+          // _showLogoutDialog();
+          controller.logOutHelper();
         },
         buttonTitle: 'logout'.tr,
       ),
@@ -295,38 +296,38 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   /// Logout Dialog
-  void _showLogoutDialog() {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: AppColors.c2f772f,
-        title: Text(
-          'logout'.tr,
-          style: const TextStyle(color: AppColors.cFFFFFF),
-        ),
-        content: Text(
-          'logout_confirmation'.tr,
-          style: TextStyle(color: AppColors.cFFFFFF.withOpacity(0.8)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'cancel'.tr,
-              style: const TextStyle(color: AppColors.c2f772f),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              controller.logOutHelper();
-            },
-            child: Text(
-              'confirm'.tr,
-              style: const TextStyle(color: AppColors.c2f772f),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showLogoutDialog() {
+  //   Get.dialog(
+  //     AlertDialog(
+  //       backgroundColor: AppColors.c2f772f,
+  //       title: Text(
+  //         'logout'.tr,
+  //         style: const TextStyle(color: AppColors.cFFFFFF),
+  //       ),
+  //       content: Text(
+  //         'logout_confirmation'.tr,
+  //         style: TextStyle(color: AppColors.cFFFFFF.withOpacity(0.8)),
+  //       ),
+  //       actions: [
+  //         TextButton(
+  //           onPressed: () => Get.back(),
+  //           child: Text(
+  //             'cancel'.tr,
+  //             style: const TextStyle(color: AppColors.c2f772f),
+  //           ),
+  //         ),
+  //         TextButton(
+  //           onPressed: () {
+  //             Get.back();
+  //             controller.logOutHelper();
+  //           },
+  //           child: Text(
+  //             'confirm'.tr,
+  //             style: const TextStyle(color: AppColors.c2f772f),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
