@@ -127,11 +127,12 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                         LoggerUtils.debug("   • mealType: ${mealDataModel.mealType}");
                         LoggerUtils.debug("   • mealId: ${mealDataModel.mealId}");
                         
-                        // Pass the model to the details screen
+                        // Pass the model to the details screen with hideSelectButton flag
                         Get.toNamed(
                           Routes.mealDetailscreen,
                           arguments: {
                             'mealData': mealDataModel,
+                            'hideSelectButton': true, // Hide select/deselect button when coming from review screen
                           },
                         );
                       },

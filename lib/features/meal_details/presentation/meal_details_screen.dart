@@ -34,6 +34,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
   String mealID = '';
   String? mealIdForSelection; // Unique ID for meal selection
   String? tabNameForSelection; // Tab name (breakfast/lunch/dinner)
+  bool hideSelectButton = false; // Flag to hide select/deselect button
 
   @override
   void initState() {
@@ -47,6 +48,9 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
     ///------<>>> Section : Get Arguments
     mealID = arguments?['mealID']?.toString() ?? '';
+    
+    ///------<>>> Section : Check if select button should be hidden
+    hideSelectButton = arguments?['hideSelectButton'] ?? false;
 
     ///------<>>> Section : Get Direct Meal Data (from AI suggested meals)
     final mealData = arguments?['mealData'] as MealDataModel?;
@@ -424,26 +428,28 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                   UIHelper.verticalSpace(24.h),
 
                   ///Section : ----------///Button -> Select This Meal///----------
-                  Obx(() {
-                    if (mealDetailsScreenController!
-                        .isMealDetailsLoading
-                        .value) {
-                      return CustomShimmerEffect(height: 52.h, width: 1.sw);
-                    }
+                  // Hide button if hideSelectButton flag is true (coming from review screen)
+                  if (!hideSelectButton)
+                    Obx(() {
+                      if (mealDetailsScreenController!
+                          .isMealDetailsLoading
+                          .value) {
+                        return CustomShimmerEffect(height: 52.h, width: 1.sw);
+                      }
 
-                    if (mealDetailsScreenController!.calorieCountList.isEmpty) {
-                      return CustomElevatedButton(
-                        onTap: null,
-                        buttonWidth: 1.sw,
-                        buttonHeight: 52.h,
-                        borderRadius: 24.r,
-                        buttonTitle: "Select This Meal",
-                      );
-                    }
+                      if (mealDetailsScreenController!.calorieCountList.isEmpty) {
+                        return CustomElevatedButton(
+                          onTap: null,
+                          buttonWidth: 1.sw,
+                          buttonHeight: 52.h,
+                          borderRadius: 24.r,
+                          buttonTitle: "Select This Meal",
+                        );
+                      }
 
-                    // Check if meal is currently selected (only for AI suggested meals)
-                    final isMealSelected =
-                        tabNameForSelection != null &&
+                      // Check if meal is currently selected (only for AI suggested meals)
+                      final isMealSelected =
+                          tabNameForSelection != null &&
                             mealIdForSelection != null
                         ? chooseFromOurSuggestedMealController!.isMealSelected(
                             tabName: tabNameForSelection!,
