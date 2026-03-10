@@ -53,6 +53,7 @@ import '../features/my_profile/bindings/my_profile_bindings.dart';
 import '../features/privacy_policy/binding/privacy_policy_binding.dart';
 import '../features/profile_mealplan/bindings/profile_meal_plan_bindings.dart';
 import '../features/report_a_problem/bindings/report_a_problem_screen_binging.dart';
+import '../features/review_your_choosen_meals/data/binding/review_your_choosen_meals_binding.dart';
 import '../features/review_your_choosen_meals/presentation/review_your_choosen_meals_screen.dart';
 import '../features/settings/binding/delete_account_binding.dart';
 import '../features/subscription/binding/subscription_plans_binding.dart';
@@ -417,6 +418,7 @@ class Routes {
     GetPage(
       name: reviewYourChoosenMealScreen,
       page: () => ReviewYourChoosenMealsScreen(),
+      binding: ReviewYourChoosenMealsBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
