@@ -113,6 +113,8 @@ Map<String, String> englishLanguage = {
   'failed_get_meal_plans': 'Failed Get Meal Plans!',
   'meal_plan_not_built': 'Meal Plan was not built for selected date!',
 
+
+
   // Progress Screen
   'mealplan': 'Mealplan',
   'workout': 'Workout',
