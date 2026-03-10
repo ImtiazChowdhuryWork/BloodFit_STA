@@ -1,7 +1,11 @@
 import 'dart:developer';
 
-import 'package:bloodfit/constants/app_list.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/ai_suggested_meals_model.dart' as ai_model;
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/recent_chosen_meals_model.dart' as recent_model;
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +26,11 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ChooseFromOurSuggestedMealController>();
+    
+    // Get selected meals data
+    final selectedMealsData = controller.getSelectedMealsCompleteData();
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -78,35 +87,69 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: AppList.reviewMealList.length,
-                  separatorBuilder: (context, indet) =>
+                  itemCount: selectedMealsData.length,
+                  separatorBuilder: (context, index) =>
                       UIHelper.verticalSpace(24.h),
                   itemBuilder: (context, index) {
-                    var data = AppList.reviewMealList[index];
+                    final mealType = selectedMealsData.keys.elementAt(index);
+                    final mealData = selectedMealsData[mealType]!;
+
+                    final mealName = mealData['mealName'] as String;
+                    final kcal = mealData['kcal'] as int;
+                    final imageUrl = mealData['image'] as String;
+                    final hasId = mealData['hasId'] as bool;
+                    final id = mealData['id'] as String?;
+
+                    // Check if image is base64
+                    final isBase64 = imageUrl.startsWith('data:image') ||
+                                    imageUrl.startsWith('iVBORw0KGgo') ||
+                                    imageUrl.startsWith('/9j/');
+
+                    // Resolve image URL (handle normal URLs and base64)
+                    String resolvedImageUrl = isBase64 ? imageUrl : _convertImageToUrl(imageUrl);
+                    
                     return MealPlanItemCard(
                       isMealEaten: false,
                       leftButtonTitle: "Details",
                       leftButtonOnTap: () {
                         log("Button Taped : Details");
-                        Get.toNamed(Routes.mealDetailscreen);
+                        
+                        // Create MealDataModel from the selected meal data
+                        final mealDataModel = _createMealDataModel(
+                          mealData: mealData,
+                          mealType: mealType,
+                          mealId: id,
+                          hasId: hasId,
+                        );
+                        
+                        LoggerUtils.debug("✅ [REVIEW] Created MealDataModel with:");
+                        LoggerUtils.debug("   • mealName: ${mealDataModel.mealName}");
+                        LoggerUtils.debug("   • mealType: ${mealDataModel.mealType}");
+                        LoggerUtils.debug("   • mealId: ${mealDataModel.mealId}");
+                        
+                        // Pass the model to the details screen
+                        Get.toNamed(
+                          Routes.mealDetailscreen,
+                          arguments: {
+                            'mealData': mealDataModel,
+                          },
+                        );
                       },
                       rightButtonOnTap: () {
                         log("Button Taped : Remove");
                         showSwapMealBottomSheet();
                       },
-                      kcalValue: data.kcalValue.toInt(),
-                      mealType: data.mealType,
-                      mealTitle: data.mealTitle,
-
+                      kcalValue: kcal,
+                      mealType: mealType,
+                      mealTitle: mealName,
                       rightButtonTitle: "Remove",
                       rightButtonBorderColor: AppColors.cb20000,
-
                       isLeftButtonBorderUsed: true,
                       leftButtonBorderWidth: 1.5.sp,
                       leftButtonBorderColor: AppColors.cc6c6c6,
                       leftButtonColor: AppColors.c262626,
-
-                      mealImagePath: Assets.images.foodImage.path,
+                      mealImagePath: resolvedImageUrl,
+                      isImageLinkBase64: isBase64,
                     );
                   },
                 ),
@@ -132,5 +175,112 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+  
+  /// Helper method to convert image to URL (handles base64, relative paths, etc.)
+  String _convertImageToUrl(String imageData) {
+    if (imageData.isEmpty) {
+      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+    }
+    
+    // If it's already a URL (starts with http), return as is
+    if (imageData.startsWith('http://') || imageData.startsWith('https://')) {
+      return imageData;
+    }
+    
+    // If it's base64 data (starts with "data:image" or looks like base64), return default
+    // Base64 typically starts with iVBORw0KGgo... for PNG or /9j/... for JPEG
+    if (imageData.startsWith('data:image') || 
+        imageData.startsWith('iVBORw0KGgo') || 
+        imageData.startsWith('/9j/')) {
+      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+    }
+    
+    // If it's a relative path (starts with /), concatenate with base URL
+    if (imageData.startsWith('/')) {
+      return 'https://faisal5000.merinasib.shop$imageData';
+    }
+    
+    // Otherwise, assume it's already a path and concatenate
+    return 'https://faisal5000.merinasib.shop/$imageData';
+  }
+  
+  /// Helper method to create MealDataModel from selected meal data
+  MealDataModel _createMealDataModel({
+    required Map<String, dynamic> mealData,
+    required String mealType,
+    required String? mealId,
+    required bool hasId,
+  }) {
+    final mealName = mealData['mealName'] as String;
+    final description = mealData['description'] as String;
+    final kcal = mealData['kcal'] as int;
+    final ingredients = mealData['ingredients'] as List;
+    final caloryCount = mealData['caloryCount'] as List;
+    final imageUrl = mealData['image'] as String;
+    
+    // Resolve image URL
+    final resolvedImageUrl = _convertImageToUrl(imageUrl);
+    
+    // Convert ingredients to MealIngredientData list
+    List<MealIngredientData> ingredientList = [];
+    if (ingredients.isNotEmpty) {
+      ingredientList = ingredients.map((ing) {
+        if (ing is ai_model.Ingredient) {
+          // AI meal ingredient
+          return MealIngredientData(
+            name: ing.name ?? '',
+            quantity: ing.quantity ?? '',
+            icon: ing.icon ?? '',
+          );
+        } else if (ing is recent_model.Ingredient) {
+          // Previously selected meal ingredient
+          return MealIngredientData(
+            name: ing.name ?? '',
+            quantity: ing.quantity ?? '',
+            icon: ing.icon ?? '',
+          );
+        } else if (ing is Map) {
+          // Fallback: Map data
+          return MealIngredientData(
+            name: ing['name'] ?? '',
+            quantity: ing['quantity'] ?? '',
+            icon: ing['icon'] ?? '',
+          );
+        }
+        return MealIngredientData(name: '', quantity: '', icon: '');
+      }).toList();
+    }
+    
+    // Convert caloryCount to MealMacronutrientsData
+    MealMacronutrientsData macronutrients = MealMacronutrientsData(
+      carbohydrates: _getMacroValue(caloryCount, 'Carbs'),
+      protein: _getMacroValue(caloryCount, 'Protein'),
+      fat: _getMacroValue(caloryCount, 'Fat'),
+    );
+    
+    return MealDataModel(
+      mealName: mealName,
+      mealType: mealType.toLowerCase(),
+      totalCalories: kcal,
+      description: description,
+      ingredients: ingredientList,
+      macronutrients: macronutrients,
+      numberOfServings: 1,
+      image: resolvedImageUrl,
+      mealId: hasId ? mealId : null, // Only set mealId for previously selected meals
+    );
+  }
+  
+  int _getMacroValue(List caloryCount, String label) {
+    try {
+      final macro = caloryCount.firstWhere(
+        (item) => item['label'] == label,
+        orElse: () => {'kcal': 0},
+      );
+      return macro['kcal'] ?? 0;
+    } catch (e) {
+      return 0;
+    }
   }
 }

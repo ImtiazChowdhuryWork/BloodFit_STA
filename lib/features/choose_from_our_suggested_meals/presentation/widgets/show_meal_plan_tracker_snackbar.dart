@@ -125,57 +125,11 @@ class _MealPlanTrackerContent extends StatelessWidget {
               width: 70.w,
               height: 80.h,
               child: CustomElevatedButton(
-                onTap: isMealPlanComplete ? () async {
+                onTap: isMealPlanComplete ? () {
                   log("Button Taped : Build Meal Plan!-----------");
                   
-                  // Show loading indicator
-                  Get.dialog(
-                    Center(
-                      child: Container(
-                        width: 100.w,
-                        height: 100.h,
-                        decoration: BoxDecoration(
-                          color: Colors.black87,
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xFFB20000),
-                          ),
-                        ),
-                      ),
-                    ),
-                    barrierDismissible: false,
-                  );
-                  
-                  // Call the API
-                  await controller.postCreateMealPlanApi();
-                  
-                  // Close loading dialog
-                  if (Get.isDialogOpen ?? false) {
-                    Get.back();
-                  }
-                  
-                  // Check if API was successful
-                  if (controller.mealCreatingErrorMessage.value.isEmpty) {
-                    // Close bottom sheet first
-                    Get.back();
-                    // Navigate to review screen
-                    Get.toNamed(Routes.reviewYourChoosenMealScreen);
-                  } else {
-                    // Close bottom sheet first
-                    Get.back();
-                    // Show error with delay to ensure proper context
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      Get.snackbar(
-                        'Error',
-                        controller.mealCreatingErrorMessage.value,
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                    });
-                  }
+                  // Navigate to review screen
+                  Get.toNamed(Routes.reviewYourChoosenMealScreen);
                 } : null,
                 buttonTitle: "Build",
                 textStyle: TextFontStyle.headline12w400cfefefeStylePoppins.copyWith(fontSize: 9.sp),
