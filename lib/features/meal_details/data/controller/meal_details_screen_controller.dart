@@ -1,6 +1,9 @@
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
+import 'package:bloodfit/features/meal_details/data/model/generate_meal_image_model.dart';
+import 'package:bloodfit/features/meal_details/data/repository/generate_meal_image_repository.dart';
 import 'package:bloodfit/features/meal_details/data/repository/meal_details_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
+import 'package:bloodfit/networks/network_response.dart';
 import 'package:get/get.dart';
 
 import '../model/meal_details_model.dart';
@@ -10,12 +13,10 @@ class MealDetailsScreenController extends GetxController{
   ///-----------<>>> Section : Importing the repositories
   final MealDetailsRepository _mealDetailsRepository;
 
+  ///-----------<>>>> Section : Importing the Generate Image Repository
+  final GenerateMealImageRepository _generateMealImageRepository;
 
-
-  MealDetailsScreenController(this._mealDetailsRepository);
-
-
-
+  MealDetailsScreenController(this._mealDetailsRepository, this._generateMealImageRepository);
 
 
   ///---------------<>>>>>> Section : Meal Details API Started Here
@@ -230,6 +231,67 @@ class MealDetailsScreenController extends GetxController{
   }
 
   ///---------------<>>>>>> Section : Meal Details API Ended Here
+  ///
+  ///
+  ///---------------<>>>>>> Section : Generate Meal Image Api Start Here
+  ///
+  Rxn<GenerateMealImageModel> generateMealImageModel = Rxn<GenerateMealImageModel>();
+  RxString generatedMealImageLink = ''.obs;
+  RxBool hasGeneratedImage = false.obs;
+
+  RxBool isMealImageGenerating = false.obs;
+  RxString generateMealImageErrorMessage = ''.obs;
+  void clearGenerateMealImageErrorMessage(){
+    generateMealImageErrorMessage.value = '';
+  }
+
+  Future<void> postGenerateMealImageApi()async{
+    try{
+      isMealImageGenerating.value = true;
+      clearGenerateMealImageErrorMessage();
+      LoggerUtils.debug("Generating Meal Image Started...");
+
+      final response = await _generateMealImageRepository.generateMealIamgeRepository(
+        title: mealName,
+        description: mealDescription,
+        ingredientList: mealIngredientList.map((e) => e.name ?? '').toList(),
+      );
+
+      LoggerUtils.debug("Response Status Code : ${response.statusCode}");
+
+      if(response.statusCode == 200 && response.isSuccess){
+        LoggerUtils.debug("Successfully Generated Meal Image!");
+
+         generateMealImageModel.value = GenerateMealImageModel.fromJson(response.jsonResponse!);
+
+        final imageLinkAtBase64 = generateMealImageModel.value?.data?.mealImageBase64 ?? '';
+
+        if(imageLinkAtBase64.isNotEmpty){
+          generatedMealImageLink.value = imageLinkAtBase64.startsWith('data:image')
+              ? imageLinkAtBase64
+              : 'data:image/png;base64,$imageLinkAtBase64';
+          hasGeneratedImage.value = true;
+          LoggerUtils.debug("Generated Meal Image Link Converted Successfully");
+        }
+
+      }else{
+        generateMealImageErrorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Failed to Generate Meal Image : Error Code : ${response.statusCode}");
+        LoggerUtils.error("Error Message : ${response.errorMessage}");
+      }
+
+    }catch(error){
+      generateMealImageErrorMessage.value = error.toString();
+      LoggerUtils.error("Error Caught While Generating Meal Image!");
+      LoggerUtils.error("Generate Meal Image Caught Error : $error");
+    }finally{
+      isMealImageGenerating.value = false;
+      LoggerUtils.debug("Is Meal Image Generating : ${isMealImageGenerating.value}");
+    }
+
+  }
+
+  ///---------------<>>>>>> Section : Generate Meal Image Api Ends Here
 
 
 

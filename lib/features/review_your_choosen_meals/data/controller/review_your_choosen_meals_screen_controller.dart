@@ -5,6 +5,8 @@ import 'package:bloodfit/features/choose_from_our_suggested_meals/data/repositor
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/get.dart';
 
+import '../../../../endpoints.dart';
+
 class ReviewYourChoosenMealsScreenController extends GetxController {
   /// Repository for creating meal plan
   final CreateMealPlanRepository _createMealPlanRepository;
@@ -135,7 +137,7 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
 
         if (meal != null && meal.id != null) {
           // Get the image from the meal object or use default
-          String mealImage = meal.image ?? 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+          String mealImage = meal.image ?? defaultMealImage;
           if (!mealImage.startsWith('http')) {
             mealImage = 'https://faisal5000.merinasib.shop$mealImage';
           }
@@ -224,13 +226,21 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
     return mealPlanData;
   }
 
-  // Helper method to convert base64 image data to URL
+  /// Checks if image data is base64 encoded
+  bool _isBase64(String imageData) {
+    if (imageData.startsWith('data:image')) return true;
+    if (imageData.startsWith('iVBORw0KGgo')) return true;
+    if (imageData.startsWith('/9j/')) return true;
+    return false;
+  }
+
+  // Helper method to convert image data to a URL or pass base64 through as-is
   String _convertImageToUrl(String imageData) {
     LoggerUtils.debug("🔄 [IMAGE_CONVERT] Input: ${imageData.length > 50 ? '${imageData.substring(0, 50)}...' : imageData}");
 
     if (imageData.isEmpty) {
-      LoggerUtils.debug("⚠️ [IMAGE_CONVERT] Empty input, returning default");
-      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+      LoggerUtils.debug("⚠️ [IMAGE_CONVERT] Empty input, returning empty");
+      return '';
     }
 
     // If it's already a URL (starts with http), return as is
@@ -239,13 +249,10 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
       return imageData;
     }
 
-    // If it's base64 data (starts with "data:image" or looks like base64), return default
-    // Base64 typically starts with iVBORw0KGgo... for PNG or /9j/... for JPEG
-    if (imageData.startsWith('data:image') ||
-        imageData.startsWith('iVBORw0KGgo') ||
-        imageData.startsWith('/9j/')) {
-      LoggerUtils.debug("⚠️ [IMAGE_CONVERT] Base64 detected, returning default");
-      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+    // If it's base64 data, pass it through — the repository will handle saving it as a file
+    if (_isBase64(imageData)) {
+      LoggerUtils.debug("✅ [IMAGE_CONVERT] Base64 detected, passing through for file upload");
+      return imageData;
     }
 
     // If it's a relative path (starts with /), concatenate with base URL

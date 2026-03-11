@@ -5,6 +5,7 @@
 const String url = "https://faisal5000.merinasib.shop/api/v1";
 const String socketBaseUrl = 'https://faisal5000.merinasib.shop';
 const String imageBaseUrl = 'https://faisal5000.merinasib.shop';
+const String defaultMealImage = 'https://faisal5000.merinasib.shop/images/meal.jpg';
 
 final class NetworkConstants {
   NetworkConstants._();
@@ -72,6 +73,11 @@ final class Endpoints {
 
   static String infoGattherWorkOutGoal() => "$url/workout/add-workout-details";
   static String getMealsByDate() => "$url/meal/get-meals-by-date";
+
+  static String postGenerateMealImageApiUrl() => "$url/ai-meal/generate-meal-image";
+
+
+  
 }
 
 

@@ -23,6 +23,23 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
   final HomeScreenController homeScreenController =
       Get.find<HomeScreenController>();
 
+  /// Detect if an image string is base64 encoded
+  bool _isBase64Image(String? image) {
+    if (image == null || image.isEmpty) return false;
+    if (image.startsWith('data:image')) return true;
+    if (image.startsWith('http://') || image.startsWith('https://')) return false;
+    if (image.startsWith('/')) return false;
+    final cleanPath = image.contains(',') ? image.split(',').last : image;
+    return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(cleanPath);
+  }
+
+  /// Returns the correct image path based on whether it's base64 or a URL
+  String _resolveImagePath(String? image) {
+    if (image == null || image.isEmpty) return '';
+    if (_isBase64Image(image)) return image;
+    return '$imageBaseUrl$image';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -125,7 +142,9 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               mealTitle: homeScreenController.breakfastName ?? '',
               kcalValue: homeScreenController.breakfastTotalKcal ?? 0,
               mealImagePath:
-                  "$imageBaseUrl${homeScreenController.breakFastImage}",
+                  _resolveImagePath(homeScreenController.breakFastImage),
+              isImageLinkBase64:
+                  _isBase64Image(homeScreenController.breakFastImage),
             ),
             UIHelper.verticalSpace(24.h),
 
@@ -172,7 +191,10 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                   'failed_to_get_meal_type'.tr,
               mealTitle: homeScreenController.lunchName ?? '',
               kcalValue: homeScreenController.lunchTotalKcal ?? 0,
-              mealImagePath: "$imageBaseUrl${homeScreenController.lunchImage}",
+              mealImagePath:
+                  _resolveImagePath(homeScreenController.lunchImage),
+              isImageLinkBase64:
+                  _isBase64Image(homeScreenController.lunchImage),
             ),
             UIHelper.verticalSpace(24.h),
 
@@ -215,7 +237,10 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                   'failed_to_get_meal_type'.tr,
               mealTitle: homeScreenController.dinerName ?? '',
               kcalValue: homeScreenController.dinerKcal ?? 0,
-              mealImagePath: "$imageBaseUrl${homeScreenController.dinerImage}",
+              mealImagePath:
+                  _resolveImagePath(homeScreenController.dinerImage),
+              isImageLinkBase64:
+                  _isBase64Image(homeScreenController.dinerImage),
             ),
           ],
         );
