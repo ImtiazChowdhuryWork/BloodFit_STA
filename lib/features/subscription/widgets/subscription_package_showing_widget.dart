@@ -4,12 +4,10 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/subscription/widgets/active_package_header.dart';
 import 'package:bloodfit/features/subscription/widgets/in_active_package_header.dart';
-import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SubscriptionPackageShowingWidget extends StatelessWidget {
   final double packagePrice;
@@ -17,10 +15,10 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
   final List<bool> isIncludedList;
   final String packageType;
   final bool isPackageActive;
-  final int? discountOffer;
+
   final String? packageDuration;
   final void Function()? onTap;
-  final bool isDiscountOfferAvailable;
+
   const SubscriptionPackageShowingWidget({
     super.key,
     required this.packagePrice,
@@ -28,8 +26,7 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
     required this.packageType,
     required this.isPackageActive,
     this.onTap,
-    this.discountOffer,
-    this.isDiscountOfferAvailable = true,
+
     this.packageDuration,
     required this.isIncludedList,
   });
@@ -97,26 +94,9 @@ class SubscriptionPackageShowingWidget extends StatelessWidget {
                 );
               },
             ),
+            
+
             UIHelper.verticalSpace(24.h),
-
-            ///Section : ------------///Discount Offers///-----------
-            isDiscountOfferAvailable
-                ? Row(
-                    children: [
-                      SvgPicture.asset(Assets.icons.fireIcon),
-
-                      UIHelper.horizontalSpace(6.w),
-                      Text(
-                        "Get $discountOffer% Discount On The First Purchase",
-                        style: TextFontStyle.headline16w500cfefefeStylePoppins,
-                      ),
-                    ],
-                  )
-                : SizedBox.shrink(),
-
-            isDiscountOfferAvailable
-                ? UIHelper.verticalSpace(24.h)
-                : SizedBox.shrink(),
 
             isPackageActive
                 ? CustomElevatedButton(
