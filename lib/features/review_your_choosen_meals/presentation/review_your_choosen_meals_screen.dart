@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/custom_elevated_button.dart';
 import '../../../custom_widgets/go_back_widget.dart';
+import '../../../endpoints.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../routes/routes.dart';
 import '../../../custom_widgets/meal_plan_item_card.dart';
@@ -233,7 +234,7 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
   /// Helper method to convert image to URL (handles base64, relative paths, etc.)
   String _convertImageToUrl(String imageData) {
     if (imageData.isEmpty) {
-      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+      return defaultMealImage;
     }
     
     // If it's already a URL (starts with http), return as is

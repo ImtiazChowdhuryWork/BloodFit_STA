@@ -64,9 +64,12 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
   void initState() {
     super.initState();
     // Set default date (today) and fetch meals on load
+    // Wrapped in addPostFrameCallback to avoid updating reactive state during build
     final today = DateFormat('yyyy/MM/dd').format(DateTime.now());
-    mealPlanFeatureOptionsController.setSelectedDate(date: today);
-    mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      mealPlanFeatureOptionsController.setSelectedDate(date: today);
+      mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+    });
   }
 
   @override
@@ -248,6 +251,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
+import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
@@ -277,11 +281,13 @@ class MealPlanFeatureOptions extends StatefulWidget {
 class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
   final MealPlanFeatureOptionsController mealPlanFeatureOptionsController =
   Get.find<MealPlanFeatureOptionsController>();
+  final HomeScreenController homeScreenController =
+  Get.find<HomeScreenController>();
 
   /// Helper method to convert image to URL (handles base64, relative paths, etc.)
   String _convertImageToUrl(String imageData) {
     if (imageData.isEmpty) {
-      return 'https://faisal5000.merinasib.shop/images/cucumber.jpeg';
+      return defaultMealImage;
     }
 
     // If it's already a URL (starts with http), return as is
@@ -311,9 +317,12 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
   void initState() {
     super.initState();
     // Set default date (today) and fetch meals on load
+    // Wrapped in addPostFrameCallback to avoid updating reactive state during build
     final today = DateFormat('yyyy/MM/dd').format(DateTime.now());
-    mealPlanFeatureOptionsController.setSelectedDate(date: today);
-    mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      mealPlanFeatureOptionsController.setSelectedDate(date: today);
+      mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+    });
   }
 
   @override
@@ -409,7 +418,8 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                       final selectedDate = DateFormat('yyyy/MM/dd').parse(
                         mealPlanFeatureOptionsController.selectedDate.value,
                       );
-                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'mealGenerationDate' : selectedDate.toString()});
+                      final String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                      Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'mealGenerationDate' : formattedDate});
                     },
                     showSectionTitle: true,
                     sectionTitle: 'choose_from_suggested_meals'.tr,
@@ -426,6 +436,20 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                 }
 
                 // Success State - Show meals from API response
+                // Check if selected date is a past date to disable buttons
+                final selectedDate = DateFormat('yyyy/MM/dd').parse(
+                  mealPlanFeatureOptionsController.selectedDate.value,
+                );
+                final today = DateTime.now();
+                final selectedDateOnly = DateTime(
+                  selectedDate.year,
+                  selectedDate.month,
+                  selectedDate.day,
+                );
+                final todayOnly = DateTime(today.year, today.month, today.day);
+                final isPastDate = selectedDateOnly.isBefore(todayOnly);
+                final isToday = selectedDateOnly.isAtSameMomentAs(todayOnly);
+
                 return Column(
                   children: mealPlanFeatureOptionsController.mealsByDateList.map((
                       meal,
@@ -436,23 +460,45 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                           onTap: () {
                             Get.toNamed(
                               Routes.mealDetailscreen,
-                              arguments: {'mealID': meal.id},
+                              arguments: {
+                                'mealID': meal.id,
+                                'hideSelectButton': true,
+                              },
                             );
                           },
                           isMealEaten: meal.status == 'done',
                           leftButtonTitle: 'i_ate_this'.tr,
-                          leftButtonOnTap: () {
-                            LoggerUtils.debug(
-                              "Button Tapped: I Ate This, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
-                            );
-                          },
+                          leftButtonOnTap: isPastDate
+                              ? () {}
+                              : isToday
+                              ? () async {
+                                  LoggerUtils.debug(
+                                    "Button Tapped: I Ate This, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
+                                  );
+                                  await homeScreenController.patchUpdateMealConsumptionApi(
+                                    mealID: meal.id ?? '',
+                                  );
+                                  // Refresh the meals list for the selected date
+                                  mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
+                                }
+                              : () {
+                                  LoggerUtils.debug(
+                                    "Button Tapped: I Ate This, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
+                                  );
+                                },
+                          leftButtonColor: isPastDate ? AppColors.c262626 : null,
+                          leftButtonBorderColor: isPastDate ? AppColors.c999999 : null,
+                          isLeftButtonBorderUsed: isPastDate,
                           rightButtonTitle: 'swap_meal'.tr,
-                          rightButtonOnTap: () {
-                            LoggerUtils.debug(
-                              "Button Tapped: Swap Meal, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
-                            );
-                            showSwapMealBottomSheet();
-                          },
+                          rightButtonOnTap: isPastDate
+                              ? () {}
+                              : () {
+                                  LoggerUtils.debug(
+                                    "Button Tapped: Swap Meal, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
+                                  );
+                                  showSwapMealBottomSheet();
+                                },
+                          rightButtonBorderColor: isPastDate ? AppColors.c999999 : null,
                           mealType:
                           meal.mealType?.capitalizeFirst ??
                               'failed_to_get_meal_type'.tr,

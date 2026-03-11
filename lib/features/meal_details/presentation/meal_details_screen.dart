@@ -149,10 +149,14 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 );
               }
 
+              final hasGeneratedImage = mealDetailsScreenController!.hasGeneratedImage.value;
+
               return ItemImageAndTitleWidget(
-                imagePath: mealDetailsScreenController!.mealImage,
+                imagePath: hasGeneratedImage
+                    ? mealDetailsScreenController!.generatedMealImageLink.value
+                    : mealDetailsScreenController!.mealImage,
                 title: mealDetailsScreenController!.mealName,
-                isBase64: mealDetailsScreenController!.isMealImageBase64,
+                isBase64: hasGeneratedImage ? true : mealDetailsScreenController!.isMealImageBase64,
               );
             }),
             UIHelper.verticalSpace(8.h),
@@ -231,21 +235,29 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                     );
                   }
 
+                  final isGenerating = mealDetailsScreenController!.isMealImageGenerating.value;
+                  final hasGenerated = mealDetailsScreenController!.hasGeneratedImage.value;
+
                   return CustomElevatedButton(
-                    onTap: () {
-                      LoggerUtils.debug("Generate Image Button Taped!");
-                    },
+                    onTap: (isGenerating || hasGenerated)
+                        ? null
+                        : () {
+                            LoggerUtils.debug("Generate Image Button Tapped!");
+                            mealDetailsScreenController!.postGenerateMealImageApi();
+                          },
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.white.withOpacity(
-                          0.2,
-                        ), // subtle white glow
-                        blurRadius: 12, // soft, spread-out effect
-                        offset: Offset(0, 2), // slight downward direction
+                        color: Colors.white.withOpacity(0.2),
+                        blurRadius: 12,
+                        offset: Offset(0, 2),
                       ),
                     ],
-                    buttonColor: AppColors.c000000,
-                    buttonTitle: " Generate Image  ",
+                    buttonColor: hasGenerated ? AppColors.c999999 : AppColors.c000000,
+                    buttonTitle: isGenerating
+                        ? " Generating... "
+                        : hasGenerated
+                            ? " Image Generated "
+                            : " Generate Image  ",
                     borderRadius: 8.r,
                     buttonHeight: 40.h,
                   );
