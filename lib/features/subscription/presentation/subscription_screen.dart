@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../helper/ui_helpers.dart';
 import '../data/controller/subscription_plans_screen_controller.dart';
+import '../data/model/subscription_plans_model.dart';
 import '../widgets/subscription_package_showing_widget.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -23,11 +23,17 @@ class SubscriptionScreen extends StatefulWidget {
 class _SubscriptionScreenState extends State<SubscriptionScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late SubscriptionPlansScreenController controller;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    controller = Get.find<SubscriptionPlansScreenController>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getSubscriptionPlansApi();
+    });
   }
 
   @override
@@ -38,11 +44,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
 
   @override
   Widget build(BuildContext context) {
-    SubscriptionPlansScreenController controller =
-        Get.find<SubscriptionPlansScreenController>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getSubscriptionPlansApi();
-    });
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -155,11 +156,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                         var plan = monthlyPlans[index];
                         return SubscriptionPackageShowingWidget(
                           packagePrice: plan.pricing?.monthly?.price ?? 0.0,
-                          packageOffersList:
-                              plan.features
-                                  ?.map((feature) => feature.label ?? '')
-                                  .toList() ??
-                              [],
+                          packageOffersList: plan.features != null
+                              ? plan.features!.map((feature) => labelValues.reverse[feature.label] ?? '').toList()
+                              : <String>[],
 
                           isIncludedList:
                               plan.features
@@ -171,18 +170,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                               [],
                           packageType: plan.name ?? 'Unknown',
                           packageDuration: 'Monthly',
-                          isPackageActive: false,
-
-                          ///------------>>>
-                          /*
-                          -------->>> IF User Is a Free User Only then And will Buy any package for first time,
-                          -------->>> isDiscountOfferAvailable: true
-
-                          --------->>> If User Is a Paid User Then,
-                          --------->>> isDiscountOfferAvailable: false  
-                          */
-                          isDiscountOfferAvailable: true,
-                          discountOffer: 50,
+                          isPackageActive: plan.isActive ?? false,
                           onTap: () {
                             // handle selection
                             Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
@@ -234,11 +222,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                         var plan = yearlyPlans[index];
                         return SubscriptionPackageShowingWidget(
                           packagePrice: plan.pricing?.yearly?.price ?? 0.0,
-                          packageOffersList:
-                              plan.features
-                                  ?.map((feature) => feature.label ?? '')
-                                  .toList() ??
-                              [],
+                          packageOffersList: plan.features != null
+                              ? plan.features!.map((feature) => labelValues.reverse[feature.label] ?? '').toList()
+                              : <String>[],
 
                           isIncludedList:
                               plan.features
@@ -250,20 +236,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                               [],
                           packageType: plan.name ?? 'Unknown',
                           packageDuration: 'Yearly',
+                          isPackageActive: plan.isActive ?? false,
 
-                          ///---------->>> Based On User Subscription Type
-                          isPackageActive: index == 0 ? true : false,
-
-                          ///------------>>>
-                          /*
-                          -------->>> IF User Is a Free User Only then And will Buy any package for first time,
-                          -------->>> isDiscountOfferAvailable: true
-
-                          --------->>> If User Is a Paid User Then,
-                          --------->>> isDiscountOfferAvailable: false  
-                          */
-                          isDiscountOfferAvailable: index == 0 ? false : true,
-                          discountOffer: 50,
                           onTap: () {
                             // handle selection
                             Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
