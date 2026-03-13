@@ -9,8 +9,9 @@ import '../../data/controller/weight_progress_showing_controller.dart';
 
 class WeightProgressFailedWidget extends StatelessWidget {
   final ProgressShowingController controller;
+  final void Function()? onTap;
 
-  WeightProgressFailedWidget({super.key, required this.controller});
+  WeightProgressFailedWidget({super.key, required this.controller, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +37,7 @@ class WeightProgressFailedWidget extends StatelessWidget {
                   ),
             UIHelper.verticalSpace(8.h),
             CustomElevatedButton(
-              onTap: () {
-                LoggerUtils.debug("Retry Button Taped!");
-                controller.getWeightProgressDataApi();
-              },
+              onTap: onTap,
               buttonTitle: "Retry",
               buttonWidth: 120.w,
               buttonHeight: 40.h,

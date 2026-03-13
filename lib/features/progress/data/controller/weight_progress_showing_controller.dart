@@ -1,3 +1,4 @@
+import 'package:bloodfit/features/progress/data/model/progress_report_api_model.dart';
 import 'package:bloodfit/features/progress/data/model/weight_progress_showing_model.dart';
 import 'package:bloodfit/features/progress/data/repository/weight_progress_showing_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
@@ -13,6 +14,65 @@ class ProgressShowingController extends GetxController {
   PorgressReportApiRepository _porgressReportApiRepository;
 
   ProgressShowingController(this._weightProgressShowingRepository, this._porgressReportApiRepository); 
+
+
+  ///------------<>>>>>> Section : Progress Report Api Starts Here
+  Rxn<ProgressReportApiModel> progressReportApiModel = Rxn<ProgressReportApiModel>();
+  RxBool isProgressReportDataLoading = false.obs;
+  RxString progressReportDataErrorMessag = ''.obs;
+  void clearProgressReportDataErrorMessage(){
+    progressReportDataErrorMessag.value = '';
+  }
+
+
+  Future<void> getProgressReportApi()async{
+    try{
+      isProgressReportDataLoading.value = true;
+      clearProgressReportDataErrorMessage();
+
+
+      final response = await _porgressReportApiRepository.progressReportApiRepository();
+
+      LoggerUtils.info("Progress Report Api Response : $response");
+
+      if(response.statusCode == 200 && response.isSuccess){
+        LoggerUtils.debug("😇😇😇😇😇.......Success In Getting the Progress Report Value!");
+
+        progressReportApiModel.value = ProgressReportApiModel.fromJson(response.jsonResponse!);
+
+      }else{
+
+
+        progressReportDataErrorMessag.value = response.errorMessage ?? 'Failed to fetch progress data';
+
+
+        LoggerUtils.error("Status Code : ${response.statusCode}");
+        LoggerUtils.error("Progress Report Section Error Message : ${progressReportDataErrorMessag.value} ");
+
+      }
+
+    }catch(error){
+
+      progressReportDataErrorMessag.value = error.toString();
+
+      LoggerUtils.error("Something WentWrong ! Failed to Get Progress Report data!");
+      LoggerUtils.error("Error Message : ${progressReportDataErrorMessag.value}");
+
+
+    }finally{
+      isProgressReportDataLoading.value = false;
+    }
+  }
+
+
+  int get totalProgressValue => progressReportApiModel.value?.data?.completionPercentage ?? 0;
+  int get totalMealProgressValue => progressReportApiModel.value?.data?.meal?.mealCompletionPercentage ?? 0;
+  int get totalWorkoutProgressValue => progressReportApiModel.value?.data?.workout?.workoutCompletionPercentage ?? 0;
+
+
+
+
+  ///------------<>>>>>> Section : Progress Report Api Ends Here
   
 
 
@@ -47,7 +107,7 @@ class ProgressShowingController extends GetxController {
 
 
         LoggerUtils.error("Status Code : ${response.statusCode}");
-        LoggerUtils.error("Weight Progress Section Error Message : ${response.errorMessage} ");
+        LoggerUtils.error("Weight Progress Section Error Message : ${weightProgressDataErrorMessage.value} ");
 
       }
 
@@ -56,6 +116,8 @@ class ProgressShowingController extends GetxController {
     }catch(error){
 
       weightProgressDataErrorMessage.value = error.toString();
+      LoggerUtils.error("Something Went Wrong! While Getting the Weight History Data!");
+      LoggerUtils.error("Error Message : ${weightProgressDataErrorMessage.value}");
 
     }finally{
 
@@ -74,4 +136,7 @@ class ProgressShowingController extends GetxController {
 
 
   ///------------<>>>>> Section : Weight Progress Showing Api Method Ends Here
+  ///
+  ///
+  ///
 }
