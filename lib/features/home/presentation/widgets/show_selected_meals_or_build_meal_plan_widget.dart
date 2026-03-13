@@ -106,7 +106,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               onTap: () {
                 Get.toNamed(
                   Routes.mealDetailscreen,
-                  arguments: {'mealID': homeScreenController.breakfastMealID},
+                  arguments: {'mealID': homeScreenController.breakfastMealID, 'hideSelectButton': true,},
                 );
               },
               isMealEaten:
@@ -153,7 +153,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               onTap: () {
                 Get.toNamed(
                   Routes.mealDetailscreen,
-                  arguments: {'mealID': homeScreenController.lunchMealID},
+                  arguments: {'mealID': homeScreenController.lunchMealID, 'hideSelectButton': true,},
                 );
               },
               isMealEaten:
@@ -203,7 +203,7 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               onTap: () {
                 Get.toNamed(
                   Routes.mealDetailscreen,
-                  arguments: {'mealID': homeScreenController.dinerMealID},
+                  arguments: {'mealID': homeScreenController.dinerMealID, 'hideSelectButton': true,},
                 );
               },
               isMealEaten:

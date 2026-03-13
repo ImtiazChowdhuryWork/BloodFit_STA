@@ -20,9 +20,8 @@ class GenerateMealImageRepository {
     Map<String,dynamic> data = {
       'meal_name' : title,
       'description' : description,
-      'ingredients' : ingredientList.map((name) => {'name': name}).toList(),
+      'ingredients' : ingredientList,
     };
-
 
     return _networkCaller.postRequest(Endpoints.postGenerateMealImageApiUrl(), body: data, headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
   }
