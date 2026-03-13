@@ -1,6 +1,8 @@
 import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/repository/meal_plan_feature_repository.dart';
+import 'package:bloodfit/features/progress/data/controller/weight_progress_showing_controller.dart';
+import 'package:bloodfit/features/progress/data/repository/weight_progress_showing_repository.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +21,10 @@ class NavigationBinding extends Bindings {
       Get.put(NetworkCaller(), permanent: true);
     }
 
+
+
+    
+
     // ✅ Repositories
     Get.lazyPut(() => DailyCaloriesApiRepository(Get.find()));
     Get.lazyPut(() => GetTodaysMealRepository(Get.find()));
@@ -26,8 +32,14 @@ class NavigationBinding extends Bindings {
     Get.lazyPut(() => MealConsumptionRepository(Get.find()));
     Get.lazyPut(() => SwapMealRepository(Get.find()));
     Get.lazyPut(() => MealPlanFeatureRepository(Get.find()));
+    Get.lazyPut(() => WeightProgressShowingRepository(Get.find()));
+
+
+
 
     // ✅ Controllers
+    
+    ///------>>> Section : Home Screen
     Get.lazyPut(
       () => HomeScreenController(
         Get.find<DailyCaloriesApiRepository>(),
@@ -38,17 +50,29 @@ class NavigationBinding extends Bindings {
       fenix: true,
     );
 
+
+
+    ///-------->>> Section : Meal Plan Feature Options Screen
     Get.lazyPut(
       () => MealPlanFeatureOptionsController(
         Get.find<MealPlanFeatureRepository>(),
       ), fenix: true,
     );
 
+
+
+    ///--------->>> Section : Weight History Screen
     Get.lazyPut(
       () => WeightHistoryScreenController(
         Get.find<UpdateCurrentWeightRepository>(),
       ),
       fenix: true,
     );
+
+
+    ///---------->>> Section : Progress Screen
+    Get.lazyPut(() => ProgressShowingController(
+      Get.find<WeightProgressShowingRepository>(),
+    ), fenix: true);
   }
 }
