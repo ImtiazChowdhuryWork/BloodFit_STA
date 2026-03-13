@@ -4,12 +4,15 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/state_manager.dart';
 import 'package:logger/web.dart';
 
+import '../repository/porgress_report_api_repository.dart';
+
 class ProgressShowingController extends GetxController {
 
   ///-----------<>>>>>>> Section : Importing Repositories
   WeightProgressShowingRepository _weightProgressShowingRepository;
+  PorgressReportApiRepository _porgressReportApiRepository;
 
-  ProgressShowingController(this._weightProgressShowingRepository); 
+  ProgressShowingController(this._weightProgressShowingRepository, this._porgressReportApiRepository); 
   
 
 

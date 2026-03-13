@@ -76,6 +76,7 @@ final class Endpoints {
 
   static String postGenerateMealImageApiUrl() => "$url/ai-meal/generate-meal-image";
   static String getWeightProgressApiUrl() => "$url/progress/weight-progress";
+  static String getProgressReportApiUrl() => "$url/progress/progress-report";
 
 
   

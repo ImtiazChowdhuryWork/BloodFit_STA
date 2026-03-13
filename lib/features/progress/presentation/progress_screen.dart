@@ -78,29 +78,46 @@ class ProgressScreen extends StatelessWidget {
               UIHelper.verticalSpace(24.h),
 
               ///Section : -----------//// your weight progress ///-------------
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: UIHelper.kDefaulutPadding(),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Your Weight Progress',
-                      style: TextFontStyle.headline20w500cfefefeStylePoppins,
+              Obx(() {
+                if (controller.isWeightProgressDataLoading.value) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.kDefaulutPadding(),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(Routes.weightHistoryScreen);
-                      },
-                      child: Text(
-                        'View All',
-                        style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomShimmerEffect(height: 10.h, width: 0.4.sw),
+                        CustomShimmerEffect(height: 10.h, width: 0.3.sw),
+                      ],
+                    ),
+                  );
+                }
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: UIHelper.kDefaulutPadding(),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Your Weight Progress',
+                        style: TextFontStyle.headline20w500cfefefeStylePoppins,
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.weightHistoryScreen);
+                        },
+                        child: Text(
+                          'View All',
+                          style:
+                              TextFontStyle.headline14w400cfefefeStylePoppins,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
               UIHelper.verticalSpace(20.h),
 
               ///Section : -----------//// Liner Progress Bar ///-------------
@@ -117,7 +134,9 @@ class ProgressScreen extends StatelessWidget {
                       .weightProgressDataErrorMessage
                       .value
                       .isNotEmpty) {
-                    return WeightProgressFailedWidget(controller: ProgressShowingController(Get.find()),);
+                    return WeightProgressFailedWidget(
+                      controller: ProgressShowingController(Get.find(), Get.find()),
+                    );
                   }
 
                   return ProgressIndicatorWithMarkers(

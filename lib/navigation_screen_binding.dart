@@ -2,6 +2,7 @@ import 'package:bloodfit/features/home/data/repository/update_meal_status_reposi
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/repository/meal_plan_feature_repository.dart';
 import 'package:bloodfit/features/progress/data/controller/weight_progress_showing_controller.dart';
+import 'package:bloodfit/features/progress/data/repository/porgress_report_api_repository.dart';
 import 'package:bloodfit/features/progress/data/repository/weight_progress_showing_repository.dart';
 import 'package:bloodfit/networks/network_caller.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,7 @@ class NavigationBinding extends Bindings {
     Get.lazyPut(() => SwapMealRepository(Get.find()));
     Get.lazyPut(() => MealPlanFeatureRepository(Get.find()));
     Get.lazyPut(() => WeightProgressShowingRepository(Get.find()));
+    Get.lazyPut(() => PorgressReportApiRepository(Get.find()));
 
 
 
@@ -73,6 +75,7 @@ class NavigationBinding extends Bindings {
     ///---------->>> Section : Progress Screen
     Get.lazyPut(() => ProgressShowingController(
       Get.find<WeightProgressShowingRepository>(),
+      Get.find<PorgressReportApiRepository>(),
     ), fenix: true);
   }
 }
