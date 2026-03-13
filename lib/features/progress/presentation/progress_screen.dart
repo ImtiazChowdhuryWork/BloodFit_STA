@@ -1,5 +1,4 @@
 import 'package:bloodfit/constants/text_font_style.dart';
-import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/features/progress/data/controller/weight_progress_showing_controller.dart';
 import 'package:bloodfit/features/progress/presentation/widget/custom_progress_indicator.dart';
 import 'package:bloodfit/features/progress/presentation/widget/overall_progress_showing_widget.dart';
@@ -7,13 +6,13 @@ import 'package:bloodfit/features/progress/presentation/widget/weight_history_ch
 import 'package:bloodfit/features/progress/presentation/widget/weight_progress_failed_widget.dart';
 import 'package:bloodfit/features/progress/presentation/widget/weight_progress_loading_showing_widget.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
-import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../custom_widgets/custom_shimmer_effect.dart';
+import '../../../helper/logger_util.dart';
 import '../../../helper/ui_helpers.dart';
 import '../../home/presentation/widgets/app_bar_section_widget.dart';
 import '../../home/presentation/widgets/consistancy_stake_preview.dart';
@@ -28,6 +27,7 @@ class ProgressScreen extends StatelessWidget {
         Get.find<ProgressShowingController>();
 
     controller.getWeightProgressDataApi();
+    controller.getProgressReportApi();
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
@@ -51,13 +51,35 @@ class ProgressScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                   horizontal: UIHelper.kDefaulutPadding(),
                 ),
-                child: OverAllProgressShowingWidget(
-                  overAllProgress: 0.7,
-                  inforTypeOne: 'mealplan'.tr,
-                  infoTypeOneProgress: 0.7,
-                  infoTypeTwo: 'workout'.tr,
-                  infoTypeTwoProgress: 0.4,
-                ),
+                child: Obx(() {
+                  if (controller.isProgressReportDataLoading.value) {
+                    return CircularProgressIndicator();
+                  }
+
+                  if (controller
+                      .progressReportDataErrorMessag
+                      .value
+                      .isNotEmpty) {
+                    return WeightProgressFailedWidget(
+                      controller: ProgressShowingController(
+                        Get.find(),
+                        Get.find(),
+                      ),
+                      onTap: () {
+                        LoggerUtils.debug("Retry Button Taped!");
+                        controller.getProgressReportApi();
+                      },
+                    );
+                  }
+
+                  return OverAllProgressShowingWidget(
+                    overAllProgress: controller.totalProgressValue.toDouble(),
+                    inforTypeOne: 'mealplan'.tr,
+                    infoTypeOneProgress: controller.totalMealProgressValue.toDouble(),
+                    infoTypeTwo: 'workout'.tr,
+                    infoTypeTwoProgress: controller.totalWorkoutProgressValue.toDouble(),
+                  );
+                }),
               ),
               UIHelper.verticalSpace(32.h),
 
@@ -135,7 +157,14 @@ class ProgressScreen extends StatelessWidget {
                       .value
                       .isNotEmpty) {
                     return WeightProgressFailedWidget(
-                      controller: ProgressShowingController(Get.find(), Get.find()),
+                      controller: ProgressShowingController(
+                        Get.find(),
+                        Get.find(),
+                      ),
+                      onTap: () {
+                        LoggerUtils.debug("Retry Button Taped!");
+                        controller.getWeightProgressDataApi();
+                      },
                     );
                   }
 

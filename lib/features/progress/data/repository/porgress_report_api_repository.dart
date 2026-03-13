@@ -12,7 +12,7 @@ class PorgressReportApiRepository {
 
     String? tokenValue = appData.read(kKeyAccessToken) ?? '';
 
-    return _networkCaller.getRequest(Endpoints.getProgressReportApiUrl(), headers: tokenValue.isEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
+    return _networkCaller.getRequest(Endpoints.getProgressReportApiUrl(), headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
   }
 
 
