@@ -11,6 +11,7 @@ import 'package:bloodfit/features/choose_extra_workout/presentation/choose_extra
 import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cost_details_for_upgrade_plan_screen.dart';
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
+import 'package:bloodfit/features/fitness/bindings/fitness_screen_bindings.dart';
 import 'package:bloodfit/features/fitness/presentation/fitness_screen.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/information_gather_meal_plan/presentation/widgets/select_weight/presentation/select_weight_screen.dart';
@@ -246,6 +247,7 @@ class Routes {
     GetPage(
       name: fitnessScreen,
       page: () => FitnessScreen(),
+      binding: FitnessScreenBindings(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
