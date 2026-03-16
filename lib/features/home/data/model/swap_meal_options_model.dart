@@ -73,6 +73,7 @@ class Alternative {
     String? description;
     List<Ingredient>? ingredients;
     int? numberOfServings;
+    String? image;
 
     Alternative({
         this.mealName,
@@ -83,6 +84,7 @@ class Alternative {
         this.description,
         this.ingredients,
         this.numberOfServings,
+        this.image,
     });
 
     factory Alternative.fromRawJson(String str) => Alternative.fromJson(json.decode(str));
@@ -98,6 +100,7 @@ class Alternative {
         description: json["description"],
         ingredients: json["ingredients"] == null ? [] : List<Ingredient>.from(json["ingredients"]!.map((x) => Ingredient.fromJson(x))),
         numberOfServings: json["number_of_servings"],
+        image: json["image"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -109,6 +112,7 @@ class Alternative {
         "description": description,
         "ingredients": ingredients == null ? [] : List<dynamic>.from(ingredients!.map((x) => x.toJson())),
         "number_of_servings": numberOfServings,
+        "image": image,
     };
 }
 

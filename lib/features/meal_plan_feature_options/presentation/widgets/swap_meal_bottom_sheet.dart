@@ -2,7 +2,10 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/custom_widgets/custom_shimmer_effect.dart';
 import 'package:bloodfit/custom_widgets/meal_plan_item_card.dart';
+import 'package:bloodfit/endpoints.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
+import 'package:bloodfit/features/home/data/model/swap_meal_options_model.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_options_loader.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
@@ -30,6 +33,23 @@ void showSwapMealBottomSheet({
 
   // Call the API to get swap meal options
   homeScreenController.getSwapMealOptionsApi();
+
+  /// Detect if an image string is base64 encoded
+  bool _isBase64Image(String? image) {
+    if (image == null || image.isEmpty) return false;
+    if (image.startsWith('data:image')) return true;
+    if (image.startsWith('http://') || image.startsWith('https://')) return false;
+    if (image.startsWith('/')) return false;
+    final cleanPath = image.contains(',') ? image.split(',').last : image;
+    return RegExp(r'^[A-Za-z0-9+/=]+$').hasMatch(cleanPath);
+  }
+
+  /// Returns the correct image path based on whether it's base64 or a URL
+  String _resolveImagePath(String? image) {
+    if (image == null || image.isEmpty) return '';
+    if (_isBase64Image(image)) return image;
+    return '$imageBaseUrl$image';
+  }
 
   Get.bottomSheet(
     isScrollControlled: true,
@@ -145,10 +165,33 @@ void showSwapMealBottomSheet({
                         LoggerUtils.debug(
                           "Button Tapped: Details - ${alternative.mealName}",
                         );
+                        // Convert Alternative to MealDataModel
+                        final mealDataModel = MealDataModel(
+                          mealName: alternative.mealName ?? 'Unknown Meal',
+                          mealType: alternative.category ?? mealType,
+                          totalCalories: alternative.totalCalories ?? 0,
+                          description: alternative.description ?? '',
+                          ingredients: (alternative.ingredients ?? []).map((ing) => MealIngredientData(
+                            name: ing.name ?? '',
+                            quantity: ing.quantity ?? '',
+                            icon: ing.icon ?? '',
+                          )).toList(),
+                          macronutrients: MealMacronutrientsData(
+                            carbohydrates: alternative.macronutrients?.carbohydrates ?? 0,
+                            protein: alternative.macronutrients?.protein ?? 0,
+                            fat: alternative.macronutrients?.fat ?? 0,
+                          ),
+                          numberOfServings: alternative.numberOfServings ?? 1,
+                          image: alternative.image ?? '',
+                          category: alternative.category,
+                          subCategory: alternative.subCategory,
+                          mealId: null,
+                        );
+                        // Navigate to meal details with the converted meal data
                         Get.toNamed(
                           Routes.mealDetailscreen,
                           arguments: {
-                            'mealID': alternative.mealName,
+                            'mealData': mealDataModel,
                             'hideSelectButton': true,
                           },
                         );
@@ -158,9 +201,8 @@ void showSwapMealBottomSheet({
                           alternative.category?.capitalizeFirst ?? mealType,
                       mealTitle: alternative.mealName ?? 'Unknown Meal',
                       kcalValue: alternative.totalCalories ?? 0,
-                      mealImagePath:
-                          '', // You can add image handling if available in the model
-                      isImageLinkBase64: false,
+                      mealImagePath: _resolveImagePath(alternative.image),
+                      isImageLinkBase64: _isBase64Image(alternative.image),
                     );
                   },
                 );

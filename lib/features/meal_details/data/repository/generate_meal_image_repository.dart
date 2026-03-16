@@ -17,10 +17,15 @@ class GenerateMealImageRepository {
 
     String? tokenValue = appData.read(kKeyAccessToken) ?? '';
 
+    // Convert List<String> to List<Map<String, String>> as backend expects
+    List<Map<String, String>> ingredients = ingredientList.map((ingredient) {
+      return {'name': ingredient};
+    }).toList();
+
     Map<String,dynamic> data = {
       'meal_name' : title,
       'description' : description,
-      'ingredients' : ingredientList,
+      'ingredients' : ingredients,
     };
 
     return _networkCaller.postRequest(Endpoints.postGenerateMealImageApiUrl(), body: data, headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);

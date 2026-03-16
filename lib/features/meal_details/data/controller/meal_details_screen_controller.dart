@@ -72,6 +72,12 @@ class MealDetailsScreenController extends GetxController{
 
         LoggerUtils.debug("🎃🎃🎃🎃Fetched meal Details Successfully!");
         mealDetailsModel.value = MealDetailsModel.fromJson(response.jsonResponse!);
+        
+        // Log the fetched image URL
+        final fetchedImageUrl = mealDetailsModel.value?.data?.image ?? 'NULL';
+        LoggerUtils.debug("🖼️ Fetched Meal Image URL: $fetchedImageUrl");
+        LoggerUtils.debug("📋 Full Meal Data: ${response.jsonResponse}");
+        
         LoggerUtils.debug("Raw JSON: ${response.jsonResponse}");
 
       }else{
@@ -150,10 +156,14 @@ class MealDetailsScreenController extends GetxController{
   }
   
   String get mealImage {
-    if (hasDirectMealData.value) {
-      return directMealDataModel.value?.image ?? 'Getting your meal image...';
+    // If image has been generated, return the generated image
+    if (hasGeneratedImage.value && generatedMealImageLink.value.isNotEmpty) {
+      return generatedMealImageLink.value;
     }
-    return data?.image ?? 'Getting your meal image...';
+    if (hasDirectMealData.value) {
+      return directMealDataModel.value?.image ?? '';
+    }
+    return data?.image ?? '';
   }
   
   /// Check if the current meal image is base64
@@ -262,17 +272,43 @@ class MealDetailsScreenController extends GetxController{
       if(response.statusCode == 200 && response.isSuccess){
         LoggerUtils.debug("Successfully Generated Meal Image!");
 
-         generateMealImageModel.value = GenerateMealImageModel.fromJson(response.jsonResponse!);
+        generateMealImageModel.value = GenerateMealImageModel.fromJson(response.jsonResponse!);
+        
+        // Log the generate image response
+        LoggerUtils.debug("📸 Generate Image Response: ${response.jsonResponse}");
+        LoggerUtils.debug("📸 Generated Image Base64: ${generateMealImageModel.value?.data?.mealImageBase64 ?? 'NULL'}");
 
-        final imageLinkAtBase64 = generateMealImageModel.value?.data?.mealImageBase64 ?? '';
-
-        if(imageLinkAtBase64.isNotEmpty){
-          generatedMealImageLink.value = imageLinkAtBase64.startsWith('data:image')
-              ? imageLinkAtBase64
-              : 'data:image/png;base64,$imageLinkAtBase64';
+        // Check if API returned the image
+        final imageBase64 = generateMealImageModel.value?.data?.mealImageBase64;
+        final hasImageData = imageBase64 != null && imageBase64.isNotEmpty;
+        
+        if (hasImageData) {
+          // API returned image data - use it directly
+          generatedMealImageLink.value = imageBase64!.startsWith('data:image')
+              ? imageBase64
+              : 'data:image/png;base64,$imageBase64';
           hasGeneratedImage.value = true;
-          LoggerUtils.debug("Generated Meal Image Link Converted Successfully");
+          LoggerUtils.debug("✅ Generated image displayed from API response");
+        } else if (mealID.value.isNotEmpty) {
+          // No image data but we have meal ID - fetch updated meal
+          LoggerUtils.debug("🔄 No image in response, fetching updated meal details...");
+          
+          // Clear direct meal data flag so getMealDetailsApi fetches from API
+          hasDirectMealData.value = false;
+          directMealDataModel.value = null;
+          
+          // Log meal ID before fetching
+          LoggerUtils.debug("🎯 Fetching meal with ID: ${mealID.value}");
+          
+          // Fetch updated meal from API
+          await getMealDetailsApi();
+        } else {
+          // No image data AND no meal ID - show message
+          LoggerUtils.debug("⚠️ Image generated but cannot display: No image data returned and no meal ID available");
+          LoggerUtils.debug("💡 This happens with AI-suggested meals that haven't been saved yet");
         }
+
+        LoggerUtils.debug("✅ Generated image swapped successfully!");
 
       }else{
         generateMealImageErrorMessage.value = response.errorMessage.toString();
