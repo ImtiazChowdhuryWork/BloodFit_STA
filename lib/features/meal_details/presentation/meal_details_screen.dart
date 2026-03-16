@@ -137,10 +137,11 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               if (mealDetailsScreenController!.isMealDetailsLoading.value) {
                 return CustomShimmerEffect(height: 0.5.sh, width: 1.sw);
               }
-              if (mealDetailsScreenController!.mealImage.isEmpty ||
+              // Show error only if BOTH image and name are empty
+              if (mealDetailsScreenController!.mealImage.isEmpty &&
                   mealDetailsScreenController!.mealName.isEmpty) {
                 return CustomShimmerEffect(
-                  height: 0.2.sh,
+                  height: 0.4.sh,
                   width: 1.sw,
                   child: Text(
                     'Failed to Get Meal Name or Image',
@@ -150,11 +151,12 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               }
 
               final hasGeneratedImage = mealDetailsScreenController!.hasGeneratedImage.value;
+              final mealImagePath = hasGeneratedImage
+                  ? mealDetailsScreenController!.generatedMealImageLink.value
+                  : mealDetailsScreenController!.mealImage;
 
               return ItemImageAndTitleWidget(
-                imagePath: hasGeneratedImage
-                    ? mealDetailsScreenController!.generatedMealImageLink.value
-                    : mealDetailsScreenController!.mealImage,
+                imagePath: mealImagePath,
                 title: mealDetailsScreenController!.mealName,
                 isBase64: hasGeneratedImage ? true : mealDetailsScreenController!.isMealImageBase64,
               );
