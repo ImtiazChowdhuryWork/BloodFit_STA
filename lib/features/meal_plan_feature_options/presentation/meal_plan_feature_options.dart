@@ -496,7 +496,14 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                                   LoggerUtils.debug(
                                     "Button Tapped: Swap Meal, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
                                   );
-                                  showSwapMealBottomSheet();
+                                  showSwapMealBottomSheet(
+                                    mealType: meal.mealType ?? 'breakfast',
+                                    mealName: meal.mealName ?? '',
+                                    mealId: meal.id,
+                                    mealCalories: meal.kcal ?? 0,
+                                    category: meal.mealType ?? 'breakfast',
+                                    subCategory: meal.mealType ?? 'breakfast',
+                                  );
                                 },
                           rightButtonBorderColor: isPastDate ? AppColors.c999999 : null,
                           mealType:
