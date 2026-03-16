@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/endpoints.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
@@ -130,7 +128,15 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
                 LoggerUtils.debug(
                   "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
                 );
-                showSwapMealBottomSheet();
+                // Use mealType as both category and subCategory for the swap API
+                showSwapMealBottomSheet(
+                  mealType: homeScreenController.itemBreakFast.value?.mealType ?? 'breakfast',
+                  mealName: homeScreenController.breakfastName ?? '',
+                  mealId: homeScreenController.breakfastMealID,
+                  mealCalories: homeScreenController.breakfastTotalKcal ?? 0,
+                  category: homeScreenController.itemBreakFast.value?.mealType ?? 'breakfast',
+                  subCategory: homeScreenController.itemBreakFast.value?.mealType ?? 'breakfast',
+                );
               },
               mealType:
                   homeScreenController
@@ -178,9 +184,17 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               rightButtonTitle: 'swap_meal'.tr,
               rightButtonOnTap: () {
                 LoggerUtils.debug(
-                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemBreakFast.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemLunch.value?.mealType} Meal Name :: ${homeScreenController.itemLunch.value?.mealName}",
                 );
-                showSwapMealBottomSheet();
+                // Use mealType as both category and subCategory for the swap API
+                showSwapMealBottomSheet(
+                  mealType: homeScreenController.itemLunch.value?.mealType ?? 'lunch',
+                  mealName: homeScreenController.lunchName ?? '',
+                  mealId: homeScreenController.lunchMealID,
+                  mealCalories: homeScreenController.lunchTotalKcal ?? 0,
+                  category: homeScreenController.itemLunch.value?.mealType ?? 'lunch',
+                  subCategory: homeScreenController.itemLunch.value?.mealType ?? 'lunch',
+                );
               },
               mealType:
                   homeScreenController
@@ -224,9 +238,17 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
               rightButtonTitle: 'swap_meal'.tr,
               rightButtonOnTap: () {
                 LoggerUtils.debug(
-                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemDinner.value?.mealType} Meal Name :: ${homeScreenController.itemBreakFast.value?.mealName}",
+                  "Button Tapped: Swap Meal, Meal Type :: ${homeScreenController.itemDinner.value?.mealType} Meal Name :: ${homeScreenController.itemDinner.value?.mealName}",
                 );
-                showSwapMealBottomSheet();
+                // Use mealType as both category and subCategory for the swap API
+                showSwapMealBottomSheet(
+                  mealType: homeScreenController.itemDinner.value?.mealType ?? 'dinner',
+                  mealName: homeScreenController.dinerName ?? '',
+                  mealId: homeScreenController.dinerMealID,
+                  mealCalories: homeScreenController.dinerKcal ?? 0,
+                  category: homeScreenController.itemDinner.value?.mealType ?? 'dinner',
+                  subCategory: homeScreenController.itemDinner.value?.mealType ?? 'dinner',
+                );
               },
               mealType:
                   homeScreenController

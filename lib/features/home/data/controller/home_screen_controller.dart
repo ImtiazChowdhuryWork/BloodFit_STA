@@ -1,5 +1,7 @@
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/features/home/data/model/swap_meal_options_model.dart';
 import 'package:bloodfit/features/home/data/repository/get_todays_meal_repository.dart';
+import 'package:bloodfit/features/home/data/repository/swap_meal_options_repository.dart';
 import 'package:bloodfit/features/home/data/repository/swap_meal_repository.dart';
 import 'package:bloodfit/features/home/data/repository/update_meal_status_repository.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
@@ -20,6 +22,7 @@ class HomeScreenController extends GetxController {
   GetTodaysMealRepository _getTodaysMealRepository;
   MealConsumptionRepository _mealConsumptionRepository;
   SwapMealRepository _swapMealRepository;
+  SwapMealOptionsRepository _swapMealOptionsRepository;
 
   ///----------->>> Section : Importing the Model
   Rxn<GetCalorieRequirementsModel> model = Rxn<GetCalorieRequirementsModel>();
@@ -29,6 +32,7 @@ class HomeScreenController extends GetxController {
     this._getTodaysMealRepository,
     this._mealConsumptionRepository,
     this._swapMealRepository,
+    this._swapMealOptionsRepository,
   );
 
   ///Section : ----------------////Selectable Meal Calendar for Meal Plan///----------------------
@@ -350,6 +354,66 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
   }
 
   ///--------->>> Section : Swap Meal Api Ends Here
+  ///
+  ///
+  ///--------->>> Section : Swap Meal Options Api Starts Here
+  
+  Rxn<SwapMealOptionsModel> swapMealOptionsModel = Rxn<SwapMealOptionsModel>();
+  
+  RxBool isSwapMealOptionsLoading = false.obs;
+  RxString swapMealOptionsErrorMessage = ''.obs;
+  void clearSwapMealOptionsErrorMessage(){
+    swapMealOptionsErrorMessage.value = '';
+  }
+
+  RxString categoryName = ''.obs;
+  void setCategoryName({required String value}){
+    categoryName.value = value;
+  }
+
+  RxString subCategoryName = ''.obs;
+  void setSubCategoryName({required String value}){
+    subCategoryName.value = value;
+  }
+
+  RxInt currentCallores = 0.obs;
+  void setCurrentCalories({required int value}){
+    currentCallores.value = value;
+  }
+
+
+  Future<void> getSwapMealOptionsApi()async{
+    try{
+      isSwapMealOptionsLoading.value = true;
+      clearSwapMealOptionsErrorMessage();
+
+      final response = await _swapMealOptionsRepository.swapMealOptionsRepository(category: categoryName.value, subCategory: subCategoryName.value, currentCallories: currentCallores.value);
+
+      LoggerUtils.debug("Swap Meal Options Api Response : ${SwapMealOptionsModel.fromJson(response.jsonResponse!)}");
+
+      if(response.statusCode == 200 && response.isSuccess){
+        LoggerUtils.debug("😇😇😇😇😇Swap Meal Options Retrieved Successfully!");
+
+        swapMealOptionsModel.value = SwapMealOptionsModel.fromJson(response.jsonResponse!);
+      }else{
+        LoggerUtils.error("😩😩😩😩😩Failed get Swap Meal Options!");
+        LoggerUtils.error("😩😩😩😩😩Error Code :: ${response.statusCode} :: Error Message --> ${response.errorMessage.toString()}");
+        swapMealOptionsErrorMessage.value = response.errorMessage.toString();
+      }
+
+    }catch(error){
+
+      LoggerUtils.error("😓😓😓😓😓😓Something Went Wrong while fetching the api!");
+      LoggerUtils.error("😓😓😓😓😓😓Error Message : ${error.toString()}");
+      swapMealOptionsErrorMessage.value = error.toString();
+
+    }finally{
+      isSwapMealOptionsLoading.value = false;
+    }
+  }
+
+
+  ///--------->>> Section : Swap Meal Options Api Ends Here
 
   @override
   void onInit() {

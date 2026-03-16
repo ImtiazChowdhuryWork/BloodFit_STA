@@ -67,6 +67,9 @@ final class Endpoints {
   static String swapMealUrl({required String mealID}){
     return "$url/meal/swap-meal/$mealID";
   }
+  static String swapMealOptions({required String category, required String subCategory, required int currentCalories}){
+    return "$url/meal/swap-meal-option?category=$category&sub_category=$subCategory&current_calories=$currentCalories";
+  }
   static String mealDetails({required String mealID}){
     return "$url/meal/get-meal/$mealID?lang=korean";
   }

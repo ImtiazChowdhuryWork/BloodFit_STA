@@ -141,7 +141,14 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                       },
                       rightButtonOnTap: () {
                         log("Button Taped : Remove");
-                        showSwapMealBottomSheet();
+                        showSwapMealBottomSheet(
+                          mealType: mealType ?? 'breakfast',
+                          mealName: mealName ?? '',
+                          mealId: null,
+                          mealCalories: kcal ?? 0,
+                          category: mealType ?? 'breakfast',
+                          subCategory: mealType ?? 'breakfast',
+                        );
                       },
                       kcalValue: kcal,
                       mealType: mealType,

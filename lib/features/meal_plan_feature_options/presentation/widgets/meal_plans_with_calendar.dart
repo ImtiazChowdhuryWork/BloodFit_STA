@@ -52,7 +52,14 @@ class MealPlansWithCalendar extends StatelessWidget {
               rightButtonTitle: data.rightButtonTitle,
               rightButtonOnTap: () {
                 log("Button Taped : Swap Meal");
-                showSwapMealBottomSheet();
+                showSwapMealBottomSheet(
+                  mealType: data.mealType ?? 'breakfast',
+                  mealName: data.mealTitle ?? '',
+                  mealId: null,
+                  mealCalories: data.kcalValue.toInt(),
+                  category: data.mealType ?? 'breakfast',
+                  subCategory: data.mealType ?? 'breakfast',
+                );
               },
               mealType: data.mealType,
               mealTitle: data.mealTitle,
