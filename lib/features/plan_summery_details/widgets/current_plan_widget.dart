@@ -9,7 +9,7 @@ class CurrentPlanWidget extends StatelessWidget {
   final String planType;
   final double planPrice;
   final String planDuration;
-  final double daysRemaining;
+  // final double daysRemaining;
   final String subscriptionDate;
   const CurrentPlanWidget({
     super.key,
@@ -17,7 +17,7 @@ class CurrentPlanWidget extends StatelessWidget {
     required this.planType,
     required this.planPrice,
     required this.planDuration,
-    required this.daysRemaining,
+    // required this.daysRemaining,
     required this.subscriptionDate,
   });
 
@@ -44,11 +44,11 @@ class CurrentPlanWidget extends StatelessWidget {
         UIHelper.verticalSpace(10.h),
 
         ///Section : ------------///Amount Charged Price///---------
-        Text(
-          "Days Remaining: $daysRemaining",
-          style: TextFontStyle.headline14w500c999999StylePoppins,
-        ),
-        UIHelper.verticalSpace(10.h),
+        // Text(
+        //   "Days Remaining: $daysRemaining",
+        //   style: TextFontStyle.headline14w500c999999StylePoppins,
+        // ),
+        // UIHelper.verticalSpace(10.h),
 
         ///Section : ------------///Subscription Date///---------
         Text(
