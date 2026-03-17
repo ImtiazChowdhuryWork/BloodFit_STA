@@ -173,7 +173,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
                           isPackageActive: plan.isActive ?? false,
                           onTap: () {
                             // handle selection
-                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
+                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen, arguments: {
+                              'planId' : plan.id ?? '',
+                              'planType': 'monthly',
+                              'planName': plan.name ?? 'Unknown'
+                            });
                             log("${plan.name} selected");
                           },
                         );
@@ -240,7 +244,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen>
 
                           onTap: () {
                             // handle selection
-                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen);
+                            Get.toNamed(Routes.costDetailsForUpgradePlanScreen, arguments: {
+                              'planId' : plan.id ?? '',
+                              'planType': 'yearly',
+                              'planName': plan.name ?? 'Unknown'
+                            });
                             log("${plan.name} selected");
                           },
                         );

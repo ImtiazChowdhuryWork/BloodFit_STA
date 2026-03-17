@@ -4,13 +4,36 @@ import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/colors.gen.dart';
+import '../data/controller/add_poromocode_screen_controller.dart';
 
-class AddPromoCodeScreen extends StatelessWidget {
+class AddPromoCodeScreen extends StatefulWidget {
   const AddPromoCodeScreen({super.key});
+
+  @override
+  State<AddPromoCodeScreen> createState() => _AddPromoCodeScreenState();
+}
+
+class _AddPromoCodeScreenState extends State<AddPromoCodeScreen> {
+  AddPoromocodeScreenController promoCodeScreenController =
+      Get.find<AddPoromocodeScreenController>();
+  String planId = '';
+
+  @override
+  void initState() {
+    final arguments = Get.arguments as Map<String, dynamic>?;
+
+    planId = arguments?['planId'] ?? '';
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      promoCodeScreenController.setPlanId(value: planId);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +73,7 @@ class AddPromoCodeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: TextFormField(
+                  controller: promoCodeScreenController.promocodeController,
                   style: TextFontStyle.headline12w500c999999StylePoppins,
                   decoration: InputDecoration(
                     hintText: "Enter Your Promo Code",
@@ -74,12 +98,20 @@ class AddPromoCodeScreen extends StatelessWidget {
               ),
               UIHelper.verticalSpace(32.h),
 
-              CustomElevatedButton(
+              Obx((){
+
+
+
+                return CustomElevatedButton(
                 onTap: () {
                   log("Button -> Validate Button Taped!");
+
+                  promoCodeScreenController.postAddPromocodeApi();
                 },
                 buttonTitle: "Validate",
-              ),
+                isLoading: promoCodeScreenController.isPromocodeValueLoading.value,
+              );
+              }),
             ],
           ),
         ),

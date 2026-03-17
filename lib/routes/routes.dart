@@ -8,7 +8,8 @@ import 'package:bloodfit/features/auth/sign_up/presentation/sign_up_screen.dart'
 import 'package:bloodfit/features/auth/verify_otp/presentation/verify_otp_screen.dart';
 import 'package:bloodfit/features/change_password/presentation/change_password_screen.dart';
 import 'package:bloodfit/features/choose_extra_workout/presentation/choose_extra_workout_screen.dart';
-import 'package:bloodfit/features/cost_details_for_upgrade_plan/presentation/cost_details_for_upgrade_plan_screen.dart';
+import 'package:bloodfit/features/plan_summery_details/bindings/summery_details_screen_controller.dart';
+import 'package:bloodfit/features/plan_summery_details/presentation/plan_summery_details_screen.dart';
 import 'package:bloodfit/features/edit_profil/presentation/edit_profile_screen.dart';
 import 'package:bloodfit/features/enter_your_details/presentation/enter_your_details_screen.dart';
 import 'package:bloodfit/features/fitness/bindings/fitness_screen_bindings.dart';
@@ -34,6 +35,7 @@ import 'package:bloodfit/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../features/add_promo_code/binding/add_promo_code_binding.dart';
 import '../features/auth/forgot_password/binding/forgot_password_binding.dart';
 import '../features/auth/reset_password/binding/reset_password_binding.dart';
 import '../features/auth/sign_in/binding/sign_in_binding.dart';
@@ -325,7 +327,8 @@ class Routes {
     ///costDetailsForUpgradePlanScreen
     GetPage(
       name: costDetailsForUpgradePlanScreen,
-      page: () => CostDetailsForUpgradePlanScreen(),
+      page: () => PlanSummeryDetailsScreen(),
+      binding: SummeryDetailsScreenBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
@@ -335,6 +338,7 @@ class Routes {
     GetPage(
       name: addPromoCodeScreen,
       page: () => AddPromoCodeScreen(),
+      binding: AddPromoCodeBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
