@@ -25,6 +25,8 @@ import '../controllers/work_out_screen_controller.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_desired_body_shape/data/controller/information_gather_body_shape_main_goal_controller.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_desired_weight/data/controller/ig_select_desired_weight_widget_controller.dart';
 import '../features/information_gather_workout/presentation/widgets/current_body_shape/data/controller/information_gather_workout_current_body_shape_main_goal_controller.dart';
+import '../features/progress/data/controller/weight_history_controller.dart';
+import '../features/progress/data/repository/weight_history_repository.dart';
 
 class ControllerBindings extends Bindings {
   @override
@@ -52,7 +54,7 @@ class ControllerBindings extends Bindings {
     Get.lazyPut(() => WorkOutScreenController(), fenix: true);
     // Get.lazyPut(() => IgCurrentBodyTypeController(), fenix: true);
     Get.lazyPut(()=> InformationGatherWorkoutCurrentBodyShapeMainGoalController(), fenix: true);
-    
+
     Get.lazyPut(() => IgPreferedActivityLevelController(), fenix: true);
     Get.lazyPut(() => IgWorkoutMainGoalController(), fenix: true);
     Get.lazyPut(() => IgDesiredWeightController(), fenix: true);
@@ -111,5 +113,9 @@ class ControllerBindings extends Bindings {
 
     ///Repositiories
     // Get.lazyPut(() => AuthService(), fenix: true);
+
+    /// Weight History Controllers
+    Get.lazyPut(() => WeightHistoryRepository(Get.find()));
+    Get.lazyPut(() => WeightHistoryController(Get.find()));
   }
 }

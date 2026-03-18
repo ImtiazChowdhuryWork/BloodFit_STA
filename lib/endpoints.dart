@@ -89,6 +89,9 @@ final class Endpoints {
   }
 
 
+  static String getWeightHistory() => "$url/health/weight-history";
+
+
   
 }
 

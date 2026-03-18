@@ -3,7 +3,6 @@ import 'package:bloodfit/features/progress/data/model/weight_progress_showing_mo
 import 'package:bloodfit/features/progress/data/repository/weight_progress_showing_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:get/state_manager.dart';
-import 'package:logger/web.dart';
 
 import '../repository/porgress_report_api_repository.dart';
 
