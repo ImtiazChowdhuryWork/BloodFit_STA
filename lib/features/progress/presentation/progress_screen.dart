@@ -1,4 +1,5 @@
 import 'package:bloodfit/constants/text_font_style.dart';
+import 'package:bloodfit/features/progress/data/controller/weight_history_controller.dart';
 import 'package:bloodfit/features/progress/data/controller/weight_progress_showing_controller.dart';
 import 'package:bloodfit/features/progress/presentation/widget/custom_progress_indicator.dart';
 import 'package:bloodfit/features/progress/presentation/widget/overall_progress_showing_widget.dart';
@@ -25,9 +26,12 @@ class ProgressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ProgressShowingController controller =
         Get.find<ProgressShowingController>();
+    final WeightHistoryController weightHistoryController =
+        Get.find<WeightHistoryController>();
 
     controller.getWeightProgressDataApi();
     controller.getProgressReportApi();
+    weightHistoryController.getWeightHistory();
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
@@ -179,33 +183,83 @@ class ProgressScreen extends StatelessWidget {
               UIHelper.verticalSpace(20.h),
 
               ///Section : -----------//// Your Weight History ///-------------
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: UIHelper.kDefaulutPadding(),
-                ),
-                child: WeightHistoryChart(
-                  title: 'Your Weight History',
-                  targetTitle: 'Weight Loss',
-                  goalWeight: 58,
-                  currentWeight: 83,
-                  // initialMonth: DateTime(2025, 9),
-                  entries: const [
-                    WeightEntry(5, 83),
-                    WeightEntry(8, 79),
-                    WeightEntry(10, 75),
-                    WeightEntry(13, 77),
-                    WeightEntry(15, 72),
-                    WeightEntry(17, 60),
-                    WeightEntry(19, 68),
-                    WeightEntry(21, 65),
-                    WeightEntry(23, 72),
-                    WeightEntry(25, 63),
-                    WeightEntry(27, 67),
-                    WeightEntry(30, 70),
-                  ],
-                  onMonthChanged: (m) => debugPrint('Month → $m'),
-                ),
-              ),
+              Obx(() {
+                LoggerUtils.debug('📊 Weight History Section - Building...');
+                LoggerUtils.debug('   - isWeightHistoryLoading: ${weightHistoryController.isWeightHistoryLoading.value}');
+                LoggerUtils.debug('   - weightHistoryErrorMessage: ${weightHistoryController.weightHistoryErrorMessage.value}');
+                LoggerUtils.debug('   - weightHistoryModel data count: ${weightHistoryController.weightHistoryModel.value?.data?.length ?? 0}');
+                
+                if (weightHistoryController.isWeightHistoryLoading.value) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.kDefaulutPadding(),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomShimmerEffect(height: 10.h, width: 0.4.sw),
+                        CustomShimmerEffect(height: 10.h, width: 0.3.sw),
+                      ],
+                    ),
+                  );
+                }
+
+                if (weightHistoryController.weightHistoryErrorMessage.value.isNotEmpty) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.kDefaulutPadding(),
+                    ),
+                    child: WeightProgressFailedWidget(
+                      controller: ProgressShowingController(
+                        Get.find(),
+                        Get.find(),
+                      ),
+                      onTap: () {
+                        LoggerUtils.debug("Retry Button Taped!");
+                        weightHistoryController.getWeightHistory();
+                      },
+                    ),
+                  );
+                }
+
+                final entries = weightHistoryController.getWeightEntries();
+                LoggerUtils.debug('📊 Weight History - Entries count: ${entries.length}');
+                if (entries.isNotEmpty) {
+                  LoggerUtils.debug('📊 First 3 entries: ${entries.take(3).toList()}');
+                  if (entries.length >= 3) {
+                    LoggerUtils.debug('📊 Last 3 entries: ${entries.sublist(entries.length - 3)}');
+                  } else {
+                    LoggerUtils.debug('📊 All entries: $entries');
+                  }
+                }
+
+                // If no entries, return empty container or show a message
+                if (entries.isEmpty) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: UIHelper.kDefaulutPadding(),
+                    ),
+                    child: Text(
+                      'No weight history available',
+                      style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                    ),
+                  );
+                }
+
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: UIHelper.kDefaulutPadding(),
+                  ),
+                  child: WeightHistoryChart(
+                    title: 'Your Weight History',
+                    targetTitle: 'Weight Loss',
+                    goalWeight: weightHistoryController.getGoalWeight(),
+                    currentWeight: weightHistoryController.getCurrentWeight(),
+                    entries: entries,
+                    onMonthChanged: (m) => debugPrint('Month → $m'),
+                  ),
+                );
+              }),
 
               CustomShimmerEffect(
                 height: 120.h,

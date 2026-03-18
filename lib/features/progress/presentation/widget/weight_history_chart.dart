@@ -1,4 +1,5 @@
 import 'package:bloodfit/gen/colors.gen.dart';
+import 'package:bloodfit/helper/logger_util.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
@@ -537,19 +538,47 @@ class _ChartPainter extends CustomPainter {
   double _toX(double day, double chartW) =>
       kLeft + (day - _xStart) / (_lastDay - _xStart) * chartW;
 
-  double _toY(double weight, double chartH, int yTop, int yBottom) =>
-      kTop + (weight - yTop) / (yBottom - yTop) * chartH;
+  double _toY(double weight, double chartH, int yTop, int yBottom) {
+    // Prevent division by zero
+    final denominator = (yBottom - yTop);
+    if (denominator == 0) {
+      LoggerUtils.error('❌ Chart _toY: Division by zero! yTop=$yTop, yBottom=$yBottom, weight=$weight');
+      return kTop; // Return safe default
+    }
+    final result = kTop + (weight - yTop) / denominator * chartH;
+    
+    // Check for NaN/Infinity
+    if (result.isNaN || result.isInfinite) {
+      LoggerUtils.error('❌ Chart _toY: NaN/Infinity result! weight=$weight, yTop=$yTop, yBottom=$yBottom, chartH=$chartH, result=$result');
+      return kTop; // Return safe default
+    }
+    
+    return result;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (entries.isEmpty) return;
+    if (entries.isEmpty) {
+      return;
+    }
 
     final double chartW = size.width - kLeft - kRight;
     final double chartH = size.height - kTop - kBottom;
 
-    // ── Y range: snap goal down to nearest 10, current up to nearest 10 ──────
-    final int yTop = ((goalWeight / 10).floor() * 10);
-    final int yBottom = ((currentWeight / 10).ceil() * 10);
+    // Calculate Y range from actual data, not goal/current
+    final weights = entries.map((e) => e.weight).toList();
+    final minWeight = weights.reduce((a, b) => a < b ? a : b);
+    final maxWeight = weights.reduce((a, b) => a > b ? a : b);
+
+    // Y range: snap min down to nearest 10, max up to nearest 10
+    int yTop = ((minWeight / 10).floor() * 10);
+    int yBottom = ((maxWeight / 10).ceil() * 10);
+    
+    // Ensure minimum range of 20 to avoid division by zero or tiny ranges
+    if (yBottom - yTop < 20) {
+      yTop = ((minWeight / 10).floor() * 10) - 10;
+      yBottom = ((maxWeight / 10).ceil() * 10) + 10;
+    }
 
     // Convenience closures
     double tx(double day) => _toX(day, chartW);
@@ -559,6 +588,16 @@ class _ChartPainter extends CustomPainter {
     final List<Offset> pts = entries
         .map((e) => Offset(tx(e.day.toDouble()), ty(e.weight)))
         .toList();
+    
+    // Check for NaN values in points
+    for (int i = 0; i < pts.length; i++) {
+      if (pts[i].dx.isNaN || pts[i].dy.isNaN || pts[i].dx.isInfinite || pts[i].dy.isInfinite) {
+        LoggerUtils.error('❌ Chart: Point $i has NaN/Infinity: ${pts[i]}');
+        LoggerUtils.error('   Entry: day=${entries[i].day}, weight=${entries[i].weight}');
+        LoggerUtils.error('   yTop=$yTop, yBottom=$yBottom, chartH=$chartH');
+        return; // Don't draw if points are invalid
+      }
+    }
 
     final tp = TextPainter(textDirection: ui.TextDirection.ltr);
     final gridPaint = Paint()
