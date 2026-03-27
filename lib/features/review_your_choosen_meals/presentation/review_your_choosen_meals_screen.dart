@@ -339,14 +339,16 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
       mealId: hasId ? mealId : null, // Only set mealId for previously selected meals
     );
   }
-  
-  int _getMacroValue(List caloryCount, String label) {
+
+  double _getMacroValue(List caloryCount, String label) {
     try {
       final macro = caloryCount.firstWhere(
         (item) => item['label'] == label,
         orElse: () => {'kcal': 0},
       );
-      return macro['kcal'] ?? 0;
+      final kcalValue = macro['kcal'];
+      if (kcalValue is num) return kcalValue.toDouble();
+      return 0;
     } catch (e) {
       return 0;
     }

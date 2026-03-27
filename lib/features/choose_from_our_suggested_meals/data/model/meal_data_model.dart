@@ -100,9 +100,9 @@ class MealIngredientData {
 }
 
 class MealMacronutrientsData {
-  final int carbohydrates;
-  final int protein;
-  final int fat;
+  final double carbohydrates;
+  final double protein;
+  final double fat;
 
   MealMacronutrientsData({
     this.carbohydrates = 0,
@@ -117,9 +117,9 @@ class MealMacronutrientsData {
 
   factory MealMacronutrientsData.fromJson(Map<String, dynamic> json) =>
       MealMacronutrientsData(
-        carbohydrates: json["carbohydrates"] ?? 0,
-        protein: json["protein"] ?? 0,
-        fat: json["fat"] ?? 0,
+        carbohydrates: json["carbohydrates"] is num ? (json["carbohydrates"] as num).toDouble() : 0,
+        protein: json["protein"] is num ? (json["protein"] as num).toDouble() : 0,
+        fat: json["fat"] is num ? (json["fat"] as num).toDouble() : 0,
       );
 
   Map<String, dynamic> toJson() => {

@@ -371,7 +371,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
                             return FoodMenarelItemTileWidget(
                               imagePath: iconPath,
-                              value: menarel.kcal ?? 0,
+                              value: (menarel.kcal ?? 0).toInt(),
                               menaralName: index == 0 ? ' Carbs' : index == 1 ? ' Protein' : ' Fat',
                             );
                           },

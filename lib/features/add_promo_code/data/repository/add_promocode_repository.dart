@@ -15,8 +15,14 @@ class AddPromocodeRepository {
   }) async {
     String? tokenValue = appData.read(kKeyAccessToken) ?? '';
 
+    // Backend expects a body with user name
+    Map<String, dynamic> data = {
+      'promocode': prmCode
+    };
+
     return _networkCaller.postRequest(
-      Endpoints.postAddPromocodeApiUrl(planId: planId, promoCode: prmCode),
+      Endpoints.postAddPromocodeApiUrl(planId: planId),
+      body: data,
       headers: tokenValue.isNotEmpty
           ? {'Authorization': 'Bearer $tokenValue'}
           : null,

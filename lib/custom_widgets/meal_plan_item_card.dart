@@ -106,6 +106,7 @@ class MealPlanItemCard extends StatelessWidget {
                                 )
                               : CustomNetworkImageWidget(
                                   imageUrl: mealImagePath,
+                                  mealType: mealType,
                                   width: 140.w,
                                   height: 140.h,
                                 ),

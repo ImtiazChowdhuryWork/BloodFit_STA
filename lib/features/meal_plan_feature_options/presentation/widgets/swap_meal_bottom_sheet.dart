@@ -177,9 +177,9 @@ void showSwapMealBottomSheet({
                             icon: ing.icon ?? '',
                           )).toList(),
                           macronutrients: MealMacronutrientsData(
-                            carbohydrates: alternative.macronutrients?.carbohydrates ?? 0,
-                            protein: alternative.macronutrients?.protein ?? 0,
-                            fat: alternative.macronutrients?.fat ?? 0,
+                            carbohydrates: (alternative.macronutrients?.carbohydrates ?? 0).toDouble(),
+                            protein: (alternative.macronutrients?.protein ?? 0).toDouble(),
+                            fat: (alternative.macronutrients?.fat ?? 0).toDouble(),
                           ),
                           numberOfServings: alternative.numberOfServings ?? 1,
                           image: alternative.image ?? '',

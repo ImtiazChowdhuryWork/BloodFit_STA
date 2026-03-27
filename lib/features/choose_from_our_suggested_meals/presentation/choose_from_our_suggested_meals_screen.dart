@@ -101,12 +101,52 @@ class _ChooseFromOurSuggestedMealsScreenState
         automaticallyImplyLeading: false,
         leading: CustomBackButton(),
         centerTitle: true,
-        title: Text(
-          "Meal Plan",
-          style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Meal Plan",
+              style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
+            ),
+            UIHelper.horizontalSpace(12.w),
+            // Clear Saved Data Button
+            InkWell(
+              onTap: () {
+                _showClearDataConfirmationDialog();
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                decoration: BoxDecoration(
+                  color: AppColors.c7e0101.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(color: AppColors.c7e0101, width: 1),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.delete_outline,
+                      color: AppColors.c7e0101,
+                      size: 18.sp,
+                    ),
+                    UIHelper.horizontalSpace(4.w),
+                    Text(
+                      "Clear",
+                      style: TextStyle(
+                        color: AppColors.c7e0101,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
         actions: [
-          
+
           InkWell(
             onTap: () {
               Get.toNamed(Routes.notificationScreen);
@@ -214,6 +254,85 @@ class _ChooseFromOurSuggestedMealsScreenState
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Show confirmation dialog before clearing saved meal data
+  void _showClearDataConfirmationDialog() {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: AppColors.scaffoldBackgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          side: BorderSide(color: AppColors.c7e0101, width: 1),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded, color: AppColors.c7e0101, size: 28.sp),
+            UIHelper.horizontalSpace(8.w),
+            Expanded(
+              child: Text(
+                "Clear Saved Meals?",
+                style: TextFontStyle.headline16w500cFFFFFFStylePoppins,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          "This will remove all saved meal selections for Breakfast, Lunch, and Dinner. This action cannot be undone.",
+          style: TextFontStyle.headline14w400c999999StylePoppins,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              "Cancel",
+              style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Get.back();
+              // Clear all selections
+              chooseFromOurSuggestedMealController.clearAllSelections();
+              // Clear recent meals lists
+              chooseFromOurSuggestedMealController.breakfastRecentChosenMeals.clear();
+              chooseFromOurSuggestedMealController.lunchRecentChosenMeals.clear();
+              chooseFromOurSuggestedMealController.dinnerRecentChosenMeals.clear();
+              
+              // Clear jobId from local storage and re-fetch
+              await chooseFromOurSuggestedMealController.clearCachedJobIdAndReFetch();
+              
+              // Clear the current jobId in controller
+              chooseFromOurSuggestedMealController.jobID.value = '';
+
+              // Show success message
+              Get.snackbar(
+                "Success",
+                "All saved meal data has been cleared",
+                backgroundColor: AppColors.c4e000b,
+                colorText: Colors.white,
+                snackPosition: SnackPosition.TOP,
+                margin: EdgeInsets.all(16),
+                borderRadius: 12,
+                duration: const Duration(seconds: 3),
+                icon: const Icon(Icons.check_circle, color: Colors.white),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.c7e0101,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            child: Text(
+              "Clear All",
+              style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
+            ),
+          ),
+        ],
       ),
     );
   }

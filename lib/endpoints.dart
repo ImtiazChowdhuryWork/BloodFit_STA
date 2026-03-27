@@ -80,12 +80,12 @@ final class Endpoints {
   static String postGenerateMealImageApiUrl() => "$url/ai-meal/generate-meal-image";
   static String getWeightProgressApiUrl() => "$url/progress/weight-progress";
   static String getProgressReportApiUrl() => "$url/progress/progress-report";
-  static String postAddPromocodeApiUrl({required String planId, required String promoCode}){
-    return "$url/promocode/add-promocode/$planId/$promoCode";
+  static String postAddPromocodeApiUrl({required String planId,}){
+    return "$url/promocode/add-promocode/$planId";
   }
 
   static String getBillingSummeryApiUrl({required String planId, required String billingType}){
-    return "$url/subscription//billing/$planId/$billingType";
+    return "$url/subscription/billing/$planId/$billingType";
   }
 
 
