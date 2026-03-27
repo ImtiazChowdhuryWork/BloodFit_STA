@@ -171,11 +171,11 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                 Obx(() {
                   final isLoading = reviewController.isMealCreating.value;
                   final hasError = reviewController.mealCreatingErrorMessage.value.isNotEmpty;
-                  
+
                   return CustomElevatedButton(
                     onTap: isLoading ? null : () async {
                       log("Button Taped -> Confirm Mealplan");
-                      
+
                       // Show loading indicator
                       Get.dialog(
                         Center(
@@ -199,27 +199,89 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                       // Call the API from review controller
                       await reviewController.postCreateMealPlanApi();
 
-                      // Close loading dialog
-                      if (Get.isDialogOpen ?? false) {
-                        Get.back();
+                      // Close loading dialog - force close regardless of state
+                      try {
+                        if (Get.isDialogOpen ?? false) {
+                          Get.back(closeOverlays: true);
+                        }
+                      } catch (_) {
+                        // Ignore if dialog already closed
                       }
 
                       // Check if API was successful
                       if (reviewController.mealCreatingErrorMessage.value.isEmpty) {
                         LoggerUtils.debug("✅ [REVIEW SCREEN] Meal plan created successfully!");
-                        
+
                         // Show success bottom sheet
                         showMealPlanBuildConfirmationBottomSheet();
                       } else {
-                        LoggerUtils.error("❌ [REVIEW SCREEN] Error: ${reviewController.mealCreatingErrorMessage.value}");
-                        
-                        // Show error snackbar
-                        Get.snackbar(
-                          'Error',
-                          reviewController.mealCreatingErrorMessage.value,
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.red,
-                          colorText: Colors.white,
+                        final errorMessage = reviewController.mealCreatingErrorMessage.value;
+                        LoggerUtils.error("❌ [REVIEW SCREEN] Error: $errorMessage");
+
+                        // Show error dialog instead of snackbar (no overlay issues)
+                        Get.dialog(
+                          Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.all(24.w),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 60.w,
+                                    height: 60.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.error_outline,
+                                      color: Colors.red,
+                                      size: 32.sp,
+                                    ),
+                                  ),
+                                  UIHelper.verticalSpace(16.h),
+                                  Text(
+                                    'Error',
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  UIHelper.verticalSpace(8.h),
+                                  Text(
+                                    errorMessage.isEmpty ? 'Failed to create meal plan. Please try again.' : errorMessage,
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.black54,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  UIHelper.verticalSpace(24.h),
+                                  CustomElevatedButton(
+                                    onTap: () {
+                                      if (Get.isDialogOpen ?? false) {
+                                        Get.back();
+                                      }
+                                    },
+                                    buttonWidth: 1.sw,
+                                    buttonHeight: 48.h,
+                                    borderRadius: 12.r,
+                                    buttonTitle: 'OK',
+                                    buttonColor: Colors.red,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          barrierDismissible: false,
                         );
                       }
                     },

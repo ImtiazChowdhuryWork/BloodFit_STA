@@ -349,12 +349,19 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
         LoggerUtils.error("❌ [API] Failed to create meal plan");
         LoggerUtils.error("❌ [API] Status Code: ${response.statusCode}");
         LoggerUtils.error("❌ [API] Error: ${response.errorMessage}");
-        mealCreatingErrorMessage.value = response.errorMessage.toString();
+        
+        // Set error message with fallback
+        final errorMsg = response.errorMessage?.toString() ?? 'Failed to create meal plan. Please try again.';
+        mealCreatingErrorMessage.value = errorMsg.isEmpty 
+            ? 'Failed to create meal plan. Please try again.' 
+            : errorMsg;
       }
     } catch (error) {
       LoggerUtils.error("❌ [API] Exception in postCreateMealPlanApi: $error");
       LoggerUtils.error("❌ [API] Error type: ${error.runtimeType}");
-      mealCreatingErrorMessage.value = error.toString();
+      mealCreatingErrorMessage.value = error.toString().isEmpty 
+          ? 'An unexpected error occurred. Please try again.' 
+          : error.toString();
     } finally {
       isMealCreating.value = false;
       LoggerUtils.debug("🏁 [API] postCreateMealPlanApi() completed");
