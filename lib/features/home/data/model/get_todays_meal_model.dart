@@ -91,7 +91,7 @@ class Datum {
 class CaloryCount {
   final String id;
   final String label;
-  final int kcal;
+  final double kcal;
 
   CaloryCount({
     required this.id,
@@ -103,7 +103,7 @@ class CaloryCount {
     return CaloryCount(
       id: json['_id'] ?? '',
       label: json['label'] ?? '',
-      kcal: json['kcal'] ?? 0,
+      kcal: json['kcal'] is num ? (json['kcal'] as num).toDouble() : 0,
     );
   }
 }

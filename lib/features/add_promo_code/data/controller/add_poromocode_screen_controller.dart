@@ -1,10 +1,7 @@
 import 'package:bloodfit/features/add_promo_code/data/repository/add_promocode_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../constants/app_enums.dart';
-import '../../../../controllers/app_snackbar_controller.dart';
 
 class AddPoromocodeScreenController extends GetxController {
   ///-------------<>>>>>> Section : Importing the Repository
@@ -46,20 +43,34 @@ class AddPoromocodeScreenController extends GetxController {
       if (response.statusCode == 200 && response.isSuccess) {
         isPromoCodeActive.value = true;
 
-        AppSnackBarController.show(
-          message: 'Promocode added to this plan!',
-          type: AppSnackBarType.success,
-          position: AppSnackBarPosition.bottom,
-          duration: const Duration(seconds: 4),
+        // Show success snackbar using rawSnackbar (doesn't need overlay context)
+        Get.rawSnackbar(
+          title: "Success",
+          message: "Promocode added to this plan!",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green.shade700,
+          duration: const Duration(seconds: 3),
+          margin: const EdgeInsets.all(16),
+          borderRadius: 12,
+          icon: const Icon(Icons.check_circle, color: Colors.white, size: 30),
+          isDismissible: true,
         );
 
+        // Wait for snackbar to show, then navigate back
+        await Future.delayed(const Duration(milliseconds: 300));
         Get.back();
       } else {
-        AppSnackBarController.show(
+        // Show error snackbar
+        Get.rawSnackbar(
+          title: "Error",
           message: response.errorMessage.toString(),
-          type: AppSnackBarType.error,
-          position: AppSnackBarPosition.bottom,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.shade700,
           duration: const Duration(seconds: 4),
+          margin: const EdgeInsets.all(16),
+          borderRadius: 12,
+          icon: const Icon(Icons.error, color: Colors.white, size: 30),
+          isDismissible: true,
         );
 
         LoggerUtils.error("Failed to submit Promocode!");

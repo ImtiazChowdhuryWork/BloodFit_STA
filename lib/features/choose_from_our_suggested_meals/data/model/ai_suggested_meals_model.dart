@@ -143,14 +143,42 @@ class HealthyComforting {
 
     factory HealthyComforting.fromJson(Map<String, dynamic> json) => HealthyComforting(
         mealName: json["meal_name"],
-        category: categoryValues.map[json["category"]]!,
-        subCategory: subCategoryValues.map[json["sub_category"]]!,
+        category: _parseCategory(json["category"]),
+        subCategory: _parseSubCategory(json["sub_category"]),
         totalCalories: json["total_calories"],
         macronutrients: json["macronutrients"] == null ? null : Macronutrients.fromJson(json["macronutrients"]),
         description: json["description"],
         ingredients: json["ingredients"] == null ? [] : List<Ingredient>.from(json["ingredients"]!.map((x) => Ingredient.fromJson(x))),
         numberOfServings: json["number_of_servings"],
     );
+
+    static Category? _parseCategory(String? category) {
+        if (category == null) return null;
+        // Try direct mapping first
+        if (categoryValues.map.containsKey(category)) {
+            return categoryValues.map[category];
+        }
+        // Fallback for common variations
+        final normalized = category.toLowerCase();
+        if (normalized.contains("breakfast")) return Category.BREAKFAST;
+        if (normalized.contains("lunch")) return Category.LUNCH;
+        if (normalized.contains("dinner")) return Category.DINNER;
+        return null;
+    }
+
+    static SubCategory? _parseSubCategory(String? subCategory) {
+        if (subCategory == null) return null;
+        // Try direct mapping first
+        if (subCategoryValues.map.containsKey(subCategory)) {
+            return subCategoryValues.map[subCategory];
+        }
+        // Handle variations without ampersands or with different formatting
+        final normalized = subCategory.toLowerCase().replaceAll(RegExp(r'[\s&-]+'), ' ');
+        if (normalized == "light fresh") return SubCategory.LIGHT_FRESH;
+        if (normalized == "protein packed") return SubCategory.PROTEIN_PACKED;
+        if (normalized == "healthy comforting") return SubCategory.HEALTHY_COMFORTING;
+        return null;
+    }
 
     Map<String, dynamic> toJson() => {
         "meal_name": mealName,
@@ -205,9 +233,9 @@ class Ingredient {
 }
 
 class Macronutrients {
-    int? carbohydrates;
-    int? protein;
-    int? fat;
+    double? carbohydrates;
+    double? protein;
+    double? fat;
 
     Macronutrients({
         this.carbohydrates,
@@ -220,9 +248,9 @@ class Macronutrients {
     String toRawJson() => json.encode(toJson());
 
     factory Macronutrients.fromJson(Map<String, dynamic> json) => Macronutrients(
-        carbohydrates: json["carbohydrates"],
-        protein: json["protein"],
-        fat: json["fat"],
+        carbohydrates: json["carbohydrates"] is num ? (json["carbohydrates"] as num).toDouble() : null,
+        protein: json["protein"] is num ? (json["protein"] as num).toDouble() : null,
+        fat: json["fat"] is num ? (json["fat"] as num).toDouble() : null,
     );
 
     Map<String, dynamic> toJson() => {

@@ -106,7 +106,7 @@ class Data {
 
 class CaloryCount {
     String? label;
-    int? kcal;
+    double? kcal;
     String? id;
 
     CaloryCount({
@@ -121,7 +121,7 @@ class CaloryCount {
 
     factory CaloryCount.fromJson(Map<String, dynamic> json) => CaloryCount(
         label: json["label"],
-        kcal: json["kcal"],
+        kcal: json["kcal"] is num ? (json["kcal"] as num).toDouble() : null,
         id: json["_id"],
     );
 

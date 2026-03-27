@@ -236,19 +236,25 @@ class _LunchTabState extends State<LunchTab> {
 
       // Display meals
       LoggerUtils.debug("🍱 [OBX] >>> Displaying MEALS (hasMeals=$hasMeals)");
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ///Section : ------------///Previously Selected Meals///----------------
-            RecentlySelectedMealsWidget(
-              isLoading: chooseFromOurSuggestedMealController
-                  .isPreviouslySelectedMealsLoading,
-              meals:
-                  chooseFromOurSuggestedMealController.lunchRecentChosenMeals,
-              tabName: 'lunch',
-            ),
-            UIHelper.verticalSpace(32.h),
+      return Obx(() {
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ///Section : ------------///Previously Selected Meals///----------------
+              if (chooseFromOurSuggestedMealController
+                      .lunchRecentChosenMeals.isNotEmpty ||
+                  chooseFromOurSuggestedMealController
+                      .isPreviouslySelectedMealsLoading.value) ...[
+                RecentlySelectedMealsWidget(
+                  isLoading: chooseFromOurSuggestedMealController
+                      .isPreviouslySelectedMealsLoading,
+                  meals:
+                      chooseFromOurSuggestedMealController.lunchRecentChosenMeals,
+                  tabName: 'lunch',
+                ),
+                UIHelper.verticalSpace(32.h),
+              ],
 
             ///Section : ------------///Protein-Packed ///----------------
             if (proteinCount > 0)
@@ -300,6 +306,7 @@ class _LunchTabState extends State<LunchTab> {
           ],
         ),
       );
+      });
     });
   }
 }

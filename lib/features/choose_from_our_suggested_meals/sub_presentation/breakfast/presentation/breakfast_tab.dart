@@ -243,19 +243,25 @@ class _BreakfastTabState extends State<BreakfastTab> {
       LoggerUtils.debug(
         "🍳 [OBX] >>> Displaying MEALS (hasMeals=$obxHasMeals)",
       );
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ///Section : ------------///Previously Selected Meals///----------------
-            RecentlySelectedMealsWidget(
-              isLoading: chooseFromOurSuggestedMealController
-                  .isPreviouslySelectedMealsLoading,
-              meals: chooseFromOurSuggestedMealController
-                  .breakfastRecentChosenMeals,
-              tabName: 'breakfast',
-            ),
-            UIHelper.verticalSpace(32.h),
+      return Obx(() {
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ///Section : ------------///Previously Selected Meals///----------------
+              if (chooseFromOurSuggestedMealController
+                      .breakfastRecentChosenMeals.isNotEmpty ||
+                  chooseFromOurSuggestedMealController
+                      .isPreviouslySelectedMealsLoading.value) ...[
+                RecentlySelectedMealsWidget(
+                  isLoading: chooseFromOurSuggestedMealController
+                      .isPreviouslySelectedMealsLoading,
+                  meals: chooseFromOurSuggestedMealController
+                      .breakfastRecentChosenMeals,
+                  tabName: 'breakfast',
+                ),
+                UIHelper.verticalSpace(32.h),
+              ],
 
             ///Section : ------------///Protein-Packed ///----------------
             if (obxProteinCount > 0)
@@ -307,6 +313,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
           ],
         ),
       );
+      });
     });
   }
 }

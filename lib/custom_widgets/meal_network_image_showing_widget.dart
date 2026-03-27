@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodfit/helper/logger_util.dart';
@@ -10,6 +12,7 @@ class CustomNetworkImageWidget extends StatelessWidget {
   final BoxFit fit;
   final BorderRadius? borderRadius;
   final bool isClipOval;
+  final String? mealType; // Added mealType for better placeholder
 
   const CustomNetworkImageWidget({
     super.key,
@@ -19,11 +22,29 @@ class CustomNetworkImageWidget extends StatelessWidget {
     this.fit = BoxFit.cover,
     this.borderRadius,
     this.isClipOval = true,
+    this.mealType,
   });
+
+  /// Check if the image is base64 encoded
+  bool get _isBase64Image {
+    if (imageUrl == null || imageUrl!.isEmpty) return false;
+    if (imageUrl!.startsWith('data:image')) return true;
+    // Base64 typically starts with these patterns
+    if (imageUrl!.startsWith('iVBORw0KGgo')) return true; // PNG
+    if (imageUrl!.startsWith('/9j/')) return true; // JPEG
+    if (imageUrl!.startsWith('R0lGOD')) return true; // GIF
+    return false;
+  }
 
   String get _resolvedUrl {
     if (imageUrl == null || imageUrl!.isEmpty) {
       LoggerUtils.error('MealNetworkImage → imageUrl is null or empty');
+      return '';
+    }
+
+    // If it's base64, don't try to resolve as URL
+    if (_isBase64Image) {
+      LoggerUtils.debug('MealNetworkImage → Base64 image detected');
       return '';
     }
 
@@ -33,7 +54,6 @@ class CustomNetworkImageWidget extends StatelessWidget {
     }
 
     // Ensure no double slash
-    // ✅ Replace with this
     final base = imageBaseUrl.endsWith('/')
         ? imageBaseUrl.substring(0, imageBaseUrl.length - 1)
         : imageBaseUrl;
@@ -46,71 +66,150 @@ class CustomNetworkImageWidget extends StatelessWidget {
 
   bool get _isValidResolvedUrl => _resolvedUrl.startsWith('http');
 
-  // 🔑 Add your auth token here if needed
   Map<String, String> get _headers => {
     'Accept': 'image/*',
-    // Uncomment and add token if your server requires auth:
-    // 'Authorization': 'Bearer ${YourAuthController.token}',
   };
+
+  /// Get color based on meal type
+  Color _getMealTypeColor() {
+    switch (mealType?.toLowerCase()) {
+      case 'breakfast':
+        return const Color(0xFFFFA726); // Orange
+      case 'lunch':
+        return const Color(0xFF66BB6A); // Green
+      case 'dinner':
+        return const Color(0xFF42A5F5); // Blue
+      default:
+        return const Color(0xFFAB47BC); // Purple
+    }
+  }
+
+  /// Get icon based on meal type
+  IconData _getMealTypeIcon() {
+    switch (mealType?.toLowerCase()) {
+      case 'breakfast':
+        return Icons.breakfast_dining;
+      case 'lunch':
+        return Icons.lunch_dining;
+      case 'dinner':
+        return Icons.dinner_dining;
+      default:
+        return Icons.restaurant;
+    }
+  }
+
+  /// Get base64 data without the prefix
+  String? get _base64Data {
+    if (!_isBase64Image || imageUrl == null) return null;
+    
+    // Strip the data URI prefix if present (e.g., "data:image/png;base64,")
+    if (imageUrl!.contains(',')) {
+      return imageUrl!.split(',').last;
+    }
+    return imageUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
     LoggerUtils.debug('MealNetworkImage → Building with URL: $_resolvedUrl');
+    LoggerUtils.debug('MealNetworkImage → Is base64: $_isBase64Image');
     LoggerUtils.debug('MealNetworkImage → Is valid: $_isValidResolvedUrl');
 
-    if (!_isValidResolvedUrl) {
-      LoggerUtils.error('MealNetworkImage → Invalid URL, showing error widget');
-      return _buildContainer(_errorWidget());
+    // Handle base64 images
+    if (_isBase64Image) {
+      try {
+        final base64Data = _base64Data;
+        if (base64Data == null) {
+          LoggerUtils.error('MealNetworkImage → Base64 data is null');
+          return _buildContainer(_placeholderWidget());
+        }
+
+        return _buildContainer(
+          isClipOval
+              ? ClipOval(
+                  child: Image.memory(
+                    base64Decode(base64Data),
+                    width: width,
+                    height: height,
+                    fit: fit,
+                    errorBuilder: (_, error, __) {
+                      LoggerUtils.error(
+                        'MealNetworkImage → ❌ Failed to decode base64: $error',
+                      );
+                      return _placeholderWidget();
+                    },
+                  ),
+                )
+              : Image.memory(
+                  base64Decode(base64Data),
+                  width: width,
+                  height: height,
+                  fit: fit,
+                  errorBuilder: (_, error, __) {
+                    LoggerUtils.error(
+                      'MealNetworkImage → ❌ Failed to decode base64: $error',
+                    );
+                    return _placeholderWidget();
+                  },
+                ),
+        );
+      } catch (e) {
+        LoggerUtils.error('MealNetworkImage → ❌ Base64 decode error: $e');
+        return _buildContainer(_placeholderWidget());
+      }
     }
 
+    // Handle invalid URLs
+    if (!_isValidResolvedUrl) {
+      LoggerUtils.error('MealNetworkImage → Invalid URL, showing placeholder');
+      return _buildContainer(_placeholderWidget());
+    }
+
+    // Handle network images
     return _buildContainer(
-      isClipOval? ClipOval(
-        child: CachedNetworkImage(
-          imageUrl: _resolvedUrl,
-          httpHeaders: _headers, // ✅ Pass headers
-          fit: fit,
-          width: width,
-          height: height,
-          placeholder: (_, __) {
-            LoggerUtils.debug('MealNetworkImage → ⏳ Loading...');
-            return const Center(
-              child: CircularProgressIndicator(strokeWidth: 2),
-            );
-          },
-          errorWidget: (_, error, stackTrace) {
-            // 🔥 This will now show the actual error (403, 404, etc.)
-            LoggerUtils.error(
-              'MealNetworkImage → ❌ FAILED\n'
-              '  URL: $_resolvedUrl\n'
-              '  Error: $error\n'
-              '  Stack: $stackTrace',
-            );
-            return _errorWidget(error: error.toString());
-          },
-        ),
-      ): CachedNetworkImage(
-        imageUrl: _resolvedUrl,
-        httpHeaders: _headers, // ✅ Pass headers
-        fit: fit,
-        width: width,
-        height: height,
-        placeholder: (_, __) {
-          LoggerUtils.debug('MealNetworkImage → ⏳ Loading...');
-          return const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
-          );
-        },
-        errorWidget: (_, error, stackTrace) {
-          // 🔥 This will now show the actual error (403, 404, etc.)
-          LoggerUtils.error(
-            'MealNetworkImage → ❌ FAILED\n'
-            '  URL: $_resolvedUrl\n'
-            '  Error: $error\n'
-            '  Stack: $stackTrace',
-          );
-          return _errorWidget(error: error.toString());
-        },
-      ),
+      isClipOval
+          ? ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: _resolvedUrl,
+                httpHeaders: _headers,
+                fit: fit,
+                width: width,
+                height: height,
+                memCacheWidth: width.toInt(),
+                memCacheHeight: height.toInt(),
+                fadeInDuration: const Duration(milliseconds: 300),
+                fadeOutDuration: const Duration(milliseconds: 300),
+                placeholder: (_, __) => _placeholderWidget(),
+                errorWidget: (_, error, stackTrace) {
+                  LoggerUtils.error(
+                    'MealNetworkImage → ❌ FAILED\n'
+                    '  URL: $_resolvedUrl\n'
+                    '  Error: $error',
+                  );
+                  return _placeholderWidget();
+                },
+              ),
+            )
+          : CachedNetworkImage(
+              imageUrl: _resolvedUrl,
+              httpHeaders: _headers,
+              fit: fit,
+              width: width,
+              height: height,
+              memCacheWidth: width.toInt(),
+              memCacheHeight: height.toInt(),
+              fadeInDuration: const Duration(milliseconds: 300),
+              fadeOutDuration: const Duration(milliseconds: 300),
+              placeholder: (_, __) => _placeholderWidget(),
+              errorWidget: (_, error, stackTrace) {
+                LoggerUtils.error(
+                  'MealNetworkImage → ❌ FAILED\n'
+                  '  URL: $_resolvedUrl\n'
+                  '  Error: $error',
+                );
+                return _placeholderWidget();
+              },
+            ),
     );
   }
 
@@ -121,32 +220,54 @@ class CustomNetworkImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _errorWidget({String? error}) {
+  Widget _placeholderWidget() {
+    final mealColor = _getMealTypeColor();
+    final mealIcon = _getMealTypeIcon();
+
     return Container(
-      color: Colors.grey.shade800,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            mealColor.withOpacity(0.3),
+            mealColor.withOpacity(0.1),
+          ],
+        ),
+      ),
       alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.image_not_supported,
-            color: Colors.white54,
-            size: 28,
+          Icon(
+            mealIcon,
+            color: mealColor,
+            size: 48,
           ),
-          if (error != null) ...[
-            const SizedBox(height: 4),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                // Shows "403", "404", etc. on the widget in debug
-                error.length > 20 ? '${error.substring(0, 20)}...' : error,
-                style: const TextStyle(color: Colors.white38, fontSize: 9),
-                textAlign: TextAlign.center,
-              ),
+          const SizedBox(height: 4),
+          Text(
+            _getMealTypeLabel(),
+            style: TextStyle(
+              color: mealColor.withOpacity(0.8),
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
             ),
-          ],
+          ),
         ],
       ),
     );
+  }
+
+  String _getMealTypeLabel() {
+    switch (mealType?.toLowerCase()) {
+      case 'breakfast':
+        return 'Breakfast';
+      case 'lunch':
+        return 'Lunch';
+      case 'dinner':
+        return 'Dinner';
+      default:
+        return 'Meal';
+    }
   }
 }
