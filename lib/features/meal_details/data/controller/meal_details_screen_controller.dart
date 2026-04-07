@@ -261,10 +261,18 @@ class MealDetailsScreenController extends GetxController{
       clearGenerateMealImageErrorMessage();
       LoggerUtils.debug("Generating Meal Image Started...");
 
+      // Resolve mealId: prefer the explicit mealID (from API-fetched meals),
+      // fall back to the mealId embedded in direct meal data (AI suggested meals).
+      final effectiveMealId = mealID.value.isNotEmpty
+          ? mealID.value
+          : directMealDataModel.value?.mealId ?? '';
+      LoggerUtils.debug("🎯 [GENERATE IMAGE] Using mealId: '$effectiveMealId'");
+
       final response = await _generateMealImageRepository.generateMealIamgeRepository(
         title: mealName,
         description: mealDescription,
         ingredientList: mealIngredientList.map((e) => e.name ?? '').toList(),
+        mealId: effectiveMealId,
       );
 
       LoggerUtils.debug("Response Status Code : ${response.statusCode}");

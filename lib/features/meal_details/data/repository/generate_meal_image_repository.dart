@@ -13,6 +13,7 @@ class GenerateMealImageRepository {
     required String title,
     required String description,
     required List<String> ingredientList,
+    required String mealId,
     })async{
 
     String? tokenValue = appData.read(kKeyAccessToken) ?? '';
@@ -28,6 +29,6 @@ class GenerateMealImageRepository {
       'ingredients' : ingredients,
     };
 
-    return _networkCaller.postRequest(Endpoints.postGenerateMealImageApiUrl(), body: data, headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
+    return _networkCaller.postRequest(Endpoints.postGenerateMealImageApiUrl(mealId: mealId), body: data, headers: tokenValue.isNotEmpty ? {'Authorization' : 'Bearer $tokenValue'} : null);
   }
 }
