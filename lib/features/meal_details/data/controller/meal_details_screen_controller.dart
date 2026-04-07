@@ -6,7 +6,9 @@ import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/networks/network_response.dart';
 import 'package:get/get.dart';
 
+import '../model/has_meal_image_model.dart';
 import '../model/meal_details_model.dart';
+import '../repository/has_meal_image_api_repository.dart';
 
 class MealDetailsScreenController extends GetxController{
 
@@ -16,7 +18,11 @@ class MealDetailsScreenController extends GetxController{
   ///-----------<>>>> Section : Importing the Generate Image Repository
   final GenerateMealImageRepository _generateMealImageRepository;
 
-  MealDetailsScreenController(this._mealDetailsRepository, this._generateMealImageRepository);
+
+  ///-----------<>>>>> Section : Importing Has Selected Meal Dedicated Image Checking Repository
+  final HasMealImageApiRepository _hasMealImageApiRepository;
+
+  MealDetailsScreenController(this._mealDetailsRepository, this._generateMealImageRepository, this._hasMealImageApiRepository);
 
 
   ///---------------<>>>>>> Section : Meal Details API Started Here
@@ -297,23 +303,10 @@ class MealDetailsScreenController extends GetxController{
               : 'data:image/png;base64,$imageBase64';
           hasGeneratedImage.value = true;
           LoggerUtils.debug("✅ Generated image displayed from API response");
-        } else if (mealID.value.isNotEmpty) {
-          // No image data but we have meal ID - fetch updated meal
-          LoggerUtils.debug("🔄 No image in response, fetching updated meal details...");
-          
-          // Clear direct meal data flag so getMealDetailsApi fetches from API
-          hasDirectMealData.value = false;
-          directMealDataModel.value = null;
-          
-          // Log meal ID before fetching
-          LoggerUtils.debug("🎯 Fetching meal with ID: ${mealID.value}");
-          
-          // Fetch updated meal from API
-          await getMealDetailsApi();
         } else {
-          // No image data AND no meal ID - show message
-          LoggerUtils.debug("⚠️ Image generated but cannot display: No image data returned and no meal ID available");
-          LoggerUtils.debug("💡 This happens with AI-suggested meals that haven't been saved yet");
+          // No inline image — fetch from has-meal-image endpoint
+          LoggerUtils.debug("🔄 No inline image in response, fetching from has-meal-image API...");
+          await getHasMealImageApi();
         }
 
         LoggerUtils.debug("✅ Generated image swapped successfully!");
@@ -336,6 +329,78 @@ class MealDetailsScreenController extends GetxController{
   }
 
   ///---------------<>>>>>> Section : Generate Meal Image Api Ends Here
+  ///
+  ///
+  ///---------------<>>>>>> Section : Has Meals Image Checker Api Starts Here
+
+  Rxn<HasMealImageModel> hasMealImageModel = Rxn<HasMealImageModel>();
+  RxBool hasMealImageDataLoading = false.obs;
+  RxBool hasMealImageApiError = false.obs;
+  RxString hasMealIamgeApiErrorMessage = ''.obs;
+
+  void clearHasMealIamgeApiErrorMessage(){
+    hasMealIamgeApiErrorMessage.value = '';
+  }
+
+  bool get isGeneratedImageBase64 {
+    final link = generatedMealImageLink.value;
+    if (link.isEmpty) return false;
+    return link.startsWith('data:image') ||
+        link.startsWith('iVBORw0KGgo') ||
+        link.startsWith('/9j/') ||
+        link.startsWith('R0lGOD');
+  }
+
+  Future<void> getHasMealImageApi() async {
+    final effectiveMealId = mealID.value.isNotEmpty
+        ? mealID.value
+        : directMealDataModel.value?.mealId ?? '';
+
+    if (effectiveMealId.isEmpty) {
+      LoggerUtils.debug("⚠️ [HAS MEAL IMAGE] No mealId available — skipping API call");
+      return;
+    }
+
+    try {
+      hasMealImageDataLoading.value = true;
+      hasMealImageApiError.value = false;
+      clearHasMealIamgeApiErrorMessage();
+
+      final response = await _hasMealImageApiRepository.hasMealImageRepository(
+        mealId: effectiveMealId,
+      );
+
+      LoggerUtils.debug("Has Meals Image Api Received MealID : $effectiveMealId");
+      LoggerUtils.debug("Has Meal Image Api Raw Response : ${response.jsonResponse}");
+
+      if (response.statusCode == 200 && response.isSuccess) {
+        LoggerUtils.debug("Has Meal Api Hit Successful!");
+        hasMealImageModel.value = HasMealImageModel.fromJson(response.jsonResponse!);
+        final imgRef = hasMealImageModel.value?.data?.imgRef;
+        if (imgRef != null && imgRef.isNotEmpty) {
+          generatedMealImageLink.value = imgRef;
+          hasGeneratedImage.value = true;
+          LoggerUtils.debug("✅ [HAS MEAL IMAGE] Loaded imgRef: $imgRef");
+        } else {
+          LoggerUtils.debug("ℹ️ [HAS MEAL IMAGE] No imgRef found — meal has no generated image yet");
+        }
+      } else {
+        hasMealImageApiError.value = true;
+        hasMealIamgeApiErrorMessage.value = response.errorMessage.toString();
+        LoggerUtils.error("Failed to check meal image: ${response.statusCode} — ${response.errorMessage}");
+      }
+    } catch (error) {
+      hasMealImageApiError.value = true;
+      hasMealIamgeApiErrorMessage.value = error.toString();
+      LoggerUtils.error("🥴🥴🥴🥴🥴Error Caught While checking meal availability of Meal Image!");
+      LoggerUtils.error("🤢🤢🤢🤢🤢🤢Has Meal Image Checking Caught Error : $error");
+    } finally {
+      hasMealImageDataLoading.value = false;
+    }
+  }
+
+
+  ///---------------<>>>>>> Section : Has Meals Image Checker Api Ends Here
 
 
 
