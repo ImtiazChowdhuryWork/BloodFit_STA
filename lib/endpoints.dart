@@ -77,7 +77,9 @@ final class Endpoints {
   static String infoGattherWorkOutGoal() => "$url/workout/add-workout-details";
   static String getMealsByDate() => "$url/meal/get-meals-by-date";
 
-  static String postGenerateMealImageApiUrl() => "$url/ai-meal/generate-meal-image";
+  static String postGenerateMealImageApiUrl({required String mealId}){
+    return "$url/ai-meal/generate-meal-image/$mealId";
+  }
   static String getWeightProgressApiUrl() => "$url/progress/weight-progress";
   static String getProgressReportApiUrl() => "$url/progress/progress-report";
   static String postAddPromocodeApiUrl({required String planId,}){
