@@ -121,7 +121,7 @@ class CustomNetworkImageWidget extends StatelessWidget {
         final base64Data = _base64Data;
         if (base64Data == null) {
           LoggerUtils.error('MealNetworkImage → Base64 data is null');
-          return _buildContainer(_placeholderWidget());
+          return _buildContainer(_fallbackImageWidget());
         }
 
         return _buildContainer(
@@ -136,7 +136,7 @@ class CustomNetworkImageWidget extends StatelessWidget {
                       LoggerUtils.error(
                         'MealNetworkImage → ❌ Failed to decode base64: $error',
                       );
-                      return _placeholderWidget();
+                      return _fallbackImageWidget();
                     },
                   ),
                 )
@@ -149,20 +149,20 @@ class CustomNetworkImageWidget extends StatelessWidget {
                     LoggerUtils.error(
                       'MealNetworkImage → ❌ Failed to decode base64: $error',
                     );
-                    return _placeholderWidget();
+                    return _fallbackImageWidget();
                   },
                 ),
         );
       } catch (e) {
         LoggerUtils.error('MealNetworkImage → ❌ Base64 decode error: $e');
-        return _buildContainer(_placeholderWidget());
+        return _buildContainer(_fallbackImageWidget());
       }
     }
 
     // Handle invalid URLs
     if (!_isValidResolvedUrl) {
-      LoggerUtils.error('MealNetworkImage → Invalid URL, showing placeholder');
-      return _buildContainer(_placeholderWidget());
+      LoggerUtils.error('MealNetworkImage → Invalid URL, showing default meal image');
+      return _buildContainer(_fallbackImageWidget());
     }
 
     // Handle network images
@@ -180,13 +180,13 @@ class CustomNetworkImageWidget extends StatelessWidget {
                 fadeInDuration: const Duration(milliseconds: 300),
                 fadeOutDuration: const Duration(milliseconds: 300),
                 placeholder: (_, __) => _placeholderWidget(),
-                errorWidget: (_, error, stackTrace) {
+                errorWidget: (_, error, __) {
                   LoggerUtils.error(
                     'MealNetworkImage → ❌ FAILED\n'
                     '  URL: $_resolvedUrl\n'
                     '  Error: $error',
                   );
-                  return _placeholderWidget();
+                  return _fallbackImageWidget();
                 },
               ),
             )
@@ -201,13 +201,13 @@ class CustomNetworkImageWidget extends StatelessWidget {
               fadeInDuration: const Duration(milliseconds: 300),
               fadeOutDuration: const Duration(milliseconds: 300),
               placeholder: (_, __) => _placeholderWidget(),
-              errorWidget: (_, error, stackTrace) {
+              errorWidget: (_, error, __) {
                 LoggerUtils.error(
                   'MealNetworkImage → ❌ FAILED\n'
                   '  URL: $_resolvedUrl\n'
                   '  Error: $error',
                 );
-                return _placeholderWidget();
+                return _fallbackImageWidget();
               },
             ),
     );
@@ -217,6 +217,16 @@ class CustomNetworkImageWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.circular(12),
       child: SizedBox(width: width, height: height, child: child),
+    );
+  }
+
+  Widget _fallbackImageWidget() {
+    return Image.network(
+      defaultMealImage,
+      width: width,
+      height: height,
+      fit: fit,
+      errorBuilder: (_, __, ___) => _placeholderWidget(),
     );
   }
 

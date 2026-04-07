@@ -21,7 +21,6 @@ import '../../../gen/assets.gen.dart';
 import '../../../routes/routes.dart';
 import '../../../custom_widgets/meal_plan_item_card.dart';
 import '../../meal_plan_feature_options/presentation/widgets/show_meal_plan_build_confirmation_bottom_sheet.dart';
-import '../../meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
 
 class ReviewYourChoosenMealsScreen extends StatelessWidget {
   const ReviewYourChoosenMealsScreen({super.key});
@@ -140,15 +139,14 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
                         );
                       },
                       rightButtonOnTap: () {
-                        log("Button Taped : Remove");
-                        showSwapMealBottomSheet(
-                          mealType: mealType ?? 'breakfast',
-                          mealName: mealName ?? '',
-                          mealId: null,
-                          mealCalories: kcal ?? 0,
-                          category: mealType ?? 'breakfast',
-                          subCategory: mealType ?? 'breakfast',
-                        );
+                        log("Button Taped : Remove - navigating back to $mealType tab");
+                        // Clear this meal's selection
+                        chooseController.clearSelectionForTab(mealType);
+                        // Signal the suggested meals screen to switch to the correct tab
+                        chooseController.pendingNavigateToTab.value =
+                            _tabIndexForMealType(mealType);
+                        // Navigate back
+                        Get.back();
                       },
                       kcalValue: kcal,
                       mealType: mealType,
@@ -300,6 +298,16 @@ class ReviewYourChoosenMealsScreen extends StatelessWidget {
     );
   }
   
+  /// Returns the tab index (0/1/2) for a given meal type string
+  int _tabIndexForMealType(String mealType) {
+    switch (mealType.toLowerCase()) {
+      case 'breakfast': return 0;
+      case 'lunch':     return 1;
+      case 'dinner':    return 2;
+      default:          return 0;
+    }
+  }
+
   /// Helper method to convert image to URL (handles base64, relative paths, etc.)
   String _convertImageToUrl(String imageData) {
     if (imageData.isEmpty) {
