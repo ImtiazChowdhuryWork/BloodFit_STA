@@ -1266,6 +1266,10 @@ Future<void> clearCachedJobIdAndReFetch() async {
   // Clear the cached jobId
   await _clearStoredJobId();
   
+  // Reset hasLoadedAiMealsInitially FIRST so UI shows loading spinner (not Refresh button)
+  // when jobID and meals are cleared below
+  hasLoadedAiMealsInitially.value = false;
+
   // Clear current meal data
   breakfastProteinPackedMeals.clear();
   breakfastLightAndFreshMeals.clear();
@@ -1276,10 +1280,10 @@ Future<void> clearCachedJobIdAndReFetch() async {
   dinnerProteinPackedMeals.clear();
   dinnerLightAndFreshMeals.clear();
   dinnerHealthyAndComfortingMeals.clear();
-  
+
   // Reset jobID
   jobID.value = '';
-  
+
   // Reset failure state
   _resetPollingRetryCount();
   
