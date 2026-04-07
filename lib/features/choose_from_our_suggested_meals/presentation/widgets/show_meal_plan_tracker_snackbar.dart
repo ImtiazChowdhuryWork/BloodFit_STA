@@ -127,8 +127,10 @@ class _MealPlanTrackerContent extends StatelessWidget {
               child: CustomElevatedButton(
                 onTap: isMealPlanComplete ? () {
                   log("Button Taped : Build Meal Plan!-----------");
-                  
-                  // Navigate to review screen
+
+                  // Close the tracker bottom sheet before navigating
+                  // so it doesn't reappear when the user comes back
+                  Get.back();
                   Get.toNamed(Routes.reviewYourChoosenMealScreen);
                 } : null,
                 buttonTitle: "Build",

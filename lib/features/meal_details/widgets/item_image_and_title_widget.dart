@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
+import 'package:bloodfit/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -52,7 +53,7 @@ class ItemImageAndTitleWidget extends StatelessWidget {
         else
           /// Network/URL image
           CustomNetworkImageWidget(
-            imageUrl: imagePath,
+            imageUrl: imagePath.isEmpty ? defaultMealImage : imagePath,
             isClipOval: false,
             width: 1.sw,
             height: 0.4.sh,

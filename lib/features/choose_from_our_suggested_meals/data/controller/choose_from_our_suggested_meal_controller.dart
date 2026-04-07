@@ -65,6 +65,26 @@ class ChooseFromOurSuggestedMealController extends GetxController {
 
   ///---------->>> Section : Boiler Code End
 
+  ///---------->>> Section : Tab Navigation Request (used by Review screen Remove button)
+  /// When set to 0/1/2, ChooseFromOurSuggestedMealsScreen animates to that tab.
+  /// Reset to -1 after the tab switch is handled.
+  RxInt pendingNavigateToTab = (-1).obs;
+
+  /// Clear the selection for a single tab without touching the others
+  void clearSelectionForTab(String tabName) {
+    if (tabName == 'breakfast') {
+      selectedBreakfastMealId.value = '';
+      selectedBreakfastMealName.value = '';
+    } else if (tabName == 'lunch') {
+      selectedLunchMealId.value = '';
+      selectedLunchMealName.value = '';
+    } else if (tabName == 'dinner') {
+      selectedDinnerMealId.value = '';
+      selectedDinnerMealName.value = '';
+    }
+    LoggerUtils.debug("🗑️ [SELECTION] Cleared selection for tab: $tabName");
+  }
+
   ///--------->>> Section : Meal Selection Tracking (One meal per tab)
   /// Track selected meal ID for each tab (only one meal can be selected per tab)
   RxString selectedBreakfastMealId = ''.obs;
@@ -221,13 +241,46 @@ class ChooseFromOurSuggestedMealController extends GetxController {
     LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
     LoggerUtils.debug("📦 [REVIEW] Getting complete selected meal data for review screen");
     LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
-    
+
     Map<String, Map<String, dynamic>> selectedMealsData = {};
-    
-    // Helper function to get meal data by ID and type
-    Map<String, dynamic>? getMealDataById(String mealId, String mealType) {
+
+    // Search AI meal lists by id and build data map
+    Map<String, dynamic>? buildFromAiMeal(String mealId, String mealType) {
+      final meal = _findAiMealById(mealId, mealType);
+      if (meal == null) return null;
+
+      LoggerUtils.debug("✅ [REVIEW] Found AI meal: ${meal.mealName}");
+
+      final String categoryImage = mealType == 'breakfast'
+          ? breakFastMealImage
+          : mealType == 'lunch'
+              ? lunchMealImage
+              : dinnerMealImage;
+      final String mealImage = (meal.image != null && meal.image.toString().isNotEmpty)
+          ? meal.image.toString()
+          : categoryImage;
+
+      return {
+        'mealName': meal.mealName ?? '',
+        'description': meal.description ?? '',
+        'kcal': meal.totalCalories ?? 0,
+        'ingredients': meal.ingredients ?? [],
+        'caloryCount': [
+          {'label': 'Carbs', 'kcal': meal.macronutrients?.carbohydrates ?? 0},
+          {'label': 'Protein', 'kcal': meal.macronutrients?.protein ?? 0},
+          {'label': 'Fat', 'kcal': meal.macronutrients?.fat ?? 0},
+        ],
+        'image': mealImage,
+        'mealType': mealType,
+        'hasId': true,
+        'id': meal.id,
+      };
+    }
+
+    // Search previously selected meal lists by id and build data map
+    Map<String, dynamic>? buildFromPreviousMeal(String mealId, String mealType) {
       if (mealId.isEmpty) return null;
-      
+
       Datum? meal;
       if (mealType == 'breakfast') {
         meal = breakfastRecentChosenMeals.firstWhere(
@@ -245,7 +298,7 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           orElse: () => Datum(),
         );
       }
-      
+
       if (meal != null && meal.id != null) {
         LoggerUtils.debug("✅ [REVIEW] Found previously selected meal: ${meal.mealName}");
         return {
@@ -260,130 +313,69 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           'id': meal.id,
         };
       }
-      
+
       return null;
     }
-    
-    // Helper function to get AI meal data by index
-    Map<String, dynamic>? getAiMealData(String mealId, String mealType) {
-      if (!mealId.contains('_')) return null;
-      
-      final parts = mealId.split('_');
-      if (parts.length < 3) return null;
-      
-      final type = parts[0];
-      final category = parts[1];
-      final index = int.tryParse(parts[2]) ?? -1;
-      
-      if (index < 0) return null;
-      
-      HealthyComforting? meal;
-      String imageUrl = '';
-      
-      if (type == 'breakfast') {
-        final categoryList = _getBreakfastCategoryList(category);
-        if (index < categoryList.length) {
-          meal = categoryList[index];
-          imageUrl = breakFastMealImage;
-        }
-      } else if (type == 'lunch') {
-        final categoryList = _getLunchCategoryList(category);
-        if (index < categoryList.length) {
-          meal = categoryList[index];
-          imageUrl = lunchMealImage;
-        }
-      } else if (type == 'dinner') {
-        final categoryList = _getDinnerCategoryList(category);
-        if (index < categoryList.length) {
-          meal = categoryList[index];
-          imageUrl = dinnerMealImage;
-        }
-      }
-      
-      if (meal != null) {
-        LoggerUtils.debug("✅ [REVIEW] Found AI meal: ${meal.mealName}");
-        
-        // Get the meal-specific image or fall back to category image
-        String mealImageUrl = imageUrl; // Default to category image (breakFastMealImage, etc.)
-        
-        LoggerUtils.debug("🖼️ [CONTROLLER] AI meal image source: $imageUrl");
-        LoggerUtils.debug("🖼️ [CONTROLLER] Image length: ${imageUrl.length}");
-        LoggerUtils.debug("🖼️ [CONTROLLER] Is empty: ${imageUrl.isEmpty}");
-        
-        return {
-          'mealName': meal.mealName ?? '',
-          'description': meal.description ?? '',
-          'kcal': meal.totalCalories ?? 0,
-          'ingredients': meal.ingredients ?? [],
-          'caloryCount': [
-            {'label': 'Carbs', 'kcal': meal.macronutrients?.carbohydrates ?? 0},
-            {'label': 'Protein', 'kcal': meal.macronutrients?.protein ?? 0},
-            {'label': 'Fat', 'kcal': meal.macronutrients?.fat ?? 0},
-          ],
-          'image': mealImageUrl,
-          'mealType': mealType,
-          'hasId': false,
-          'id': null,
-        };
-      }
-      
-      return null;
+
+    // Resolve meal data: try AI meals first, fall back to previously selected
+    Map<String, dynamic>? resolveMeal(String mealId, String mealType) {
+      if (mealId.isEmpty) return null;
+      return buildFromAiMeal(mealId, mealType) ?? buildFromPreviousMeal(mealId, mealType);
     }
-    
+
     // Get breakfast meal data
     if (selectedBreakfastMealId.value.isNotEmpty) {
-      final mealId = selectedBreakfastMealId.value;
-      Map<String, dynamic>? mealData;
-      
-      if (mealId.contains('_')) {
-        mealData = getAiMealData(mealId, 'breakfast');
-      } else {
-        mealData = getMealDataById(mealId, 'breakfast');
-      }
-      
-      if (mealData != null) {
-        selectedMealsData['breakfast'] = mealData;
-      }
+      final mealData = resolveMeal(selectedBreakfastMealId.value, 'breakfast');
+      if (mealData != null) selectedMealsData['breakfast'] = mealData;
     }
-    
+
     // Get lunch meal data
     if (selectedLunchMealId.value.isNotEmpty) {
-      final mealId = selectedLunchMealId.value;
-      Map<String, dynamic>? mealData;
-      
-      if (mealId.contains('_')) {
-        mealData = getAiMealData(mealId, 'lunch');
-      } else {
-        mealData = getMealDataById(mealId, 'lunch');
-      }
-      
-      if (mealData != null) {
-        selectedMealsData['lunch'] = mealData;
-      }
+      final mealData = resolveMeal(selectedLunchMealId.value, 'lunch');
+      if (mealData != null) selectedMealsData['lunch'] = mealData;
     }
-    
+
     // Get dinner meal data
     if (selectedDinnerMealId.value.isNotEmpty) {
-      final mealId = selectedDinnerMealId.value;
-      Map<String, dynamic>? mealData;
-      
-      if (mealId.contains('_')) {
-        mealData = getAiMealData(mealId, 'dinner');
-      } else {
-        mealData = getMealDataById(mealId, 'dinner');
-      }
-      
-      if (mealData != null) {
-        selectedMealsData['dinner'] = mealData;
-      }
+      final mealData = resolveMeal(selectedDinnerMealId.value, 'dinner');
+      if (mealData != null) selectedMealsData['dinner'] = mealData;
     }
-    
+
     LoggerUtils.debug("📦 [REVIEW] Total meals retrieved: ${selectedMealsData.length}");
     LoggerUtils.debug("📦 [REVIEW] Breakfast: ${selectedMealsData.containsKey('breakfast') ? '✅' : '❌'}");
     LoggerUtils.debug("📦 [REVIEW] Lunch: ${selectedMealsData.containsKey('lunch') ? '✅' : '❌'}");
     LoggerUtils.debug("📦 [REVIEW] Dinner: ${selectedMealsData.containsKey('dinner') ? '✅' : '❌'}");
-    
+
     return selectedMealsData;
+  }
+
+  /// Search all category lists for a meal with the given id
+  HealthyComforting? _findAiMealById(String mealId, String mealType) {
+    List<HealthyComforting> allMeals = [];
+    if (mealType == 'breakfast') {
+      allMeals = [
+        ...breakfastProteinPackedMeals,
+        ...breakfastLightAndFreshMeals,
+        ...breakfastHealthyAndComfortingMeals,
+      ];
+    } else if (mealType == 'lunch') {
+      allMeals = [
+        ...lunchProteinPackedMeals,
+        ...lunchLightAndFreshMeals,
+        ...lunchHealthyAndComfortingMeals,
+      ];
+    } else if (mealType == 'dinner') {
+      allMeals = [
+        ...dinnerProteinPackedMeals,
+        ...dinnerLightAndFreshMeals,
+        ...dinnerHealthyAndComfortingMeals,
+      ];
+    }
+    try {
+      return allMeals.firstWhere((m) => m.id == mealId);
+    } catch (_) {
+      return null;
+    }
   }
 
   ///--------->>> Section : Previously Selected Meals Api Method Start Here
@@ -1454,58 +1446,4 @@ void setSelectedDate({required String date}){
   selectedDate.value = date;
 }
 
-// Helper methods to get category lists (used by getSelectedMealsCompleteData)
-List<HealthyComforting> _getBreakfastCategoryList(String category) {
-  LoggerUtils.debug("🔍 [CATEGORY] Looking for breakfast category: $category");
-  if (category.contains('Protein')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Protein-Packed");
-    return breakfastProteinPackedMeals;
-  }
-  if (category.contains('Light')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Light-Fresh");
-    return breakfastLightAndFreshMeals;
-  }
-  if (category.contains('Healthy') || category.contains('Hearty') || category.contains('Comforting')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Healthy-Comforting/Hearty-Comforting");
-    return breakfastHealthyAndComfortingMeals;
-  }
-  LoggerUtils.debug("⚠️ [CATEGORY] No matching category found");
-  return [];
-}
-
-List<HealthyComforting> _getLunchCategoryList(String category) {
-  LoggerUtils.debug("🔍 [CATEGORY] Looking for lunch category: $category");
-  if (category.contains('Protein')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Protein-Packed");
-    return lunchProteinPackedMeals;
-  }
-  if (category.contains('Light')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Light-Fresh");
-    return lunchLightAndFreshMeals;
-  }
-  if (category.contains('Healthy') || category.contains('Hearty') || category.contains('Comforting')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Healthy-Comforting/Hearty-Comforting");
-    return lunchHealthyAndComfortingMeals;
-  }
-  LoggerUtils.debug("⚠️ [CATEGORY] No matching category found");
-  return [];
-}
-
-List<HealthyComforting> _getDinnerCategoryList(String category) {
-  LoggerUtils.debug("🔍 [CATEGORY] Looking for dinner category: $category");
-  if (category.contains('Protein')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Protein-Packed");
-    return dinnerProteinPackedMeals;
-  }
-  if (category.contains('Light')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Light-Fresh");
-    return dinnerLightAndFreshMeals;
-  }
-  if (category.contains('Healthy') || category.contains('Hearty') || category.contains('Comforting')) {
-    LoggerUtils.debug("✅ [CATEGORY] Found Healthy-Comforting/Hearty-Comforting");
-    return dinnerHealthyAndComfortingMeals;
-  }
-  LoggerUtils.debug("⚠️ [CATEGORY] No matching category found");
-  return [];
-}
 }

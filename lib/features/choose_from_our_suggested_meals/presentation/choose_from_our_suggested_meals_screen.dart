@@ -27,6 +27,7 @@ class _ChooseFromOurSuggestedMealsScreenState
     extends State<ChooseFromOurSuggestedMealsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late Worker _tabNavigationWorker;
   ChooseFromOurSuggestedMealController chooseFromOurSuggestedMealController = Get.find<ChooseFromOurSuggestedMealController>();
 
   // String receivedSelectedDate = '';
@@ -58,6 +59,17 @@ class _ChooseFromOurSuggestedMealsScreenState
 
     _tabController = TabController(length: 3, vsync: this);
 
+    ///------------->>> Section : Listen for tab navigation requests from Review screen
+    _tabNavigationWorker = ever(
+      chooseFromOurSuggestedMealController.pendingNavigateToTab,
+      (int index) {
+        if (index >= 0 && index <= 2) {
+          _tabController.animateTo(index);
+          chooseFromOurSuggestedMealController.setSelectedTabName(index: index);
+          chooseFromOurSuggestedMealController.pendingNavigateToTab.value = -1;
+        }
+      },
+    );
 
     ///------------->>> Section : Initial tab setup (Breakfast)
     chooseFromOurSuggestedMealController
@@ -86,6 +98,7 @@ class _ChooseFromOurSuggestedMealsScreenState
 
   @override
   void dispose() {
+    _tabNavigationWorker.dispose();
     _tabController.dispose();
     super.dispose();
   }

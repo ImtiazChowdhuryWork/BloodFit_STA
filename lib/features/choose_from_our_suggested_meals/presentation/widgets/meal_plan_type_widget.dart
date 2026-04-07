@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../../endpoints.dart';
 import '../../../../helper/ui_helpers.dart';
 import '../../data/model/ai_suggested_meals_model.dart';
 
@@ -50,8 +51,10 @@ class MealPlanTypeWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               var data = itemsList[index];
               final mealName = data.mealName ?? 'Test name';
-              // Create a unique ID using meal name and index (since AI meals don't have IDs)
-              final mealId = '${tabName}_${mealPlanType}_$index';
+              final mealId = data.id ?? '';
+              final mealImage = (data.image != null && data.image.toString().isNotEmpty)
+                  ? data.image.toString()
+                  : defaultMealImage;
 
               return Obx(() {
                 final isSelected = controller.isMealSelected(
@@ -68,7 +71,7 @@ class MealPlanTypeWidget extends StatelessWidget {
                     /// Create a MealDataModel from the AI suggested meal data
                     final mealDataModel = MealDataModel(
                       mealName: mealName,
-                      mealType: tabName, // Use tabName (breakfast/lunch/dinner) instead of mealPlanType
+                      mealType: tabName,
                       totalCalories: data.totalCalories ?? 0,
                       description: data.description ?? '',
                       ingredients: data.ingredients?.map((ing) => MealIngredientData(
@@ -77,15 +80,15 @@ class MealPlanTypeWidget extends StatelessWidget {
                         icon: ing.icon ?? '',
                       )).toList() ?? [],
                       macronutrients: MealMacronutrientsData(
-                        carbohydrates: data.macronutrients?.carbohydrates ?? 0,
-                        protein: data.macronutrients?.protein ?? 0,
-                        fat: data.macronutrients?.fat ?? 0,
+                        carbohydrates: (data.macronutrients?.carbohydrates ?? 0).toDouble(),
+                        protein: (data.macronutrients?.protein ?? 0).toDouble(),
+                        fat: (data.macronutrients?.fat ?? 0).toDouble(),
                       ),
                       numberOfServings: data.numberOfServings ?? 1,
-                      image: itemImagePath,
+                      image: mealImage,
                       category: data.category?.name,
                       subCategory: data.subCategory?.name,
-                      mealId: mealId, // Pass the mealId for selection tracking
+                      mealId: mealId,
                     );
 
                     LoggerUtils.debug("✅ [MEAL DATA] Created MealDataModel with:");
@@ -112,7 +115,7 @@ class MealPlanTypeWidget extends StatelessWidget {
                     }
                   },
                   isImageLinkBase64: true,
-                  itemImagePath: itemImagePath,
+                  itemImagePath: mealImage,
                   itemTitle: mealName,
                   kcalValue: data.totalCalories ?? 0,
                   servingValue: data.numberOfServings ?? 0,
