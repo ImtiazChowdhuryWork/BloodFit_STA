@@ -93,6 +93,10 @@ final class Endpoints {
 
   static String getWeightHistory() => "$url/health/weight-history";
 
+  static String getHasMealImageApiUrl({required String mealId}){
+    return "$url/img-storage/local-image/$mealId";
+  }
+
 
   
 }

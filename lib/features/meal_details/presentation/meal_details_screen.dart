@@ -120,6 +120,9 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
       ///------<>>> Call The api (or use direct data)
       await mealDetailsScreenController?.getMealDetailsApi();
+
+      ///------<>>> Check if a generated image already exists for this meal
+      await mealDetailsScreenController?.getHasMealImageApi();
     });
     super.initState();
   }
@@ -154,11 +157,59 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
               final mealImagePath = hasGeneratedImage
                   ? mealDetailsScreenController!.generatedMealImageLink.value
                   : mealDetailsScreenController!.mealImage;
+              final isImageLoading = mealDetailsScreenController!.hasMealImageDataLoading.value;
+              final hasImageError = mealDetailsScreenController!.hasMealImageApiError.value;
 
-              return ItemImageAndTitleWidget(
-                imagePath: mealImagePath,
-                title: mealDetailsScreenController!.mealName,
-                isBase64: hasGeneratedImage ? true : mealDetailsScreenController!.isMealImageBase64,
+              return Stack(
+                children: [
+                  ItemImageAndTitleWidget(
+                    imagePath: mealImagePath,
+                    title: mealDetailsScreenController!.mealName,
+                    isBase64: hasGeneratedImage
+                        ? mealDetailsScreenController!.isGeneratedImageBase64
+                        : mealDetailsScreenController!.isMealImageBase64,
+                  ),
+                  if (isImageLoading)
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.45),
+                        alignment: Alignment.center,
+                        child: const CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  if (!isImageLoading && hasImageError)
+                    Positioned(
+                      bottom: 12.h,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () => mealDetailsScreenController!.getHasMealImageApi(),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.65),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.refresh, color: Colors.white, size: 16.sp),
+                                SizedBox(width: 6.w),
+                                Text(
+                                  'Retry',
+                                  style: TextFontStyle.headline14w500c999999StylePoppins
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               );
             }),
             UIHelper.verticalSpace(8.h),
