@@ -314,11 +314,8 @@ class _ChooseFromOurSuggestedMealsScreenState
               chooseFromOurSuggestedMealController.lunchRecentChosenMeals.clear();
               chooseFromOurSuggestedMealController.dinnerRecentChosenMeals.clear();
               
-              // Clear jobId from local storage and re-fetch
+              // Clear jobId from local storage and re-fetch (also calls initializeAiMeals internally)
               await chooseFromOurSuggestedMealController.clearCachedJobIdAndReFetch();
-              
-              // Clear the current jobId in controller
-              chooseFromOurSuggestedMealController.jobID.value = '';
 
               // Show success message
               Get.snackbar(

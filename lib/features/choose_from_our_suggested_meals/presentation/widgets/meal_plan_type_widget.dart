@@ -52,9 +52,20 @@ class MealPlanTypeWidget extends StatelessWidget {
               var data = itemsList[index];
               final mealName = data.mealName ?? 'Test name';
               final mealId = data.id ?? '';
+              // Priority: 1) meal's own image  2) tab default base64 image  3) defaultMealImage URL
               final mealImage = (data.image != null && data.image.toString().isNotEmpty)
                   ? data.image.toString()
-                  : defaultMealImage;
+                  : itemImagePath.isNotEmpty
+                      ? itemImagePath
+                      : defaultMealImage;
+
+              // Detect if the image is base64 — only base64 strings should be decoded.
+              // URLs (http/https) and the defaultMealImage must NOT be treated as base64,
+              // otherwise base64Decode throws FormatException on URL characters like ':'.
+              final isMealImageBase64 = mealImage.startsWith('data:image') ||
+                  mealImage.startsWith('iVBORw0KGgo') || // PNG
+                  mealImage.startsWith('/9j/') ||         // JPEG
+                  mealImage.startsWith('R0lGOD');         // GIF
 
               return Obx(() {
                 final isSelected = controller.isMealSelected(
@@ -114,7 +125,7 @@ class MealPlanTypeWidget extends StatelessWidget {
                       );
                     }
                   },
-                  isImageLinkBase64: true,
+                  isImageLinkBase64: isMealImageBase64,
                   itemImagePath: mealImage,
                   itemTitle: mealName,
                   kcalValue: data.totalCalories ?? 0,
