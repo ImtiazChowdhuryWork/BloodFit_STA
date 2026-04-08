@@ -59,26 +59,8 @@ class CreateMealPlanRepository {
       LoggerUtils.error("📦 [REPO] ❌ Failed to download images: $e");
     }
 
-    // Strip base64 image data from meals JSON to avoid "Field value too long"
-    // (images are already being sent as separate file attachments)
-    final mealsData = Map<String, dynamic>.from(mealPlanData['meals'] as Map);
-    for (final mealType in mealsData.keys) {
-      final mealList = mealsData[mealType];
-      if (mealList is List) {
-        for (int i = 0; i < mealList.length; i++) {
-          if (mealList[i] is Map) {
-            final meal = Map<String, dynamic>.from(mealList[i]);
-            final image = meal['image']?.toString() ?? '';
-            if (_isBase64(image)) {
-              meal['image'] = '';
-            }
-            mealList[i] = meal;
-          }
-        }
-      }
-    }
-
     // Prepare multipart fields (text data only)
+    final mealsData = mealPlanData['meals'] as Map;
     final Map<String, String> multipartFields = {
       'date': mealPlanData['date'].toString(),
       'meals': jsonEncode(mealsData),

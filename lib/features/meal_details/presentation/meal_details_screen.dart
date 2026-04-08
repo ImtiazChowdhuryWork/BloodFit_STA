@@ -73,19 +73,16 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
         tabNameForSelection = 'dinner';
       }
 
-      // Use the mealId passed from the meal card (if available)
-      // This ensures the same ID is used for selection tracking
+      // Use the mealId passed from the meal card
+      // If mealId is empty, mealIdForSelection stays null → Select button disabled
       if (mealData.mealId != null && mealData.mealId!.isNotEmpty) {
         mealIdForSelection = mealData.mealId;
         LoggerUtils.debug(
           "🎯 [MEAL DETAILS] Using passed mealId from MealDataModel: $mealIdForSelection",
         );
       } else {
-        // Fallback: Create a unique meal ID using mealName and image
-        mealIdForSelection =
-            '${tabNameForSelection}_${mealData.mealName}_${mealData.image}';
         LoggerUtils.debug(
-          "🎯 [MEAL DETAILS] Created fallback mealId: $mealIdForSelection",
+          "🎯 [MEAL DETAILS] No mealId available — Select button will be disabled",
         );
       }
 
@@ -548,43 +545,18 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                         : AppColors
                               .cb20000; // Red for selection (unselected state)
 
+                    final canSelect = tabNameForSelection != null && mealIdForSelection != null;
+
                     return CustomElevatedButton(
-                      onTap: () {
+                      onTap: canSelect ? () {
                         log("Button Taped : Select This Meal!");
-
-                        // Only allow selection if we have valid selection info
-                        if (tabNameForSelection != null &&
-                            mealIdForSelection != null) {
-                          final mealName =
-                              mealDetailsScreenController!.mealName;
-
-                          if (isMealSelected) {
-                            // Deselect the meal
-                            LoggerUtils.debug(
-                              "🎯 [BUTTON] Deselecting meal...",
-                            );
-                            chooseFromOurSuggestedMealController!
-                                .setSelectedMeal(
-                                  tabName: tabNameForSelection!,
-                                  mealId: mealIdForSelection!,
-                                  mealName: mealName,
-                                );
-                          } else {
-                            // Select the meal
-                            LoggerUtils.debug("🎯 [BUTTON] Selecting meal...");
-                            chooseFromOurSuggestedMealController!
-                                .setSelectedMeal(
-                                  tabName: tabNameForSelection!,
-                                  mealId: mealIdForSelection!,
-                                  mealName: mealName,
-                                );
-                          }
-                        } else {
-                          LoggerUtils.debug(
-                            "⚠️ [BUTTON] Cannot select meal - missing selection info",
-                          );
-                        }
-                      },
+                        final mealName = mealDetailsScreenController!.mealName;
+                        chooseFromOurSuggestedMealController!.setSelectedMeal(
+                          tabName: tabNameForSelection!,
+                          mealId: mealIdForSelection!,
+                          mealName: mealName,
+                        );
+                      } : null,
                       buttonWidth: 1.sw,
                       buttonHeight: 52.h,
                       borderRadius: 24.r,
