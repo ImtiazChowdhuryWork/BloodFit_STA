@@ -251,6 +251,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
 
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/custom_widgets/custom_elevated_button.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_bottom_sheet.dart';
@@ -419,6 +420,11 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                         mealPlanFeatureOptionsController.selectedDate.value,
                       );
                       final String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                      // Clear previous selections so the new date starts fresh
+                      // (only if already registered — first-time navigation initialises fresh via binding)
+                      if (Get.isRegistered<ChooseFromOurSuggestedMealController>()) {
+                        Get.find<ChooseFromOurSuggestedMealController>().clearAllSelections();
+                      }
                       Get.toNamed(Routes.chooseFromOurSuggestedMealsScreen, arguments: {'mealGenerationDate' : formattedDate});
                     },
                     showSectionTitle: true,

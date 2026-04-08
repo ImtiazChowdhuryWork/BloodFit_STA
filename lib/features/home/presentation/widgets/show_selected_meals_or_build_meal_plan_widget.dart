@@ -1,5 +1,6 @@
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/endpoints.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/data/controller/choose_from_our_suggested_meal_controller.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/presentation/widgets/build_meal_plan_icon_widget.dart';
 import 'package:bloodfit/features/home/presentation/widgets/meal_showing_widget_shimmer_effect.dart';
@@ -273,6 +274,11 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
         onTap: () {
           final DateTime now = DateTime.now();
           final String formatedCurrentDate = DateFormat('yyyy-MM-dd').format(now);
+          // Clear previous selections so the new session starts fresh
+          // (only if already registered — first-time navigation initialises fresh via binding)
+          if (Get.isRegistered<ChooseFromOurSuggestedMealController>()) {
+            Get.find<ChooseFromOurSuggestedMealController>().clearAllSelections();
+          }
           Get.toNamed(
             Routes.chooseFromOurSuggestedMealsScreen,
             arguments: {'mealGenerationDate': formatedCurrentDate},
