@@ -147,8 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       controller.getDailyCaloriesApi();
                                     },
                               size: 120.w,
-                              progress: controller.completationPercentage
-                                  .toDouble(),
+                              progress: controller.completationPercentage / 100.0,
                               strokeWidth: 8,
                               capColor: AppColors.cFFFFFF,
                               capSizeMultiplier: 0.3,
