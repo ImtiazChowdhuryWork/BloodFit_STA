@@ -33,14 +33,8 @@ class _InfoTileWidgetState extends State<InfoTileWidget>
       duration: const Duration(milliseconds: 600),
     );
 
-    _animation = Tween<double>(
-      begin: 0,
-      end: widget.progressValue,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-      ),
+    _animation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
     _controller.forward();
@@ -51,16 +45,6 @@ class _InfoTileWidgetState extends State<InfoTileWidget>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.progressValue != widget.progressValue) {
-      _animation = Tween<double>(
-        begin: oldWidget.progressValue,
-        end: widget.progressValue,
-      ).animate(
-        CurvedAnimation(
-          parent: _controller,
-          curve: Curves.easeOutCubic,
-        ),
-      );
-
       _controller
         ..reset()
         ..forward();
@@ -84,7 +68,7 @@ class _InfoTileWidgetState extends State<InfoTileWidget>
               width: 40.w,
               height: 40.h,
               child: CircularProgressIndicator(
-                value: _animation.value,
+                value: _animation.value * widget.progressValue,
                 strokeWidth: 10,
                 backgroundColor: AppColors.c999999,
                 color: AppColors.cFFFFFF,
@@ -111,7 +95,7 @@ class _InfoTileWidgetState extends State<InfoTileWidget>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${(_animation.value * 100).toStringAsFixed(0)}% Complete',
+                  '${(_animation.value * widget.progressValue * 100).toStringAsFixed(0)}% Complete',
                   style: TextFontStyle.headline12w400cfefefeStylePoppins,
                 ),
                 UIHelper.verticalSpace(6.h),
