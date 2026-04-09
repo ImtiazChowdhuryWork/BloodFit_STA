@@ -233,32 +233,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ShowSelectedMealsOrBuildMealPlanWidget(),
                   UIHelper.verticalSpace(24.h),
 
-                  ///Section : -------------///FOR TEST PURPOSE OF Recently Selected Meals////------------
-                  ///Section : -------------///Will be removed after test is done////------------
-                  // BuildMealPlanWidget(
-                  //   onTap: () {
-                  //     LoggerUtils.debug("================ Button Tapped : Get Started ================!");
-                  //     final DateTime now = DateTime.now();
-                  //     final String formatedCurrentDate = DateFormat(
-                  //       'yyyy-MM-dd',
-                  //     ).format(now);
-                  //     Get.toNamed(
-                  //       Routes.chooseFromOurSuggestedMealsScreen,
-                  //       arguments: {
-                  //         'mealGenerationDate': formatedCurrentDate,
-                  //       },
-                  //     );
-                  //   },
-                  //   showSectionTitle: true,
-                  //   sectionTitle: 'choose_from_suggested_meals'.tr,
-                  //   buttonTitle: 'get_started'.tr,
-                  //   positionTop: -36.h,
-                  //   positionRight: -20.w,
-                  //   imageIconPath: Assets.icons.chickeMealIcon,
-                  //   title: 'build_your_daily_meals'.tr,
-                  //   subTitle: 'select_meals_description'.tr,
-                  // ),
-
                   ///Section : -------------///Build Your Meal Plan////------------
                   BuildMealPlanWidget(
                     onTap: () {

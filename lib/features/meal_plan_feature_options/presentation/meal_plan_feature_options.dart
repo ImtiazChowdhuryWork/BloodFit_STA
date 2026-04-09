@@ -474,9 +474,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                           },
                           isMealEaten: meal.status == 'done',
                           leftButtonTitle: 'i_ate_this'.tr,
-                          leftButtonOnTap: isPastDate
-                              ? () {}
-                              : isToday
+                          leftButtonOnTap: isToday
                               ? () async {
                                   LoggerUtils.debug(
                                     "Button Tapped: I Ate This, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
@@ -487,14 +485,10 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                                   // Refresh the meals list for the selected date
                                   mealPlanFeatureOptionsController.postGetMealsBySelectedDate();
                                 }
-                              : () {
-                                  LoggerUtils.debug(
-                                    "Button Tapped: I Ate This, Meal Type: ${meal.mealType}, Meal Name: ${meal.mealName}",
-                                  );
-                                },
-                          leftButtonColor: isPastDate ? AppColors.c262626 : null,
-                          leftButtonBorderColor: isPastDate ? AppColors.c999999 : null,
-                          isLeftButtonBorderUsed: isPastDate,
+                              : () {},
+                          leftButtonColor: !isToday ? AppColors.c262626 : null,
+                          leftButtonBorderColor: !isToday ? AppColors.c999999 : null,
+                          isLeftButtonBorderUsed: !isToday,
                           rightButtonTitle: 'swap_meal'.tr,
                           rightButtonOnTap: isPastDate
                               ? () {}
