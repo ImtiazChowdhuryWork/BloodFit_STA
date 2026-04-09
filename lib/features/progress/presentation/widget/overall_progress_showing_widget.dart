@@ -68,6 +68,24 @@ class _OverAllProgressShowingWidgetState
     super.dispose();
   }
 
+  String get _headline {
+    if (widget.overAllProgress <= 0) return 'Let\'s Get Started!';
+    if (widget.overAllProgress < 0.25) return 'Great Start!';
+    if (widget.overAllProgress < 0.50) return 'Keep It Up!';
+    if (widget.overAllProgress < 0.75) return 'Halfway There!';
+    if (widget.overAllProgress < 1.0) return 'Almost There!';
+    return 'Goal Achieved!';
+  }
+
+  String get _subHeadline {
+    if (widget.overAllProgress <= 0) return 'Take the first step today.';
+    if (widget.overAllProgress < 0.25) return 'Every small step counts!';
+    if (widget.overAllProgress < 0.50) return 'You\'re building great momentum.';
+    if (widget.overAllProgress < 0.75) return 'More than halfway, don\'t stop now!';
+    if (widget.overAllProgress < 1.0) return 'Just a little bit more, let\'s keep going.';
+    return 'Amazing! You\'ve crushed your goal!';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,12 +106,12 @@ class _OverAllProgressShowingWidgetState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Almost There!',
+                    _headline,
                     style: TextFontStyle.headline18w500cfefefeStylePoppins,
                   ),
                   UIHelper.verticalSpace(6.h),
                   Text(
-                    'Just Little Bit More, Let’s Keep Going.',
+                    _subHeadline,
                     style: TextFontStyle.headline12w500c999999StylePoppins,
                   ),
                 ],
