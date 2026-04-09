@@ -44,10 +44,9 @@ class _OverAllProgressShowingWidgetState
       duration: const Duration(milliseconds: 800),
     );
 
-    _progressAnimation = Tween<double>(
-      begin: 0,
-      end: widget.overAllProgress,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _progressAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
 
     _controller.forward();
   }
@@ -57,14 +56,6 @@ class _OverAllProgressShowingWidgetState
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.overAllProgress != widget.overAllProgress) {
-      _progressAnimation =
-          Tween<double>(
-            begin: oldWidget.overAllProgress,
-            end: widget.overAllProgress,
-          ).animate(
-            CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-          );
-
       _controller
         ..reset()
         ..forward();
@@ -120,7 +111,7 @@ class _OverAllProgressShowingWidgetState
                         
                         SizedBox.expand(
                           child: CircularProgressIndicator(
-                            value: _progressAnimation.value,
+                            value: _progressAnimation.value * widget.overAllProgress,
                             strokeWidth: 10,
                             backgroundColor: AppColors.c000000,
                             color: AppColors.cb20000,
@@ -131,7 +122,7 @@ class _OverAllProgressShowingWidgetState
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              '${(_progressAnimation.value * 100).toStringAsFixed(0)}%',
+                              '${(_progressAnimation.value * widget.overAllProgress * 100).toStringAsFixed(0)}%',
                               style: TextFontStyle
                                   .headline20w500cfefefeStylePoppins,
                             ),

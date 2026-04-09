@@ -77,11 +77,11 @@ class ProgressScreen extends StatelessWidget {
                   }
 
                   return OverAllProgressShowingWidget(
-                    overAllProgress: controller.totalProgressValue.toDouble(),
+                    overAllProgress: controller.totalProgressValue / 100.0,
                     inforTypeOne: 'mealplan'.tr,
-                    infoTypeOneProgress: controller.totalMealProgressValue.toDouble(),
+                    infoTypeOneProgress: controller.totalMealProgressValue / 100.0,
                     infoTypeTwo: 'workout'.tr,
-                    infoTypeTwoProgress: controller.totalWorkoutProgressValue.toDouble(),
+                    infoTypeTwoProgress: controller.totalWorkoutProgressValue / 100.0,
                   );
                 }),
               ),
