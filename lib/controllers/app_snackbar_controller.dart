@@ -17,7 +17,7 @@ class AppSnackBarController {
   }) {
     _remove();
 
-    final overlay = Overlay.of(Get.overlayContext!);
+    final overlay = Navigator.of(Get.context!, rootNavigator: true).overlay!;
 
     _entry = OverlayEntry(
       builder: (_) {
