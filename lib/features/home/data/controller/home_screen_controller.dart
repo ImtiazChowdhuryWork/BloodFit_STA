@@ -288,8 +288,9 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
           "Meals Eaten Status Updated Successfully for Meal ID : $mealID",
         );
 
-        // Refresh the meals data to reflect the updated status
+        // Refresh the meals data and daily calories to reflect the updated status
         await getTodaysSelectedMealsApi();
+        await getDailyCaloriesApi();
       } else {
         isTodaysMealEatenHasError.value = response.errorMessage.toString();
         LoggerUtils.error(

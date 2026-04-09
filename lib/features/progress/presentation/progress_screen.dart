@@ -2,6 +2,7 @@ import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/progress/data/controller/weight_history_controller.dart';
 import 'package:bloodfit/features/progress/data/controller/weight_progress_showing_controller.dart';
 import 'package:bloodfit/features/progress/presentation/widget/custom_progress_indicator.dart';
+import 'package:bloodfit/features/progress/presentation/widget/overall_progress_shimmer_widget.dart';
 import 'package:bloodfit/features/progress/presentation/widget/overall_progress_showing_widget.dart';
 import 'package:bloodfit/features/progress/presentation/widget/weight_history_chart.dart';
 import 'package:bloodfit/features/progress/presentation/widget/weight_progress_failed_widget.dart';
@@ -57,7 +58,7 @@ class ProgressScreen extends StatelessWidget {
                 ),
                 child: Obx(() {
                   if (controller.isProgressReportDataLoading.value) {
-                    return CircularProgressIndicator();
+                    return OverAllProgressShimmerWidget();
                   }
 
                   if (controller
