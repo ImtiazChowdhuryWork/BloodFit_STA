@@ -15,6 +15,7 @@ import '../../../your_daily_calories_intake/data/model/get_calorie_requirements_
 
 import '../model/get_todays_meal_model.dart' hide Icon;
 import '../repository/daily_calories_api_repository.dart';
+import '../../../meal_plan_feature_options/presentation/data/controller/meal_plan_feature_options_controller.dart';
 
 class HomeScreenController extends GetxController {
   ///--------->>> Section : Importing the Repositories
@@ -324,6 +325,14 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
       isSwapMealValueLoading.value = true;
       clearSwapMealError();
 
+      LoggerUtils.debug("===== PATCH SWAP MEAL API → REQUEST =====");
+      LoggerUtils.debug("Endpoint mealID  : $mealID");
+      LoggerUtils.debug("description      : $description");
+      LoggerUtils.debug("ingredientList   : $ingredientList");
+      LoggerUtils.debug("imageUrl         : $imageUrl");
+      LoggerUtils.debug("caloriesCount    : $caloriesCount");
+      LoggerUtils.debug("=========================================");
+
       final response = await _swapMealRepository.swapMealRepository(
         mealID: mealID,
         description: description,
@@ -332,14 +341,40 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
         caloriesCount: caloriesCount,
       );
 
+      LoggerUtils.debug("===== PATCH SWAP MEAL API → RESPONSE =====");
+      LoggerUtils.debug("Status Code  : ${response.statusCode}");
+      LoggerUtils.debug("Is Success   : ${response.isSuccess}");
+      LoggerUtils.debug("Error Msg    : ${response.errorMessage}");
+      LoggerUtils.debug("JSON Body    : ${response.jsonResponse}");
+      LoggerUtils.debug("==========================================");
+
       if (response.statusCode == 200 && response.isSuccess) {
         LoggerUtils.debug("🤪🤪🤪🤪Meals Swaped Successfully!");
+        // Navigate back first so the overlay context is available for the snackbar
+        Get.back();
         AppSnackBarController.show(
-          message: 'Meal swaped successfully!',
+          message: 'Meal swapped successfully!',
           type: AppSnackBarType.success,
           position: AppSnackBarPosition.top,
           duration: const Duration(seconds: 4),
         );
+        // Refresh home screen data
+        await getTodaysSelectedMealsApi();
+        await getDailyCaloriesApi();
+        // Refresh meal plan options screen if it's currently active
+        if (Get.isRegistered<MealPlanFeatureOptionsController>()) {
+          await Get.find<MealPlanFeatureOptionsController>().postGetMealsBySelectedDate();
+          final refreshedMeals = Get.find<MealPlanFeatureOptionsController>().mealsByDateList;
+          LoggerUtils.debug("===== REFRESHED MEAL PLAN OPTIONS LIST =====");
+          LoggerUtils.debug("Total meals after swap : ${refreshedMeals.length}");
+          refreshedMeals.asMap().forEach((index, meal) {
+            LoggerUtils.debug("  [$index] mealName=${meal.mealName}, mealType=${meal.mealType}, kcal=${meal.kcal}, status=${meal.status}");
+          });
+          LoggerUtils.debug("============================================");
+        }
+      } else {
+        swapMealErrorMessage.value = response.errorMessage ?? 'Failed to swap meal';
+        LoggerUtils.error("☠️ Swap Meal Failed: ${swapMealErrorMessage.value}");
       }
     } catch (error) {
       swapMealErrorMessage.value = error.toString();
@@ -390,23 +425,39 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
 
       final response = await _swapMealOptionsRepository.swapMealOptionsRepository(category: categoryName.value, subCategory: subCategoryName.value, currentCallories: currentCallores.value);
 
-      LoggerUtils.debug("Swap Meal Options Api Response : ${SwapMealOptionsModel.fromJson(response.jsonResponse!)}");
-
       if(response.statusCode == 200 && response.isSuccess){
         LoggerUtils.debug("😇😇😇😇😇Swap Meal Options Retrieved Successfully!");
 
         swapMealOptionsModel.value = SwapMealOptionsModel.fromJson(response.jsonResponse!);
+
+        final alternatives = swapMealOptionsModel.value?.data?.alternatives ?? [];
+        LoggerUtils.debug("===== SWAP MEAL OPTIONS LIST =====");
+        LoggerUtils.debug("Original Category    : ${swapMealOptionsModel.value?.data?.originalCategory}");
+        LoggerUtils.debug("Original SubCategory : ${swapMealOptionsModel.value?.data?.originalSubCategory}");
+        LoggerUtils.debug("Target Calories      : ${swapMealOptionsModel.value?.data?.targetCalories}");
+        LoggerUtils.debug("Total alternatives   : ${alternatives.length}");
+        alternatives.asMap().forEach((index, item) {
+          LoggerUtils.debug("--- Alternative [$index] ---");
+          LoggerUtils.debug("  mealName    : ${item.mealName}");
+          LoggerUtils.debug("  description : ${item.description}");
+          LoggerUtils.debug("  totalCal    : ${item.totalCalories}");
+          LoggerUtils.debug("  category    : ${item.category} / ${item.subCategory}");
+          LoggerUtils.debug("  image       : ${item.image}");
+          LoggerUtils.debug("  ingredients : ${item.ingredients?.map((i) => i.name).toList()}");
+          LoggerUtils.debug("  macros      : carbs=${item.macronutrients?.carbohydrates}, protein=${item.macronutrients?.protein}, fat=${item.macronutrients?.fat}");
+        });
+        LoggerUtils.debug("==================================");
       }else{
         LoggerUtils.error("😩😩😩😩😩Failed get Swap Meal Options!");
         LoggerUtils.error("😩😩😩😩😩Error Code :: ${response.statusCode} :: Error Message --> ${response.errorMessage.toString()}");
-        swapMealOptionsErrorMessage.value = response.errorMessage.toString();
+        swapMealOptionsErrorMessage.value = 'Unable to load meal options. Please try again.';
       }
 
     }catch(error){
 
       LoggerUtils.error("😓😓😓😓😓😓Something Went Wrong while fetching the api!");
       LoggerUtils.error("😓😓😓😓😓😓Error Message : ${error.toString()}");
-      swapMealOptionsErrorMessage.value = error.toString();
+      swapMealOptionsErrorMessage.value = 'Unable to load meal options. Please try again.';
 
     }finally{
       isSwapMealOptionsLoading.value = false;
