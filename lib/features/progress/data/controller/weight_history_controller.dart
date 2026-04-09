@@ -69,7 +69,7 @@ class WeightHistoryController extends GetxController {
         .where((entry) => entry.date != null && entry.weight != null)
         .map((entry) {
           final weightEntry = WeightEntry(
-            entry.date!.day,
+            entry.date!,
             entry.weight!.toDouble(),
           );
           LoggerUtils.debug('🔄 Transformed: Date=${entry.date} (day=${entry.date!.day}), Weight=${entry.weight} → WeightEntry(${entry.date!.day}, ${entry.weight!.toDouble()})');

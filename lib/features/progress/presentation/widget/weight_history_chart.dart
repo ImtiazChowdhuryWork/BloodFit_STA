@@ -8,9 +8,10 @@ import 'dart:ui' as ui;
 // ─────────────────────────────────────────────────────────────────────────────
 
 class WeightEntry {
-  final int day;
+  final DateTime date;
   final double weight;
-  const WeightEntry(this.day, this.weight);
+  int get day => date.day;
+  const WeightEntry(this.date, this.weight);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -79,7 +80,7 @@ class _WeightHistoryChartState extends State<WeightHistoryChart> {
       if (picked != null) {
         setState(() {
           _selectedMonth = picked;
-          _hoveredIndex = null;
+          _hoveredIndex = null; // clear hover so stale index doesn't hit new filtered list
         });
         widget.onMonthChanged?.call(picked);
       }
@@ -166,17 +167,30 @@ class _WeightHistoryChartState extends State<WeightHistoryChart> {
     
               const SizedBox(height: 10),
     
-              // Chart
-              SizedBox(
-                height: 220,
-                child: _ChartArea(
-                  entries: widget.entries,
-                  hoveredIndex: _hoveredIndex,
-                  goalWeight: widget.goalWeight,
-                  currentWeight: widget.currentWeight,
-                  selectedMonth: _selectedMonth,
-                  onHover: (i) => setState(() => _hoveredIndex = i),
-                ),
+              // Filter entries to selected month and sort by day
+              Builder(
+                builder: (_) {
+                  final filteredEntries = widget.entries
+                      .where(
+                        (e) =>
+                            e.date.year == _selectedMonth.year &&
+                            e.date.month == _selectedMonth.month,
+                      )
+                      .toList()
+                    ..sort((a, b) => a.day.compareTo(b.day));
+
+                  return SizedBox(
+                    height: 220,
+                    child: _ChartArea(
+                      entries: filteredEntries,
+                      hoveredIndex: _hoveredIndex,
+                      goalWeight: widget.goalWeight,
+                      currentWeight: widget.currentWeight,
+                      selectedMonth: _selectedMonth,
+                      onHover: (i) => setState(() => _hoveredIndex = i),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -558,46 +572,34 @@ class _ChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (entries.isEmpty) {
-      return;
-    }
-
     final double chartW = size.width - kLeft - kRight;
     final double chartH = size.height - kTop - kBottom;
 
-    // Calculate Y range from actual data, not goal/current
-    final weights = entries.map((e) => e.weight).toList();
-    final minWeight = weights.reduce((a, b) => a < b ? a : b);
-    final maxWeight = weights.reduce((a, b) => a > b ? a : b);
+    // Y range: derived from data when available, otherwise use a default scale
+    int yTop;
+    int yBottom;
 
-    // Y range: snap min down to nearest 10, max up to nearest 10
-    int yTop = ((minWeight / 10).floor() * 10);
-    int yBottom = ((maxWeight / 10).ceil() * 10);
-    
-    // Ensure minimum range of 20 to avoid division by zero or tiny ranges
-    if (yBottom - yTop < 20) {
-      yTop = ((minWeight / 10).floor() * 10) - 10;
-      yBottom = ((maxWeight / 10).ceil() * 10) + 10;
+    if (entries.isEmpty) {
+      yTop = 60;
+      yBottom = 100;
+    } else {
+      final weights = entries.map((e) => e.weight).toList();
+      final minWeight = weights.reduce((a, b) => a < b ? a : b);
+      final maxWeight = weights.reduce((a, b) => a > b ? a : b);
+
+      yTop = ((minWeight / 10).floor() * 10);
+      yBottom = ((maxWeight / 10).ceil() * 10);
+
+      // Ensure minimum range of 20 to avoid division by zero or tiny ranges
+      if (yBottom - yTop < 20) {
+        yTop = ((minWeight / 10).floor() * 10) - 10;
+        yBottom = ((maxWeight / 10).ceil() * 10) + 10;
+      }
     }
 
     // Convenience closures
     double tx(double day) => _toX(day, chartW);
     double ty(double weight) => _toY(weight, chartH, yTop, yBottom);
-
-    // Pre-compute canvas points
-    final List<Offset> pts = entries
-        .map((e) => Offset(tx(e.day.toDouble()), ty(e.weight)))
-        .toList();
-    
-    // Check for NaN values in points
-    for (int i = 0; i < pts.length; i++) {
-      if (pts[i].dx.isNaN || pts[i].dy.isNaN || pts[i].dx.isInfinite || pts[i].dy.isInfinite) {
-        LoggerUtils.error('❌ Chart: Point $i has NaN/Infinity: ${pts[i]}');
-        LoggerUtils.error('   Entry: day=${entries[i].day}, weight=${entries[i].weight}');
-        LoggerUtils.error('   yTop=$yTop, yBottom=$yBottom, chartH=$chartH');
-        return; // Don't draw if points are invalid
-      }
-    }
 
     final tp = TextPainter(textDirection: ui.TextDirection.ltr);
     final gridPaint = Paint()
@@ -672,63 +674,80 @@ class _ChartPainter extends CustomPainter {
       tp.paint(canvas, Offset(labelX, kTop + chartH + 5));
     }
 
-    // ── Smooth line path ──────────────────────────────────────────────────────
-    final Path linePath = _smoothPath(pts);
+    if (entries.isNotEmpty) {
+      // Pre-compute canvas points
+      final List<Offset> pts = entries
+          .map((e) => Offset(tx(e.day.toDouble()), ty(e.weight)))
+          .toList();
 
-    // ── Clip canvas to reveal chart left→right based on progress ─────────────
-    final double revealX = kLeft + chartW * progress;
-    canvas.save();
-    canvas.clipRect(Rect.fromLTRB(0, 0, revealX, size.height));
+      // Validate points
+      for (int i = 0; i < pts.length; i++) {
+        if (pts[i].dx.isNaN || pts[i].dy.isNaN ||
+            pts[i].dx.isInfinite || pts[i].dy.isInfinite) {
+          LoggerUtils.error('❌ Chart: Point $i has NaN/Infinity: ${pts[i]}');
+          return;
+        }
+      }
 
-    // ── Gradient fill under the line ─────────────────────────────────────────
-    final Path fillPath = Path()
-      ..addPath(linePath, Offset.zero)
-      ..lineTo(pts.last.dx, kTop + chartH)
-      ..lineTo(pts.first.dx, kTop + chartH)
-      ..close();
+      // ── Smooth line path ────────────────────────────────────────────────────
+      final Path linePath = _smoothPath(pts);
 
-    canvas.drawPath(
-      fillPath,
-      Paint()
-        ..shader =
-            ui.Gradient.linear(Offset(0, kTop), Offset(0, kTop + chartH), [
+      // ── Clip canvas to reveal chart left→right based on progress ───────────
+      final double revealX = kLeft + chartW * progress;
+      canvas.save();
+      canvas.clipRect(Rect.fromLTRB(0, 0, revealX, size.height));
+
+      // ── Gradient fill under the line ────────────────────────────────────────
+      final Path fillPath = Path()
+        ..addPath(linePath, Offset.zero)
+        ..lineTo(pts.last.dx, kTop + chartH)
+        ..lineTo(pts.first.dx, kTop + chartH)
+        ..close();
+
+      canvas.drawPath(
+        fillPath,
+        Paint()
+          ..shader = ui.Gradient.linear(
+            Offset(0, kTop),
+            Offset(0, kTop + chartH),
+            [
               AppColors.cb20000.withOpacity(0.40),
               AppColors.cb20000.withOpacity(0.00),
-            ]),
-    );
-
-    // ── Line stroke ───────────────────────────────────────────────────────────
-    canvas.drawPath(
-      linePath,
-      Paint()
-        ..color = AppColors.cb20000
-        ..strokeWidth = 2.2
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round,
-    );
-
-    canvas.restore(); // remove clip so hover dot/tooltip draw freely
-
-    // ── Hover indicator ───────────────────────────────────────────────────────
-    if (hoveredIndex != null && hoveredIndex! < pts.length) {
-      final Offset pt = pts[hoveredIndex!];
-      final WeightEntry e = entries[hoveredIndex!];
-
-      // vertical crosshair
-      canvas.drawLine(
-        Offset(pt.dx, kTop),
-        Offset(pt.dx, kTop + chartH),
-        Paint()
-          ..color = Colors.white.withOpacity(0.25)
-          ..strokeWidth = 1,
+            ],
+          ),
       );
 
-      // dot
-      canvas.drawCircle(pt, 5, Paint()..color = AppColors.cb20000);
-      canvas.drawCircle(pt, 2.5, Paint()..color = Colors.white);
+      // ── Line stroke ─────────────────────────────────────────────────────────
+      canvas.drawPath(
+        linePath,
+        Paint()
+          ..color = AppColors.cb20000
+          ..strokeWidth = 2.2
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
 
-      _drawTooltip(canvas, size, pt, e, chartW);
+      canvas.restore(); // remove clip so hover dot/tooltip draw freely
+
+      // ── Hover indicator ─────────────────────────────────────────────────────
+      if (hoveredIndex != null && hoveredIndex! < pts.length) {
+        final Offset pt = pts[hoveredIndex!];
+        final WeightEntry e = entries[hoveredIndex!];
+
+        canvas.drawLine(
+          Offset(pt.dx, kTop),
+          Offset(pt.dx, kTop + chartH),
+          Paint()
+            ..color = Colors.white.withOpacity(0.25)
+            ..strokeWidth = 1,
+        );
+
+        canvas.drawCircle(pt, 5, Paint()..color = AppColors.cb20000);
+        canvas.drawCircle(pt, 2.5, Paint()..color = Colors.white);
+
+        _drawTooltip(canvas, size, pt, e, chartW);
+      }
     }
   }
 
