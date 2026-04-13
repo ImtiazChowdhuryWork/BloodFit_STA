@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/features/home/data/model/swap_meal_options_model.dart';
 import 'package:bloodfit/features/home/data/repository/get_todays_meal_repository.dart';
@@ -418,10 +420,76 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
   }
 
 
+  // ─── Swap Meal Options Progress Simulation ───────────────────────────────
+
+  RxInt swapMealOptionsLoadingProgress = 0.obs;
+  RxString swapMealOptionsLoadingMessage = ''.obs;
+  Timer? _swapProgressTimer;
+  bool _isSwapProgressRunning = false;
+
+  static const List<String> _swapLoadingMessages = [
+    'Finding meal alternatives...',
+    'Matching your calorie target...',
+    'Comparing nutritional values...',
+    'Selecting the best options...',
+    'Almost done...',
+  ];
+
+  void _startSwapProgressSimulation() {
+    if (_isSwapProgressRunning) return;
+    _isSwapProgressRunning = true;
+    _swapProgressTimer?.cancel();
+    swapMealOptionsLoadingProgress.value = 0;
+    swapMealOptionsLoadingMessage.value = _swapLoadingMessages[0];
+
+    _swapProgressTimer = Timer.periodic(const Duration(milliseconds: 575), (_) {
+      if (swapMealOptionsLoadingProgress.value < 95) {
+        swapMealOptionsLoadingProgress.value += 1;
+        _updateSwapProgressMessage();
+      }
+    });
+  }
+
+  Future<void> _completeSwapProgress() async {
+    if (!_isSwapProgressRunning) return;
+    _isSwapProgressRunning = false;
+    _swapProgressTimer?.cancel();
+    _swapProgressTimer = null;
+    swapMealOptionsLoadingMessage.value = 'Meal options ready!';
+
+    // Animate smoothly from current position to 100%
+    while (swapMealOptionsLoadingProgress.value < 100) {
+      await Future.delayed(const Duration(milliseconds: 30));
+      swapMealOptionsLoadingProgress.value += 1;
+    }
+
+    // Hold at 100% briefly so the user sees it
+    await Future.delayed(const Duration(milliseconds: 400));
+    swapMealOptionsLoadingProgress.value = 0;
+  }
+
+  void _updateSwapProgressMessage() {
+    final p = swapMealOptionsLoadingProgress.value;
+    if (p < 20) {
+      swapMealOptionsLoadingMessage.value = _swapLoadingMessages[0];
+    } else if (p < 40) {
+      swapMealOptionsLoadingMessage.value = _swapLoadingMessages[1];
+    } else if (p < 60) {
+      swapMealOptionsLoadingMessage.value = _swapLoadingMessages[2];
+    } else if (p < 80) {
+      swapMealOptionsLoadingMessage.value = _swapLoadingMessages[3];
+    } else {
+      swapMealOptionsLoadingMessage.value = _swapLoadingMessages[4];
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+
   Future<void> getSwapMealOptionsApi()async{
     try{
       isSwapMealOptionsLoading.value = true;
       clearSwapMealOptionsErrorMessage();
+      _startSwapProgressSimulation();
 
       final response = await _swapMealOptionsRepository.swapMealOptionsRepository(category: categoryName.value, subCategory: subCategoryName.value, currentCallories: currentCallores.value);
 
@@ -452,16 +520,24 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
         LoggerUtils.error("😩😩😩😩😩Error Code :: ${response.statusCode} :: Error Message --> ${response.errorMessage.toString()}");
         swapMealOptionsErrorMessage.value = 'Unable to load meal options. Please try again.';
       }
+      await _completeSwapProgress();
 
     }catch(error){
 
       LoggerUtils.error("😓😓😓😓😓😓Something Went Wrong while fetching the api!");
       LoggerUtils.error("😓😓😓😓😓😓Error Message : ${error.toString()}");
       swapMealOptionsErrorMessage.value = 'Unable to load meal options. Please try again.';
+      await _completeSwapProgress();
 
     }finally{
       isSwapMealOptionsLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    _swapProgressTimer?.cancel();
+    super.onClose();
   }
 
 

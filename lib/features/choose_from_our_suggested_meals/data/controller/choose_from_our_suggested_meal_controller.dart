@@ -523,6 +523,70 @@ void clearAiSuggestedErrorMessage() {
   aiSuggestedMealsErrorMessage.value = '';
 }
 
+// ─── Progress Simulation ─────────────────────────────────────────────────────
+
+RxInt aiMealsLoadingProgress = 0.obs;
+RxString aiMealsLoadingMessage = ''.obs;
+RxBool isAiMealsGenerating = false.obs;
+Timer? _progressTimer;
+bool _isProgressRunning = false;
+
+static const List<String> _loadingMessages = [
+  'Generating your personalized meals...',
+  'Analyzing your preferences...',
+  'Crafting the best combinations for you...',
+  'Selecting the finest ingredients...',
+  'Almost ready...',
+];
+
+void _startProgressSimulation() {
+  if (_isProgressRunning) return;
+  _isProgressRunning = true;
+  _progressTimer?.cancel();
+  aiMealsLoadingProgress.value = 0;
+  aiMealsLoadingMessage.value = _loadingMessages[0];
+  isAiMealsGenerating.value = true;
+
+  // Tick every 1.2 s → reaches ~95 % in ~114 s (≈ 2 min), then waits for real completion
+  _progressTimer = Timer.periodic(const Duration(milliseconds: 1200), (_) {
+    if (aiMealsLoadingProgress.value < 95) {
+      aiMealsLoadingProgress.value += 1;
+      _updateProgressMessage();
+    }
+  });
+}
+
+void _completeProgress() {
+  if (!_isProgressRunning) return;
+  _isProgressRunning = false;
+  _progressTimer?.cancel();
+  _progressTimer = null;
+  aiMealsLoadingProgress.value = 100;
+  aiMealsLoadingMessage.value = 'Your meals are ready!';
+  // Show 100 % briefly, then hide overlay
+  Future.delayed(const Duration(milliseconds: 800), () {
+    isAiMealsGenerating.value = false;
+    aiMealsLoadingProgress.value = 0;
+  });
+}
+
+void _updateProgressMessage() {
+  final p = aiMealsLoadingProgress.value;
+  if (p < 20) {
+    aiMealsLoadingMessage.value = _loadingMessages[0];
+  } else if (p < 40) {
+    aiMealsLoadingMessage.value = _loadingMessages[1];
+  } else if (p < 60) {
+    aiMealsLoadingMessage.value = _loadingMessages[2];
+  } else if (p < 80) {
+    aiMealsLoadingMessage.value = _loadingMessages[3];
+  } else {
+    aiMealsLoadingMessage.value = _loadingMessages[4];
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 ///-------------->>> Section : AI Genereted Meals Api Method Starts Here
 ///-------------->>> Socket Is Used for getting the Response of the ai
 ///-------------->>> For Getting the AI Meals We have to go through two API Methods
@@ -634,6 +698,7 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
       LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
 
       // Reset loading states on error
+      _completeProgress();
       isAiSuggestedMealsLoading.value = false;
     }
   } catch (error) {
@@ -641,6 +706,7 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
     LoggerUtils.error("💥 Error Catched While getting the JobID Value!");
     LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
 
+    _completeProgress();
     isAiSuggestedMealsLoading.value = false;
   } finally {
     isJobIdValueLoading.value = false;
@@ -766,12 +832,13 @@ void _processAiMealsResponse(dynamic response) {
       jobID.value = '';
       
       // Reset loading states
+      _completeProgress();
       isAiSuggestedMealsLoading.value = false;
       isAiGeneratedMealsValueLoading.value = false;
-      
+
       return;
     }
-    
+
     // If status is not "completed", don't process meals - continue waiting/polling
     if (status != 'completed') {
       LoggerUtils.debug("⏳ [PROCESS] Job status is '$status' - meals not ready yet. Continuing to wait...");
@@ -797,12 +864,13 @@ void _processAiMealsResponse(dynamic response) {
           jobID.value = '';
           
           // Reset loading states
+          _completeProgress();
           isAiSuggestedMealsLoading.value = false;
           isAiGeneratedMealsValueLoading.value = false;
-          
+
           return;
         }
-        
+
         LoggerUtils.debug("⏳ [PROCESS] Scheduling next poll in $_pollingIntervalSeconds seconds...");
         // Schedule another poll attempt after 3 seconds
         Future.delayed(Duration(seconds: _pollingIntervalSeconds), () {
@@ -925,6 +993,7 @@ void _processAiMealsResponse(dynamic response) {
     LoggerUtils.debug("🔓 [PROCESS] Finally block - resetting loading states");
     LoggerUtils.debug("🔓 [PROCESS] Current isAiSuggestedMealsLoading: ${isAiSuggestedMealsLoading.value}");
     LoggerUtils.debug("🔓 [PROCESS] Current isAiGeneratedMealsValueLoading: ${isAiGeneratedMealsValueLoading.value}");
+    _completeProgress();
     isAiSuggestedMealsLoading.value = false;
     isAiGeneratedMealsValueLoading.value = false;
     LoggerUtils.debug("🔓 [PROCESS] Loading states reset to FALSE");
@@ -1352,6 +1421,9 @@ Future<void> initializeAiMeals() async {
     LoggerUtils.debug("🔄 [CONTROLLER] Initializing AI meals (no meals in memory)...");
     LoggerUtils.debug("🔄 [CONTROLLER] Loading jobId from local storage...");
 
+    // Start progress overlay (long wait expected — up to ~2 min)
+    _startProgressSimulation();
+
     // Check for existing jobId from today
     final existingJobId = await _loadJobIdFromLocal();
     LoggerUtils.debug("🎯 [CONTROLLER] existingJobId from local storage: '${existingJobId ?? 'NULL'}'");
@@ -1414,8 +1486,9 @@ Future<void> initializeAiMeals() async {
 void onClose() {
   LoggerUtils.debug("👋👋👋 ChooseFromOurSuggestedMealController closed");
 
-  // Cancel any active timer
+  // Cancel any active timers
   _responseTimer?.cancel();
+  _progressTimer?.cancel();
 
   // Remove socket listeners to prevent memory leaks
   if (jobID.value.isNotEmpty) {

@@ -142,12 +142,8 @@ class _DinnerTabState extends State<DinnerTab> {
                 UIHelper.verticalSpace(32.h),
               ],
 
-              /// Shimmer loading cards for AI meals
-              const MealsLoadingShimmerCard(),
-              UIHelper.verticalSpace(32.h),
-              const MealsLoadingShimmerCard(),
-              UIHelper.verticalSpace(32.h),
-              const MealsLoadingShimmerCard(),
+              /// AI meals progress card
+              const AiMealsProgressCard(),
             ],
           ),
         );

@@ -6,7 +6,7 @@ import 'package:bloodfit/endpoints.dart';
 import 'package:bloodfit/features/choose_from_our_suggested_meals/data/model/meal_data_model.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/data/model/swap_meal_options_model.dart';
-import 'package:bloodfit/features/meal_plan_feature_options/presentation/widgets/swap_meal_options_loader.dart';
+import 'package:bloodfit/features/choose_from_our_suggested_meals/presentation/widgets/meals_loading_shimmer_card.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
@@ -78,7 +78,7 @@ void showSwapMealBottomSheet({
               child: Obx(() {
                 // Loading State
                 if (homeScreenController.isSwapMealOptionsLoading.value) {
-                  return SwapMealOptionsLoader();
+                  return const SwapMealProgressCard();
                 }
 
                 // Error State
