@@ -556,18 +556,23 @@ void _startProgressSimulation() {
   });
 }
 
-void _completeProgress() {
+Future<void> _completeProgress() async {
   if (!_isProgressRunning) return;
   _isProgressRunning = false;
   _progressTimer?.cancel();
   _progressTimer = null;
-  aiMealsLoadingProgress.value = 100;
   aiMealsLoadingMessage.value = 'Your meals are ready!';
-  // Show 100 % briefly, then hide overlay
-  Future.delayed(const Duration(milliseconds: 800), () {
-    isAiMealsGenerating.value = false;
-    aiMealsLoadingProgress.value = 0;
-  });
+
+  // Animate smoothly from current position to 100%
+  while (aiMealsLoadingProgress.value < 100) {
+    await Future.delayed(const Duration(milliseconds: 30));
+    aiMealsLoadingProgress.value += 1;
+  }
+
+  // Hold at 100% briefly so the user sees it
+  await Future.delayed(const Duration(milliseconds: 400));
+  isAiMealsGenerating.value = false;
+  aiMealsLoadingProgress.value = 0;
 }
 
 void _updateProgressMessage() {
@@ -698,7 +703,7 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
       LoggerUtils.error("Error Message : ${jobIdErrorMessage.value}");
 
       // Reset loading states on error
-      _completeProgress();
+      await _completeProgress();
       isAiSuggestedMealsLoading.value = false;
     }
   } catch (error) {
@@ -706,7 +711,7 @@ Future<void> getAiSuggestedMealsJobIdApi() async {
     LoggerUtils.error("💥 Error Catched While getting the JobID Value!");
     LoggerUtils.error("Catched Error : ${jobIdErrorMessage.value}");
 
-    _completeProgress();
+    await _completeProgress();
     isAiSuggestedMealsLoading.value = false;
   } finally {
     isJobIdValueLoading.value = false;
@@ -766,14 +771,14 @@ void _listenForAiMealsResponse() {
   });
 
   // Listen for the specific event using jobId
-  _socketServices.socket?.on('ai-meals-response-${jobID.value}', (data) {
+  _socketServices.socket?.on('ai-meals-response-${jobID.value}', (data) async {
     LoggerUtils.debug("📥 Received socket response for jobId: ${jobID.value}");
     LoggerUtils.debug("📦 Socket Data: $data");
-    
+
     // Cancel the timeout timer since we received the response
     _responseTimer?.cancel();
-    
-    _processAiMealsResponse(data);
+
+    await _processAiMealsResponse(data);
   });
 
   // Listen for error events
@@ -793,7 +798,7 @@ void _listenForAiMealsResponse() {
 }
 
 /// Process the AI meals response received via socket or polling
-void _processAiMealsResponse(dynamic response) {
+Future<void> _processAiMealsResponse(dynamic response) async {
   LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
   LoggerUtils.debug("🔄 [PROCESS] _processAiMealsResponse() CALLED");
   LoggerUtils.debug("🔄 [PROCESS] Response type: ${response.runtimeType}");
@@ -832,7 +837,7 @@ void _processAiMealsResponse(dynamic response) {
       jobID.value = '';
       
       // Reset loading states
-      _completeProgress();
+      await _completeProgress();
       isAiSuggestedMealsLoading.value = false;
       isAiGeneratedMealsValueLoading.value = false;
 
@@ -864,7 +869,7 @@ void _processAiMealsResponse(dynamic response) {
           jobID.value = '';
           
           // Reset loading states
-          _completeProgress();
+          await _completeProgress();
           isAiSuggestedMealsLoading.value = false;
           isAiGeneratedMealsValueLoading.value = false;
 
@@ -914,6 +919,10 @@ void _processAiMealsResponse(dynamic response) {
     LoggerUtils.debug("🔄 [PROCESS] Storing aiGeneratedMealsData...");
     aiGeneratedMealsData.value = mealsData;
     LoggerUtils.debug("✅ [PROCESS] aiGeneratedMealsData stored");
+
+    // Complete progress animation BEFORE populating meals so the card
+    // stays visible until 100% — then meals appear after the animation.
+    await _completeProgress();
 
     ///------->>> Process BREAKFAST meals
     LoggerUtils.debug("🔄 [PROCESS] Processing BREAKFAST meals...");
@@ -988,12 +997,12 @@ void _processAiMealsResponse(dynamic response) {
     LoggerUtils.error("❌ [PROCESS] Error type: ${e.runtimeType}");
     LoggerUtils.error("╚═══════════════════════════════════════════════════════════");
     aiGeneretedMealsDataErrorMessage.value = "Failed to process meals data";
+    await _completeProgress();
   } finally {
     // Reset loading states
     LoggerUtils.debug("🔓 [PROCESS] Finally block - resetting loading states");
     LoggerUtils.debug("🔓 [PROCESS] Current isAiSuggestedMealsLoading: ${isAiSuggestedMealsLoading.value}");
     LoggerUtils.debug("🔓 [PROCESS] Current isAiGeneratedMealsValueLoading: ${isAiGeneratedMealsValueLoading.value}");
-    _completeProgress();
     isAiSuggestedMealsLoading.value = false;
     isAiGeneratedMealsValueLoading.value = false;
     LoggerUtils.debug("🔓 [PROCESS] Loading states reset to FALSE");
@@ -1192,7 +1201,7 @@ Future<void> getAiSuggestedMealsViaPolling() async {
       LoggerUtils.debug("🔄 [POLLING] Calling _processAiMealsResponse() with data...");
       
       try {
-        _processAiMealsResponse(response.jsonResponse!);
+        await _processAiMealsResponse(response.jsonResponse!);
         LoggerUtils.debug("✅ [POLLING] _processAiMealsResponse() COMPLETED");
       } catch (processError) {
         LoggerUtils.error("❌ [POLLING] _processAiMealsResponse() threw error: $processError");
