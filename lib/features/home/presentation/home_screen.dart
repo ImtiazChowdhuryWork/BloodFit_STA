@@ -224,8 +224,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   UIHelper.verticalSpace(24.h),
 
                   ///Section : -------------///received 3 meal plan///--------------
-                  ReceivedThreeMealPlansWidget(),
-                  UIHelper.verticalSpace(24.h),
+                  Obx(() {
+                    if (controller.todaysSelectedMealsList.isNotEmpty) {
+                      return Column(
+                        children: [
+                          ReceivedThreeMealPlansWidget(),
+                          UIHelper.verticalSpace(24.h),
+                        ],
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }),
 
                   ///Section : -------------///Build Your Meal Plan////------------
                   ///Section : -------------///Show Selected Meals////------------
