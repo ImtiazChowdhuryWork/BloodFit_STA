@@ -53,6 +53,8 @@ void showSwapMealBottomSheet({
 
   Get.bottomSheet(
     isScrollControlled: true,
+    isDismissible: false,
+    enableDrag: false,
     backgroundColor: AppColors.c111111,
     SafeArea(
       child: Container(
