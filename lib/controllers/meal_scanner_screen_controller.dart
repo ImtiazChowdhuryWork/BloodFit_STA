@@ -9,6 +9,7 @@ class MealScannerScreenController extends GetxController
     with SingleGetTickerProviderMixin {
   var isLoading = false.obs;
   var cameraInitialized = false.obs;
+  var cameraInitFailed = false.obs;
   var scanStatus = 'Point camera at food and tap capture'.obs;
   var nutritionData = <String, dynamic>{}.obs;
   var apiResponse = ''.obs;
@@ -94,10 +95,21 @@ class MealScannerScreenController extends GetxController
         return;
       }
 
-      final cameras = await availableCameras();
+      // On iOS, availableCameras() may return empty immediately after permission
+      // is granted — retry a few times with a short delay to allow the camera
+      // subsystem to finish initializing.
+      List<CameraDescription> cameras = [];
+      for (int attempt = 0; attempt < 3; attempt++) {
+        cameras = await availableCameras();
+        if (cameras.isNotEmpty) break;
+        await Future.delayed(const Duration(milliseconds: 500));
+        LoggerUtils.debug('Camera list empty, retrying (attempt ${attempt + 1})...');
+      }
+
       if (cameras.isEmpty) {
         scanStatus.value = 'No camera found on this device';
-        LoggerUtils.error('No cameras available');
+        LoggerUtils.error('No cameras available after retries');
+        cameraInitFailed.value = true;
         return;
       }
       _cameraController = CameraController(
@@ -110,8 +122,14 @@ class MealScannerScreenController extends GetxController
       cameraInitialized.value = true;
     } catch (e) {
       LoggerUtils.error('Camera error: $e');
-      scanStatus.value = 'Failed to initialize camera';
+      cameraInitFailed.value = true;
     }
+  }
+
+  Future<void> retryCamera() async {
+    cameraInitFailed.value = false;
+    cameraInitialized.value = false;
+    await _initializeCamera();
   }
 
   Future<void> captureAndAnalyze() async {

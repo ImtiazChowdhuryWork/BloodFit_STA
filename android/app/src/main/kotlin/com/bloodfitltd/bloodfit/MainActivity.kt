@@ -1,4 +1,4 @@
-package com.example.bloodfit
+package com.bloodfitltd.bloodfit
 
 import io.flutter.embedding.android.FlutterActivity
 
