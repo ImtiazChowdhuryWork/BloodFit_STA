@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyC0_5qBDpxgibgsgrfa5MC6L5OeSLQ1ecc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>161567192464</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.bloodfitltd.bloodfit</string>
+	<key>PROJECT_ID</key>
+	<string>blood-fit</string>
+	<key>STORAGE_BUCKET</key>
+	<string>blood-fit.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:161567192464:ios:a7f8eead7d51fbbb046f15</string>
+</dict>
+</plist>
