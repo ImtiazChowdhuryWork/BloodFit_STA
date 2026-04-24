@@ -15,7 +15,7 @@ class GoodForBloodTypeWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Bad For Your Blood Type",
+          "Good For Your Blood Type",
           style: TextFontStyle.headline14w400cfefefeStylePoppins,
         ),
         UIHelper.verticalSpace(8.h),

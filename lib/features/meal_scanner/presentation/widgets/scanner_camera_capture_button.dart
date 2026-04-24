@@ -52,7 +52,7 @@ class ScannerCameraCaptureButton extends StatelessWidget {
                           child: CircularProgressIndicator(
                             color: AppColors.cb20000,
                             strokeWidth: 2.5,
-                            backgroundColor: Colors.purple,
+                            backgroundColor: Colors.transparent,
                           ),
                         ),
                         // Loading Text in center
