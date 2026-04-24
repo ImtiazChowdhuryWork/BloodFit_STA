@@ -5,7 +5,10 @@ import 'package:get/get.dart' hide Response, MultipartFile;
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import '../constants/app_constant_text.dart';
+import '../helper/di.dart';
 import '../helper/logger_util.dart';
+import '../routes/routes.dart';
 import 'network_response.dart';
 
 class NetworkCaller {
@@ -137,7 +140,7 @@ class NetworkCaller {
       if (response.statusCode == 401 && !isLogin) {
         debugPrint('Unauthorized: Token expired or invalid');
         LoggerUtils.error(response.body);
-        // await _handleUnauthorized(message: 'Session Expired');
+        await _handleUnauthorized(message: 'Session expired. Please login again.');
         return NetworkResponse(
           isSuccess: false,
           statusCode: response.statusCode,
@@ -236,34 +239,21 @@ class NetworkCaller {
   // Handle unauthorized access (401) - Clear tokens and navigate to login
   Future<void> _handleUnauthorized({required String message}) async {
     try {
-      // final String? currentRole = await GetStorageModel().read(
-      //   AppConstants.currentRole,
-      // );
-
-      // Handle logout based on user role
-      // if (currentRole != null) {
-      //   if (currentRole == UserRole.user.name) {
-      //     // Check if controller is registered before using it
-      //     if (Get.isRegistered<UserProfileScreenController>()) {
-      //       Get.find<UserProfileScreenController>().handleLogOut();
-      //     }
-      //   } else if (currentRole == UserRole.provider.name) {
-      //     // Check if controller is registered before using it
-      //     if (Get.isRegistered<SvpProfileScreenController>()) {
-      //       Get.find<SvpProfileScreenController>().handleLogOut();
-      //     }
-      //   }
-      // }
+      // Clear the stored access token
+      appData.remove(kKeyAccessToken);
 
       // Show a snackbar to inform the user
       Get.snackbar(
-        'Error',
+        'Session Expired',
         message,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red.shade100,
         colorText: Colors.red.shade900,
         duration: const Duration(seconds: 3),
       );
+
+      // Navigate to login, clearing the entire navigation stack
+      Get.offAllNamed(Routes.signInScreen);
     } catch (e) {
       debugPrint('Error handling unauthorized: $e');
     }
