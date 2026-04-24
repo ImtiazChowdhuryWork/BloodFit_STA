@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/features/home/data/model/swap_meal_options_model.dart';
+import 'package:bloodfit/features/home/data/model/swap_meal_request_model.dart';
 import 'package:bloodfit/features/home/data/repository/get_todays_meal_repository.dart';
 import 'package:bloodfit/features/home/data/repository/swap_meal_options_repository.dart';
 import 'package:bloodfit/features/home/data/repository/swap_meal_repository.dart';
@@ -322,25 +323,25 @@ Rxn<Datum> itemDinner = Rxn<Datum>();
     swapMealErrorMessage.value = '';
   }
 
-  Future<void> pathchSwapMealApi({required String mealID, required String description, required List<String> ingredientList, required String imageUrl, required List<Map<String, dynamic>> caloriesCount}) async {
+  Future<void> pathchSwapMealApi({
+    required String mealID,
+    required SwapMealRequestModel meal,
+    required String imageUrl,
+  }) async {
     try {
       isSwapMealValueLoading.value = true;
       clearSwapMealError();
 
       LoggerUtils.debug("===== PATCH SWAP MEAL API → REQUEST =====");
       LoggerUtils.debug("Endpoint mealID  : $mealID");
-      LoggerUtils.debug("description      : $description");
-      LoggerUtils.debug("ingredientList   : $ingredientList");
+      LoggerUtils.debug("meal             : ${meal.toJson()}");
       LoggerUtils.debug("imageUrl         : $imageUrl");
-      LoggerUtils.debug("caloriesCount    : $caloriesCount");
       LoggerUtils.debug("=========================================");
 
       final response = await _swapMealRepository.swapMealRepository(
         mealID: mealID,
-        description: description,
-        ingredientList: ingredientList,
+        meal: meal,
         imageUrl: imageUrl,
-        caloriesCount: caloriesCount,
       );
 
       LoggerUtils.debug("===== PATCH SWAP MEAL API → RESPONSE =====");

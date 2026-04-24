@@ -4,6 +4,7 @@ import 'package:bloodfit/custom_widgets/food_item_data_helper_widget.dart';
 import 'package:bloodfit/custom_widgets/meal_network_image_showing_widget.dart';
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
 import 'package:bloodfit/features/home/data/model/swap_meal_options_model.dart';
+import 'package:bloodfit/features/home/data/model/swap_meal_request_model.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/logger_util.dart';
@@ -94,45 +95,38 @@ class _MealSwapOnboardingScreenState extends State<MealSwapOnboardingScreen>
   void _confirmSwap() {
     LoggerUtils.debug("Button Tapped → Confirm Mealplan");
 
-    final List<String> ingredientList = _selectedMeal.ingredients
-            ?.map((i) => i.name ?? '')
-            .where((n) => n.isNotEmpty)
-            .toList() ??
-        [];
-
-    final List<Map<String, dynamic>> caloriesCount = [
-      {
-        'label': 'Carbohydrates',
-        'kcal': _selectedMeal.macronutrients?.carbohydrates ?? 0,
-      },
-      {
-        'label': 'Protein',
-        'kcal': _selectedMeal.macronutrients?.protein ?? 0,
-      },
-      {
-        'label': 'Fat',
-        'kcal': _selectedMeal.macronutrients?.fat ?? 0,
-      },
-    ];
-
     // API expects a URL/path reference — never send raw base64 (causes "request entity too large")
     final String imageRef = _isBase64(_selectedMeal.image) ? '' : (_selectedMeal.image ?? '');
 
+    final meal = SwapMealRequestModel(
+      mealName: _selectedMeal.mealName ?? '',
+      description: _selectedMeal.description ?? '',
+      serving: _selectedMeal.numberOfServings ?? 1,
+      ingredients: (_selectedMeal.ingredients ?? [])
+          .map((i) => SwapMealIngredient(
+                name: i.name ?? '',
+                quantity: i.quantity ?? '',
+                icon: i.icon ?? '',
+              ))
+          .toList(),
+      caloryCount: [
+        SwapMealCaloryCount(label: 'Carbs', kcal: _selectedMeal.macronutrients?.carbohydrates ?? 0),
+        SwapMealCaloryCount(label: 'Protein', kcal: _selectedMeal.macronutrients?.protein ?? 0),
+        SwapMealCaloryCount(label: 'Fat', kcal: _selectedMeal.macronutrients?.fat ?? 0),
+      ],
+    );
+
     LoggerUtils.debug("===== CONFIRM SWAP → PAYLOAD =====");
     LoggerUtils.debug("Meal ID        : $_mealId");
-    LoggerUtils.debug("Description    : ${_selectedMeal.description}");
-    LoggerUtils.debug("Ingredients    : $ingredientList");
+    LoggerUtils.debug("meal           : ${meal.toJson()}");
     LoggerUtils.debug("Image (raw)    : ${_selectedMeal.image?.substring(0, (_selectedMeal.image?.length ?? 0).clamp(0, 80))}... isBase64=${_isBase64(_selectedMeal.image)}");
     LoggerUtils.debug("Image (sent)   : $imageRef");
-    LoggerUtils.debug("Calory Count   : $caloriesCount");
     LoggerUtils.debug("==================================");
 
     _homeController.pathchSwapMealApi(
       mealID: _mealId,
-      description: _selectedMeal.description ?? '',
-      ingredientList: ingredientList,
+      meal: meal,
       imageUrl: imageRef,
-      caloriesCount: caloriesCount,
     );
   }
 

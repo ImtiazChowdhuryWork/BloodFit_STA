@@ -150,9 +150,10 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
       );
       if (mealData != null) {
         mealPlanData['meals']['breakfast'] = [mealData];
-        // Convert base64 image to URL if needed
-        mealPlanData['breakfastImage'] = _convertImageToUrl(
+        mealPlanData['breakfastImage'] = _resolveImage(
           chooseFromOurSuggestedMealController!.breakFastMealImage,
+          chooseFromOurSuggestedMealController!.selectedBreakfastMealId.value,
+          chooseFromOurSuggestedMealController!.breakfastRecentChosenMeals,
         );
         LoggerUtils.debug("✅ [BUILD] Breakfast meal added: ${mealData['mealName']}");
       }
@@ -166,9 +167,10 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
       );
       if (mealData != null) {
         mealPlanData['meals']['lunch'] = [mealData];
-        // Convert base64 image to URL if needed
-        mealPlanData['lunchImage'] = _convertImageToUrl(
+        mealPlanData['lunchImage'] = _resolveImage(
           chooseFromOurSuggestedMealController!.lunchMealImage,
+          chooseFromOurSuggestedMealController!.selectedLunchMealId.value,
+          chooseFromOurSuggestedMealController!.lunchRecentChosenMeals,
         );
         LoggerUtils.debug("✅ [BUILD] Lunch meal added: ${mealData['mealName']}");
       }
@@ -182,9 +184,10 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
       );
       if (mealData != null) {
         mealPlanData['meals']['dinner'] = [mealData];
-        // Convert base64 image to URL if needed
-        mealPlanData['dinnerImage'] = _convertImageToUrl(
+        mealPlanData['dinnerImage'] = _resolveImage(
           chooseFromOurSuggestedMealController!.dinnerMealImage,
+          chooseFromOurSuggestedMealController!.selectedDinnerMealId.value,
+          chooseFromOurSuggestedMealController!.dinnerRecentChosenMeals,
         );
         LoggerUtils.debug("✅ [BUILD] Dinner meal added: ${mealData['mealName']}");
       }
@@ -199,6 +202,23 @@ class ReviewYourChoosenMealsScreenController extends GetxController {
     LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
 
     return mealPlanData;
+  }
+
+  // Returns the best available image URL for a meal slot.
+  // Tries AI image first; if empty, falls back to the previously selected Datum's image.
+  String _resolveImage(String aiImage, String mealId, List<Datum> recentMeals) {
+    final converted = _convertImageToUrl(aiImage);
+    if (converted.isNotEmpty) return converted;
+
+    try {
+      final meal = recentMeals.firstWhere((m) => m.id == mealId);
+      final fallback = _convertImageToUrl(meal.image ?? '');
+      LoggerUtils.debug("⚠️ [IMAGE_RESOLVE] AI image empty, using previously selected meal image: $fallback");
+      return fallback;
+    } catch (_) {
+      LoggerUtils.debug("⚠️ [IMAGE_RESOLVE] No fallback image found for mealId: $mealId");
+      return '';
+    }
   }
 
   /// Checks if image data is base64 encoded
