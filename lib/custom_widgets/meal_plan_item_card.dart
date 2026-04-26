@@ -120,12 +120,10 @@ class MealPlanItemCard extends StatelessWidget {
                   /// Meal Info + Buttons
                   Expanded(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// Meal Name
-                        SizedBox(
-                          height: 40.h,
+                        Expanded(
                           child: Text(
                             mealTitle,
                             maxLines: 2,
