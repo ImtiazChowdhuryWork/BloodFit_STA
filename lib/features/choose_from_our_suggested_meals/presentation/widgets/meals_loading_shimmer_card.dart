@@ -8,6 +8,102 @@ import '../../../../helper/ui_helpers.dart';
 import '../../../home/data/controller/home_screen_controller.dart';
 import '../../data/controller/choose_from_our_suggested_meal_controller.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Shimmer that mimics the FoodItemShowingWidget card layout.
+// Shown in place of CircularProgressIndicator while AI meals are loading.
+// ─────────────────────────────────────────────────────────────────────────────
+class SuggestedMealTabShimmer extends StatelessWidget {
+  const SuggestedMealTabShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionShimmer(),
+          UIHelper.verticalSpace(32.h),
+          _SectionShimmer(),
+          UIHelper.verticalSpace(32.h),
+          _SectionShimmer(),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionShimmer extends StatelessWidget {
+  const _SectionShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section title
+        CustomShimmerEffect(height: 18.h, width: 140.w),
+        UIHelper.verticalSpace(8.h),
+
+        // Horizontal list of 3 card shimmers
+        SizedBox(
+          height: 250.h,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (_, __) => UIHelper.horizontalSpace(16.w),
+            itemBuilder: (_, __) => _FoodItemCardShimmer(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FoodItemCardShimmer extends StatelessWidget {
+  const _FoodItemCardShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 210.w,
+      padding: EdgeInsets.all(10.sp),
+      decoration: BoxDecoration(
+        color: AppColors.c262626,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Image area
+          CustomShimmerEffect(height: 130.h, width: double.infinity),
+          UIHelper.verticalSpace(21.h),
+
+          // Title line 1
+          CustomShimmerEffect(height: 14.h, width: 160.w),
+          UIHelper.verticalSpace(6.h),
+
+          // Title line 2
+          CustomShimmerEffect(height: 14.h, width: 110.w),
+          UIHelper.verticalSpace(8.h),
+
+          // Kcal + Serving row
+          Row(
+            children: [
+              CustomShimmerEffect(height: 12.h, width: 55.w),
+              UIHelper.horizontalSpace(8.w),
+              CustomShimmerEffect(height: 12.h, width: 2.w),
+              UIHelper.horizontalSpace(8.w),
+              CustomShimmerEffect(height: 12.h, width: 55.w),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class MealsLoadingShimmerCard extends StatelessWidget {
   const MealsLoadingShimmerCard({super.key});
 

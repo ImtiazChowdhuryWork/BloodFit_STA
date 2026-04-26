@@ -117,7 +117,7 @@ class _LunchTabState extends State<LunchTab> {
         LoggerUtils.debug(
           "🍱 [OBX] >>> Showing LOADING indicator (loading=$isLoading, hasJobId=$hasJobId, hasLoadedInitially=$hasLoadedInitially)",
         );
-        return const Center(child: CircularProgressIndicator());
+        return const SuggestedMealTabShimmer();
       }
 
       // Show shimmer while waiting for AI meals to be generated (jobId exists but meals not ready yet)

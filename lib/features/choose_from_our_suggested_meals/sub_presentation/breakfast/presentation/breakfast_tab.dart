@@ -120,7 +120,7 @@ class _BreakfastTabState extends State<BreakfastTab> {
         LoggerUtils.debug(
           "🍳 [OBX] >>> Showing LOADING indicator (loading=$obxIsLoading, hasJobId=$hasJobId, hasLoadedInitially=$hasLoadedInitially)",
         );
-        return const Center(child: CircularProgressIndicator());
+        return const SuggestedMealTabShimmer();
       }
 
       // Show shimmer while waiting for AI meals to be generated (jobId exists but meals not ready yet)
