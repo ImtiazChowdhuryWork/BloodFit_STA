@@ -124,12 +124,15 @@ class MealPlanItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         /// Meal Name
-                        Text(
-                          mealTitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              TextFontStyle.headline14w500cFFFFFFStylePoppins,
+                        SizedBox(
+                          height: 40.h,
+                          child: Text(
+                            mealTitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                TextFontStyle.headline14w500cFFFFFFStylePoppins,
+                          ),
                         ),
                         UIHelper.verticalSpace(6.h),
 

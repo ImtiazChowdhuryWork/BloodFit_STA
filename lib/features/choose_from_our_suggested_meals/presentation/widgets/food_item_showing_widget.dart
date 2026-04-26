@@ -98,11 +98,14 @@ class FoodItemShowingWidget extends StatelessWidget {
             UIHelper.verticalSpace(21.h),
 
             /// Section: Item Name
-            Text(
-              itemTitle,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextFontStyle.headline16w500cFFFFFFStylePoppins,
+            SizedBox(
+              height: 44.h,
+              child: Text(
+                itemTitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextFontStyle.headline16w500cFFFFFFStylePoppins,
+              ),
             ),
             UIHelper.verticalSpace(8.h),
 
