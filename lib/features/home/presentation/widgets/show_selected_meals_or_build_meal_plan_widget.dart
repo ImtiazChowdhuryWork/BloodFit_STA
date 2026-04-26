@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../../custom_widgets/custom_elevated_button.dart';
 import '../../../../custom_widgets/meal_plan_item_card.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../helper/ui_helpers.dart';
@@ -64,19 +65,35 @@ class ShowSelectedMealsOrBuildMealPlanWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Icon(
+                Icons.wifi_off_rounded,
+                color: AppColors.cb20000,
+                size: 40.sp,
+              ),
+              UIHelper.verticalSpace(12.h),
               Text(
-                homeScreenController.todaysSelectedMealsErrorMessage.value,
+                'Something went wrong.',
+                textAlign: TextAlign.center,
+                style: TextFontStyle.headline14w500cFFFFFFStylePoppins,
+              ),
+              UIHelper.verticalSpace(4.h),
+              Text(
+                'Please check your connection and try again.',
                 textAlign: TextAlign.center,
                 style: TextFontStyle.headline14w500cFFFFFFStylePoppins.copyWith(
-                  color: AppColors.cb20000,
+                  color: AppColors.cc6c6c6,
                 ),
               ),
               UIHelper.verticalSpace(16.h),
-              ElevatedButton(
-                onPressed: () =>
-                    homeScreenController.getTodaysSelectedMealsApi(),
-                child: Text('retry'.tr),
-              ),
+
+
+              CustomElevatedButton(
+              onTap: () => homeScreenController.getTodaysSelectedMealsApi(),
+              buttonTitle: 'retry'.tr,
+              buttonWidth: 120.w,
+              buttonHeight: 40.h,
+            ),
+            
             ],
           ),
         );
