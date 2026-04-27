@@ -568,8 +568,8 @@ void _startProgressSimulation() {
   aiMealsLoadingMessage.value = _loadingMessages[0];
   isAiMealsGenerating.value = true;
 
-  // Tick every 1.2 s → reaches ~95 % in ~114 s (≈ 2 min), then waits for real completion
-  _progressTimer = Timer.periodic(const Duration(milliseconds: 1200), (_) {
+  // Tick every 3 s → reaches ~95 % in ~285 s (≈ 4.75 min), then waits for real completion
+  _progressTimer = Timer.periodic(const Duration(milliseconds: 3000), (_) {
     if (aiMealsLoadingProgress.value < 95) {
       aiMealsLoadingProgress.value += 1;
       _updateProgressMessage();
@@ -627,7 +627,7 @@ Timer? _responseTimer;
 
 /// Retry counter for tracking failed polling attempts
 int _pollingRetryCount = 0;
-static const int _maxPollingRetries = 60; // Max retries before considering it failed (60 * 3s = 3 minutes)
+static const int _maxPollingRetries = 100; // Max retries before considering it failed (100 * 3s = 5 minutes)
 static const int _pollingIntervalSeconds = 3;
 
 /// Track if job generation has failed
