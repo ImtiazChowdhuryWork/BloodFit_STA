@@ -35,6 +35,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
   String? mealIdForSelection; // Unique ID for meal selection
   String? tabNameForSelection; // Tab name (breakfast/lunch/dinner)
   bool hideSelectButton = false; // Flag to hide select/deselect button
+  bool hideGenerateImageButton = false; // Flag to hide Generate Image button for past dates
 
   @override
   void initState() {
@@ -57,6 +58,7 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
 
     ///------<>>> Section : Check if select button should be hidden
     hideSelectButton = arguments?['hideSelectButton'] ?? false;
+    hideGenerateImageButton = arguments?['hideGenerateImageButton'] ?? false;
 
     ///------<>>> Section : Get Direct Meal Data (from AI suggested meals)
     final mealData = arguments?['mealData'] as MealDataModel?;
@@ -270,48 +272,49 @@ class _MealDetailsScreenState extends State<MealDetailsScreen> {
                 }),
                 UIHelper.horizontalSpace(20.w),
 
-                Obx(() {
-                  if (mealDetailsScreenController!.isMealDetailsLoading.value) {
-                    return CustomShimmerEffect(height: 20.h, width: 120.w);
-                  }
-                  if (mealDetailsScreenController!.totalKcal <= 0) {
-                    return CustomShimmerEffect(
-                      height: 40.h,
-                      width: 120.w,
-                      child: Text(
-                        'Failed to show Generate Image Button',
-                        style: TextFontStyle.headline14w400cb20000StylePoppins,
-                      ),
+                if (!hideGenerateImageButton)
+                  Obx(() {
+                    if (mealDetailsScreenController!.isMealDetailsLoading.value) {
+                      return CustomShimmerEffect(height: 20.h, width: 120.w);
+                    }
+                    if (mealDetailsScreenController!.totalKcal <= 0) {
+                      return CustomShimmerEffect(
+                        height: 40.h,
+                        width: 120.w,
+                        child: Text(
+                          'Failed to show Generate Image Button',
+                          style: TextFontStyle.headline14w400cb20000StylePoppins,
+                        ),
+                      );
+                    }
+
+                    final isGenerating = mealDetailsScreenController!.isMealImageGenerating.value;
+                    final hasGenerated = mealDetailsScreenController!.hasGeneratedImage.value;
+
+                    return CustomElevatedButton(
+                      onTap: (isGenerating || hasGenerated)
+                          ? null
+                          : () {
+                              LoggerUtils.debug("Generate Image Button Tapped!");
+                              mealDetailsScreenController!.postGenerateMealImageApi();
+                            },
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.2),
+                          blurRadius: 12,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                      buttonColor: hasGenerated ? AppColors.c999999 : AppColors.c000000,
+                      buttonTitle: isGenerating
+                          ? " Generating... "
+                          : hasGenerated
+                              ? " Image Generated "
+                              : " Generate Image  ",
+                      borderRadius: 8.r,
+                      buttonHeight: 40.h,
                     );
-                  }
-
-                  final isGenerating = mealDetailsScreenController!.isMealImageGenerating.value;
-                  final hasGenerated = mealDetailsScreenController!.hasGeneratedImage.value;
-
-                  return CustomElevatedButton(
-                    onTap: (isGenerating || hasGenerated)
-                        ? null
-                        : () {
-                            LoggerUtils.debug("Generate Image Button Tapped!");
-                            mealDetailsScreenController!.postGenerateMealImageApi();
-                          },
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.white.withOpacity(0.2),
-                        blurRadius: 12,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                    buttonColor: hasGenerated ? AppColors.c999999 : AppColors.c000000,
-                    buttonTitle: isGenerating
-                        ? " Generating... "
-                        : hasGenerated
-                            ? " Image Generated "
-                            : " Generate Image  ",
-                    borderRadius: 8.r,
-                    buttonHeight: 40.h,
-                  );
-                }),
+                  }),
               ],
             ),
             UIHelper.verticalSpace(12.h),
