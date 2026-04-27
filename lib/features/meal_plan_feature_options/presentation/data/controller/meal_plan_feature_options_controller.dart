@@ -57,6 +57,17 @@ class MealPlanFeatureOptionsController extends GetxController {
         LoggerUtils.debug("Number of meals loaded: ${mealsByDateList.length}");
         LoggerUtils.debug("Full Response JSON: ${response.jsonResponse}");
         LoggerUtils.debug("Data from model: ${mealsByDateModel.value?.data}");
+
+        LoggerUtils.debug("╔═══════════════════════════════════════════════════════════");
+        LoggerUtils.debug("🍽️ [MEAL_PLAN] Meals returned by API for date: ${selectedDate.value}");
+        for (int i = 0; i < mealsByDateList.length; i++) {
+          final meal = mealsByDateList[i];
+          LoggerUtils.debug("  [$i] mealName: ${meal.mealName}");
+          LoggerUtils.debug("  [$i] mealType: ${meal.mealType}");
+          LoggerUtils.debug("  [$i] kcal    : ${meal.kcal}");
+          LoggerUtils.debug("  [$i] caloryCount: ${meal.caloryCount?.map((c) => '${c.label}:${c.kcal}').join(', ')}");
+        }
+        LoggerUtils.debug("╚═══════════════════════════════════════════════════════════");
       } else {
         selectedDateDataError.value = response.errorMessage ?? 'Unknown error';
         LoggerUtils.error("Failed to get response for Selected Date! : $selectedDate");

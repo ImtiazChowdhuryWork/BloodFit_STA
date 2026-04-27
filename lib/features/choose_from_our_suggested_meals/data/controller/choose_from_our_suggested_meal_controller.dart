@@ -260,15 +260,36 @@ class ChooseFromOurSuggestedMealController extends GetxController {
           ? meal.image.toString()
           : categoryImage;
 
+      // Distribute totalCalories proportionally across macros so caloryCount
+      // sums to exactly totalCalories — matching what the review screen shows.
+      final int totalKcal = meal.totalCalories ?? 0;
+      final double carbsG = (meal.macronutrients?.carbohydrates ?? 0).toDouble();
+      final double proteinG = (meal.macronutrients?.protein ?? 0).toDouble();
+      final double fatG = (meal.macronutrients?.fat ?? 0).toDouble();
+      final double carbsRaw = carbsG * 4;
+      final double proteinRaw = proteinG * 4;
+      final double fatRaw = fatG * 9;
+      final double rawTotal = carbsRaw + proteinRaw + fatRaw;
+      int carbsKcal, proteinKcal, fatKcal;
+      if (rawTotal > 0 && totalKcal > 0) {
+        carbsKcal = (totalKcal * carbsRaw / rawTotal).round();
+        proteinKcal = (totalKcal * proteinRaw / rawTotal).round();
+        fatKcal = totalKcal - carbsKcal - proteinKcal;
+      } else {
+        carbsKcal = totalKcal;
+        proteinKcal = 0;
+        fatKcal = 0;
+      }
+
       return {
         'mealName': meal.mealName ?? '',
         'description': meal.description ?? '',
-        'kcal': meal.totalCalories ?? 0,
+        'kcal': totalKcal,
         'ingredients': meal.ingredients ?? [],
         'caloryCount': [
-          {'label': 'Carbs', 'kcal': meal.macronutrients?.carbohydrates ?? 0},
-          {'label': 'Protein', 'kcal': meal.macronutrients?.protein ?? 0},
-          {'label': 'Fat', 'kcal': meal.macronutrients?.fat ?? 0},
+          {'label': 'Carbs', 'kcal': carbsKcal},
+          {'label': 'Protein', 'kcal': proteinKcal},
+          {'label': 'Fat', 'kcal': fatKcal},
         ],
         'image': mealImage,
         'mealType': mealType,
