@@ -97,7 +97,7 @@ Map<String, String> englishLanguage = {
 
   // Received Three Meal Plans Widget
   'youve_received': 'You’ve Received ',
-  'free_meal_plans': 'free Meal Plans',
+  'free_meal_plans': 'Meal Plans',
   'for_today': ' for Today!',
 
 

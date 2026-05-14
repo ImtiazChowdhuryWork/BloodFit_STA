@@ -47,7 +47,7 @@ void showMealPlanBuildConfirmationBottomSheet() {
               SvgPicture.asset(Assets.icons.aiIcon),
               UIHelper.horizontalSpace(10.w),
               Text(
-                "Great! You’ve Build Your Mealplan.",
+                "Great! You’ve Built Your Mealplan.",
                 style: TextFontStyle.headline18w500cfefefeStylePoppins,
               ),
             ],
