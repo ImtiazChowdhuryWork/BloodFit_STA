@@ -65,7 +65,7 @@ dependencies:
   fl_chart: ^1.1.1
   http: ^1.2.0
   path_provider: ^2.1.5
-
+  in_app_purchase:
 
 dev_dependencies:
   flutter_test:

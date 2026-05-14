@@ -37,6 +37,14 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  # Fix firebase_core bug: messages.g.m has wrong import path vs all other Pigeon-generated plugins
+  messages_m = File.expand_path('~/.pub-cache/hosted/pub.dev/firebase_core-4.8.0/ios/firebase_core/Sources/firebase_core/messages.g.m')
+  if File.exist?(messages_m)
+    content = File.read(messages_m)
+    fixed = content.gsub('#import "messages.g.h"', '#import "./include/firebase_core/messages.g.h"')
+    File.write(messages_m, fixed) if content != fixed
+  end
+
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
