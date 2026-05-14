@@ -31,6 +31,7 @@ import 'package:bloodfit/features/view_profile_sub_type_free/presentation/view_p
 import 'package:bloodfit/features/weight_history/bindings/weight_history_screen_bindings.dart';
 import 'package:bloodfit/features/you_are_all_set/presentation/you_are_all_set_screen.dart';
 import 'package:bloodfit/features/your_daily_calories_intake/presentation/your_daily_calories_intake_screen.dart';
+import 'package:bloodfit/iap.dart';
 import 'package:bloodfit/navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -141,8 +142,8 @@ class Routes {
     ///Sign In Screen
     GetPage(
       name: signInScreen,
-      page: () => SignInScreen(),
-      binding: SignInBinding(),
+      page: () => IAPSubscriptionScreen(),
+      // binding: SignInBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),
