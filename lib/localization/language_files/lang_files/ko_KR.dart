@@ -98,7 +98,7 @@ Map<String, String> koreanLanguage = {
 
   // Received Three Meal Plans Widget
   'youve_received': '오늘 ',
-  'free_meal_plans': '무료 식단을',
+  'free_meal_plans': '식사 계획',
   'for_today': ' 받았습니다!',
 
 

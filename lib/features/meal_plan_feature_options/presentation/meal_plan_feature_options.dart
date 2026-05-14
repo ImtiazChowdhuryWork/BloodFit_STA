@@ -182,6 +182,16 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                 }
 
                 // Success State - Show meals from API response
+                final selectedDatecs1 = DateFormat('yyyy/MM/dd').parse(
+                  mealPlanFeatureOptionsController.selectedDate.value,
+                );
+                final todayCs1 = DateTime.now();
+                final isPastDateCs1 = DateTime(
+                  selectedDatecs1.year,
+                  selectedDatecs1.month,
+                  selectedDatecs1.day,
+                ).isBefore(DateTime(todayCs1.year, todayCs1.month, todayCs1.day));
+
                 return Column(
                   children: mealPlanFeatureOptionsController.mealsByDateList.map((
                     meal,
@@ -192,7 +202,10 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                           onTap: () {
                             Get.toNamed(
                               Routes.mealDetailscreen,
-                              arguments: {'mealID': meal.id},
+                              arguments: {
+                                'mealID': meal.id,
+                                'hideGenerateImageButton': isPastDateCs1,
+                              },
                             );
                           },
                           isMealEaten: meal.status == 'done',
@@ -469,6 +482,7 @@ class _MealPlanFeatureOptionsState extends State<MealPlanFeatureOptions> {
                               arguments: {
                                 'mealID': meal.id,
                                 'hideSelectButton': true,
+                                'hideGenerateImageButton': isPastDate,
                               },
                             );
                           },
