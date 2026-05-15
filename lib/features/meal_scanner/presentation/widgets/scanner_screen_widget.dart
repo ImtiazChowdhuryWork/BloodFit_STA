@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/scanner_camera_capture_button.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/scanner_nutrition_details_widget.dart';
@@ -20,16 +21,23 @@ class ScannerScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // FULL SCREEN Camera Preview
-        SizedBox(
-          width: 1.sw,
-          height: 0.81.sh,
-          child: CameraPreview(controller.cameraController),
-        ),
+        /// Camera preview — freezes on the captured image during analysis,
+        /// returns to live feed when analysis completes.
+        Obx(() {
+          final frozen = controller.capturedImagePath.value;
+          return SizedBox(
+            width: 1.sw,
+            height: 0.81.sh,
+            child: frozen.isNotEmpty
+                ? Image.file(File(frozen), fit: BoxFit.cover)
+                : CameraPreview(controller.cameraController),
+          );
+        }),
 
-        // Scanner Overlay (Positioned in center)
+        /// Scanning frame with animated scan line
         ScannerOverlayWidget(),
-        // Close Button - Use Navigator.pop() to go back
+
+        /// Close button
         Positioned(
           top: 10.h,
           left: 10.w,
@@ -42,10 +50,26 @@ class ScannerScreenWidget extends StatelessWidget {
           ),
         ),
 
-        // Nutrition Details (when available)
+        /// Shutter flash — brief white overlay when photo is taken.
+        Obx(() {
+          return AnimatedOpacity(
+            opacity: controller.isFlashing.value ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 150),
+            child: controller.isFlashing.value
+                ? Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.white.withValues(alpha: 0.85),
+                  )
+                : const SizedBox.shrink(),
+          );
+        }),
+
+
+        /// Nutrition result panel
         ScannerNutritionDetailsWidget(),
 
-        // Capture Button
+        /// Capture button
         ScannerCameraCaptureButton(),
       ],
     );

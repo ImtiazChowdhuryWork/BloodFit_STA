@@ -38,7 +38,7 @@ class NeutralForBloodTypeWidget extends StatelessWidget {
               return ScanningResultTileWidget(
                 itemName: item.name ?? '',
                 sufficIcon: Assets.icons.warningIcon,
-                borderColor: AppColors.c999999,
+                borderColor: AppColors.cF9A825,
               );
             },
           ),

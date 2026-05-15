@@ -11,9 +11,15 @@ class MealScannerScreenController extends GetxController
   final MealScannerRepository _repository = MealScannerRepository(Get.find());
 
   var isLoading = false.obs;
+  var isFlashing = false.obs;
   var cameraInitialized = false.obs;
   var cameraInitFailed = false.obs;
   var scanStatus = 'Point camera at food and tap capture'.obs;
+
+  /// Holds the path of the captured image while analysis is in progress.
+  /// When set, the UI freezes on this image instead of the live camera feed.
+  /// Cleared when analysis completes.
+  var capturedImagePath = ''.obs;
 
   /// Holds the parsed API response after a successful scan.
   Rxn<Data> scanResult = Rxn<Data>();
@@ -139,7 +145,13 @@ class MealScannerScreenController extends GetxController
     scanStatus.value = 'Capturing image...';
 
     try {
+      // Trigger shutter flash for instant capture feedback.
+      isFlashing.value = true;
       final XFile capturedImage = await _cameraController.takePicture();
+      capturedImagePath.value = capturedImage.path;
+      await Future.delayed(const Duration(milliseconds: 250));
+      isFlashing.value = false;
+
       scanStatus.value = 'Analyzing food...';
 
       LoggerUtils.debug('[SCANNER] Image captured: ${capturedImage.path}');
@@ -180,7 +192,9 @@ class MealScannerScreenController extends GetxController
       );
       scanStatus.value = 'Analysis failed. Try again.';
     } finally {
+      isFlashing.value = false;
       isLoading.value = false;
+      capturedImagePath.value = '';
     }
   }
 
