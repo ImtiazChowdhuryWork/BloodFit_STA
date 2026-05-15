@@ -142,8 +142,8 @@ class Routes {
     ///Sign In Screen
     GetPage(
       name: signInScreen,
-      page: () => IAPSubscriptionScreen(),
-      // binding: SignInBinding(),
+      page: () => SignInScreen(),
+      binding: SignInBinding(),
       transition: _transition(),
       customTransition: _customTransition(),
       transitionDuration: _duration(),

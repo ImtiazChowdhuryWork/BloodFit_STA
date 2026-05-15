@@ -114,8 +114,8 @@ class Feature {
     String toRawJson() => json.encode(toJson());
 
     factory Feature.fromJson(Map<String, dynamic> json) => Feature(
-        key: keyValues.map[json["key"]]!,
-        label: labelValues.map[json["label"]]!,
+        key: keyValues.map[json["key"]],
+        label: labelValues.map[json["label"]],
         included: json["included"],
         id: json["_id"],
     );
