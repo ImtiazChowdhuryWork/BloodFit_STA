@@ -6,6 +6,7 @@ import 'package:bloodfit/features/my_profile/data/model/personal_data_model.dart
 import 'package:bloodfit/features/my_profile/presentation/widgets/profile_optoin_tile_extension.dart';
 import 'package:bloodfit/features/settings/presentation/widgets/settings_option_title_extension.dart';
 import 'package:bloodfit/routes/routes.dart';
+import 'package:get/get.dart';
 
 import '../features/faq/data/model/faq_model.dart';
 import '../features/information_gather_meal_plan/presentation/widgets/select_gender/model/gender_model.dart';
@@ -178,11 +179,18 @@ class AppList {
     "150 kg",
   ];
 
-  static List<CardTileOptionModel<SettingsOptionTitle>> settingsScreenList = [
+  static List<CardTileOptionModel<SettingsOptionTitle>> get settingsScreenList => [
+    CardTileOptionModel(
+      imagePath: '',
+      titleEnum: SettingsOptionTitle.language,
+      sectionTitle: 'preferences'.tr,
+      route: '',
+      labelMapper: (e) => e.label,
+    ),
     CardTileOptionModel(
       imagePath: Assets.icons.lockIcon,
       titleEnum: SettingsOptionTitle.changePassword,
-      sectionTitle: " Account Management",
+      sectionTitle: 'account_management'.tr,
 
       route: Routes.changePasswordScreen,
       labelMapper: (e) => e.label,
@@ -190,7 +198,7 @@ class AppList {
     CardTileOptionModel(
       imagePath: Assets.icons.fileIcon,
       titleEnum: SettingsOptionTitle.termsAndConditions,
-      sectionTitle: "Legal & Privacy",
+      sectionTitle: 'legal_privacy'.tr,
       route: Routes.termsAndConditionsScreen,
       labelMapper: (e) => e.label,
     ),
@@ -203,7 +211,7 @@ class AppList {
     CardTileOptionModel(
       imagePath: Assets.icons.warningIcon,
       titleEnum: SettingsOptionTitle.reportAProblem,
-      sectionTitle: "Support",
+      sectionTitle: 'support'.tr,
       route: Routes.reportProbelmScreen,
       labelMapper: (e) => e.label,
     ),

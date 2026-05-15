@@ -68,13 +68,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           'my_profile'.tr,
           style: TextFontStyle.headline24w700cFFFFFFStylePoppins,
         ),
-        actions: [
-          // Language Toggle Switch in AppBar
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: _buildLanguageToggleSwitch(),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -163,115 +156,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         },
         buttonTitle: 'logout'.tr,
       ),
-    );
-  }
-
-  /// Language Toggle Switch Widget
-  Widget _buildLanguageToggleSwitch() {
-    return GestureDetector(
-      onTap: _toggleLanguage,
-      child: Container(
-        width: 80.w,
-        height: 32.h,
-        decoration: BoxDecoration(
-          color: AppColors.c2f772f.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: AppColors.cFFFFFF.withOpacity(0.1),
-            width: 1,
-          ),
-        ),
-        child: Stack(
-          children: [
-            // Animated sliding background
-            AnimatedAlign(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
-              alignment: Get.locale?.languageCode == 'ko'
-                  ? Alignment.centerRight
-                  : Alignment.centerLeft,
-              child: Container(
-                width: 36.w,
-                height: 28.h,
-                margin: EdgeInsets.symmetric(horizontal: 2.w),
-                decoration: BoxDecoration(
-                  color: AppColors.c2f772f,
-                  borderRadius: BorderRadius.circular(14.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Text labels
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'EN',
-                      style: TextStyle(
-                        color: Get.locale?.languageCode != 'ko'
-                            ? AppColors.cFFFFFF
-                            : AppColors.cFFFFFF.withOpacity(0.6),
-                        fontWeight:
-                        Get.locale?.languageCode != 'ko'
-                            ? FontWeight.w700
-                            : FontWeight.w500,
-                        fontSize: 11.sp,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'KO',
-                      style: TextStyle(
-                        color: Get.locale?.languageCode == 'ko'
-                            ? AppColors.cFFFFFF
-                            : AppColors.cFFFFFF.withOpacity(0.6),
-                        fontWeight:
-                        Get.locale?.languageCode == 'ko'
-                            ? FontWeight.w700
-                            : FontWeight.w500,
-                        fontSize: 11.sp,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _toggleLanguage() {
-    final currentLang = Get.locale?.languageCode ?? 'en';
-    final newLocale = currentLang == 'ko'
-        ? const Locale('en', 'US')
-        : const Locale('ko', 'KR');
-
-    Get.updateLocale(newLocale);
-
-    // Show feedback
-    Get.snackbar(
-      'language'.tr,
-      newLocale.languageCode == 'ko'
-          ? 'korean_selected'.tr
-          : 'english_selected'.tr,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: AppColors.c2f772f,
-      colorText: AppColors.cFFFFFF,
-      duration: const Duration(seconds: 1),
-      margin: EdgeInsets.all(10.w),
     );
   }
 
