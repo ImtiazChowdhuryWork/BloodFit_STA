@@ -58,8 +58,8 @@ class _LoadingState extends State<Loading> {
         Get.put(SignInScreenController(Get.find()));
       }
 
-      // final Widget startScreen = isFirstTime ? OnboardingScreen() : SignInScreen();
-      final Widget startScreen = IAPSubscriptionScreen();
+      final Widget startScreen = isFirstTime ? OnboardingScreen() : SignInScreen();
+      
       // Navigate via GetX
       Get.offAll(() => startScreen);
     }

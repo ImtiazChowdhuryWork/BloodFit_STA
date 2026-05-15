@@ -14,10 +14,27 @@ import 'package:get/get.dart';
 import '../../../constants/text_font_style.dart';
 import '../../../custom_widgets/go_back_widget.dart';
 import '../../../gen/colors.gen.dart';
+import '../../../services/iap_service.dart';
 import '../widgets/current_plan_widget.dart';
 import '../widgets/payment_info_row_widget.dart';
-import '../widgets/upgrade_plan_widget.dart';
 
+/// [PlanSummeryDetailsScreen] is the billing summary screen shown after
+/// the user selects a subscription plan from [SubscriptionScreen].
+///
+/// --- DATA FLOW ---
+/// Arguments received from [SubscriptionScreen] via [Get.toNamed]:
+///   - planId    → used to call the backend billing summary API.
+///   - planType  → 'monthly' or 'yearly', used in the billing API call.
+///   - planName  → displayed as the plan label (currently unused in this screen).
+///   - productId → the App Store / Play Store product ID for this plan.
+///                 Used to trigger the IAP purchase when "Pay Now" is tapped.
+///
+/// --- RESPONSIBILITIES ---
+/// 1. Fetches billing summary (plan name, price, date) from the backend.
+/// 2. Shows promo code option (navigates to [addPromoCodeScreen]).
+/// 3. "Pay Now" button triggers [IAPService.buyProduct] with the [productId],
+///    which opens the native store payment sheet.
+///    The purchase result is handled asynchronously by [IAPService._onPurchaseUpdate].
 class PlanSummeryDetailsScreen extends StatefulWidget {
   const PlanSummeryDetailsScreen({super.key});
 
@@ -30,8 +47,20 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
   PlanSummeryDetailsScreenController planSummeryDetailsScreenController =
       Get.find<PlanSummeryDetailsScreenController>();
 
+  /// Global IAP service used to trigger the purchase when "Pay Now" is tapped.
+  /// Registered as a permanent singleton in [ControllerBindings].
+  late final IAPService _iapService;
+
+  /// Backend plan ID — used to call the billing summary API.
   String planId = '';
+
+  /// Billing period — 'monthly' or 'yearly'. Sent to the billing summary API.
   String planType = '';
+
+  /// Store product ID — passed from [SubscriptionScreen].
+  /// Format: com.bloodfitltd.bloodfit.{slug}.{monthly|yearly}
+  /// Used by [IAPService.buyProduct] to initiate the App Store / Play Store purchase.
+  String productId = '';
 
   @override
   void initState() {
@@ -39,6 +68,8 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
 
     planId = arguments?['planId'] ?? '';
     planType = arguments?['planType'] ?? '';
+    productId = arguments?['productId'] ?? '';
+    _iapService = Get.find<IAPService>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       planSummeryDetailsScreenController.setPlanId(value: planId);
@@ -53,7 +84,6 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackgroundColor,
 
-      /// -------------------- App Bar Section --------------------
       appBar: AppBar(
         backgroundColor: AppColors.scaffoldBackgroundColor,
         centerTitle: true,
@@ -69,14 +99,14 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ///Section : -------///Text -> Biling Summery///-----------
             Text(
               "Billing Summary",
               style: TextFontStyle.headline22w500cfefefeStylePoppins,
             ),
             UIHelper.verticalSpace(24.h),
 
-            ///Section : ------------///CurrentPlan Details///---------
+            /// Current plan details — fetched from the backend billing summary API.
+            /// Shows shimmer placeholders while loading.
             Obx(() {
               if (planSummeryDetailsScreenController
                   .isSummeryDetailsLoading
@@ -86,10 +116,8 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
                   children: [
                     CustomShimmerEffect(height: 10.h, width: 0.7.sw),
                     UIHelper.verticalSpace(10.h),
-
                     CustomShimmerEffect(height: 10.h, width: 0.3.sw),
                     UIHelper.verticalSpace(10.h),
-
                     CustomShimmerEffect(height: 10.h, width: 0.5.sw),
                     UIHelper.verticalSpace(10.h),
                   ],
@@ -112,7 +140,6 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
                 planPrice: planSummeryDetailsScreenController.planPrice,
                 planDuration:
                     planSummeryDetailsScreenController.planDurationType,
-                // daysRemaining: 15,
                 subscriptionDate: planSummeryDetailsScreenController
                     .formattedSubscriptionDate,
               );
@@ -120,19 +147,11 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
 
             UIHelper.verticalSpace(16.h),
 
-            ///-----------///Upgrade Plan///------------
-            // UpgradePlanWidget(
-            //   planTitle: "Upgraded Plan",
-            //   planType: "Pro",
-            //   price: 6.99,
-            //   planDurationType: "Monthly",
-            //   daysRemaining: 15,
-            //   discountOnPreviousPlan: 3.495,
-            //   subscriptionStartDate: "15/09/2025",
-            // ),
-            // UIHelper.verticalSpace(24.h),
+            // UpgradePlanWidget — reserved for plan upgrade flow (not active yet).
+            // UpgradePlanWidget(...),
 
-            ///Section : ---------///PromoCode///---------
+            /// Promo code section — navigates to [addPromoCodeScreen]
+            /// passing the [planId] so the promo can be applied to the correct plan.
             Obx(() {
               if (planSummeryDetailsScreenController
                   .isSummeryDetailsLoading
@@ -170,7 +189,7 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
             }),
             UIHelper.verticalSpace(24.h),
 
-            ///Section : ---------------///Total Price for Current Plan///----------
+            /// Price breakdown rows — all values come from the backend billing API.
             Obx(() {
               if (planSummeryDetailsScreenController
                   .isSummeryDetailsLoading
@@ -192,7 +211,6 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
             }),
             UIHelper.verticalSpace(16.h),
 
-            ///Section:-------///Total Amount For This Month///----
             Obx(() {
               if (planSummeryDetailsScreenController
                   .isSummeryDetailsLoading
@@ -214,14 +232,9 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
             }),
             UIHelper.verticalSpace(10.h),
 
-            ///Section:-------///Total Amount For This Month///----
-            // PaymentInfoRowWidget(
-            //   title: "Already Charged (Starter Plan):",
-            //   price: 6.99,
-            // ),
-            // UIHelper.verticalSpace(10.h),
+            // Already Charged row — reserved for upgrade flow (not active yet).
+            // PaymentInfoRowWidget(title: "Already Charged (Starter Plan):", price: 6.99),
 
-            ///Section:-------///Pay for Upgrade: ///----
             Obx(() {
               if (planSummeryDetailsScreenController
                   .isSummeryDetailsLoading
@@ -244,7 +257,17 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
             }),
             UIHelper.verticalSpace(24.h),
 
-            ///Section : -------///Button -> Pay Now///-----------
+            /// Pay Now button — the entry point for the IAP purchase.
+            ///
+            /// States:
+            /// - Loading (billing API)  → shimmer placeholder.
+            /// - Purchasing (IAP)       → CircularProgressIndicator.
+            /// - Ready                  → "Pay Now" button.
+            ///
+            /// On tap: calls [IAPService.buyProduct] with [productId].
+            /// The native store payment sheet appears.
+            /// Purchase result (success / error / pending) is handled by
+            /// [IAPService._onPurchaseUpdate] which shows snackbar feedback.
             Obx(() {
               if (planSummeryDetailsScreenController
                   .isSummeryDetailsLoading
@@ -252,9 +275,16 @@ class _PlanSummeryDetailsScreenState extends State<PlanSummeryDetailsScreen> {
                 return CustomShimmerEffect(height: 40.h, width: 0.6.sw);
               }
 
+              if (_iapService.isPurchasing.value) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.cb20000),
+                );
+              }
+
               return CustomElevatedButton(
                 onTap: () {
-                  log("Button Taped -> Pay Now");
+                  log("Button Taped -> Pay Now | productId: $productId");
+                  _iapService.buyProduct(productId);
                 },
                 buttonTitle: "Pay Now",
                 borderRadius: 24.r,

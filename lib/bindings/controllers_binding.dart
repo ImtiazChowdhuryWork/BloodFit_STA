@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../controllers/calendar_controller.dart';
+import '../services/iap_service.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/enums_controller.dart';
 import '../controllers/fitness_screen_controller.dart';
@@ -117,5 +118,8 @@ class ControllerBindings extends Bindings {
     /// Weight History Controllers
     Get.lazyPut(() => WeightHistoryRepository(Get.find()));
     Get.lazyPut(() => WeightHistoryController(Get.find()));
+
+    /// IAP Service — registered eagerly so product fetching starts on app launch
+    Get.put(IAPService(), permanent: true);
   }
 }
