@@ -77,6 +77,7 @@ class ChangePasswordScreenController extends GetxController {
       LoggerUtils.error(
         "Form Validation Err Found 😨😨😨😨😨: ${errorMessage.value}",
       );
+      return;
     }
 
     isLoading.value = true;
