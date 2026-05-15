@@ -23,6 +23,20 @@ Map<String, String> englishLanguage = {
   'english_selected': 'English Selected',
   'korean_selected': '한국어 선택됨',
 
+  // Settings Screen - Section Titles
+  'preferences': 'Preferences',
+  'account_management': 'Account Management',
+  'legal_privacy': 'Legal & Privacy',
+  'support': 'Support',
+
+  // Settings Screen - Option Labels
+  'change_password': 'Change Password',
+  'terms_conditions': 'Terms And Conditions',
+  'privacy_policy': 'Privacy Policy',
+  'report_problem': 'Report A Problem',
+  'faq': 'FAQ',
+  'delete_account': 'Delete Account',
+
   // Profile Tags
   'classic_diet': 'Classic Diet',
   'lose_weight': 'Lose Weight',

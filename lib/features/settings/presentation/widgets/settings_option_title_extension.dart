@@ -1,20 +1,23 @@
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:get/get.dart';
 
 extension SettingsOptionTitleExtension on SettingsOptionTitle {
   String get label {
     switch (this) {
+      case SettingsOptionTitle.language:
+        return 'language'.tr;
       case SettingsOptionTitle.changePassword:
-        return "Change Password";
+        return 'change_password'.tr;
       case SettingsOptionTitle.termsAndConditions:
-        return "Terms And Conditions";
+        return 'terms_conditions'.tr;
       case SettingsOptionTitle.privacyPolicy:
-        return "Privacy Policy";
+        return 'privacy_policy'.tr;
       case SettingsOptionTitle.reportAProblem:
-        return "Report A Problem";
+        return 'report_problem'.tr;
       case SettingsOptionTitle.faq:
-        return "FAQ";
+        return 'faq'.tr;
       case SettingsOptionTitle.deleteAccount:
-        return "Delete Account";
+        return 'delete_account'.tr;
     }
   }
 }

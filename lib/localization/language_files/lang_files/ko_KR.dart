@@ -24,6 +24,20 @@ Map<String, String> koreanLanguage = {
 'english_selected': 'English Selected',
 'korean_selected': '한국어 선택됨',
 
+// Settings Screen - Section Titles
+'preferences': '환경설정',
+'account_management': '계정 관리',
+'legal_privacy': '법적 & 개인정보',
+'support': '지원',
+
+// Settings Screen - Option Labels
+'change_password': '비밀번호 변경',
+'terms_conditions': '이용약관',
+'privacy_policy': '개인정보 처리방침',
+'report_problem': '문제 신고',
+'faq': 'FAQ',
+'delete_account': '계정 삭제',
+
 // Profile Tags
 'classic_diet': '클래식 다이어트',
 'lose_weight': '체중 감량',
