@@ -1,6 +1,11 @@
 import 'package:get/get.dart';
 
 import '../controllers/calendar_controller.dart';
+import '../controllers/custom_image_picker_controller.dart';
+import '../features/my_profile/data/controller/profile_screen_controller.dart';
+import '../features/my_profile/data/repository/my_profile_repository.dart';
+import '../features/my_profile/data/repository/upload_profile_image_repository.dart';
+import '../networks/network_caller.dart';
 import '../services/iap_service.dart';
 import '../controllers/edit_profile_screen_controller.dart';
 import '../controllers/enums_controller.dart';
@@ -32,6 +37,11 @@ import '../features/progress/data/repository/weight_history_repository.dart';
 class ControllerBindings extends Bindings {
   @override
   void dependencies() {
+    // NetworkCaller must be first — all repositories depend on it.
+    if (!Get.isRegistered<NetworkCaller>()) {
+      Get.put(NetworkCaller(), permanent: true);
+    }
+
     Get.lazyPut(() => ReadMoreController());
     Get.lazyPut(() => OnboardingScreenController());
     // Get.lazyPut(() => SignInScreenController(), fenix: true);
@@ -39,8 +49,16 @@ class ControllerBindings extends Bindings {
     // Get.lazyPut(() => OtpValidationScreenController());
     // Get.lazyPut(() => ResetPasswordScreenController());
 
-    ///------>>> Profile Screen Controller
-    // Get.lazyPut(() => ProfileScreenController(Get.find()), fenix: true);
+    /// Profile — registered globally so AppBarSectionWidget can show the
+    /// real profile image on every screen without requiring the user to
+    /// visit the profile screen first.
+    Get.lazyPut(() => CustomImagePickerController(), fenix: true);
+    Get.lazyPut(() => MyProfileRepository(Get.find()), fenix: true);
+    Get.lazyPut(() => UploadProfileImageRepository(Get.find()), fenix: true);
+    Get.lazyPut(
+      () => ProfileScreenController(Get.find(), Get.find()),
+      fenix: true,
+    );
     Get.lazyPut(() => EnumsController(), fenix: true);
     Get.lazyPut(() => EditProfileScreenController(), fenix: true);
     Get.lazyPut(() => CalandarController(), fenix: true);

@@ -25,7 +25,6 @@ class AppSnackBarController {
           message: message,
           type: type,
           position: position,
-          onClose: _remove,
         );
       },
     );

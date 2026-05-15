@@ -1,11 +1,11 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_enums.dart';
+import 'package:bloodfit/controllers/app_snackbar_controller.dart';
 import 'package:bloodfit/features/my_profile/data/repository/my_profile_repository.dart';
 import 'package:bloodfit/features/my_profile/data/repository/upload_profile_image_repository.dart';
 import 'package:bloodfit/helper/di.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/custom_image_picker_controller.dart';
@@ -26,10 +26,23 @@ class ProfileScreenController extends GetxController {
   void onInit() {
     super.onInit();
     ever(model, (_) => updateReactiveFullName());
+
+    // Pre-load cached image URL from GetStorage so AppBarSectionWidget
+    // shows the image instantly before the API call completes.
+    final cachedUrl = appData.read(kImageUrl) ?? '';
+    reactiveProfileImageUrl.value = cachedUrl;
+    LoggerUtils.debug("╔══════════════════════════════════════════════════");
+    LoggerUtils.debug("🟢 [PROFILE-CONTROLLER] onInit()");
+    LoggerUtils.debug("📦 [PROFILE-CONTROLLER] Cached image URL from storage: ${cachedUrl.isNotEmpty ? cachedUrl : 'EMPTY — no cached URL found'}");
+    LoggerUtils.debug("╚══════════════════════════════════════════════════");
   }
 
   Rxn<GetMyProfileDataModel> model = Rxn<GetMyProfileDataModel>();
   RxString reactiveFullName = ''.obs;
+
+  /// Single source of truth for the profile image URL across all screens.
+  /// Watched by AppBarSectionWidget via Obx — updates everywhere automatically.
+  RxString reactiveProfileImageUrl = ''.obs;
 
   RxBool isLoading = false.obs;
   RxString errorMessage = ''.obs;
@@ -69,57 +82,72 @@ class ProfileScreenController extends GetxController {
   }
 
   void logOutHelper() {
-    // Clear image controller data on logout
+    LoggerUtils.debug("╔══════════════════════════════════════════════════");
+    LoggerUtils.debug("🔴 [PROFILE] logOutHelper() — clearing all user data");
+    LoggerUtils.debug("╚══════════════════════════════════════════════════");
+
     final imageController = Get.find<CustomImagePickerController>();
     imageController.clearImage();
+    LoggerUtils.debug("🔴 [PROFILE] Image controller cleared");
 
-    // Remove user data
     appData.remove(kKeyAccessToken);
     appData.remove(kKeyUserName);
     appData.remove(kKeyEmail);
     appData.remove(kKeyUserID);
+    appData.remove(kImageUrl);
+    reactiveProfileImageUrl.value = '';
+    LoggerUtils.debug("🔴 [PROFILE] Storage cleared — reactiveProfileImageUrl reset to empty");
 
-    LoggerUtils.info("User logged out successfully");
+    LoggerUtils.info("✅ [PROFILE] User logged out successfully");
     Get.offAllNamed(Routes.signInScreen);
   }
 
   ///----------->>> Api Call : Get Profile Data Method
   Future<void> getMyProfileDataApi() async {
+    LoggerUtils.debug("╔══════════════════════════════════════════════════");
+    LoggerUtils.debug("📡 [PROFILE-API] getMyProfileDataApi() called");
+    LoggerUtils.debug("╚══════════════════════════════════════════════════");
+
     isLoading.value = true;
     clearErrorMessage();
 
     try {
       final response = await _myProfileRepository.myProfileRepository();
 
+      LoggerUtils.debug("📡 [PROFILE-API] Response received");
+      LoggerUtils.debug("📡 [PROFILE-API] Status code : ${response.statusCode}");
+      LoggerUtils.debug("📡 [PROFILE-API] isSuccess   : ${response.isSuccess}");
+
       if (response.statusCode == 200 && response.isSuccess) {
         model.value = GetMyProfileDataModel.fromJson(response.jsonResponse!);
 
-        // Update image controller with API image
         final imageController = Get.find<CustomImagePickerController>();
         final imageUrl = model.value?.data?.image;
-        LoggerUtils.debug("Profile image URL from API: $imageUrl");
+
+        LoggerUtils.debug("🖼  [PROFILE-API] Image URL from API : ${imageUrl ?? 'NULL'}");
+
         if (imageUrl != null && imageUrl.isNotEmpty) {
-          LoggerUtils.debug("Setting API image in controller: $imageUrl");
           imageController.setImageFromApi(imageUrl);
+          appData.write(kImageUrl, imageUrl);
+          reactiveProfileImageUrl.value = imageUrl;
+          LoggerUtils.debug("✅ [PROFILE-API] Image URL set in controller, storage, and reactiveProfileImageUrl");
+          LoggerUtils.debug("✅ [PROFILE-API] reactiveProfileImageUrl → $imageUrl");
         } else {
-          LoggerUtils.debug(
-            "No image URL found in profile data or URL is empty",
-          );
+          LoggerUtils.debug("⚠️  [PROFILE-API] Image URL is null or empty — default image will show");
         }
 
-        // Update reactive full name
         updateReactiveFullName();
-
-        LoggerUtils.debug("Success: Profile Data Fetched Successfully!!");
+        LoggerUtils.debug("✅ [PROFILE-API] Profile data fetched successfully");
       } else {
         errorMessage.value = response.errorMessage.toString();
-        LoggerUtils.error("Error Message: ${errorMessage.value}");
+        LoggerUtils.error("❌ [PROFILE-API] Failed — Status: ${response.statusCode} | Error: ${errorMessage.value}");
       }
     } catch (e) {
       errorMessage.value = e.toString();
-      LoggerUtils.error("Error Message: ${errorMessage.value}");
+      LoggerUtils.error("❌ [PROFILE-API] Exception caught: ${errorMessage.value}");
     } finally {
       isLoading.value = false;
+      LoggerUtils.debug("📡 [PROFILE-API] getMyProfileDataApi() finished");
     }
   }
 
@@ -175,11 +203,10 @@ class ProfileScreenController extends GetxController {
         LoggerUtils.debug("Refreshing profile data after upload...");
         await getMyProfileDataApi();
 
-        Get.snackbar(
-          "Success",
-          "Profile image uploaded successfully!",
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+        AppSnackBarController.show(
+          message: "Profile image uploaded successfully!",
+          type: AppSnackBarType.success,
+          position: AppSnackBarPosition.bottom,
         );
       } else {
         imageUploadingErrorMessage.value =
@@ -187,11 +214,10 @@ class ProfileScreenController extends GetxController {
         LoggerUtils.error(
           "Error While Uploading Image: ${imageUploadingErrorMessage.value}",
         );
-        Get.snackbar(
-          "Error",
-          "Failed to upload profile image: ${response.errorMessage}",
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+        AppSnackBarController.show(
+          message: "Failed to upload profile image: ${response.errorMessage}",
+          type: AppSnackBarType.error,
+          position: AppSnackBarPosition.bottom,
         );
       }
     } catch (e) {
@@ -199,11 +225,10 @@ class ProfileScreenController extends GetxController {
       LoggerUtils.error(
         "Error While Uploading Image: ${imageUploadingErrorMessage.value}",
       );
-      Get.snackbar(
-        "Error",
-        "Failed to upload profile image: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+      AppSnackBarController.show(
+        message: "Failed to upload profile image: $e",
+        type: AppSnackBarType.error,
+        position: AppSnackBarPosition.bottom,
       );
     } finally {
       isImageBeingUpload.value = false;
