@@ -1,4 +1,5 @@
 import 'package:bloodfit/features/home/data/controller/home_screen_controller.dart';
+import 'package:bloodfit/features/my_profile/data/controller/profile_screen_controller.dart';
 import 'package:bloodfit/features/home/data/repository/daily_calories_api_repository.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/meal_plan_feature_options.dart';
@@ -61,7 +62,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
-    // _initializeControllers();
+
+    // Fetch profile data as soon as the main navigation loads so the
+    // profile image is available in AppBarSectionWidget on every screen.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<ProfileScreenController>().getMyProfileDataApi();
+    });
   }
 
   @override
