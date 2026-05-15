@@ -1,6 +1,7 @@
 import 'package:bloodfit/constants/text_font_style.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/bad_for_blood_type_widget.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/widgets/good_for_blood_type_widget.dart';
+import 'package:bloodfit/features/meal_scanner/presentation/widgets/neutral_for_blood_type_widget.dart';
 import 'package:bloodfit/gen/assets.gen.dart';
 import 'package:bloodfit/gen/colors.gen.dart';
 import 'package:bloodfit/helper/ui_helpers.dart';
@@ -29,8 +30,17 @@ class ScannerNutritionDetailsWidget extends StatelessWidget {
                 opacity: controller.fadeAnimation,
                 child: SlideTransition(
                   position: controller.slideAnimation,
-                  child: Container(
-                    height: 0.48.sh,
+                  child: ConstrainedBox(
+                    // Max height stops just above the camera capture button.
+                    // Button sits at bottom: 50px with height 90.h, plus a 16.h gap.
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height
+                          - 20.h   // panel top offset
+                          - 90.h   // camera button height
+                          - 50     // camera button bottom offset
+                          - 16.h,  // gap between panel and button
+                    ),
+                    child: Container(
                     padding: EdgeInsets.all(22.sp),
                     decoration: BoxDecoration(
                       color: AppColors.c111111,
@@ -89,19 +99,74 @@ class ScannerNutritionDetailsWidget extends StatelessWidget {
                               ),
                             )
                           else ...[
-                            BadForBloodTypeWidget(),
-                            UIHelper.verticalSpace(8.h),
-                            GoodForBloodTypeWidget(),
-                            UIHelper.verticalSpace(16.h),
-                            Text(
-                              "Avoid The Reds, Greens Are Good",
-                              style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                            Builder(
+                              builder: (context) {
+                                final result = controller.scanResult.value;
+                                final allEmpty =
+                                    (result?.harmfulIngredients ?? []).isEmpty &&
+                                    (result?.neutralIngredients ?? []).isEmpty &&
+                                    (result?.safeIngredients ?? []).isEmpty;
+
+                                if (allEmpty) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 24.h),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.info_outline,
+                                          color: AppColors.c999999,
+                                          size: 48.sp,
+                                        ),
+                                        UIHelper.verticalSpace(12.h),
+                                        Text(
+                                          'No ingredient data available',
+                                          style: TextFontStyle.headline16w500cfefefeStylePoppins,
+                                        ),
+                                        UIHelper.verticalSpace(8.h),
+                                        Text(
+                                          'We could not determine the ingredients for this item.',
+                                          style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+
+                                final hasHarmful = (result?.harmfulIngredients ?? []).isNotEmpty;
+                                final hasNeutral = (result?.neutralIngredients ?? []).isNotEmpty;
+                                final hasSafe = (result?.safeIngredients ?? []).isNotEmpty;
+
+                                final parts = <String>[
+                                  if (hasHarmful) 'Avoid The Reds',
+                                  if (hasNeutral) 'Watch The Yellows',
+                                  if (hasSafe) 'Greens Are Good',
+                                ];
+                                final dynamicMessage = parts.join(', ');
+
+                                return Column(
+                                  children: [
+                                    BadForBloodTypeWidget(),
+                                    UIHelper.verticalSpace(8.h),
+                                    NeutralForBloodTypeWidget(),
+                                    UIHelper.verticalSpace(8.h),
+                                    GoodForBloodTypeWidget(),
+                                    UIHelper.verticalSpace(16.h),
+                                    Text(
+                                      dynamicMessage,
+                                      style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ],
 
                           UIHelper.verticalSpace(35.h),
                         ],
                       ),
+                    ),
                     ),
                   ),
                 ),

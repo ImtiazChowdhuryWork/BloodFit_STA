@@ -8,37 +8,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class GoodForBloodTypeWidget extends StatelessWidget {
-  const GoodForBloodTypeWidget({super.key});
+class NeutralForBloodTypeWidget extends StatelessWidget {
+  const NeutralForBloodTypeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<MealScannerScreenController>();
 
     return Obx(() {
-      final safe = controller.scanResult.value?.safeIngredients ?? [];
+      final neutral = controller.scanResult.value?.neutralIngredients ?? [];
 
-      if (safe.isEmpty) return const SizedBox.shrink();
+      if (neutral.isEmpty) return const SizedBox.shrink();
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Good",
+            "Neutral",
             style: TextFontStyle.headline14w400cfefefeStylePoppins,
           ),
           UIHelper.verticalSpace(8.h),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: safe.length,
+            itemCount: neutral.length,
             separatorBuilder: (context, index) => UIHelper.verticalSpace(8.h),
             itemBuilder: (context, index) {
-              final item = safe[index];
+              final item = neutral[index];
               return ScanningResultTileWidget(
                 itemName: item.name ?? '',
-                sufficIcon: Assets.icons.doneIcon,
-                borderColor: AppColors.c299105,
+                sufficIcon: Assets.icons.warningIcon,
+                borderColor: AppColors.c999999,
               );
             },
           ),
