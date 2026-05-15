@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../../controllers/meal_scanner_screen_controller.dart';
+import '../../data/controller/meal_scanner_screen_controller.dart';
 import '../../../../gen/colors.gen.dart';
 
 class ScannerScreenWidget extends StatelessWidget {

@@ -3,6 +3,7 @@ import 'package:bloodfit/features/my_profile/data/controller/profile_screen_cont
 import 'package:bloodfit/features/home/data/repository/daily_calories_api_repository.dart';
 import 'package:bloodfit/features/home/presentation/home_screen.dart';
 import 'package:bloodfit/features/meal_plan_feature_options/presentation/meal_plan_feature_options.dart';
+import 'package:bloodfit/features/meal_scanner/bindings/meal_scanner_bindings.dart';
 import 'package:bloodfit/features/meal_scanner/presentation/meal_scanner_screen.dart';
 import 'package:bloodfit/features/progress/presentation/progress_screen.dart';
 import 'package:bloodfit/features/weight_history/data/controller/weight_history_screen_controller.dart';
@@ -78,7 +79,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   void _onItemTapped(int index) {
     if (index == 2) {
-      // Scanner button tapped - navigate to MealScannerScreen
+      MealScannerBindings().dependencies();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MealScannerScreen()),

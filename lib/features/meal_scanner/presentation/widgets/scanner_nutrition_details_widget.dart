@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../controllers/meal_scanner_screen_controller.dart';
+import '../../data/controller/meal_scanner_screen_controller.dart';
 
 class ScannerNutritionDetailsWidget extends StatelessWidget {
   final MealScannerScreenController controller =
@@ -20,7 +20,7 @@ class ScannerNutritionDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return controller.nutritionData.isNotEmpty
+      return controller.scanResult.value != null
           ? Positioned(
               top: 20.h,
               left: 20.w,

@@ -1,18 +1,22 @@
+import 'package:bloodfit/features/meal_scanner/data/model/meal_scanner_result_model.dart';
+import 'package:bloodfit/features/meal_scanner/data/repository/meal_scanner_repository.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MealScannerScreenController extends GetxController
     with SingleGetTickerProviderMixin {
+  final MealScannerRepository _repository = MealScannerRepository(Get.find());
+
   var isLoading = false.obs;
   var cameraInitialized = false.obs;
   var cameraInitFailed = false.obs;
   var scanStatus = 'Point camera at food and tap capture'.obs;
-  var nutritionData = <String, dynamic>{}.obs;
-  var apiResponse = ''.obs;
+
+  /// Holds the parsed API response after a successful scan.
+  Rxn<Data> scanResult = Rxn<Data>();
 
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
@@ -25,7 +29,7 @@ class MealScannerScreenController extends GetxController
     super.onInit();
     _initializeCamera();
     _initializeAnimations();
-    ever(nutritionData, (_) => handleNutritionDataAnimation());
+    ever(scanResult, (_) => handleNutritionDataAnimation());
   }
 
   void _initializeAnimations() {
@@ -54,13 +58,11 @@ class MealScannerScreenController extends GetxController
       if (status.isGranted) {
         // Already granted — proceed directly
       } else if (status.isDenied) {
-        // Not yet asked or denied once — request it
         status = await Permission.camera.request();
       }
 
       if (!status.isGranted) {
         LoggerUtils.error('Camera permission denied');
-        // Permission permanently denied or denied after request — show settings dialog
         await Get.dialog(
           AlertDialog(
             backgroundColor: const Color(0xFF1C1C1C),
@@ -75,14 +77,14 @@ class MealScannerScreenController extends GetxController
             actions: [
               TextButton(
                 onPressed: () {
-                  Get.close(2); // closes dialog + scanner screen
+                  Get.close(2);
                   Get.delete<MealScannerScreenController>(force: true);
                 },
                 child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
               ),
               TextButton(
                 onPressed: () async {
-                  Get.close(2); // closes dialog + scanner screen
+                  Get.close(2);
                   Get.delete<MealScannerScreenController>(force: true);
                   await openAppSettings();
                 },
@@ -95,9 +97,6 @@ class MealScannerScreenController extends GetxController
         return;
       }
 
-      // On iOS, availableCameras() may return empty immediately after permission
-      // is granted — retry a few times with a short delay to allow the camera
-      // subsystem to finish initializing.
       List<CameraDescription> cameras = [];
       for (int attempt = 0; attempt < 3; attempt++) {
         cameras = await availableCameras();
@@ -112,6 +111,7 @@ class MealScannerScreenController extends GetxController
         cameraInitFailed.value = true;
         return;
       }
+
       _cameraController = CameraController(
         cameras.first,
         ResolutionPreset.medium,
@@ -139,14 +139,39 @@ class MealScannerScreenController extends GetxController
     scanStatus.value = 'Capturing image...';
 
     try {
-      await _cameraController.takePicture();
+      final XFile capturedImage = await _cameraController.takePicture();
       scanStatus.value = 'Analyzing food...';
 
-      // Simulated delay — replace with real API call when available
-      await Future.delayed(Duration(seconds: 2));
-      _simulateAPIResponse();
+      LoggerUtils.debug('[SCANNER] Image captured: ${capturedImage.path}');
+      LoggerUtils.debug('[SCANNER] Sending to POST /ai-meal/scan-food...');
+
+      final response = await _repository.scanFood(imagePath: capturedImage.path);
+
+      LoggerUtils.debug('[SCANNER] Response status: ${response.statusCode}');
+      LoggerUtils.debug('[SCANNER] Response success: ${response.isSuccess}');
+
+      if (response.statusCode == 200 && response.isSuccess && response.jsonResponse != null) {
+        final model = MealScannerResultModel.fromJson(response.jsonResponse!);
+        LoggerUtils.debug('[SCANNER] Identified ingredients: ${model.data?.identifiedIngredients}');
+        LoggerUtils.debug('[SCANNER] Harmful: ${model.data?.harmfulIngredients?.length}');
+        LoggerUtils.debug('[SCANNER] Safe: ${model.data?.safeIngredients?.length}');
+        LoggerUtils.debug('[SCANNER] Neutral: ${model.data?.neutralIngredients?.length}');
+
+        scanResult.value = model.data;
+        scanStatus.value = 'Analysis complete!';
+      } else {
+        final errorMsg = response.errorMessage ?? 'Could not identify the food. Try again.';
+        LoggerUtils.error('[SCANNER] API error: $errorMsg');
+        scanStatus.value = 'Analysis failed. Try again.';
+        Get.snackbar(
+          'Scan Failed',
+          errorMsg,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     } catch (e) {
-      LoggerUtils.error('Error: $e');
+      LoggerUtils.error('[SCANNER] Exception: $e');
       Get.snackbar(
         'Error',
         'Failed to analyze food: $e',
@@ -160,7 +185,7 @@ class MealScannerScreenController extends GetxController
   }
 
   void clearNutritionData() {
-    nutritionData.clear();
+    scanResult.value = null;
     scanStatus.value = 'Point camera at food and tap capture';
     if (animationController.status == AnimationStatus.completed) {
       animationController.reverse();
@@ -168,7 +193,7 @@ class MealScannerScreenController extends GetxController
   }
 
   void handleNutritionDataAnimation() {
-    if (nutritionData.isNotEmpty) {
+    if (scanResult.value != null) {
       if (animationController.status == AnimationStatus.dismissed ||
           animationController.status == AnimationStatus.forward) {
         animationController.forward();
@@ -182,32 +207,7 @@ class MealScannerScreenController extends GetxController
   }
 
   bool get shouldShowNutritionDetails {
-    return animationController.value > 0 || nutritionData.isNotEmpty;
-  }
-
-  // Simulated API response — REMOVE THIS WHEN YOU ADD REAL API
-  void _simulateAPIResponse() {
-    final foods = [
-      {'foodName': 'Apple', 'calories': 95, 'protein': 0.5, 'carbs': 25, 'fat': 0.3},
-      {'foodName': 'Banana', 'calories': 105, 'protein': 1.3, 'carbs': 27, 'fat': 0.4},
-      {'foodName': 'Chicken Salad', 'calories': 320, 'protein': 25, 'carbs': 12, 'fat': 18},
-      {'foodName': 'Pizza Slice', 'calories': 285, 'protein': 12, 'carbs': 36, 'fat': 10},
-    ];
-
-    final randomFood = foods[DateTime.now().millisecondsSinceEpoch % foods.length];
-
-    nutritionData.value = {
-      'foodName': randomFood['foodName'],
-      'calories': randomFood['calories'],
-      'protein': randomFood['protein'],
-      'carbs': randomFood['carbs'],
-      'fat': randomFood['fat'],
-      'confidence': 0.85 + (DateTime.now().millisecond % 15) / 100,
-    };
-
-    scanStatus.value = 'Analysis complete!';
-    apiResponse.value = '${nutritionData['foodName']} - ${nutritionData['calories']} kcal';
-    LoggerUtils.debug('Simulated Nutrition Data: $nutritionData');
+    return animationController.value > 0 || scanResult.value != null;
   }
 
   CameraController get cameraController => _cameraController;

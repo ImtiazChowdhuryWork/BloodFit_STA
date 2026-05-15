@@ -2,7 +2,7 @@ import 'package:bloodfit/features/meal_scanner/presentation/widgets/scanner_over
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../controllers/meal_scanner_screen_controller.dart';
+import '../../data/controller/meal_scanner_screen_controller.dart';
 import '../../../../gen/colors.gen.dart';
 
 class ScannerOverlayWidget extends StatelessWidget {

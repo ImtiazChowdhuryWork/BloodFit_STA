@@ -97,6 +97,8 @@ final class Endpoints {
     return "$url/img-storage/local-image/$mealId";
   }
 
+  static String scanFood() => "$url/ai-meal/scan-food";
+
 
   
 }
