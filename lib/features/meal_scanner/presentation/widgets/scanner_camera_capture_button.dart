@@ -20,57 +20,55 @@ class ScannerCameraCaptureButton extends StatelessWidget {
       right: 0,
       child: Obx(
         () => Center(
-          child: InkWell(
-            onTap: controller.isLoading.value
-                ? null
-                : controller.captureAndAnalyze,
-            child: Container(
-              height: 90.h,
-              width: 90.w,
-              padding: EdgeInsets.all(10.sp),
-              decoration: BoxDecoration(
-                color: AppColors.c111111,
-                shape: BoxShape.circle,
-              ),
-              child: controller.isLoading.value
-                  ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Background circle
-                        Container(
-                          height: 65.h,
-                          width: 65.w,
-                          decoration: BoxDecoration(
-                            color: AppColors.c111111,
-                            shape: BoxShape.circle,
+          child: IgnorePointer(
+            ignoring: controller.isLoading.value,
+            child: InkWell(
+              onTap: controller.captureAndAnalyze,
+              child: Container(
+                height: 90.h,
+                width: 90.w,
+                padding: EdgeInsets.all(10.sp),
+                decoration: BoxDecoration(
+                  color: AppColors.c111111,
+                  shape: BoxShape.circle,
+                ),
+                child: controller.isLoading.value
+                    ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            height: 65.h,
+                            width: 65.w,
+                            decoration: BoxDecoration(
+                              color: AppColors.c111111,
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                        // Circular Progress Border
-                        SizedBox(
-                          height: 80.h,
-                          width: 80.w,
-                          child: CircularProgressIndicator(
-                            color: AppColors.cb20000,
-                            strokeWidth: 2.5,
-                            backgroundColor: Colors.transparent,
+                          SizedBox(
+                            height: 80.h,
+                            width: 80.w,
+                            child: CircularProgressIndicator(
+                              color: AppColors.cb20000,
+                              strokeWidth: 2.5,
+                              backgroundColor: Colors.transparent,
+                            ),
                           ),
+                          Text(
+                            "Analyzing",
+                            style: TextFontStyle.headline12w400cfefefeStylePoppins
+                                .copyWith(fontSize: 10.sp),
+                          ),
+                        ],
+                      )
+                    : ClipOval(
+                        child: Image.asset(
+                          height: 50.h,
+                          width: 50.w,
+                          Assets.images.scannerButtonImage.path,
+                          fit: BoxFit.contain,
                         ),
-                        // Loading Text in center
-                        Text(
-                          "Analyzing",
-                          style: TextFontStyle.headline12w400cfefefeStylePoppins
-                              .copyWith(fontSize: 10.sp),
-                        ),
-                      ],
-                    )
-                  : ClipOval(
-                      child: Image.asset(
-                        height: 50.h,
-                        width: 50.w,
-                        Assets.images.scannerButtonImage.path,
-                        fit: BoxFit.contain,
                       ),
-                    ),
+              ),
             ),
           ),
         ),
