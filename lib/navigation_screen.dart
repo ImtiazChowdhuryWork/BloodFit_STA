@@ -109,6 +109,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
         child: PageView(
           controller: _pageController,
           onPageChanged: _onPageChanged,
+          // Swiping disabled — scanner tab (index 2) requires a direct tap
+          // to open MealScannerScreen via Navigator.push. Swiping would land
+          // on an empty Container placeholder and never open the camera.
+          physics: const NeverScrollableScrollPhysics(),
           children: _pages,
         ),
       ),
