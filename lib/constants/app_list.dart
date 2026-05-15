@@ -36,12 +36,6 @@ class AppList {
       imagePath: Assets.images.onboardingImageTwo.path,
     ),
     OnboardingModel(
-      title: "Get Your 7-Day Free Trial",
-      subTitle:
-          "Experience All The Benefits Of Our Meal Plans With A 7-Day Free Trial! Get Access To Personalized Meal Suggestions, Track Your Progress, And Enjoy Healthy Meals Tailored To Your Needs.",
-      imagePath: Assets.images.onboardingImageThree.path,
-    ),
-    OnboardingModel(
       title: "1-day streak",
       subTitle: "Awesome! Every Streak Counts, Keep It Going!",
       imagePath: Assets.images.onboardingImageFour.path,
