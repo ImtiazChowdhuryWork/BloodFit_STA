@@ -62,14 +62,43 @@ class ScannerNutritionDetailsWidget extends StatelessWidget {
                             ],
                           ),
                           UIHelper.verticalSpace(8.h),
-                          BadForBloodTypeWidget(),
-                          UIHelper.verticalSpace(8.h),
-                          GoodForBloodTypeWidget(),
-                          UIHelper.verticalSpace(16.h),
-                          Text(
-                            "Avoid The Reds, Greens Are Good",
-                            style: TextFontStyle.headline14w400cfefefeStylePoppins,
-                          ),
+
+                          // No food detected — all ingredient lists are empty
+                          if ((controller.scanResult.value?.identifiedIngredients ?? []).isEmpty)
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 24.h),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.no_food_outlined,
+                                    color: AppColors.c999999,
+                                    size: 48.sp,
+                                  ),
+                                  UIHelper.verticalSpace(12.h),
+                                  Text(
+                                    'No food detected',
+                                    style: TextFontStyle.headline16w500cfefefeStylePoppins,
+                                  ),
+                                  UIHelper.verticalSpace(8.h),
+                                  Text(
+                                    'Point the camera at a food item and try again.',
+                                    style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                          else ...[
+                            BadForBloodTypeWidget(),
+                            UIHelper.verticalSpace(8.h),
+                            GoodForBloodTypeWidget(),
+                            UIHelper.verticalSpace(16.h),
+                            Text(
+                              "Avoid The Reds, Greens Are Good",
+                              style: TextFontStyle.headline14w400cfefefeStylePoppins,
+                            ),
+                          ],
+
                           UIHelper.verticalSpace(35.h),
                         ],
                       ),
