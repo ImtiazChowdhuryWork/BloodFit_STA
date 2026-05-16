@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../constants/app_constant_text.dart';
 import '../constants/text_font_style.dart';
+import '../controllers/custom_image_picker_controller.dart';
 import '../controllers/select_height_screen_controller.dart';
 import '../controllers/weight_picker_widget_controller.dart';
 import '../custom_widgets/custom_button.dart';
@@ -112,6 +113,46 @@ void rotation() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+}
+
+void clearUserSessionData() {
+  // Auth tokens & session flags
+  appData.remove(kKeyAccessToken);
+  appData.remove(kKeyRefreshToken);
+  appData.remove(kKeyIsLoggedIn);
+  appData.remove(kKeyIsUserVerified);
+  appData.remove(kKeySignUpToken);
+  appData.remove(kKeyForgotPasswordToken);
+
+  // User profile
+  appData.remove(kKeyName);
+  appData.remove(kKeyFirstName);
+  appData.remove(kKeyLastName);
+  appData.remove(kImageUrl);
+  appData.remove(kEmail);
+  appData.remove(kPassword);
+  appData.remove(kKeyUserName);
+  appData.remove(kKeyEmail);
+  appData.remove(kKeyUserID);
+
+  // Workout plan
+  appData.remove(kKeyCurrentBodyShape);
+  appData.remove(kKeyActivityLevel);
+  appData.remove(kKeyPreffredWorkout);
+  appData.remove(kKeyWorkoutFocusArea);
+
+  // Meal plan state
+  appData.remove(kKeyIsMealPlanSubmitted);
+  appData.remove(kKeyDesiredBodyShape);
+
+  // Health & onboarding data
+  removeAllSavedDataToLocalStorageForInformationGatherMealPlan();
+
+  // Clear profile image from memory
+  try {
+    final imageController = Get.find<CustomImagePickerController>();
+    imageController.clearImage();
+  } catch (_) {}
 }
 
 bool removeAllSavedDataToLocalStorageForInformationGatherMealPlan() {

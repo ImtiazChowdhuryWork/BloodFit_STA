@@ -5,8 +5,7 @@ import 'package:get/get.dart' hide Response, MultipartFile;
 import 'package:http/http.dart';
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
-import '../constants/app_constant_text.dart';
-import '../helper/di.dart';
+import '../helper/helper_methods.dart';
 import '../helper/logger_util.dart';
 import '../routes/routes.dart';
 import 'network_response.dart';
@@ -236,13 +235,10 @@ class NetworkCaller {
     }
   }
 
-  // Handle unauthorized access (401) - Clear tokens and navigate to login
   Future<void> _handleUnauthorized({required String message}) async {
     try {
-      // Clear the stored access token
-      appData.remove(kKeyAccessToken);
+      clearUserSessionData();
 
-      // Show a snackbar to inform the user
       Get.snackbar(
         'Session Expired',
         message,
@@ -252,7 +248,6 @@ class NetworkCaller {
         duration: const Duration(seconds: 3),
       );
 
-      // Navigate to login, clearing the entire navigation stack
       Get.offAllNamed(Routes.signInScreen);
     } catch (e) {
       debugPrint('Error handling unauthorized: $e');

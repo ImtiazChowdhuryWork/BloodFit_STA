@@ -4,6 +4,7 @@ import 'package:bloodfit/controllers/app_snackbar_controller.dart';
 import 'package:bloodfit/features/my_profile/data/repository/my_profile_repository.dart';
 import 'package:bloodfit/features/my_profile/data/repository/upload_profile_image_repository.dart';
 import 'package:bloodfit/helper/di.dart';
+import 'package:bloodfit/helper/helper_methods.dart';
 import 'package:bloodfit/helper/logger_util.dart';
 import 'package:bloodfit/routes/routes.dart';
 import 'package:get/get.dart';
@@ -82,23 +83,8 @@ class ProfileScreenController extends GetxController {
   }
 
   void logOutHelper() {
-    LoggerUtils.debug("╔══════════════════════════════════════════════════");
-    LoggerUtils.debug("🔴 [PROFILE] logOutHelper() — clearing all user data");
-    LoggerUtils.debug("╚══════════════════════════════════════════════════");
-
-    final imageController = Get.find<CustomImagePickerController>();
-    imageController.clearImage();
-    LoggerUtils.debug("🔴 [PROFILE] Image controller cleared");
-
-    appData.remove(kKeyAccessToken);
-    appData.remove(kKeyUserName);
-    appData.remove(kKeyEmail);
-    appData.remove(kKeyUserID);
-    appData.remove(kImageUrl);
+    clearUserSessionData();
     reactiveProfileImageUrl.value = '';
-    LoggerUtils.debug("🔴 [PROFILE] Storage cleared — reactiveProfileImageUrl reset to empty");
-
-    LoggerUtils.info("✅ [PROFILE] User logged out successfully");
     Get.offAllNamed(Routes.signInScreen);
   }
 
