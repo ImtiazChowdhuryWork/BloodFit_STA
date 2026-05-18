@@ -33,9 +33,8 @@ class UploadProfileImageRepository {
       'profilePicture': imageFile,
     };
 
-    // Use the existing multipartPostRequest method from NetworkCaller
-    return _networkCaller.multipartPostRequest(
-      Endpoints.uploadProfileImage(),
+    return _networkCaller.multipartPatchRequest(
+      Endpoints.updateProfileData(),
       files: files,
       headers: headers,
     );
