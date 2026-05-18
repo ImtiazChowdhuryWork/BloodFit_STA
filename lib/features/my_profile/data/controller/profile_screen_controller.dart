@@ -1,6 +1,7 @@
 import 'package:bloodfit/constants/app_constant_text.dart';
 import 'package:bloodfit/constants/app_enums.dart';
 import 'package:bloodfit/controllers/app_snackbar_controller.dart';
+import 'package:bloodfit/endpoints.dart';
 import 'package:bloodfit/features/my_profile/data/repository/my_profile_repository.dart';
 import 'package:bloodfit/features/my_profile/data/repository/upload_profile_image_repository.dart';
 import 'package:bloodfit/helper/di.dart';
@@ -31,7 +32,7 @@ class ProfileScreenController extends GetxController {
     // Pre-load cached image URL from GetStorage so AppBarSectionWidget
     // shows the image instantly before the API call completes.
     final cachedUrl = appData.read(kImageUrl) ?? '';
-    reactiveProfileImageUrl.value = cachedUrl;
+    reactiveProfileImageUrl.value = _buildFullImageUrl(cachedUrl);
     LoggerUtils.debug("╔══════════════════════════════════════════════════");
     LoggerUtils.debug("🟢 [PROFILE-CONTROLLER] onInit()");
     LoggerUtils.debug("📦 [PROFILE-CONTROLLER] Cached image URL from storage: ${cachedUrl.isNotEmpty ? cachedUrl : 'EMPTY — no cached URL found'}");
@@ -82,6 +83,12 @@ class ProfileScreenController extends GetxController {
     subscriptionType.value = UserSubscriptionType.starter;
   }
 
+  String _buildFullImageUrl(String path) {
+    if (path.isEmpty) return '';
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    return '$imageBaseUrl$path';
+  }
+
   void logOutHelper() {
     clearUserSessionData();
     reactiveProfileImageUrl.value = '';
@@ -115,7 +122,7 @@ class ProfileScreenController extends GetxController {
         if (imageUrl != null && imageUrl.isNotEmpty) {
           imageController.setImageFromApi(imageUrl);
           appData.write(kImageUrl, imageUrl);
-          reactiveProfileImageUrl.value = imageUrl;
+          reactiveProfileImageUrl.value = _buildFullImageUrl(imageUrl);
           LoggerUtils.debug("✅ [PROFILE-API] Image URL set in controller, storage, and reactiveProfileImageUrl");
           LoggerUtils.debug("✅ [PROFILE-API] reactiveProfileImageUrl → $imageUrl");
         } else {
