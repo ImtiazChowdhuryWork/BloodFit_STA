@@ -17,11 +17,14 @@ import 'package:get/get.dart';
 
 import '../../../../custom_widgets/app_logo_widget.dart';
 import '../../../../custom_widgets/social_media_button_widget.dart';
+import '../../google_sign_in/data/controller/google_sign_in_controller.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});
 
   final SignInScreenController controller = Get.find<SignInScreenController>();
+  final GoogleSignInController googleController =
+      Get.find<GoogleSignInController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -190,15 +193,26 @@ class SignInScreen extends StatelessWidget {
 
                 ///Section : -----------------///Button : Social Media -> Facebook///----------------
                 ///Section : -----------------///Button : Social Media -> Google///----------------
-                SocialMediaButtonWidget(
-                  title: "or Login With Social Media",
-                  faceBookOnTap: () {
-                    log("Social Button Taped : FaceBook");
-                  },
-                  googleOnTap: () {
-                    log("Social Button Taped : Google");
-                  },
-                ),
+                Obx(() {
+                  return Column(
+                    children: [
+                      if (googleController.errorMessage.value.isNotEmpty)
+                        ErrorMessageWidget(
+                          errorMessage: googleController.errorMessage,
+                          onClear: googleController.clearError,
+                        ),
+                      SocialMediaButtonWidget(
+                        title: "or Login With Social Media",
+                        faceBookOnTap: () {
+                          log("Social Button Taped : FaceBook");
+                        },
+                        googleOnTap: googleController.isLoading.value
+                            ? null
+                            : () => googleController.signInWithGoogle(),
+                      ),
+                    ],
+                  );
+                }),
                 UIHelper.verticalSpace(20.h),
               ],
             ),

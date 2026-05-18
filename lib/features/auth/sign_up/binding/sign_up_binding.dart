@@ -1,3 +1,5 @@
+import 'package:bloodfit/features/auth/google_sign_in/data/controller/google_sign_in_controller.dart';
+import 'package:bloodfit/features/auth/google_sign_in/data/repository/google_sign_in_repository.dart';
 import 'package:bloodfit/features/auth/sign_up/data/controller/sign_up_screen_controller.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +18,13 @@ class SignUpBinding extends Bindings {
     Get.lazyPut<SignInRepository>(() => SignInRepository(Get.find()));
     Get.lazyPut<SignInScreenController>(
       () => SignInScreenController(Get.find()),
+    );
+
+    Get.lazyPut<GoogleSignInRepository>(
+      () => GoogleSignInRepository(Get.find()),
+    );
+    Get.lazyPut<GoogleSignInController>(
+      () => GoogleSignInController(Get.find()),
     );
   }
 }

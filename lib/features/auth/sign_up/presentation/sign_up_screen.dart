@@ -15,11 +15,14 @@ import '../../../../custom_widgets/custom_elevated_button.dart';
 import '../../../../custom_widgets/error_message.dart';
 import '../../../../custom_widgets/social_media_button_widget.dart';
 import '../../../../routes/routes.dart';
+import '../../google_sign_in/data/controller/google_sign_in_controller.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
 
   final SignUpScreenController controller = Get.find<SignUpScreenController>();
+  final GoogleSignInController googleController =
+      Get.find<GoogleSignInController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -228,15 +231,26 @@ class SignUpScreen extends StatelessWidget {
 
                 ///Section : -----------------///Button : Social Media -> Facebook///----------------
                 ///Section : -----------------///Button : Social Media -> Google///----------------
-                SocialMediaButtonWidget(
-                  title: "or Signup With Social Media",
-                  faceBookOnTap: () {
-                    log("Social Button Taped : FaceBook");
-                  },
-                  googleOnTap: () {
-                    log("Social Button Taped : Google");
-                  },
-                ),
+                Obx(() {
+                  return Column(
+                    children: [
+                      if (googleController.errorMessage.value.isNotEmpty)
+                        ErrorMessageWidget(
+                          errorMessage: googleController.errorMessage,
+                          onClear: googleController.clearError,
+                        ),
+                      SocialMediaButtonWidget(
+                        title: "or Signup With Social Media",
+                        faceBookOnTap: () {
+                          log("Social Button Taped : FaceBook");
+                        },
+                        googleOnTap: googleController.isLoading.value
+                            ? null
+                            : () => googleController.signInWithGoogle(),
+                      ),
+                    ],
+                  );
+                }),
                 UIHelper.verticalSpace(20.h),
               ],
             ),

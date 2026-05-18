@@ -12,7 +12,20 @@
           "package_name": "com.bloodfitltd.bloodfit"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "161567192464-je3u0ej50rotd7o6mrgcolcsbupq9eoh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bloodfitltd.bloodfit",
+            "certificate_hash": "01aedd653763ba9227e90ec02356260c539f9d3d"
+          }
+        },
+        {
+          "client_id": "161567192464-afcujudlgqa86qu70b2sgdkm61ennemm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCoHC2buvNAyGsFuKzElYPRLCQrgKbxPdA"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161567192464-afcujudlgqa86qu70b2sgdkm61ennemm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "161567192464-3r06ct5qgcgp53bf674p1f30s08p2s0l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bloodfit"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +56,12 @@
           "package_name": "com.example.bloodfit"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "161567192464-afcujudlgqa86qu70b2sgdkm61ennemm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCoHC2buvNAyGsFuKzElYPRLCQrgKbxPdA"
@@ -39,7 +69,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161567192464-afcujudlgqa86qu70b2sgdkm61ennemm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "161567192464-3r06ct5qgcgp53bf674p1f30s08p2s0l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bloodfit"
+              }
+            }
+          ]
         }
       }
     }

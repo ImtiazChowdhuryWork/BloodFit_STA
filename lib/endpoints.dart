@@ -99,6 +99,9 @@ final class Endpoints {
 
   static String scanFood() => "$url/ai-meal/scan-food";
 
+  // TODO: Update path when backend confirms the Google OAuth endpoint URL
+  static String googleSignIn() => "$url/auth/google";
+
 
   
 }
