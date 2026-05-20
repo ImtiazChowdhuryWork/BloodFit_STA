@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:bloodfit/constants/app_constant_text.dart';
+import 'package:bloodfit/features/auth/google_sign_in/data/controller/google_sign_in_controller.dart';
+import 'package:bloodfit/features/auth/google_sign_in/data/repository/google_sign_in_repository.dart';
 import 'package:bloodfit/features/auth/sign_in/data/controller/sign_in_screen_controller.dart';
 import 'package:bloodfit/features/auth/sign_in/data/repository/sign_in_repository.dart';
 import 'package:bloodfit/features/auth/sign_in/presentation/sign_in_screen.dart';
@@ -56,6 +58,13 @@ class _LoadingState extends State<Loading> {
 
       if (!Get.isRegistered<SignInScreenController>()) {
         Get.put(SignInScreenController(Get.find()));
+      }
+
+      if (!Get.isRegistered<GoogleSignInRepository>()) {
+        Get.put(GoogleSignInRepository(Get.find()));
+      }
+      if (!Get.isRegistered<GoogleSignInController>()) {
+        Get.put(GoogleSignInController(Get.find()));
       }
 
       final Widget startScreen = isFirstTime ? OnboardingScreen() : SignInScreen();

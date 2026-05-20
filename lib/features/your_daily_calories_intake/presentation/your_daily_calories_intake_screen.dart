@@ -105,7 +105,7 @@ class _YourDailyCaloriesIntakeScreenState
                                     fit: BoxFit.cover,
                                   ),
                                   Text(
-                                    'Calculating...',
+                                    'Calculating your\ncalorie needs...',
                                     textAlign: TextAlign.center,
                                     style: TextFontStyle
                                         .headline14w400cFFFFFFStylePoppins,

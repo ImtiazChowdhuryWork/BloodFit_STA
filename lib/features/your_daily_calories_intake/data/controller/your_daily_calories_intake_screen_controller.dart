@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../model/get_calorie_requirements_model.dart';
 
 class YourDailyCaloriesIntakeScreenController extends GetxController {
-  ///---------->>> Section : Importing the repository
   final YourDailyCaloriesIntakeScreenRepository
   _yourDailyCaloriesIntakeScreenRepository;
   final Rxn<GetCalorieRequirementsModel> model =
@@ -17,33 +16,32 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isSuccess = false.obs;
   RxString errorMessage = ''.obs;
-  void clearErrorMessage() {
-    errorMessage.value = '';
-  }
-
-
   RxString dailyCaloriesText = ''.obs;
 
-  
+  // Shown in the loading circle while polling
+  RxString loadingMessage = 'Calculating...'.obs;
 
+  void clearErrorMessage() => errorMessage.value = '';
 
-
-  // Retries up to [maxRetries] times with a 2-second gap to handle the backend
-  // race window where calorie requirements haven't been computed yet right after
-  // health details are submitted.
-  Future<void> getYourDailyCaloriesIntakeApi({int maxRetries = 3}) async {
+  // Polls every [pollInterval] seconds for up to [timeoutSeconds] seconds.
+  // The user sees a "Calculating..." state the whole time — the Retry button
+  // only appears if the backend never returns data within the timeout window.
+  Future<void> getYourDailyCaloriesIntakeApi({
+    int timeoutSeconds = 300,
+    int pollIntervalSeconds = 3,
+  }) async {
     isLoading.value = true;
+    isSuccess.value = false;
     clearErrorMessage();
 
-    for (int attempt = 1; attempt <= maxRetries; attempt++) {
+    final int maxAttempts = (timeoutSeconds / pollIntervalSeconds).ceil();
+
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
-        LoggerUtils.debug("=== API CALL ATTEMPT $attempt/$maxRetries ===");
+        LoggerUtils.debug("⏱ Polling attempt $attempt/$maxAttempts");
 
         final response = await _yourDailyCaloriesIntakeScreenRepository
             .yourDailyCaloriesIntakeRepository();
-
-        LoggerUtils.debug("Status Code: ${response.statusCode}");
-        LoggerUtils.debug("Is Success: ${response.isSuccess}");
 
         if (response.statusCode == 200 && response.isSuccess) {
           final data = GetCalorieRequirementsModel.fromJson(
@@ -55,14 +53,13 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
             model.value = data;
             dailyCaloriesText.value = totalCalorie.toString();
             isSuccess.value = true;
-            LoggerUtils.debug("✅ Success: totalCalorie = $totalCalorie");
+            LoggerUtils.debug("✅ Calorie data ready: $totalCalorie kcal");
             break;
           }
 
-          // 200 but calorieRequirement not ready yet — backend race condition
-          LoggerUtils.debug("⚠️ calorieRequirement null on attempt $attempt — backend not ready yet");
+          LoggerUtils.debug("⏳ Backend still computing — will retry in ${pollIntervalSeconds}s");
         } else {
-          LoggerUtils.debug("❌ Non-200 on attempt $attempt: ${response.statusCode} | ${response.errorMessage}");
+          LoggerUtils.debug("❌ Non-200: ${response.statusCode} | ${response.errorMessage}");
           errorMessage.value = response.errorMessage ?? "Unknown error";
         }
       } catch (e) {
@@ -70,21 +67,15 @@ class YourDailyCaloriesIntakeScreenController extends GetxController {
         errorMessage.value = e.toString();
       }
 
-      if (attempt < maxRetries) {
-        LoggerUtils.debug("⏳ Retrying in 2s...");
-        await Future.delayed(const Duration(seconds: 2));
+      if (attempt < maxAttempts) {
+        await Future.delayed(Duration(seconds: pollIntervalSeconds));
       }
     }
 
     if (!isSuccess.value) {
-      isSuccess.value = false;
-      LoggerUtils.error("❌ All $maxRetries attempts failed");
+      LoggerUtils.error("❌ Calorie data unavailable after ${timeoutSeconds}s");
     }
 
     isLoading.value = false;
   }
-
-  // String get dailyConsumableCalories =>
-  //     model.value?.data?.calorieRequirement?.totalCalorie.toString() ??
-  //     'Failed to Get Daily Total \nConsumable Calories!';
 }
