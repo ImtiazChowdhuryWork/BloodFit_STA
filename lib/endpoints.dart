@@ -2,10 +2,13 @@
 
 // const String url = "https://sebaev.softvencefsd.xyz";
 
-const String url = "https://faisal5000.merinasib.shop/api/v1";
-const String socketBaseUrl = 'https://faisal5000.merinasib.shop';
-const String imageBaseUrl = 'https://faisal5000.merinasib.shop';
-const String defaultMealImage = 'https://faisal5000.merinasib.shop/images/meal.jpg';
+// const String url = "https://faisal5000.merinasib.shop/api/v1";
+const String url = "https://api.bloodfit.co.uk/api/v1"; 
+// const String socketBaseUrl = 'https://faisal5000.merinasib.shop';
+const String socketBaseUrl = 'https://api.bloodfit.co.uk';
+// const String imageBaseUrl = 'https://faisal5000.merinasib.shop';
+const String imageBaseUrl = 'https://api.bloodfit.co.uk';
+const String defaultMealImage = 'https://api.bloodfit.co.uk/images/meal.jpg';
 
 final class NetworkConstants {
   NetworkConstants._();
@@ -71,7 +74,7 @@ final class Endpoints {
     return "$url/meal/swap-meal-option?category=$category&sub_category=$subCategory&current_calories=$currentCalories";
   }
   static String mealDetails({required String mealID}){
-    return "$url/meal/get-meal/$mealID?lang=korean";
+    return "$url/meal/get-meal/$mealID?lang=en";
   }
 
   static String infoGattherWorkOutGoal() => "$url/workout/add-workout-details";

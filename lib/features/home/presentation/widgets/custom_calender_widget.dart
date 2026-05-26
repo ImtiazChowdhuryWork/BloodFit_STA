@@ -45,7 +45,7 @@ class CustomCalenderWidget extends StatelessWidget {
               backgroundColor: AppColors.c363636,
               progressColor: AppColors.cb20000,
               completedCaloriesIconPath: Assets.icons.fireGray,
-              isCalorieTaskCompleted: false,
+              isCalorieTaskCompleted: true,
               isCheatDay: false,
             ),
           );
